@@ -1,0 +1,32 @@
+<div class="preview-section">
+  <div class="global-container">
+    <div class="pv-huge">
+      <div class="preview-section_flex-header">
+        <h2>Lo último en {{tag}}</h2>
+        <a href="/tag/{{slug}}" class="button w-button">Explorar categoría</a>
+      </div>
+      <div class="post-grid w-dyn-list">
+        <div role="list" class="post-cols w-dyn-items">      
+          {{#get "posts" include="tags,authors" filter="tag:{{slug}}+tag:-'wiki'+featured:true" limit="4" include="tags" order="published_at desc" as |articles|}}
+            {{#if articles}}
+              {{#foreach articles}}
+                {{> "post-card"}}
+              {{/foreach}}
+            {{else}}
+              <p>Próximamente</p>
+              {{#get "posts" include="tags,authors" filter="tag:{{slug}}" limit="4" include="tags" order="published_at desc" as |fallbackArticles|}}
+                {{#if fallbackArticles}}
+                  {{#foreach fallbackArticles}}
+                    {{> "post-card"}}
+                  {{/foreach}}
+                {{else}}
+                  <p>Próximamente</p>
+                {{/if}}
+              {{/get}}
+            {{/if}}
+          {{/get}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

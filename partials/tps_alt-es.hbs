@@ -1,0 +1,35 @@
+<div role='list' class='post-col_alt w-dyn-items'>
+  {{#get "posts"
+    include="tags,authors"
+    filter="tag:{{slug}}+tag:-'Wiki'+tag:-'hash-en'"
+    limit="3"
+    include="tags"
+    order="published_at desc"
+    as |articles|
+  }}
+    {{#if articles}}
+      {{#foreach articles}}
+        {{> "post-card"}}
+      {{/foreach}}
+    {{else}}
+      <p>Próximamente</p>
+      {{#get "posts"
+        include="tags,authors"
+        filter="tag:{{slug}}"
+        limit="3"
+        include="tags"
+        order="published_at desc"
+        as |fallbackArticles|
+      }}
+        {{#if fallbackArticles}}
+          {{#foreach fallbackArticles}}
+            {{> "post-card"}}
+          {{/foreach}}
+        {{else}}
+          Próximamente
+        {{/if}}
+      {{/get}}
+    {{/if}}
+  {{/get}}
+  <a href="/tag/{{slug}}" class="button w-button">Explorar {{tag}}</a>
+</div>

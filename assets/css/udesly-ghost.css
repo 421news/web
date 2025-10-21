@@ -1,0 +1,34 @@
+:root {
+    --shimmer-gradient-0: rgba(255, 255, 255, 0);
+    --shimmer-gradient-20: rgba(255, 255, 255, 0.2);
+    --shimmer-gradient-60: rgba(255, 255, 255, 0.5);
+}
+
+@-webkit-keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+.w-dyn-items.loading .w-dyn-item > * {
+  position: relative;
+  overflow: hidden;
+}
+
+.w-dyn-items.loading  .w-dyn-item > *::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, var(--shimmer-gradient-0) 0, var(--shimmer-gradient-20) 20%, var(--shimmer-gradient-60) 60%, var(--shimmer-gradient-0));
+  -webkit-animation: shimmer 2s infinite;
+          animation: shimmer 2s infinite;
+  content: "";
+}
