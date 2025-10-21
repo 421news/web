@@ -1,0 +1,73 @@
+ {{#get "posts" include="tags,authors" limit="1" filter="tag:-'wiki'+(tag:{{slug}})" as |items|}}
+  <div class="w-dyn-list">
+    {{#if items}}
+      <div role="list" class="w-dyn-items">
+        {{#foreach items}}
+        <div role="listitem" class="w-dyn-item">
+          <div class="hl-post">
+            <div class="pt-xhuge">
+              <div class="global-container">
+                <div class="hl-post_grid">
+                  <div class="hl-post_meta">
+                    <div class="hl-post_meta-wrapper">
+                      <div>
+                        <span class="plain-tags pl-xsmall">
+                          {{#if primary_tag}}
+                            <strong>{{primary_tag.name}}</strong>
+                            {{#if tags.[1]}}
+                              <strong><a href="{{url}}">{{name}}</a></strong>
+                            {{/if}}
+                          {{/if}}
+                          {{#foreach tags from="2"}}
+                            , <strong><a href="/tag/{{slug}}">{{name}}</a></strong>
+                          {{/foreach}}
+                        </span>
+                      </div>
+                    </div>
+                    <div class="hero-title_wrapper">
+                      <a href="{{url}}" class="flashy-h1_link w-inline-block">
+                        <div class="flashy-h1_wrapper">
+                          <div>
+                            <h1 class="flashy-h1 is-alt">
+                              <span>{{ title }}</span>
+                            </h1>
+                          </div>
+                          <div>
+                            <div class="flashy-h1 is-alt is-shadow">
+                              <span class="flashy-h1_shadow">{{ title }}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                    <div class="pl-xsmall">
+                      <p class="hl-post_preview pb-xsmall">{{excerpt}}</p>
+                      <div class="pb-small">
+                        {{> "author-box"}}
+                      </div>
+                      <a href="{{url}}" class="button is-icon is-secondary w-inline-block">
+                        {{#has tag="#en"}}
+                          <div>Read</div>
+                        {{else}}
+                          <div>Leer</div>
+                        {{/has}}
+                        <img src="{{asset "images/arrow-3.svg"}}" loading="lazy" alt="">
+                      </a>
+                    </div>
+                  </div>
+                  <div class="hl-post_img-wrapper"><img src="{{feature_image}}" loading="lazy" alt="" class="hl-post_img">
+                    <div class="post-card_overlay in-hl-post"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/foreach}}
+      </div>
+    {{/if}}
+    {{#unless items}}
+      <div class="display-none"></div>
+    {{/unless}}
+  </div>
+{{/get}}

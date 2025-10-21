@@ -1,0 +1,48 @@
+routes:
+  /suscribite/: suscribite
+  /gracias/: gracias
+  /oh-yes/: oh-yes
+  /ultimos-posts/: last-posts-es
+  /en/last-posts/: last-posts-en
+
+  /tag/cultura/: tag-cultura
+  /tag/tecnologia/: tag-tecnologia
+  /tag/juegos/: tag-juegos
+  /tag/vida-real/: tag-vida-real
+
+  /tag/cannabis/: tag-secundario-cannabis
+  /tag/tutoriales/: tag-secundario-tutoriales
+  /tag/argentina/: tag-secundario-argentina
+  /tag/cripto/: tag-secundario-cripto
+  /tag/deportes/: tag-secundario-deportes
+  /tag/filosofia/: tag-secundario-filosofia
+  /tag/historieta/: tag-secundario-historieta
+  /tag/internet/: tag-secundario-internet
+  /tag/libros/: tag-secundario-libros
+  /tag/magic-the-gathering/: tag-secundario-magicthegathering
+  /tag/memes/: tag-secundario-memes
+  /tag/musica/: tag-secundario-musica
+  /tag/peliculas/: tag-secundario-peliculas
+  /tag/series/: tag-secundario-series
+  /tag/soberania/: tag-secundario-soberania
+  /tag/videojuegos/: tag-secundario-videojuegos
+  /tag/warhammer/: tag-secundario-warhammer
+  /tag/wiki/: tag-secundario-wiki
+
+  /en/tag/culture/: tag-culture
+  /en/tag/tech/: tag-tech
+  /en/tag/games/: tag-games
+  /en/tag/real-life/: tag-real-life
+
+collections:
+  /:
+    permalink: /{slug}/
+    template: index
+    filter: 'tag:-hash-en'
+  /en/:
+    permalink: /en/{slug}/
+    template: en
+    filter: 'tag:hash-en'
+
+taxonomies:
+  author: /author/{slug}/

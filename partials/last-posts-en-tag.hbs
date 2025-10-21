@@ -1,0 +1,43 @@
+<div class="preview-section">
+    <div class="global-container">
+        <div class="pv-huge">
+            <div class="preview-section_flex-header pb-small">
+                <h2>Last posts</h2>
+            </div>
+            <div class="last-posts-section">
+                {{#get "posts"
+                    include="tags,authors"
+                    filter="primary_tag:{{tag}}+tag:'hash-en'"
+                    limit="16"
+                    order="published_at desc"
+                    as |articles|
+                }}
+                    {{#if articles}}
+                        {{#foreach articles}}
+                            {{> "post-card"}}
+                        {{/foreach}}
+                    {{else}}
+                        No posts.
+                    {{/if}}
+                {{/get}}
+            </div>
+            <button class="button" id="load-more" data-next="{{next}}" style="display: block; margin: auto; margin-top: 50px;">
+                Load more
+            </button>
+            {{!-- <button
+                class="button"
+                style="display: block; margin: auto; margin-top: 50px;"
+            >
+                <a href="/ultimos-posts/" style="color: white; text-decoration: none;">
+                    Ver todas
+                </a>
+            </button> --}}
+        {{!-- <div class="post-cols w-dyn-list">
+            {{> "tps_alt-es" tag="Cultura" slug="cultura"}}
+            {{> "tps_alt-es" tag="Tecnología" slug="tecnologia"}}
+            {{> "tps_alt-es" tag="Juegos" slug="juegos"}}
+            {{> "tps_alt-es" tag="Vida real" slug="vida-real"}}
+        </div> --}}
+        </div>
+    </div>
+</div>
