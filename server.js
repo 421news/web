@@ -33,12 +33,18 @@ const hbs = exphbs.create({
             const val = (blocks[name] || '');
             blocks[name] = '';
             return val;
-        }
+        },
+        // Ghost helpers stubs for dev
+        ghost_head: function() { return ''; },
+        ghost_foot: function() { return ''; },
+        meta_title: function() { return '421 Dev'; },
+        body_class: function() { return ''; }
     }
 })
 
 app.engine(".hbs", hbs.engine);
 app.set("view engine", ".hbs");
+app.set("views", __dirname);
 
 app.use("/assets", express.static(path.join(__dirname, "assets")))
 
@@ -89,6 +95,13 @@ app.get("/", (req, res) => {
             title: "421",
             description: "Description"
         }
+    })
+})
+
+// ruta aislada para probar el file browser
+app.get("/file-browser", (req, res) => {
+    res.render("file-browser-preview", {
+        layout: false
     })
 })
 
