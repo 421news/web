@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>421 — File Browser Preview</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --negro: #121212;
+      --crema: #eae6e1;
+      --amarillo: #fcd221;
+      --verde: #17a583;
+      --radius: 8px;
+      --border-width: 2px;
+    }
+    * { box-sizing: border-box; padding: 0; margin: 0; }
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background-color: #f5f2ef;
+      padding: 2rem;
+    }
+    .preview-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--negro);
+    }
+    .preview-header h1 { font-size: 1.5rem; font-style: italic; }
+    .preview-header p { color: rgba(18,18,18,0.5); font-size: 0.85rem; margin-top: 0.5rem; }
+
+    /* ======== FILE BROWSER CSS ======== */
+    .fb-window {
+      border: var(--border-width) solid var(--negro);
+      border-radius: var(--radius);
+      background-color: var(--crema);
+      overflow: hidden;
+      font-family: 'Nunito Sans', sans-serif;
+      max-width: 1100px;
+      margin: 0 auto;
+      box-shadow: 4px 4px 0 var(--negro);
+    }
+    .fb-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--negro);
+      color: var(--crema);
+      padding: 8px 12px;
+      cursor: default;
+      user-select: none;
+    }
+    .fb-titlebar-dots { display: flex; gap: 6px; }
+    .fb-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+      border: 1.5px solid rgba(234,230,225,0.3);
+      cursor: pointer; transition: opacity 0.15s ease;
+    }
+    .fb-dot:hover { opacity: 0.7; }
+    .fb-dot--close { background-color: #ff5f57; }
+    .fb-dot--minimize { background-color: var(--amarillo); }
+    .fb-dot--maximize { background-color: var(--verde); }
+    .fb-titlebar-title { font-weight: 700; font-style: italic; font-size: 13px; letter-spacing: 0.5px; }
+    .fb-titlebar-spacer { width: 54px; }
+    .fb-toolbar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; background-color: var(--negro);
+      border-bottom: var(--border-width) solid var(--negro);
+    }
+    .fb-toolbar-btn {
+      background: rgba(234,230,225,0.1); border: 1.5px solid rgba(234,230,225,0.2);
+      color: var(--crema); border-radius: 4px; padding: 4px 10px; font-size: 14px;
+      cursor: pointer; font-family: inherit;
+      transition: background 0.15s ease, transform 0.1s ease;
+      display: flex; align-items: center; gap: 4px; text-decoration: none;
+    }
+    .fb-toolbar-btn:hover { background: rgba(234,230,225,0.2); transform: translateY(-1px); }
+    .fb-toolbar-btn:active { transform: translateY(0); }
+    .fb-toolbar-btn.is-disabled { opacity: 0.3; pointer-events: none; }
+    .fb-toolbar-separator { width: 1px; height: 20px; background-color: rgba(234,230,225,0.15); margin: 0 4px; }
+    .fb-pathbar {
+      display: flex; align-items: center; padding: 6px 12px;
+      background-color: var(--crema); border-bottom: var(--border-width) solid var(--negro);
+      font-size: 13px; gap: 2px; overflow-x: auto;
+    }
+    .fb-pathbar-segment {
+      display: inline-flex; align-items: center; gap: 2px;
+      color: var(--negro); text-decoration: none; padding: 3px 8px;
+      border-radius: 4px; font-weight: 700; white-space: nowrap;
+      transition: background 0.15s ease;
+    }
+    .fb-pathbar-segment:hover { background-color: rgba(18,18,18,0.08); }
+    .fb-pathbar-segment.is-active { background-color: var(--negro); color: var(--crema); }
+    .fb-pathbar-separator { color: rgba(18,18,18,0.4); font-size: 11px; user-select: none; }
+    .fb-body { display: flex; min-height: 340px; }
+    .fb-sidebar {
+      width: 200px; min-width: 200px; background-color: rgba(18,18,18,0.04);
+      border-right: var(--border-width) solid var(--negro); padding: 12px 0; overflow-y: auto;
+    }
+    .fb-sidebar-heading {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.2px; color: rgba(18,18,18,0.45); padding: 8px 14px 4px; user-select: none;
+    }
+    .fb-sidebar-item {
+      display: flex; align-items: center; gap: 8px; padding: 6px 14px;
+      color: var(--negro); text-decoration: none; font-size: 13px; font-weight: 600;
+      transition: background 0.12s ease; cursor: pointer; border: none;
+      background: none; width: 100%; text-align: left; font-family: inherit;
+    }
+    .fb-sidebar-item:hover { background-color: rgba(18,18,18,0.07); }
+    .fb-sidebar-item.is-active { background-color: var(--negro); color: var(--crema); }
+    .fb-sidebar-divider { height: 1px; background-color: rgba(18,18,18,0.1); margin: 8px 14px; }
+    .fb-icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; font-style: normal; }
+    .fb-content { flex: 1; padding: 16px; overflow-y: auto; }
+    .fb-content-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px;
+    }
+    .fb-item {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 12px 8px; border-radius: var(--radius); text-decoration: none;
+      color: var(--negro); transition: background 0.12s ease, transform 0.1s ease;
+      cursor: pointer; border: 2px solid transparent;
+    }
+    .fb-item:hover { background-color: rgba(18,18,18,0.06); transform: translateY(-2px); }
+    .fb-item:active { transform: translateY(0); }
+    .fb-item.is-selected { background-color: rgba(252,210,33,0.15); border-color: var(--amarillo); }
+    .fb-item-icon { font-size: 36px; line-height: 1; user-select: none; }
+    .fb-item-name { font-size: 12px; font-weight: 600; text-align: center; word-break: break-word; line-height: 1.3; max-width: 100%; }
+    .fb-item--folder .fb-item-icon { color: var(--amarillo); text-shadow: 1px 1px 0 rgba(18,18,18,0.15); }
+    .fb-item--file .fb-item-icon { color: var(--negro); }
+    .fb-item--exec .fb-item-icon { color: var(--verde); }
+    .fb-statusbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 12px; background-color: var(--negro);
+      color: rgba(234,230,225,0.6); font-size: 11px; font-weight: 600;
+      border-top: var(--border-width) solid var(--negro);
+    }
+    .fb-statusbar-left { display: flex; align-items: center; gap: 12px; }
+    .fb-statusbar-right { display: flex; align-items: center; gap: 8px; }
+    .fb-view-btn {
+      background: none; border: 1px solid rgba(234,230,225,0.2);
+      color: rgba(234,230,225,0.5); border-radius: 3px; padding: 2px 6px;
+      font-size: 12px; cursor: pointer; font-family: inherit; transition: all 0.12s ease;
+    }
+    .fb-view-btn:hover { color: var(--crema); border-color: rgba(234,230,225,0.4); }
+    .fb-view-btn.is-active { color: var(--crema); background-color: rgba(234,230,225,0.15); border-color: rgba(234,230,225,0.3); }
+    .fb-content-list { display: none; }
+    .fb-content.is-list .fb-content-grid { display: none; }
+    .fb-content.is-list .fb-content-list { display: block; }
+    .fb-list-header {
+      display: grid; grid-template-columns: 1fr 120px 140px; padding: 4px 8px;
+      border-bottom: 1.5px solid var(--negro); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px; color: rgba(18,18,18,0.5); user-select: none;
+    }
+    .fb-list-row {
+      display: grid; grid-template-columns: 1fr 120px 140px; padding: 6px 8px;
+      border-bottom: 1px solid rgba(18,18,18,0.06); text-decoration: none;
+      color: var(--negro); font-size: 13px; align-items: center; transition: background 0.1s ease;
+    }
+    .fb-list-row:hover { background-color: rgba(18,18,18,0.05); }
+    .fb-list-name { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+    .fb-list-name .fb-icon { font-size: 18px; }
+    .fb-list-type { color: rgba(18,18,18,0.5); font-size: 12px; }
+    .fb-list-modified { color: rgba(18,18,18,0.5); font-size: 12px; }
+    .fb-window.is-minimized .fb-toolbar,
+    .fb-window.is-minimized .fb-pathbar,
+    .fb-window.is-minimized .fb-body,
+    .fb-window.is-minimized .fb-statusbar { display: none; }
+    @media screen and (max-width: 768px) {
+      .fb-sidebar { display: none; }
+      .fb-content-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 4px; }
+      .fb-item-icon { font-size: 28px; }
+      .fb-item-name { font-size: 11px; }
+      .fb-body { min-height: 260px; }
+      .fb-list-header, .fb-list-row { grid-template-columns: 1fr 100px; }
+      .fb-list-modified { display: none; }
+      .fb-toolbar { overflow-x: auto; }
+      .fb-window { box-shadow: 2px 2px 0 var(--negro); }
+    }
+    @media screen and (max-width: 480px) {
+      .fb-content-grid { grid-template-columns: repeat(3, 1fr); }
+      .fb-titlebar-title { font-size: 11px; }
+      .fb-pathbar { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-header">
+    <h1>421 File Browser &mdash; Preview</h1>
+    <p>Componente de navegaci&oacute;n tipo Unix file manager</p>
+  </div>
+
+  <div class="fb-window">
+    <div class="fb-titlebar">
+      <div class="fb-titlebar-dots">
+        <span class="fb-dot fb-dot--close" title="Cerrar"></span>
+        <span class="fb-dot fb-dot--minimize" title="Minimizar"></span>
+        <span class="fb-dot fb-dot--maximize" title="Maximizar"></span>
+      </div>
+      <span class="fb-titlebar-title">421 &mdash; Explorador de archivos</span>
+      <div class="fb-titlebar-spacer"></div>
+    </div>
+
+    <div class="fb-toolbar">
+      <button class="fb-toolbar-btn is-disabled" data-action="back" title="Atr&aacute;s"><span>&#8592;</span></button>
+      <a href="#" class="fb-toolbar-btn" title="Inicio"><span>&#8962;</span></a>
+      <div class="fb-toolbar-separator"></div>
+      <a href="#" class="fb-toolbar-btn" title="Recargar" onclick="location.reload()"><span>&#8635;</span></a>
+    </div>
+
+    <div class="fb-pathbar">
+      <a href="#" class="fb-pathbar-segment"><i class="fb-icon">&#128187;</i> home</a>
+      <span class="fb-pathbar-separator">/</span>
+      <a href="#" class="fb-pathbar-segment is-active">421</a>
+      <span class="fb-pathbar-separator">/</span>
+    </div>
+
+    <div class="fb-body">
+      <aside class="fb-sidebar">
+        <div class="fb-sidebar-heading">Marcadores</div>
+        <a href="#" class="fb-sidebar-item is-active"><i class="fb-icon">&#127968;</i> Inicio</a>
+        <a href="#" class="fb-sidebar-item"><i class="fb-icon">&#127912;</i> Cultura</a>
+        <a href="#" class="fb-sidebar-item"><i class="fb-icon">&#128268;</i> Tecnolog&iacute;a</a>
+        <a href="#" class="fb-sidebar-item"><i class="fb-icon">&#127918;</i> Juegos</a>
+        <a href="#" class="fb-sidebar-item"><i class="fb-icon">&#127758;</i> Vida real</a>
+        <div class="fb-sidebar-divider"></div>
+        <div class="fb-sidebar-heading">Sistema</div>
+        <a href="#" class="fb-sidebar-item"><i class="fb-icon">&#128231;</i> Suscribite</a>
+        <a href="#" class="fb-sidebar-item"><i class="fb-icon">&#128214;</i> Revista</a>
+      </aside>
+
+      <div class="fb-content">
+        <div class="fb-content-grid">
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128193;</span><span class="fb-item-name">cultura/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128193;</span><span class="fb-item-name">tecnologia/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128193;</span><span class="fb-item-name">juegos/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128193;</span><span class="fb-item-name">vida-real/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">cannabis/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">cripto/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">deportes/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">filosofia/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">historieta/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">internet/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">libros/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">mtg/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">memes/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">musica/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">peliculas/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">series/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">soberania/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">tutoriales/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">videojuegos/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">warhammer/</span></a>
+          <a href="#" class="fb-item fb-item--folder"><span class="fb-item-icon">&#128194;</span><span class="fb-item-name">wiki/</span></a>
+          <a href="#" class="fb-item fb-item--exec"><span class="fb-item-icon">&#128196;</span><span class="fb-item-name">suscribite.sh</span></a>
+          <a href="#" class="fb-item fb-item--file"><span class="fb-item-icon">&#128220;</span><span class="fb-item-name">revista.pdf</span></a>
+          <a href="#" class="fb-item fb-item--file"><span class="fb-item-icon">&#128203;</span><span class="fb-item-name">ultimos.log</span></a>
+        </div>
+
+        <div class="fb-content-list">
+          <div class="fb-list-header"><span>Nombre</span><span>Tipo</span><span>Modificado</span></div>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128193;</i> cultura/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128193;</i> tecnologia/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128193;</i> juegos/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128193;</i> vida-real/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> cannabis/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> cripto/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> deportes/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> filosofia/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> historieta/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> internet/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> libros/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> mtg/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> memes/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> musica/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> peliculas/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> series/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> soberania/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> tutoriales/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> videojuegos/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> warhammer/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128194;</i> wiki/</span><span class="fb-list-type">Carpeta</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128196;</i> suscribite.sh</span><span class="fb-list-type">Ejecutable</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128220;</i> revista.pdf</span><span class="fb-list-type">Documento</span><span class="fb-list-modified">--</span></a>
+          <a href="#" class="fb-list-row"><span class="fb-list-name"><i class="fb-icon">&#128203;</i> ultimos.log</span><span class="fb-list-type">Archivo log</span><span class="fb-list-modified">--</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="fb-statusbar">
+      <div class="fb-statusbar-left"><span class="fb-statusbar-count"></span></div>
+      <div class="fb-statusbar-right">
+        <button class="fb-view-btn is-active" data-view="grid" title="Vista cuadr&iacute;cula">&#9783;</button>
+        <button class="fb-view-btn" data-view="list" title="Vista lista">&#9776;</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var w = document.querySelector(".fb-window");
+      if (!w) return;
+      var dotClose = w.querySelector(".fb-dot--close");
+      var dotMin = w.querySelector(".fb-dot--minimize");
+      var dotMax = w.querySelector(".fb-dot--maximize");
+      if (dotMin) dotMin.addEventListener("click", function () { w.classList.toggle("is-minimized"); });
+      if (dotMax) dotMax.addEventListener("click", function () { w.classList.toggle("is-minimized"); });
+      if (dotClose) dotClose.addEventListener("click", function () { w.style.display = "none"; });
+
+      var gridBtn = w.querySelector(".fb-view-btn[data-view='grid']");
+      var listBtn = w.querySelector(".fb-view-btn[data-view='list']");
+      var content = w.querySelector(".fb-content");
+      function setView(m) {
+        if (!content) return;
+        content.classList.toggle("is-list", m === "list");
+        if (gridBtn && listBtn) {
+          gridBtn.classList.toggle("is-active", m === "grid");
+          listBtn.classList.toggle("is-active", m === "list");
+        }
+      }
+      if (gridBtn) gridBtn.addEventListener("click", function () { setView("grid"); });
+      if (listBtn) listBtn.addEventListener("click", function () { setView("list"); });
+
+      var items = w.querySelectorAll(".fb-item");
+      items.forEach(function (item) {
+        item.addEventListener("click", function (e) {
+          e.preventDefault();
+          items.forEach(function (i) { i.classList.remove("is-selected"); });
+          item.classList.add("is-selected");
+        });
+      });
+
+      var countEl = w.querySelector(".fb-statusbar-count");
+      if (countEl) countEl.textContent = items.length + " elementos";
+    });
+  </script>
+</body>
+</html>
