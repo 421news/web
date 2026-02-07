@@ -6,6 +6,7 @@
     {{> "global-head"}}
     <title>421 | Tecnomagia para la vida real</title>
     <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
+    <link href="{{asset "css/file-browser.css"}}" rel="stylesheet" type="text/css">
   </head>
   <body>
     <div class="page-wrapper">
@@ -17,6 +18,11 @@
 
         <!-- POPULAR POSTS -->
         {{> "index-highlighted-posts-es"}}
+
+        <!-- FILE BROWSER NAVIGATION -->
+        <div class="global-container pt-small pb-small">
+          {{> "file-browser"}}
+        </div>
 
         <!-- LAST POSTS -->
         {{> "last-posts-es"}}
