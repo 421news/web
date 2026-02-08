@@ -1,34 +1,44 @@
-{{!-- 421 Desktop - Unix File Browser (Spanish) --}}
-<div data-fb-lang="es">
+{{!-- 421 Desktop - Unix File Browser (Universal / Bilingual) --}}
 
-  {{!-- Post data injection via Ghost API --}}
-  <div id="fb-posts-data">
-    {{#get "posts" limit="100" include="tags" filter="tag:-hash-en"}}
-      {{#foreach posts}}
-      <div class="fb-post-entry"
-        data-title="{{title}}"
-        data-url="{{url}}"
-        data-image="{{feature_image}}"
-        data-date="{{date published_at format='DD/MM/YY'}}"
-        data-primary-tag="{{primary_tag.slug}}"
-        data-tags="{{#foreach tags}}{{slug}}{{#unless @last}},{{/unless}}{{/foreach}}">
-      </div>
-      {{/foreach}}
-    {{/get}}
-  </div>
-
-  {{!-- Desktop overlay (windows render here) --}}
-  <div id="fb-desktop" class="fb-desktop"></div>
-
-  {{!-- Taskbar --}}
-  <div id="fb-taskbar" class="fb-taskbar" style="display:none">
-    <div class="fb-taskbar-items" id="fb-taskbar-items"></div>
-  </div>
-
-  {{!-- Launcher button --}}
-  <button id="fb-launcher" class="fb-launcher">
-    <span class="fb-launcher-icon">&#128193;</span> Explorador
-  </button>
-
+{{!-- Post data injection via Ghost API (both languages) --}}
+<div id="fb-posts-data">
+  {{#get "posts" limit="100" include="tags" filter="tag:-hash-en"}}
+    {{#foreach posts}}
+    <div class="fb-post-entry" data-lang="es"
+      data-title="{{title}}"
+      data-url="{{url}}"
+      data-image="{{feature_image}}"
+      data-date="{{date published_at format='DD/MM/YY'}}"
+      data-primary-tag="{{primary_tag.slug}}"
+      data-tags="{{#foreach tags}}{{slug}}{{#unless @last}},{{/unless}}{{/foreach}}">
+    </div>
+    {{/foreach}}
+  {{/get}}
+  {{#get "posts" limit="100" include="tags" filter="tag:hash-en"}}
+    {{#foreach posts}}
+    <div class="fb-post-entry" data-lang="en"
+      data-title="{{title}}"
+      data-url="{{url}}"
+      data-image="{{feature_image}}"
+      data-date="{{date published_at format='DD/MM/YY'}}"
+      data-primary-tag="{{primary_tag.slug}}"
+      data-tags="{{#foreach tags}}{{slug}}{{#unless @last}},{{/unless}}{{/foreach}}">
+    </div>
+    {{/foreach}}
+  {{/get}}
 </div>
+
+{{!-- Desktop overlay (windows render here) --}}
+<div id="fb-desktop" class="fb-desktop"></div>
+
+{{!-- Taskbar --}}
+<div id="fb-taskbar" class="fb-taskbar" style="display:none">
+  <div class="fb-taskbar-items" id="fb-taskbar-items"></div>
+</div>
+
+{{!-- Launcher button --}}
+<button id="fb-launcher" class="fb-launcher">
+  <span class="fb-launcher-icon">&#128193;</span> <span id="fb-launcher-text"></span>
+</button>
+
 <script src="{{asset "js/file-browser.js"}}"></script>
