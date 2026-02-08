@@ -162,12 +162,18 @@ const hbs = exphbs.create({
             if (!arr || !arr.length) {
                 return options.inverse ? options.inverse(this) : '';
             }
-            return arr.map(function(item, i) {
-                item['@index'] = i;
-                item['@first'] = i === 0;
-                item['@last'] = i === arr.length - 1;
-                return options.fn(item);
-            }).join('');
+            var out = '';
+            for (var i = 0; i < arr.length; i++) {
+                var data = {};
+                if (options.data) {
+                    data = Object.create(options.data);
+                }
+                data.index = i;
+                data.first = i === 0;
+                data.last = i === arr.length - 1;
+                out += options.fn(arr[i], { data: data });
+            }
+            return out;
         },
         get: function() {
             var args = Array.prototype.slice.call(arguments);
@@ -220,8 +226,10 @@ const hbs = exphbs.create({
             var val = args.length > 1 ? args[0] : this;
             if (val instanceof Date) {
                 var fmt = (options.hash && options.hash.format) || 'DD/MM/YYYY';
+                var y = val.getFullYear();
                 return fmt
-                    .replace('YYYY', val.getFullYear())
+                    .replace('YYYY', y)
+                    .replace('YY', String(y).slice(-2))
                     .replace('MM', String(val.getMonth() + 1).padStart(2, '0'))
                     .replace('DD', String(val.getDate()).padStart(2, '0'))
                     .replace('D', val.getDate())
