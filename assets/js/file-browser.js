@@ -540,18 +540,68 @@
     },
 
     _openArticle: function (article) {
-      var html =
-        '<iframe class="fb-article-frame" src="' + WM._esc(article.url) + '"></iframe>';
+      var loadMsg = LANG === "en" ? "Loading\u2026" : "Cargando\u2026";
+      var errMsg = LANG === "en" ? "Could not load article." : "No se pudo cargar el art\u00EDculo.";
+      var openTab = LANG === "en" ? "Open in new tab" : "Abrir en nueva pesta\u00F1a";
 
       var off = (WM.counter % 6) * 24;
-      WM.create({
+      var winId = WM.create({
         title: article.name,
         width: 680,
         height: 520,
         x: 100 + off,
         y: 60 + off,
-        html: html
+        html: '<div class="fb-article-viewer"><p class="fb-article-loading">' + loadMsg + '</p></div>'
       });
+
+      fetch(article.url)
+        .then(function (res) { return res.text(); })
+        .then(function (raw) {
+          var doc = new DOMParser().parseFromString(raw, "text/html");
+
+          // Extract title
+          var titleEl = doc.querySelector("h1.flashy-h1, h1.heading, h1");
+          var title = titleEl ? titleEl.textContent.trim() : article.name;
+
+          // Extract featured image
+          var imgHtml = "";
+          var imgEl = doc.querySelector(".post-header img[src]");
+          var featDiv = doc.querySelector(".alt-post_featimg");
+          if (imgEl && imgEl.getAttribute("src")) {
+            imgHtml = '<img class="fb-article-img" src="' + WM._esc(imgEl.getAttribute("src")) + '" />';
+          } else if (featDiv) {
+            var bg = (featDiv.getAttribute("style") || "").match(/url\(['"]?([^'")]+)/);
+            if (bg && bg[1]) imgHtml = '<img class="fb-article-img" src="' + WM._esc(bg[1]) + '" />';
+          }
+
+          // Extract article body
+          var bodyEl = doc.querySelector(".rich-text.w-richtext");
+          var bodyHtml = bodyEl ? bodyEl.innerHTML : "";
+
+          // Extract author
+          var authorEl = doc.querySelector(".author-name_link");
+          var author = authorEl ? authorEl.textContent.trim() : "";
+
+          // Build viewer
+          var out =
+            '<h1 class="fb-article-title">' + WM._esc(title) + '</h1>' +
+            (author ? '<p class="fb-article-meta">' + WM._esc(author) + (article.date ? " \u2014 " + article.date : "") + '</p>' : '') +
+            imgHtml +
+            '<div class="fb-article-content">' + bodyHtml + '</div>';
+
+          var w = WM.wins[winId];
+          if (w) {
+            var v = w.el.querySelector(".fb-article-viewer");
+            if (v) v.innerHTML = out;
+          }
+        })
+        .catch(function () {
+          var w = WM.wins[winId];
+          if (w) {
+            var v = w.el.querySelector(".fb-article-viewer");
+            if (v) v.innerHTML = '<p class="fb-article-loading">' + errMsg + ' <a href="' + WM._esc(article.url) + '" target="_blank">' + openTab + '</a></p>';
+          }
+        });
     }
   };
 
