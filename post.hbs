@@ -10,13 +10,32 @@
     {
       "@context": "https://schema.org",
       "@type": "NewsArticle",
-      "headline": {{title}},
-      "image": [{{feature_image}}],
-      "datePublished": {{date published_at}},
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{url absolute="true"}}"
+      },
+      "headline": "{{title}}",
+      "description": "{{excerpt}}",
+      "image": ["{{feature_image}}"],
+      "datePublished": "{{date published_at format="YYYY-MM-DDTHH:mm:ssZ"}}",
+      "dateModified": "{{date updated_at format="YYYY-MM-DDTHH:mm:ssZ"}}",
       "author": [{
         "@type": "Person",
-        "name": {{primary_author.name}},
-      }]
+        "name": "{{primary_author.name}}",
+        "url": "{{primary_author.url absolute="true"}}"
+      }],
+      "publisher": {
+        "@type": "Organization",
+        "name": "{{@site.title}}",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "{{@site.logo}}"
+        }
+      },
+      {{#if primary_tag}}
+      "articleSection": "{{primary_tag.name}}",
+      {{/if}}
+      "inLanguage": "{{#has tag="#en"}}en{{else}}es{{/has}}"
     }
   </script>
 </head>

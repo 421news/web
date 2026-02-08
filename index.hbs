@@ -5,7 +5,26 @@
   <head>
     {{> "global-head"}}
     <title>421 | Tecnomagia para la vida real</title>
+    <meta name="description" content="{{@site.description}}">
     <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{@site.title}}",
+        "url": "{{@site.url}}",
+        "description": "{{@site.description}}",
+        "inLanguage": "es",
+        "publisher": {
+          "@type": "Organization",
+          "name": "{{@site.title}}",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "{{@site.logo}}"
+          }
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="page-wrapper">

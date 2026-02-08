@@ -4,9 +4,9 @@
 {{#contentFor "wf-site"}}6669c61faddc5cdc1cf55c96{{/contentFor}}
 {{#contentFor "wf-classes"}}body{{/contentFor}}
 {{#contentFor "wf-head"}}<meta charset="utf-8">
-<title>Page</title>
-<meta content="Page" property="og:title">
-<meta content="Page" property="twitter:title">
+<title>{{#page}}{{title}}{{/page}} | {{@site.title}}</title>
+<meta content="{{#page}}{{title}}{{/page}}" property="og:title">
+<meta content="{{#page}}{{title}}{{/page}}" property="twitter:title">
 <meta content="width=device-width, initial-scale=1" name="viewport">
 <meta content="Webflow" name="generator">
 <link href="{{asset "css/normalize.css"}}" rel="stylesheet" type="text/css">
