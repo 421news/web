@@ -1,170 +1,34 @@
-<div class="fb-window">
-  <!-- Title Bar -->
-  <div class="fb-titlebar">
-    <div class="fb-titlebar-dots">
-      <span class="fb-dot fb-dot--close" title="Close"></span>
-      <span class="fb-dot fb-dot--minimize" title="Minimize"></span>
-      <span class="fb-dot fb-dot--maximize" title="Maximize"></span>
-    </div>
-    <span class="fb-titlebar-title">421 &mdash; File Browser</span>
-    <div class="fb-titlebar-spacer"></div>
-  </div>
+{{!-- 421 Desktop - Unix File Browser (English) --}}
+<div data-fb-lang="en">
 
-  <!-- Toolbar -->
-  <div class="fb-toolbar">
-    <button class="fb-toolbar-btn is-disabled" data-action="back" title="Back">
-      <span>&#8592;</span>
-    </button>
-    <a href="/en/" class="fb-toolbar-btn" title="Home">
-      <span>&#8962;</span>
-    </a>
-    <div class="fb-toolbar-separator"></div>
-    <a href="/en/" class="fb-toolbar-btn" title="Reload">
-      <span>&#8635;</span>
-    </a>
-  </div>
-
-  <!-- Path Bar -->
-  <div class="fb-pathbar">
-    <a href="/en/" class="fb-pathbar-segment">
-      <i class="fb-icon">&#128187;</i> home
-    </a>
-    <span class="fb-pathbar-separator">/</span>
-    <a href="/en/" class="fb-pathbar-segment is-active">421</a>
-    <span class="fb-pathbar-separator">/</span>
-  </div>
-
-  <!-- Body: Sidebar + Content -->
-  <div class="fb-body">
-
-    <!-- Sidebar -->
-    <aside class="fb-sidebar">
-      <div class="fb-sidebar-heading">Bookmarks</div>
-      <a href="/en/" class="fb-sidebar-item">
-        <i class="fb-icon">&#127968;</i> Home
-      </a>
-      <a href="/en/tag/culture" class="fb-sidebar-item">
-        <i class="fb-icon">&#127912;</i> Culture
-      </a>
-      <a href="/en/tag/tech" class="fb-sidebar-item">
-        <i class="fb-icon">&#128268;</i> Tech
-      </a>
-      <a href="/en/tag/games" class="fb-sidebar-item">
-        <i class="fb-icon">&#127918;</i> Games
-      </a>
-      <a href="/en/tag/real-life" class="fb-sidebar-item">
-        <i class="fb-icon">&#127758;</i> Real life
-      </a>
-
-      <div class="fb-sidebar-divider"></div>
-      <div class="fb-sidebar-heading">System</div>
-      <a href="/suscribite" class="fb-sidebar-item">
-        <i class="fb-icon">&#128231;</i> Subscribe
-      </a>
-      <a href="/revista-421" class="fb-sidebar-item">
-        <i class="fb-icon">&#128214;</i> Magazine
-      </a>
-    </aside>
-
-    <!-- Content Area -->
-    <div class="fb-content">
-
-      <!-- Grid View -->
-      <div class="fb-content-grid">
-        <!-- Main Folders (Primary Categories) -->
-        <a href="/en/tag/culture" class="fb-item fb-item--folder">
-          <span class="fb-item-icon">&#128193;</span>
-          <span class="fb-item-name">culture/</span>
-        </a>
-        <a href="/en/tag/tech" class="fb-item fb-item--folder">
-          <span class="fb-item-icon">&#128193;</span>
-          <span class="fb-item-name">tech/</span>
-        </a>
-        <a href="/en/tag/games" class="fb-item fb-item--folder">
-          <span class="fb-item-icon">&#128193;</span>
-          <span class="fb-item-name">games/</span>
-        </a>
-        <a href="/en/tag/real-life" class="fb-item fb-item--folder">
-          <span class="fb-item-icon">&#128193;</span>
-          <span class="fb-item-name">real-life/</span>
-        </a>
-
-        <!-- Files (Special Pages) -->
-        <a href="/suscribite" class="fb-item fb-item--exec">
-          <span class="fb-item-icon">&#128196;</span>
-          <span class="fb-item-name">subscribe.sh</span>
-        </a>
-        <a href="/revista-421" class="fb-item fb-item--file">
-          <span class="fb-item-icon">&#128220;</span>
-          <span class="fb-item-name">magazine.pdf</span>
-        </a>
-        <a href="/en/last-posts" class="fb-item fb-item--file">
-          <span class="fb-item-icon">&#128203;</span>
-          <span class="fb-item-name">latest.log</span>
-        </a>
+  {{!-- Post data injection via Ghost API --}}
+  <div id="fb-posts-data">
+    {{#get "posts" limit="100" include="tags" filter="tag:hash-en"}}
+      {{#foreach posts}}
+      <div class="fb-post-entry"
+        data-title="{{title}}"
+        data-url="{{url}}"
+        data-image="{{feature_image}}"
+        data-date="{{date published_at format='DD/MM/YY'}}"
+        data-primary-tag="{{primary_tag.slug}}"
+        data-tags="{{#foreach tags}}{{slug}}{{#unless @last}},{{/unless}}{{/foreach}}">
       </div>
-
-      <!-- List View -->
-      <div class="fb-content-list">
-        <div class="fb-list-header">
-          <span>Name</span>
-          <span>Type</span>
-          <span>Modified</span>
-        </div>
-
-        <!-- Main Folders -->
-        <a href="/en/tag/culture" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128193;</i> culture/</span>
-          <span class="fb-list-type">Folder</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-        <a href="/en/tag/tech" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128193;</i> tech/</span>
-          <span class="fb-list-type">Folder</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-        <a href="/en/tag/games" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128193;</i> games/</span>
-          <span class="fb-list-type">Folder</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-        <a href="/en/tag/real-life" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128193;</i> real-life/</span>
-          <span class="fb-list-type">Folder</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-
-        <!-- Files -->
-        <a href="/suscribite" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128196;</i> subscribe.sh</span>
-          <span class="fb-list-type">Executable</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-        <a href="/revista-421" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128220;</i> magazine.pdf</span>
-          <span class="fb-list-type">Document</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-        <a href="/en/last-posts" class="fb-list-row">
-          <span class="fb-list-name"><i class="fb-icon">&#128203;</i> latest.log</span>
-          <span class="fb-list-type">Log file</span>
-          <span class="fb-list-modified">--</span>
-        </a>
-      </div>
-
-    </div>
+      {{/foreach}}
+    {{/get}}
   </div>
 
-  <!-- Status Bar -->
-  <div class="fb-statusbar">
-    <div class="fb-statusbar-left">
-      <span class="fb-statusbar-count"></span>
-    </div>
-    <div class="fb-statusbar-right">
-      <button class="fb-view-btn is-active" data-view="grid" title="Grid view">&#9783;</button>
-      <button class="fb-view-btn" data-view="list" title="List view">&#9776;</button>
-    </div>
+  {{!-- Desktop overlay (windows render here) --}}
+  <div id="fb-desktop" class="fb-desktop"></div>
+
+  {{!-- Taskbar --}}
+  <div id="fb-taskbar" class="fb-taskbar" style="display:none">
+    <div class="fb-taskbar-items" id="fb-taskbar-items"></div>
   </div>
+
+  {{!-- Launcher button --}}
+  <button id="fb-launcher" class="fb-launcher">
+    <span class="fb-launcher-icon">&#128193;</span> Explorer
+  </button>
+
 </div>
-
 <script src="{{asset "js/file-browser.js"}}"></script>
