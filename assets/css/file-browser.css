@@ -333,6 +333,21 @@
   flex-shrink: 0;
 }
 
+/* ---- Resize Handles ---- */
+.fb-resize {
+  position: absolute;
+  z-index: 10;
+}
+.fb-resize--n  { top: -4px; left: 10px; right: 10px; height: 8px; cursor: n-resize; }
+.fb-resize--s  { bottom: -4px; left: 10px; right: 10px; height: 8px; cursor: s-resize; }
+.fb-resize--e  { right: -4px; top: 10px; bottom: 10px; width: 8px; cursor: e-resize; }
+.fb-resize--w  { left: -4px; top: 10px; bottom: 10px; width: 8px; cursor: w-resize; }
+.fb-resize--ne { top: -4px; right: -4px; width: 14px; height: 14px; cursor: ne-resize; }
+.fb-resize--nw { top: -4px; left: -4px; width: 14px; height: 14px; cursor: nw-resize; }
+.fb-resize--se { bottom: -4px; right: -4px; width: 14px; height: 14px; cursor: se-resize; }
+.fb-resize--sw { bottom: -4px; left: -4px; width: 14px; height: 14px; cursor: sw-resize; }
+.is-maximized .fb-resize { display: none; }
+
 /* ---- Article Iframe ---- */
 .fb-article-frame {
   flex: 1;

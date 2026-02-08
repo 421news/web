@@ -1,19 +1,22 @@
 /**
  * 421 Desktop - Unix Window System
  * Window manager, file browser, article viewer
+ * Resize + drag + taskbar
  */
 (function () {
   "use strict";
 
-  /* ============ CONFIG ============ */
-  var LANG = (document.querySelector("[data-fb-lang]") || {}).getAttribute("data-fb-lang") || "es";
+  /* ============ LANGUAGE (auto-detect from URL) ============ */
+  var p = window.location.pathname;
+  var LANG = (p.indexOf("/en/") === 0 || p === "/en") ? "en" : "es";
 
   var CFG = {
     es: {
       title: "421 \u2014 Explorador de archivos",
+      launcherLabel: "Explorador",
       bookmarks: "Marcadores", system: "Sistema", home: "Inicio",
       subscribe: "Suscribite", magazine: "Revista", latest: "\u00DAltimos posts",
-      items: "elementos", emptyMsg: "Carpeta vac\u00EDa", readBtn: "Leer art\u00EDculo \u2192",
+      items: "elementos", emptyMsg: "Carpeta vac\u00EDa",
       categories: {
         "cultura":     { icon: "\uD83C\uDFA8", subs: ["historieta","libros","musica","peliculas","series","memes"] },
         "tecnologia":  { icon: "\uD83D\uDD0C", subs: ["cripto","internet","tutoriales","soberania"] },
@@ -28,9 +31,10 @@
     },
     en: {
       title: "421 \u2014 File Browser",
+      launcherLabel: "Explorer",
       bookmarks: "Bookmarks", system: "System", home: "Home",
       subscribe: "Subscribe", magazine: "Magazine", latest: "Latest posts",
-      items: "items", emptyMsg: "Empty folder", readBtn: "Read article \u2192",
+      items: "items", emptyMsg: "Empty folder",
       categories: {
         "culture":    { icon: "\uD83C\uDFA8", subs: ["historieta","libros","musica","peliculas","series","memes"] },
         "tech":       { icon: "\uD83D\uDD0C", subs: ["cripto","internet","tutoriales","soberania"] },
@@ -110,6 +114,9 @@
         w.appendChild(c);
       }
 
+      // resize handles
+      this._addResizeHandles(w);
+
       this.desktop.appendChild(w);
       this._drag(w, tb);
       this._controls(w, id);
@@ -168,17 +175,93 @@
       return d.innerHTML;
     },
 
+    /* -- Drag -- */
     _drag: function (win, handle) {
       var ox = 0, oy = 0, dragging = false;
-      function start(cx, cy) { dragging = true; ox = cx - win.offsetLeft; oy = cy - win.offsetTop; WM.front(win); }
-      function move(cx, cy) { if (!dragging) return; win.style.left = (cx - ox) + "px"; win.style.top = (cy - oy) + "px"; }
+      function start(cx, cy) {
+        if (win.classList.contains("is-maximized")) return;
+        dragging = true; ox = cx - win.offsetLeft; oy = cy - win.offsetTop; WM.front(win);
+      }
+      function move(cx, cy) {
+        if (!dragging) return;
+        win.style.left = (cx - ox) + "px";
+        win.style.top = (cy - oy) + "px";
+      }
       function end() { dragging = false; }
-      handle.addEventListener("mousedown", function (e) { if (e.target.classList.contains("fb-dot")) return; start(e.clientX, e.clientY); e.preventDefault(); });
+      handle.addEventListener("mousedown", function (e) {
+        if (e.target.classList.contains("fb-dot")) return;
+        start(e.clientX, e.clientY); e.preventDefault();
+      });
       document.addEventListener("mousemove", function (e) { move(e.clientX, e.clientY); });
       document.addEventListener("mouseup", end);
-      handle.addEventListener("touchstart", function (e) { if (e.target.classList.contains("fb-dot")) return; var t = e.touches[0]; start(t.clientX, t.clientY); }, { passive: true });
-      document.addEventListener("touchmove", function (e) { if (!dragging) return; var t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
+      handle.addEventListener("touchstart", function (e) {
+        if (e.target.classList.contains("fb-dot")) return;
+        var t = e.touches[0]; start(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener("touchmove", function (e) {
+        if (!dragging) return; var t = e.touches[0]; move(t.clientX, t.clientY);
+      }, { passive: true });
       document.addEventListener("touchend", end);
+    },
+
+    /* -- Resize -- */
+    _addResizeHandles: function (win) {
+      var dirs = ["n","s","e","w","ne","nw","se","sw"];
+      var minW = 320, minH = 200;
+      var edge = null, startX, startY, startW, startH, startL, startT;
+
+      dirs.forEach(function (dir) {
+        var h = document.createElement("div");
+        h.className = "fb-resize fb-resize--" + dir;
+        win.appendChild(h);
+
+        h.addEventListener("mousedown", function (e) {
+          if (win.classList.contains("is-maximized")) return;
+          e.preventDefault(); e.stopPropagation();
+          edge = dir;
+          startX = e.clientX; startY = e.clientY;
+          startW = win.offsetWidth; startH = win.offsetHeight;
+          startL = win.offsetLeft; startT = win.offsetTop;
+          WM.front(win);
+        });
+
+        h.addEventListener("touchstart", function (e) {
+          if (win.classList.contains("is-maximized")) return;
+          e.stopPropagation();
+          var t = e.touches[0];
+          edge = dir;
+          startX = t.clientX; startY = t.clientY;
+          startW = win.offsetWidth; startH = win.offsetHeight;
+          startL = win.offsetLeft; startT = win.offsetTop;
+          WM.front(win);
+        }, { passive: true });
+      });
+
+      function onMove(cx, cy) {
+        if (!edge) return;
+        var dx = cx - startX, dy = cy - startY;
+        if (edge.indexOf("e") !== -1) win.style.width = Math.max(minW, startW + dx) + "px";
+        if (edge.indexOf("w") !== -1) {
+          var nw = Math.max(minW, startW - dx);
+          win.style.width = nw + "px";
+          win.style.left = (startL + startW - nw) + "px";
+        }
+        if (edge.indexOf("s") !== -1) win.style.height = Math.max(minH, startH + dy) + "px";
+        if (edge.indexOf("n") !== -1) {
+          var nh = Math.max(minH, startH - dy);
+          win.style.height = nh + "px";
+          win.style.top = (startT + startH - nh) + "px";
+        }
+      }
+
+      document.addEventListener("mousemove", function (e) { onMove(e.clientX, e.clientY); });
+      document.addEventListener("touchmove", function (e) {
+        if (!edge) return; var t = e.touches[0]; onMove(t.clientX, t.clientY);
+      }, { passive: true });
+
+      function onEnd() { edge = null; }
+      document.addEventListener("mouseup", onEnd);
+      document.addEventListener("touchend", onEnd);
     },
 
     _controls: function (win, id) {
@@ -212,12 +295,14 @@
     allSubs: [],
 
     init: function () {
-      // Collect all subcategory slugs
       var cats = L.categories;
       Object.keys(cats).forEach(function (k) { FS.allSubs = FS.allSubs.concat(cats[k].subs); });
 
-      // Read posts from hidden data elements
-      var els = document.querySelectorAll(".fb-post-entry");
+      // Read posts filtered by current language
+      var els = document.querySelectorAll('.fb-post-entry[data-lang="' + LANG + '"]');
+      // Fallback: if no data-lang attributes, read all (for preview/testing)
+      if (els.length === 0) els = document.querySelectorAll(".fb-post-entry");
+
       els.forEach(function (el) {
         FS.posts.push({
           title: el.getAttribute("data-title") || "",
@@ -235,7 +320,6 @@
       var cats = L.categories;
 
       if (path === "/") {
-        // Root: show main category folders + special files
         Object.keys(cats).forEach(function (slug) {
           items.push({ name: slug + "/", type: "folder", path: "/" + slug, icon: "\uD83D\uDCC1" });
         });
@@ -251,11 +335,9 @@
       var subCat = parts[1];
 
       if (cats[mainCat] && !subCat) {
-        // Inside a main category: show subfolders + articles with this tag
         cats[mainCat].subs.forEach(function (sub) {
           items.push({ name: sub + "/", type: "folder", path: "/" + mainCat + "/" + sub, icon: "\uD83D\uDCC2" });
         });
-        // Articles that have this main category tag but not a subcategory tag
         FS.posts.forEach(function (p) {
           var inMain = p.tags.indexOf(mainCat) !== -1 || p.primaryTag === mainCat;
           var inSub = false;
@@ -268,7 +350,6 @@
       }
 
       if (cats[mainCat] && subCat) {
-        // Inside a subcategory: show articles with this tag
         FS.posts.forEach(function (p) {
           if (p.tags.indexOf(subCat) !== -1) {
             items.push({ name: p.title, type: "article", url: p.url, image: p.image, date: p.date, icon: "\uD83D\uDCF0" });
@@ -347,7 +428,6 @@
       el.querySelector(".fb-nav-forward").addEventListener("click", function () { self._goForward(); });
       el.querySelector(".fb-nav-home").addEventListener("click", function () { self._navigate("/"); });
 
-      // Sidebar navigation
       el.querySelectorAll(".fb-side-nav").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var p = btn.getAttribute("data-path");
@@ -360,7 +440,6 @@
 
     _navigate: function (path) {
       this.currentPath = path;
-      // Manage history
       if (this.historyIdx < this.history.length - 1) {
         this.history = this.history.slice(0, this.historyIdx + 1);
       }
@@ -435,7 +514,6 @@
           el.innerHTML = '<span class="fb-item-icon">' + item.icon + '</span><span class="fb-item-name">' + WM._esc(item.name) + '</span>';
 
           el.addEventListener("click", function () {
-            // Deselect others
             grid.querySelectorAll(".fb-item").forEach(function (i) { i.classList.remove("is-selected"); });
             el.classList.add("is-selected");
           });
@@ -457,8 +535,6 @@
       // Update status bar
       var countEl = el.querySelector(".fb-status-count");
       if (countEl) {
-        var folderCount = items.filter(function (i) { return i.type === "folder"; }).length;
-        var fileCount = items.length - folderCount;
         countEl.textContent = items.length + " " + L.items;
       }
     },
@@ -483,6 +559,10 @@
   document.addEventListener("DOMContentLoaded", function () {
     WM.init();
     FS.init();
+
+    // Set launcher label by language
+    var launcherText = document.getElementById("fb-launcher-text");
+    if (launcherText) launcherText.textContent = L.launcherLabel;
 
     var launcher = document.getElementById("fb-launcher");
     if (launcher) {

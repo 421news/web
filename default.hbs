@@ -31,10 +31,13 @@
       <link href='{{asset "images/webclip.png"}}' rel='apple-touch-icon' />
     {{/unless}}
     <link href='{{asset "css/udesly-ghost.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/file-browser.css"}}' rel='stylesheet' />
     {{ghost_head}}
   </head>
   <body class='{{body_class}}'>
     {{{body}}}
+
+    {{> "file-browser"}}
 
     {{ghost_foot}}
     <script src='{{asset "js/udesly-ghost.min.js"}}'></script>
