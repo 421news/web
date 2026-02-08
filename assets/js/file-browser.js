@@ -464,26 +464,16 @@
     },
 
     _openArticle: function (article) {
-      var imgHtml = article.image
-        ? '<img class="fb-article-image" src="' + WM._esc(article.image) + '" alt="" />'
-        : '';
       var html =
-        '<div class="fb-article-preview">' +
-          imgHtml +
-          '<div class="fb-article-body">' +
-            '<h2 class="fb-article-title">' + WM._esc(article.name) + '</h2>' +
-            (article.date ? '<p class="fb-article-meta">' + article.date + '</p>' : '') +
-            '<a href="' + WM._esc(article.url) + '" class="fb-article-read">' + L.readBtn + '</a>' +
-          '</div>' +
-        '</div>';
+        '<iframe class="fb-article-frame" src="' + WM._esc(article.url) + '"></iframe>';
 
       var off = (WM.counter % 6) * 24;
       WM.create({
         title: article.name,
-        width: 480,
-        height: 440,
-        x: 160 + off,
-        y: 80 + off,
+        width: 680,
+        height: 520,
+        x: 100 + off,
+        y: 60 + off,
         html: html
       });
     }
