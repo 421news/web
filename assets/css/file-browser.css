@@ -7,7 +7,7 @@
 .fb-desktop {
   position: fixed;
   inset: 0;
-  z-index: 900;
+  z-index: 950;
   pointer-events: none;
   overflow: hidden;
 }
@@ -17,7 +17,7 @@
   position: fixed;
   bottom: 24px;
   left: 24px;
-  z-index: 9999;
+  z-index: 9997;
   background-color: var(--negro);
   color: var(--crema);
   border: 2px solid var(--crema);
@@ -53,9 +53,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  z-index: 9998;
+  z-index: 9996;
   background-color: var(--negro);
-  border-top: 2px solid rgba(234,230,225,0.15);
+  border-top: 2px solid rgba(234,230,225,0.15) !important;
   padding: 4px 8px;
   display: flex;
   align-items: center;
@@ -283,11 +283,11 @@
   text-decoration: none;
   color: var(--negro);
   cursor: pointer;
-  border: 2px solid transparent;
+  border: 2px solid transparent !important;
   transition: background 0.1s ease;
 }
 .fb-item:hover { background-color: rgba(18,18,18,0.06); }
-.fb-item.is-selected { background-color: rgba(252,210,33,0.15); border-color: var(--amarillo); }
+.fb-item.is-selected { background-color: rgba(252,210,33,0.15); border-color: var(--amarillo) !important; }
 .fb-item-icon { font-size: 32px; line-height: 1; user-select: none; }
 .fb-item-name {
   font-size: 11px;
@@ -362,7 +362,7 @@
   font-weight: 800;
   font-style: italic;
   line-height: 1.25;
-  margin-bottom: 8px;
+  margin: 0 0 8px 0;
 }
 .fb-article-meta {
   font-size: 13px;
