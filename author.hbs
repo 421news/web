@@ -4,7 +4,24 @@
   <head>
     {{> "global-head"}}
     <title>421 | Artículos de {{primary_author.name}}</title>
+    <meta name="description" content="Artículos escritos por {{primary_author.name}} en {{@site.title}}">
     <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
+    {{#author}}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "mainEntity": {
+          "@type": "Person",
+          "name": "{{name}}",
+          "url": "{{url absolute="true"}}",
+          {{#if bio}}"description": "{{bio}}",{{/if}}
+          {{#if profile_image}}"image": "{{profile_image}}",{{/if}}
+          {{#if twitter}}"sameAs": ["https://x.com/{{twitter}}"]{{/if}}
+        }
+      }
+    </script>
+    {{/author}}
   </head>
   <body>
     {{#author}}
