@@ -1,0 +1,37 @@
+{
+  "name": "421",
+  "author": {
+    "email": "giancab@proton.me"
+  },
+  "description": "Ghost Theme for 421.news",
+  "keywords": [
+    "ghost-theme"
+  ],
+  "version": "2.1.0",
+  "engines": {
+    "ghost": ">=4.0.0"
+  },
+  "license": "MIT",
+  "card_assets": false,
+  "posts_per_page": 8,
+  "image_sizes": {
+    "xxs": {
+      "width": 30
+    },
+    "xs": {
+      "width": 100
+    },
+    "s": {
+      "width": 300
+    },
+    "m": {
+      "width": 600
+    },
+    "l": {
+      "width": 1000
+    },
+    "xl": {
+      "width": 2000
+    }
+  }
+}

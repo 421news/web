@@ -1,0 +1,19 @@
+{{!< default}}
+
+  <div class="page-wrapper">
+    {{> "general-styling"}}
+    {{> "site-nav-es"}}
+    <main>
+      <div style="margin-top: 50px"></div>
+      <!-- LAST POSTS -->
+      {{> "last-posts-es-secondary-tag" tag="deportes"}}
+
+      <!-- WIKI -->
+      {{!-- {{> "wiki-section-es"}} --}}
+
+    </main>
+
+    {{> "site-footer"}}
+
+  </div>
+  <script src="{{asset "js/pagination-next.js"}}"></script>

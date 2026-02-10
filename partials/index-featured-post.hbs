@@ -1,0 +1,110 @@
+{{#get
+  'posts'
+  include='tags,authors'
+  filter="tag:-'Wiki'+featured:true+tag:{{languageFilter}}"
+  limit='1'
+  as |featured|
+}}
+  <div class='w-dyn-list'>
+    {{#if featured}}
+      <div role='list' class='w-dyn-items'>
+        {{#foreach featured}}
+          <div role='listitem' class='w-dyn-item'>
+            <div
+              class='hero-home'
+              style="background-image: url('{{feature_image}}')"
+            >
+              <div class='hero-home_content'>
+                <div class='global-container'>
+                  <div class='hero-home_cols'>
+                    <div class='hero-home_meta'>
+                      <span
+                        id='cover-tags'
+                        class='plain-tags'
+                        style='background-color: #121212; padding: 5px'
+                      >
+                        {{#foreach tags}}
+                          <a href='/tag/{{slug}}'>{{name}}</a>
+                          {{#unless @last}}, {{/unless}}
+                        {{/foreach}}
+                      </span>
+                      <a href='{{url}}' style='text-decoration: none'>
+                        <div
+                          id='w-node-_19e5bfb4-641d-9263-3e20-ad3f2c295cea-1cf55c9d'
+                          class='hero-title_wrapper'
+                        >
+                          <div class='flashy-h1_wrapper'>
+                            <div class='w-embed'>
+                              <h1 class='flashy-h1 flashy-h1-shadow'>
+                                <span>{{title}}</span>
+                              </h1>
+                            </div>
+                            <div class='w-embed'>
+                              <div class='flashy-h1 is-shadow'>
+                                <span class='flashy-h1_shadow'>{{title}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                      <div
+                        class='author-box is-home'
+                        style="
+                          background-image: url('{{asset
+                          "images/rectangle-217.svg"
+                        }}')"
+                      >
+                        {{#primary_author}}
+                          <a href='{{url}}'>
+                            <img
+                              src='{{img_url profile_image size='medium'}}'
+                              loading='lazy'
+                              alt="{{name}}'s profile picture"
+                              class='author-photo'
+                            />
+                          </a>
+                        {{/primary_author}}
+                        <div class='w-embed'>
+                          <p class='is-italic'>
+                            {{date updated_at format='D/M/YYYY'}}
+                            —
+                            {{#primary_author}}
+                              <a
+                                href='{{url}}'
+                                class='author-name_link'
+                              >{{name}}</a>
+                            {{/primary_author}}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class='featured-post-read-button'>
+                      <a
+                        id='w-node-_7694fb40-2359-8a94-5bdf-a5cfb066ef95-1cf55c9d'
+                        href='{{url}}'
+                        class='button is-icon is-secondary w-inline-block'
+                      >
+                        <div id='read-div'></div>
+                        <img
+                          src='{{asset "images/arrow-3.svg"}}'
+                          loading='lazy'
+                          alt=''
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='hero_overlays'>
+              <div
+                class='hero_texture'
+                style="background-image: url('{{asset "images/textura.png"}}')"
+              ></div>
+            </div>
+          </div>
+        {{/foreach}}
+      </div>
+    {{/if}}
+  </div>
+{{/get}}

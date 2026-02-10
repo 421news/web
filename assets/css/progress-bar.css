@@ -1,0 +1,39 @@
+/* Container */
+.progress {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 4px;          /* Horizontal bar height */
+    z-index: 9999;
+    pointer-events: none;               /* Don’t block clicks */
+    background: transparent;
+}
+  
+/* The filling bar */
+.progress__bar {
+    display: block;
+    width: 100%; height: 100%;
+    transform-origin: 0 0;
+    transform: scaleX(var(--progress, 0));     /* Horizontal fill */
+    /* Nice subtle style (customize as you like) */
+    background: linear-gradient(180deg, var(--amarillo), var(--verde));
+}
+  
+/* Place at the bottom */
+.progress--bottom { top: auto; bottom: 0; }
+  
+/* Vertical variants (side rail) */
+.progress--vertical {
+    width: 6px; height: 100%;
+}
+.progress--left.progress--vertical  { left: 0;  top: 0; }
+.progress--right.progress--vertical { right: 0; top: 0; left: auto; }
+  
+.progress--vertical .progress__bar {
+    transform: scaleY(var(--progress, 0));     /* Vertical fill */
+}
+  
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .progress__bar { transition: none !important; }
+}
+  

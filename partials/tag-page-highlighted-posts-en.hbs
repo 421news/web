@@ -1,0 +1,31 @@
+<div class="preview-section bg-gradient">
+    <div class="global-container">
+        <div class="pv-huge">
+        <div class="text-center">
+            <h2 class="text-black">Highlighted posts</h2>
+        </div>
+        {{#get "posts"
+            include="tags,authors"
+            limit="4"
+            order="published_at desc"
+            filter="primary_tag:{{tag}}+featured:true+tag:-'Wiki'+tag:{{languageFilter}}"
+            as |items|
+        }}
+            <div class="post-grid w-dyn-list">
+            {{#if items}}
+                <div role="list" class="post-cols w-dyn-items">
+                {{#foreach posts}}
+                    {{> "post-card"}}
+                {{/foreach}}
+                </div>
+            {{/if}}
+            {{#unless items}}
+                <div class="w-dyn-empty">
+                <div>Ups, nothing here yet.</div>
+                </div>
+            {{/unless}}
+            </div>
+        {{/get}}
+        </div>
+    </div>
+</div>

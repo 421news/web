@@ -1,0 +1,14 @@
+<div class="global-container">
+  <h2 class="text-amarillo">Leer más sobre:</h2>
+  <div class="tag-grid pt-small">
+    {{#get "tags" limit="all" include="count.posts"}}
+      <ul class="tags-grid text-small">
+        {{#foreach tags}}
+          <li>
+            <a href="{{url}}" class="button w-button">{{name}} <span class="tags_post-counter">({{count.posts}})</span></a>
+          </li>
+        {{/foreach}}
+      </ul>
+    {{/get}}
+  </div>
+</div>

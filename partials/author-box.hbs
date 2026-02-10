@@ -1,0 +1,17 @@
+<div class="author-box">
+  {{#primary_author}}
+    <img
+      src="{{img_url profile_image size="medium"}}"
+      loading="lazy"
+      alt="{{name}}'s profile picture"
+      class="author-photo"
+    />
+  {{/primary_author}}
+  <p class="is-italic">
+    {{date published_at}}
+    —
+    {{#primary_author}}
+      <a href="{{url}}" class="author-name_link">{{name}}</a>
+    {{/primary_author}}
+  </p>
+</div>
