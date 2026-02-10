@@ -1,4 +1,4 @@
-<html>
+<html lang="es">
   <head>
     <title>{{meta_title}}</title>
     <meta charset='utf-8' />
@@ -31,14 +31,97 @@
       <link href='{{asset "images/webclip.png"}}' rel='apple-touch-icon' />
     {{/unless}}
     <link href='{{asset "css/udesly-ghost.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/globals.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/site-nav.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/index.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />
+    <script>
+      (function() {
+        if (window.location.pathname.startsWith('/en/')) {
+          document.documentElement.lang = 'en';
+        }
+        var path = window.location.pathname;
+        function addHreflang(lang, href) {
+          var link = document.createElement('link');
+          link.rel = 'alternate'; link.hreflang = lang; link.href = href;
+          document.head.appendChild(link);
+        }
+        if (path === '/' || path === '/en/' || path === '/en') {
+          addHreflang('es', 'https://www.421.news/');
+          addHreflang('en', 'https://www.421.news/en/');
+          addHreflang('x-default', 'https://www.421.news/');
+        }
+      })();
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var enMeta = document.querySelector('meta[name="english-version"]');
+        var esMeta = document.querySelector('meta[name="spanish-version"]');
+        function addHreflang(lang, href) {
+          var link = document.createElement('link');
+          link.rel = 'alternate'; link.hreflang = lang; link.href = href;
+          document.head.appendChild(link);
+        }
+        if (enMeta && enMeta.content) {
+          addHreflang('es', window.location.href);
+          addHreflang('en', 'https://www.421.news/en/' + enMeta.content + '/');
+        }
+        if (esMeta && esMeta.content) {
+          addHreflang('en', window.location.href);
+          addHreflang('es', 'https://www.421.news/' + esMeta.content + '/');
+        }
+      });
+    </script>
     {{ghost_head}}
+    <script>
+      (function() {
+        // only run on root path to avoid redirect loops
+        if (window.location.pathname !== "/" && !window.location.pathname.match(/^\/$/)) {
+          return;
+        }
+
+        // check if user has already set a language preference
+        const prefersSpanish = localStorage.getItem('prefersSpanish');
+        if (prefersSpanish === "true") {
+          return;
+        }
+
+        // get browser lang
+        const browserLang = navigator.language || navigator.userLanguage;
+        // get primary lang code 
+        const langCode = browserLang.toLowerCase().split('-')[0];
+
+        // list of english lang codes
+        const englishCodes = ['en'];
+
+        // check if browser language is english
+        if (englishCodes.includes(langCode)) {
+          window.location.href = '/en/';
+        }
+      })();
+    </script>
   </head>
   <body class='{{body_class}}'>
     {{{body}}}
 
+    {{> "sticky-subscribe-mobile-button"}}
+    <script>
+      (function() {
+        // Update sticky subscribe button text for English pages
+        if (window.location.pathname.startsWith('/en/')) {
+          const subscribeButton = document.getElementById('hero-mobile-subscribe-button');
+          if (subscribeButton) {
+            subscribeButton.textContent = "Subscribe";
+            subscribeButton.href = "/en/subscribe";
+          }
+        }
+      })();
+    </script>
     {{ghost_foot}}
     <script src='{{asset "js/udesly-ghost.min.js"}}'></script>
     <script src='{{asset "built/portal.min.js"}}'></script>
     <script src='{{asset "js/seamless.js"}}'></script>
+    <script src="{{asset "js/hide-show-nav.js"}}"></script>
   </body>
 </html>
