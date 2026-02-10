@@ -298,16 +298,14 @@ body.wm-desktop .fb-window:not(.wm-managed) {
   display: none;
 }
 
-/* ---- Responsive: hide everything WM on mobile ---- */
+/* ---- Responsive: hide everything on mobile ---- */
 @media screen and (max-width: 1023px) {
   .wm-launcher,
   .wm-taskbar,
   .wm-windows,
   .wm-window,
-  .wm-root {
+  .wm-root,
+  .fb-window {
     display: none !important;
-  }
-  body.wm-desktop .fb-window:not(.wm-managed) {
-    display: block;
   }
 }
