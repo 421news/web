@@ -1,0 +1,313 @@
+/* ========================================
+   WINDOW MANAGER - Floating Desktop System
+   Launcher, Taskbar, Draggable/Resizable Windows
+   ======================================== */
+
+/* ---- Launcher Button ---- */
+.wm-launcher {
+  position: fixed;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--negro);
+  color: var(--crema);
+  border: var(--border-width) solid var(--crema);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  animation: wm-pulse 3s ease-in-out infinite;
+}
+.wm-launcher:hover {
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 3px 3px 0 rgba(18, 18, 18, 0.4);
+}
+.wm-launcher:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+@keyframes wm-pulse {
+  0%, 100% { box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.3); }
+  50% { box-shadow: 2px 2px 8px rgba(18, 18, 18, 0.15); }
+}
+
+/* ---- Floating Windows ---- */
+.wm-window {
+  position: fixed;
+  z-index: 10001;
+  border: var(--border-width) solid var(--negro);
+  border-radius: var(--radius);
+  background-color: var(--crema);
+  box-shadow: 4px 4px 0 var(--negro);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 400px;
+  min-height: 300px;
+}
+.wm-window.wm-focused {
+  box-shadow: 6px 6px 0 var(--negro), 0 0 0 1px var(--negro);
+}
+
+/* Window body fills remaining space */
+.wm-window .wm-window-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* File browser inside a floating window */
+.wm-window .fb-window {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  max-width: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.wm-window .fb-body {
+  flex: 1;
+  overflow: hidden;
+}
+.wm-window .fb-content {
+  overflow-y: auto;
+}
+
+/* ---- Drag Handle (titlebar) ---- */
+.wm-window .fb-titlebar {
+  cursor: grab;
+}
+.wm-window .fb-titlebar.wm-dragging {
+  cursor: grabbing;
+}
+
+/* ---- Resize Handle ---- */
+.wm-resize-handle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  cursor: nw-resize;
+  z-index: 2;
+}
+.wm-resize-handle::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid rgba(18, 18, 18, 0.3);
+  border-bottom: 2px solid rgba(18, 18, 18, 0.3);
+}
+
+/* ---- Taskbar ---- */
+.wm-taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36px;
+  background-color: var(--negro);
+  color: var(--crema);
+  z-index: 10002;
+  border-top: var(--border-width) solid var(--crema);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  overflow-x: auto;
+}
+
+.wm-taskbar-items {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  overflow-x: auto;
+  min-width: 0;
+}
+
+.wm-taskbar-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(234, 230, 225, 0.1);
+  border: 1px solid rgba(234, 230, 225, 0.2);
+  border-radius: 4px;
+  color: var(--crema);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.12s ease;
+  flex-shrink: 0;
+}
+.wm-taskbar-item:hover {
+  background: rgba(234, 230, 225, 0.2);
+}
+.wm-taskbar-item.is-minimized {
+  opacity: 0.5;
+}
+.wm-taskbar-item.is-active {
+  background: rgba(234, 230, 225, 0.2);
+  border-color: var(--crema);
+}
+
+/* ---- Post window (separate floating window) ---- */
+.wm-post-window {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.wm-post-titlebar {
+  flex-shrink: 0;
+}
+.wm-post-titlebar.wm-dragging {
+  cursor: grabbing;
+}
+.wm-post-body {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--crema);
+}
+
+/* ---- In-window content: post preview ---- */
+.wm-post-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  display: block;
+  border-bottom: var(--border-width) solid var(--negro);
+}
+
+.wm-post-details {
+  padding: 20px;
+}
+.wm-post-details h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  color: var(--negro);
+}
+.wm-post-meta {
+  font-size: 12px;
+  color: rgba(18, 18, 18, 0.5);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+.wm-post-excerpt {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--negro);
+  margin-bottom: 20px;
+}
+.wm-post-link {
+  display: inline-block;
+  padding: 8px 20px;
+  background-color: var(--negro);
+  color: var(--crema);
+  text-decoration: none;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 700;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  border: var(--border-width) solid var(--negro);
+}
+.wm-post-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 2px 2px 0 var(--negro);
+}
+
+/* ---- In-window content: folder grid ---- */
+.wm-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+  padding: 16px;
+}
+.wm-folder-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--negro);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background 0.12s ease, transform 0.1s ease;
+}
+.wm-folder-item:hover {
+  background-color: rgba(18, 18, 18, 0.06);
+  transform: translateY(-2px);
+}
+.wm-folder-item-icon {
+  font-size: 36px;
+  line-height: 1;
+  user-select: none;
+}
+.wm-folder-item-name {
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.3;
+  max-width: 100%;
+}
+
+/* ---- Loading / Error states ---- */
+.wm-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  font-size: 14px;
+  color: rgba(18, 18, 18, 0.5);
+  font-weight: 600;
+}
+.wm-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  font-size: 14px;
+  color: #ff5f57;
+  font-weight: 600;
+}
+
+/* ---- Hide inline file browser on desktop ---- */
+body.wm-desktop .fb-window:not(.wm-managed) {
+  display: none;
+}
+
+/* ---- Responsive: hide everything WM on mobile ---- */
+@media screen and (max-width: 1023px) {
+  .wm-launcher,
+  .wm-taskbar,
+  .wm-windows,
+  .wm-window,
+  .wm-root {
+    display: none !important;
+  }
+  body.wm-desktop .fb-window:not(.wm-managed) {
+    display: block;
+  }
+}
