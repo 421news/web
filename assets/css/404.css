@@ -1,0 +1,38 @@
+.main-404 {
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('/assets/images/404-01.webp');
+}
+
+.text {
+    width: 500px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%, 50%);
+    top: 30%;
+}
+
+.text h1 {
+    color: var(--amarillo);
+}
+
+.text .last-p {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 600px) {
+    .main-404 {
+        background-image: url('/assets/images/404-02-mobile.webp');
+        background-position: bottom;
+        background-size: contain;
+    }
+    .text {
+        width: 100%;
+        top: 100px;
+        position: relative;
+        text-align: center;
+        left: 0;
+    }
+}

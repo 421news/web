@@ -1,0 +1,31 @@
+<div class="preview-section">
+    <div class="global-container">
+        <div class="pv-huge">
+            <div class="preview-section_flex-header">
+                <h2>Last in Wiki</h2>
+                <a href="/tag/wiki" class="button w-button">
+                    Explore Wiki
+                </a>
+            </div>
+            <div class="post-grid w-dyn-list">
+                <div role="list" class="post-cols w-dyn-items">
+                    {{#get "posts"
+                        include="tags,authors"
+                        filter="tag:'wiki'+tag:'hash-en'"
+                        limit="4"
+                        order="published_at desc"
+                        as |articles|
+                    }}
+                        {{#if articles}}
+                        {{#foreach articles}}
+                            {{> "post-card"}}
+                        {{/foreach}}
+                        {{else}}
+                        <p>Coming soon</p>
+                        {{/if}}
+                    {{/get}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

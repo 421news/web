@@ -1,0 +1,236 @@
+{{!< default}}
+
+    <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
+    <div class="page-wrapper">
+      {{> "general-styling"}}
+      {{> "site-nav-es"}}
+
+      <!-- Formulario de suscripcion -->
+      <div class="subscription-section">
+        <div class="global-container">
+          <div class="pv-huge">
+            <div class="text-center">
+              <h2 class="title">Suscribite a 421</h2>
+              <p class="subtitle">Elegí el tipo de suscripción que prefieras</p>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px 0; padding: 15px; background-color: var(--negro); border-radius: 8px;">
+              <p style="margin: 0; font-size: 14px; line-height: 1.5;">
+                Esta pantalla de suscripción está sólo disponible para Argentina. Si sos de otro país, por favor <a href="/en/subscribe" style="color: var(--amarillo, #00ff00); text-decoration: underline;">clickeá acá</a> para suscribirte vía Stripe.
+              </p>
+            </div>
+
+            <div class="subscription-options-wrapper">
+              <div class="paid-subs">
+                <!-- Opcion Wizard Anual -->
+                <div class="subscription-option premium" id="wizard-annual-option">
+                  <h3>Wizard Anual</h3>
+                  <div style="font-size: 15px; color: var(--verde);">Pesificado a valor dólar blue de hoy</div>
+                  <div class="price">
+                    <b>$100USD</b>
+                    <div>
+                      <div class="striked-price">
+                        $120USD
+                      </div>
+                      <div>anual</div>
+                    </div>
+                  </div>
+                  <p class="savings">¡Ahorrá 2 meses!</p>
+                  <ul class="features">
+                    <li>Todos los beneficios del plan Wizard</li>
+                    <li>2 meses de descuento</li>
+                  </ul>
+                  <button class="select-plan-btn premium-btn" data-plan="wizard-yearly">
+                    Seleccionar
+                  </button>
+                </div>
+
+                <!-- Opcion Wizard Mensual -->
+                <div class="subscription-option" id="wizard-monthly-option" style="margin: 10px 0">
+                  <h3 style="font-size: 2rem; font-style: normal">Wizard</h3>
+                  <div style="font-size: 15px; color: var(--amarillo);">Pesificado a valor dólar blue de hoy</div>
+                  <div
+                    style="display: flex; gap: 10px; align-items: center;"
+                    class="price"
+                  >
+                    <b style="font-size: 2rem;">$10USD</b>
+                    <div>
+                      {{!-- <div
+                        style="font-size: 1rem; text-decoration: line-through"
+                      >
+                        $14.000
+                      </div> --}}
+                      <div>mensual</div>
+                    </div>
+                  </div>
+                  <ul class="features">
+                    <li>Newsletter mensual premium</li>
+                    <li>Edición digital de la revista 421</li>
+                    <li>Eventos AFK</li>
+                  </ul>
+                  <button class="select-plan-btn" data-plan="wizard-monthly">
+                    Seleccionar
+                  </button>
+                </div>
+              </div>
+
+              <!-- Opcion Goblin (Gratis) -->
+              <a href="#/portal/signup">
+                <div class="subscription-option">
+                  <h3>Goblin</h3>
+                  <ul class="features">
+                    <li>Recibí las notas por mail</li>
+                  </ul>
+                  <button class="select-plan-btn" data-plan="goblin">
+                    Seleccionar
+                  </button>
+                </div>
+              </a>
+            </div>
+
+            <!-- Formulario de suscripcion (inicialmente oculto) -->
+            <div id="subscription-form-container" style="display: none;">
+              <h3 id="selected-plan-title" style="margin-bottom: 30px;">Completá tu suscripción</h3>
+              <form id="subscription-form">
+                <input type="hidden" id="subType" name="subType" value="">
+                <div class="form-group">
+                  <label for="name">Nombre completo</label>
+                  <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Correo electrónico</label>
+                  <input type="email" id="email" name="email" required>
+                </div>
+                <div style="font-size: 15px;">
+                  (El mail tiene que ser el mismo de la cuenta de MercadoPago)
+                </div>
+                <br />
+                <button type="submit" class="submit-btn">Suscribirse</button>
+              </form>
+              <div id="form-message" class="form-message"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{> "site-footer"}}
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6669c61faddc5cdc1cf55c96" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const modeSwitchButton = document.getElementById("mode-switch");
+        const bodyElement = document.querySelector(".body");
+
+        // Check and apply user preference from localStorage
+        if (localStorage.getItem("lightMode") === "enabled") {
+          bodyElement.classList.add("light-mode");
+          updateDivBorders("#121212");
+        }
+
+        modeSwitchButton.addEventListener("click", function() {
+          bodyElement.classList.toggle("light-mode");
+          
+          if (bodyElement.classList.contains("light-mode")) {
+            localStorage.setItem("lightMode", "enabled");
+            updateDivBorders("#121212");
+          } else {
+            localStorage.setItem("lightMode", "disabled");
+            updateDivBorders("");
+          }
+        });
+
+        function updateDivBorders(color) {
+          document.querySelectorAll("div").forEach(function(div) {
+            div.style.borderColor = color;
+          })
+        }
+      })
+    </script>
+    <!-- Script para el formulario de suscripcion -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Elementos del DOM
+        const planButtons = document.querySelectorAll(".select-plan-btn");
+        const formContainer = document.getElementById("subscription-form-container");
+        const subTypeInput = document.getElementById("subType");
+        const selectedPlanTitle = document.getElementById("selected-plan-title");
+        const subscriptionForm = document.getElementById("subscription-form");
+        const formMessage = document.getElementById("form-message");
+
+        // Manejar seleccion de plan
+        planButtons.forEach(function(button) {
+          button.addEventListener("click", function() {
+            const plan = this.getAttribute("data-plan");
+
+            if (plan === "goblin") return;
+
+            // Actualizar form con el plan seleccionado
+            subTypeInput.value = plan;
+
+            // Actualizar titulo con el plan seleccionado
+            let planDisplay = "";
+            if (plan === "goblin") {
+              planDisplay = "Goblin (Gratis)";
+            } else if (plan === "wizard-monthly") {
+              planDisplay = "Wizard Mensual";
+            } else if (plan === "wizard-yearly") {
+              planDisplay = "Wizard Anual";
+            }
+
+            selectedPlanTitle.textContent = `Complete su suscripción: ${planDisplay}`;
+
+            // Mostrar el form
+            formContainer.style.display = "block";
+
+            // Desplazarse al formulario
+            formContainer.scrollIntoView({ behavior: "smooth" });
+          });
+        });
+
+        // Manejar el envio del form
+        subscriptionForm.addEventListener("submit", function(event) {
+          event.preventDefault();
+
+          // recopilar datos del form
+          const formData = {
+            formSubType: subTypeInput.value,
+            formName: document.getElementById("name").value,
+            formEmail: document.getElementById("email").value
+          };
+
+          // mostrar msj de carga
+          formMessage.textContent = "Procesando la solicitud...";
+          formMessage.className = "form-message";
+
+          // enviar datos al servicio externo
+          fetch("https://mercado-pago-ghost.onrender.com/subscribe", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          })
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('Error en la respuesta del servidor');
+            }
+            return response.json();
+          })
+          .then(function(data) {
+            if (data.success && data.redirectUrl) {
+              // redirigir a la pagina de mercadopago
+              window.location.href = data.redirectUrl;
+            } else {
+              throw new Error(data.message || "Error al procesar la suscripción")
+            }
+          })
+          .catch(function(error) {
+            formMessage.textContent = 'Ha ocurrido un error al procesar tu suscripción. Por favor, intenta nuevamente.';
+            formMessage.className = 'form-message error';
+            console.error('Error:', error);
+          })
+        });
+      });
+    </script>

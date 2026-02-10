@@ -1,0 +1,251 @@
+<style>
+  .nav_buttons {
+    position: relative;
+  }
+
+  .nav_category.is-open {
+    background: #000;
+    color: #fff;
+  }
+  .nav_category.is-open:hover {
+    transform: translateY(0);
+  }
+
+  .site-nav-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
+    z-index: 1000;
+    min-width: 160px;
+    visibility: hidden;
+  }
+
+  .site-nav-dropdown .nav_category:last-child {
+    border-radius: 0px 0px 8px 8px;
+  }
+
+  .site-nav-dropdown .site-nav-button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border-radius: 4px;
+    padding: 8px 12px;
+    white-space: nowrap;
+  }
+
+  .site-nav-dropdown .site-nav-button + .site-nav-button {
+    margin-top: 4px;
+  }
+
+  .nav-mobile {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 0;
+    justify-content: start;
+    margin-top: 10px;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--crema);
+    z-index: 1000;
+    position: relative;
+  }
+  .nav-mobile a {
+    text-align: center;
+    white-space: nowrap;
+    word-break: keep-all;
+    color: var(--negro);
+    border-style: solid;
+    border-width: 2px 1px 2px 2px;
+    border-color: var(--negro);
+    background-color: var(--crema);
+    padding: 2rem 1.75rem;
+    font-style: italic;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  #nav-mobile-trigger {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+</style>
+<header class='site-header'>
+  <div class='global-container'>
+    <div class='site-nav'>
+      <a
+        href='/'
+        id='logo'
+        class='site-logo'
+        style="background-image: url('{{asset "images/frame-2.svg"}}');"
+      ></a>
+      <nav class='nav_categories'>
+        <a href='/tag/cultura' class='nav_category is-first'>Cultura</a>
+        <a href='/tag/tecnologia' class='nav_category'>Tecnología</a>
+        <a href='/tag/juegos' class='nav_category'>Juegos</a>
+        <a href='/tag/vida-real' class='nav_category'>Vida real</a>
+        <button
+          id="nav-dropdown-trigger"
+          class='nav_category is-last'
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="nav-dropdown-menu"
+        >
+          Más <span style="font-size: 10px;">▼</span>
+          <div id="nav-dropdown-menu" class="site-nav-dropdown" hidden>
+            <a href="/revista-421" class="nav_category">Revista</a>
+            <a href="/tag/el-canon" class="nav_category">El Canon</a>
+            <a href="/pitcheale-a-421/" class="nav_category">Pitcheale a 421</a>
+          </div>
+        </button>
+      </nav>
+      <div class='nav_buttons'>
+        <a href='/suscribite' class='site-nav-button'>Suscribite</a>
+        <a href='#' class='site-nav-button is-icon' data-ghost-search>
+          <img
+            src='{{asset "images/vector-5.svg"}}'
+            class='button_icon is-smaller'
+            loading='lazy'
+            alt=''
+          />
+        </a>
+        <a
+          href='/en/'
+          class='site-nav-button'
+          style="display: flex; align-items: center;"
+          onclick="localStorage.removeItem('prefersSpanish');"
+        >
+          <img
+            src='{{asset "images/argentina-flag.svg"}}'
+            alt="Argentina Flag"
+            style="width: 1.2em; height: 0.8em; vertical-align: middle; margin-right: 0.3em;"
+          />
+          ES
+        </a>
+      </div>
+    </div>
+    <div class="site-nav-mobile">
+      <button id="nav-mobile-trigger" class="site-nav-button is-icon">☰</button>
+      <a
+        href='/'
+        id='logo'
+        class='site-logo'
+        style="background-image: url('{{asset "images/frame-2.svg"}}');"
+      ></a>
+      <div>
+        <a
+          href='/en/'
+          class='site-nav-button'
+          style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;"
+          onclick="localStorage.setItem('prefersSpanish', 'true');"
+        >
+            <img
+              src='{{asset "images/argentina-flag.svg"}}'
+              alt="Argentina Flag"
+              style="width: 1.2em; height: 0.8em; vertical-align: middle;"
+            />
+        </a>
+        <a
+          href="#"
+          class="site-nav-button is-icon"
+          style="display: flex; justify-content: center; align-items: center;"
+          data-ghost-search
+        >
+          <img
+            src="{{asset "images/vector-5.svg"}}"
+            class="button_icon is-smaller"
+            loading="lazy"
+            alt=""
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+  <nav id="nav-mobile" class="nav-mobile">
+    <a href='/tag/cultura'>Cultura</a>
+    <a href='/tag/tecnologia'>Tecnología</a>
+    <a href='/tag/juegos'>Juegos</a>
+    <a href='/tag/vida-real'>Vida real</a>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const trigger = document.getElementById("nav-dropdown-trigger");
+    const menu = document.getElementById("nav-dropdown-menu");
+
+    if (!trigger || !menu) return
+
+    function openMenu() {
+      trigger.classList.add("is-open");
+      menu.style.visibility = "visible";
+      trigger.setAttribute("aria-expanded", "true");
+      menu.hidden = false;
+    }
+
+    function closeMenu() {
+      trigger.classList.remove("is-open");
+      menu.style.visibility = "hidden";
+      trigger.setAttribute("aria-expanded", "false");
+      menu.hidden = true;
+    }
+
+    function toggleMenu(e) {
+      e.stopPropagation();
+      if (menu.hidden) openMenu();
+      else closeMenu();
+    }
+
+    trigger.addEventListener("mouseenter", toggleMenu);
+    trigger.addEventListener("mouseleave", function(e) {
+      if (!menu.hidden) {
+        const insideOfMenu = menu.contains(e.target);
+        if (!insideOfMenu) closeMenu();
+      }
+    });
+
+    // close on outside click
+    document.addEventListener("click", function(e) {
+      if (menu.hidden) {
+        const clickedInside = trigger.contains(e.target) || menu.contains(e.target);
+        if (!clickedInside) closeMenu();
+      }
+    })
+  })
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const mobileTrigger = document.getElementById("nav-mobile-trigger");
+    const mobileMenu = document.getElementById("nav-mobile");
+
+    if (!mobileTrigger || !mobileMenu) return
+
+    mobileMenu.style.display = "none";
+
+    function openMobileMenu() {
+      mobileTrigger.classList.add("is-open");
+      mobileMenu.style.display = "flex";
+    }
+
+    function closeMobileMenu() {
+      mobileTrigger.classList.remove("is-open");
+      mobileMenu.style.display = "none";
+    }
+
+    function toggleMobileMenu(e) {
+      e.stopPropagation();
+      if (mobileMenu.style.display === "none") openMobileMenu();
+      else closeMobileMenu();
+    }
+
+    if ('ontouchstart' in window) {
+      mobileTrigger.addEventListener("touchstart", toggleMobileMenu, { passive: false });
+    } else {
+      mobileTrigger.addEventListener("click", toggleMobileMenu);
+    }
+  })
+</script>

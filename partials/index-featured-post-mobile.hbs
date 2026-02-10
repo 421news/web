@@ -1,0 +1,47 @@
+{{#get
+    'posts'
+    include='tags,authors'
+    filter="tag:-'Wiki'+featured:true+tag:{{languageFilter}}"
+    limit="1"
+    as |featured|
+}}
+    {{#if featured}}
+        {{#foreach featured}}
+
+            <!-- dark header block -->
+            <div class="hero-mobile-header" style="background-color: #121212;">
+                <div class="global-container">
+                    <!-- title in yellow -->
+                    <h1 class="hero-mobile-title">
+                        <a href="{{url}}" style="text-decoration: none; color: var(--amarillo);">
+                            {{title}}
+                        </a>
+                    </h1>
+
+                    <!-- author in white -->
+                    <div class="hero-mobile-author">
+                        {{#primary_author}}
+                            <a href="{{url}}" style="color: white; text-decoration: none";>
+                                <span id="hero-mobile-author-prefix">Por</span> {{name}}
+                            </a>
+                        {{/primary_author}}
+                    </div>
+                </div>
+            </div>
+
+            <!-- cover img -->
+            <div class="hero-mobile-image">
+                <img
+                    src="{{feature_image}}"
+                    alt="{{title}}"
+                    loading="lazy"
+                    style="width: 100%; display: block;"
+                />
+
+                <a href="{{url}}" class="hero-mobile-read-button" id="hero-mobile-read-button">
+                    Leer nota →
+                </a>
+            </div>
+        {{/foreach}}
+    {{/if}}
+{{/get}}

@@ -1,0 +1,157 @@
+:root {
+  --negro: #121212;
+  --crema: #eae6e1;
+  --amarillo: #fcd221;
+  --verde: #17a583;
+  --radius: 8px;
+  --border-width: 2px;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.display-none {
+  display: none;
+}
+
+.global-container {
+  width: 1220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.global-container.is-fixed {
+  z-index: 888;
+  margin-left: auto;
+  margin-right: auto;
+  position: fixed;
+  inset: 0% 0% auto;
+}
+
+h1 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 120%;
+}
+
+h2 {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 32px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 36px;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 30px;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+a {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  display: inline-block;
+}
+
+figure {
+  margin: 40px 0;
+}
+
+figcaption {
+  margin-top: 5px;
+  text-align: center;
+}
+
+.w-richtext figure {
+  max-width: 100%;
+  position: static;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.is-italic {
+  margin-bottom: 0;
+  font-style: italic;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-black {
+  color: var(--negro);
+  font-weight: 700;
+}
+.text-amarillo {
+  color: var(--amarillo);
+  font-weight: 700;
+}
+.text-verde {
+  color: var(--verde);
+  font-weight: 700;
+}
+
+/* PADDING */
+.pv-huge {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+.pt-medium {
+  margin-top: 4rem;
+}
+.pt-xhuge {
+  margin-top: 12rem;
+}
+
+.pt-xhuge.pt-0_mobile {
+  margin-top: 8rem;
+}
+.pv-large {
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
+}
+.pt-large {
+  padding-top: 7rem;
+}
+.pl-xsmall {
+  padding-left: 1rem;
+}
+.pt-small {
+  padding-top: 2rem;
+}
+.pb-xsmall {
+  padding-bottom: 1rem;
+}
+.pb-small {
+  padding-bottom: 2rem;
+}
+.pv-xhuge {
+  padding-top: 12rem;
+  padding-bottom: 12rem;
+}
+
+.ph-small {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+.pt-xsmall {
+  padding-top: 1rem;
+}

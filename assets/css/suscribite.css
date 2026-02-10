@@ -1,0 +1,254 @@
+/* PAGE GENERAL */
+a {
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+}
+
+.subscription-section {
+  padding: 60px 0;
+  background: linear-gradient(180deg, var(--verde), #121212);
+  color: #fff;
+}
+
+.title {
+  color: var(--amarillo);
+}
+
+.subtitle {
+  font-weight: bold;
+  font-size: 18px;
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+/* CARDS GENERAL */
+.subscription-options-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 40px 0;
+}
+
+.subscription-option {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 280px;
+  max-width: 350px;
+  padding: 30px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+.subscription-option:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.features li {
+  padding: 8px 0;
+  position: relative;
+  padding-left: 25px;
+}
+
+.features li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--verde);
+}
+
+.select-plan-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: var(--amarillo);
+  color: #121212;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.select-plan-btn:hover {
+  color: white;
+  background: #121212;
+}
+
+/* PAID CARDS */
+.paid-subs {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.price {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.price > b {
+  font-size: 2rem;
+}
+
+.striked-price {
+  font-size: 1rem;
+  text-decoration: line-through;
+}
+
+/* PREMIUM CARD */
+
+.subscription-option.premium {
+  background: linear-gradient(170deg, #121212, var(--verde));
+  border: 1px solid var(--amarillo);
+}
+.subscription-option.premium > h3 {
+  font-size: 2rem;
+  font-style: normal;
+}
+.subscription-option.premium .price {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.select-plan-btn.premium-btn {
+  color: #121212 !important;
+  background: var(--amarillo) !important;
+}
+
+.subscription-option h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+.savings {
+  display: inline-block;
+  padding: 5px 10px;
+  background: var(--verde);
+  color: white;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* FORM */
+
+#subscription-form-container {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 6px;
+  background: var(--amarillo);
+  color: #121212;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: var(--amarillo);
+}
+
+.form-message {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.form-message.success {
+  background: rgba(39, 174, 96, 0.2);
+  border: 1px solid #27ae60;
+}
+
+.form-message.error {
+  background: rgba(231, 76, 60, 0.2);
+  border: 1px solid #e74c3c;
+}
+
+/* LIGHT MODE */
+.light-mode .subscription-section {
+  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+  color: #121212;
+}
+
+.light-mode .subscription-option {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .subscription-option.premium {
+  background: linear-gradient(145deg, #e6d8ff, #d8c4ff);
+  border: 1px solid #6c3eb8;
+  color: #121212;
+}
+
+.light-mode #subscription-form-container {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.light-mode .form-group input {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.8);
+  color: #121212;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .paid-subs {
+    flex-direction: column;
+  }
+
+  .subscription-options {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .subscription-option {
+    width: 100%;
+    max-width: 100%;
+  }
+}

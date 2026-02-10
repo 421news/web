@@ -1,0 +1,47 @@
+<div class='pt-xhuge pt-0_mobile'>
+  <div class='alt-post-header'>
+    <div class='alt-post-header_content'>
+      <div class='p-huge pr-0'>
+        <div class='ph-small'>
+          <div
+            class='hl-post_meta is-flex'
+          >
+            <div class='plain-tags tags-in-featured'>
+              {{#foreach tags}}
+                <a href='/tag/{{slug}}'>{{name}}</a>
+                {{#unless @last}}, {{/unless}}
+              {{/foreach}}
+            </div>
+            <div class='hl-post_meta-wrapper'>
+              <h1 class='heading'>{{title}}</h1>
+              <p class='hl-post_preview'>{{excerpt}}</p>
+              <div class='author-box is-alt'>
+                {{#primary_author}}
+                  <img
+                    src='{{img_url profile_image size='medium'}}'
+                    loading='lazy'
+                    alt="{{name}}'s profile picture"
+                    class='author-photo'
+                  />
+                {{/primary_author}}
+                <p class='is-italic'>
+                  {{date published_at}}
+                  —
+                  {{#primary_author}}
+                    <a href='{{url}}' class='author-name_link'>{{name}}</a>
+                  {{/primary_author}}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div id='translation-link' style='margin-top: 20px'></div>
+          {{reading_time}}
+        </div>
+      </div>
+      <div
+        class='alt-post_featimg'
+        style="background-image: url('{{feature_image}}')"
+      ></div>
+    </div>
+  </div>
+</div>
