@@ -33,5 +33,9 @@
     "xl": {
       "width": 2000
     }
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-handlebars": "^8.0.1"
   }
 }

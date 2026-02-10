@@ -75,6 +75,7 @@
     <link href='{{asset "css/index.css"}}' rel='stylesheet' />
     <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />
     <link href='{{asset "css/file-browser.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/window-manager.css"}}' rel='stylesheet' />
     <script>
       (function() {
         // only run on root path to avoid redirect loops
@@ -119,11 +120,13 @@
         }
       })();
     </script>
+    {{> "window-manager"}}
     {{ghost_foot}}
     <script src='{{asset "js/udesly-ghost.min.js"}}'></script>
     <script src='{{asset "built/portal.min.js"}}'></script>
     <script src='{{asset "js/seamless.js"}}'></script>
     <script src="{{asset "js/hide-show-nav.js"}}"></script>
     <script src="{{asset "js/file-browser.js"}}"></script>
+    <script src="{{asset "js/window-manager.js"}}"></script>
   </body>
 </html>
