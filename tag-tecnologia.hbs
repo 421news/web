@@ -1,11 +1,5 @@
 {{!< default}}
 
-<head>
-  {{> "global-head"}}
-  <title>421 | Tecnología</title>
-  <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
-</head>
-<body>
   <div class="page-wrapper">
     {{> "general-styling"}}
     {{> "site-nav-es"}}
@@ -24,6 +18,10 @@
       
     </main>
 
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser"}}
+    </div>
     {{> "site-footer"}}
 
   </div>
@@ -73,4 +71,3 @@
       }
     });
   </script>
-</body>

@@ -1,13 +1,6 @@
 {{!< default}}
 
-<html>
-  <head>
-    {{> "global-head"}}
-    <title>421 | Últimos Posts</title>
-    <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
     <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
-  </head>
-  <body>
     <div class="page-wrapper">
       {{> "general-styling"}}
       {{> "site-nav-es"}}
@@ -29,6 +22,8 @@
       </div>
     </div>
 
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser"}}
+    </div>
     {{> "site-footer"}}
-  </body>
-</html>

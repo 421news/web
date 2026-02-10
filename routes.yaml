@@ -10,6 +10,8 @@ routes:
   /tag/juegos/: tag-juegos
   /tag/vida-real/: tag-vida-real
 
+  /tag/el-canon/: tag-el-canon
+
   /tag/cannabis/: tag-secundario-cannabis
   /tag/tutoriales/: tag-secundario-tutoriales
   /tag/argentina/: tag-secundario-argentina
@@ -33,6 +35,7 @@ routes:
   /en/tag/tech/: tag-tech
   /en/tag/games/: tag-games
   /en/tag/real-life/: tag-real-life
+  /en/subscribe/: subscribe
 
 collections:
   /:

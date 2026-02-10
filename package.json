@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "express": "^5.2.1",
-    "express-handlebars": "^8.0.5"
+    "express-handlebars": "^8.0.1"
   }
 }

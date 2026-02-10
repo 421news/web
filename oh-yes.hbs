@@ -1,17 +1,10 @@
 {{!< default}}
 
-<html>
-  <head>
-    {{> "global-head"}}
-    <title>421 | Tecnomagia para la vida real</title>
-    <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
     <style>
         #doom-iframe {
             margin-top: 100px;
         }
     </style>
-  </head>
-  <body>
     <div class="page-wrapper">
       {{> "general-styling"}} <!-- TODO: Revisar -->
       {{> "site-nav-es"}}
@@ -35,6 +28,10 @@
         </div>
       </main>
 
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser"}}
+    </div>
       {{> "site-footer"}}
 
     </div>
@@ -49,5 +46,3 @@
             });
         });
     </script>
-  </body>
-</html>

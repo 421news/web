@@ -10,9 +10,6 @@
 .site-header.nav-hidden {
     transform: translateY(-100%);
 }
-.sub-mobile-button.nav-hidden {
-    transform: translateY(-2000%);
-}
 
 .site-logo {
     background-position: 50%;
