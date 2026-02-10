@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
     const header = document.querySelector(".site-header");
-    const mobileSubButton = document.querySelector(".sub-mobile-button");
+    const mobileSubButton = document.querySelector(".hero-mobile-suscribite-button");
 
     let lastScrollY = window.scrollY;
     let scrollThreshold = 50;

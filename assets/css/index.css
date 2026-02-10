@@ -1,3 +1,78 @@
+/* Mobile Hero Styles */
+
+.hero-mobile {
+  display: none;
+}
+
+.hero-mobile-header {
+  padding: 3rem 0 2rem 0;
+  padding-top: calc(80px + 3rem);
+  background-color: #121212;
+}
+
+.hero-mobile-title {
+  color: var(--amarillo);
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.hero-mobile-author {
+  color: white;
+  font-size: 1rem;
+  font-style: italic;
+  text-align: center;
+}
+
+.hero-mobile-image {
+  width: 100%;
+}
+
+.hero-mobile-read-button {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: transparent;
+  color: white;
+  text-decoration: underline;
+  text-decoration-color: white;
+  font-style: italic;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.hero-mobile-suscribite-button {
+  display: none;
+  width: 100%;
+  background-color: #121212;
+  color: white;
+  text-align: center;
+  padding: 1rem 2rem;
+  font-style: italic;
+  font-weight: 700;
+  text-decoration: none;
+  border: none;
+  transition: all 0.2s ease;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+}
+.hero-mobile-suscribite-button.nav-hidden {
+  transform: translateY(100px);
+}
+
+.hero-mobile-suscribe-button:hover {
+  background-color: var(--amarillo);
+}
+
 /* FORM STYLING */
 
 .page-wrapper {
@@ -116,8 +191,8 @@ body.light-mode {
 }
 
 .hero_texture {
-  -webkit-backdrop-filter: brightness(200%) grayscale();
-  backdrop-filter: brightness(200%) grayscale();
+  -webkit-backdrop-filter: brightness(200%);
+  backdrop-filter: brightness(200%);
   mix-blend-mode: soft-light;
   background-position: 0 0;
   background-size: auto;
@@ -356,8 +431,6 @@ body.light-mode {
 .post-card_overlay {
   aspect-ratio: 3 / 2;
   opacity: 1;
-  -webkit-backdrop-filter: grayscale();
-  backdrop-filter: grayscale();
   mix-blend-mode: soft-light;
   background-position: 0 0;
   background-size: auto;
@@ -367,28 +440,9 @@ body.light-mode {
   transition: all 0.2s;
   position: absolute;
   inset: 0%;
-}
-
-.post-card_overlay:hover {
-  -webkit-backdrop-filter: none;
-  -webkit-backdrop-filter: grayscale();
-  backdrop-filter: grayscale();
   mix-blend-mode: difference;
   background-position: 0 0, 0 0;
   background-size: auto, auto;
-}
-
-.post-card_overlay.in-hl-post {
-  border-radius: 12px;
-}
-
-.post-card_overlay.in-hl-post:hover {
-  -webkit-backdrop-filter: grayscale();
-  backdrop-filter: grayscale();
-  mix-blend-mode: soft-light;
-  background-image: url('../images/Textura.png');
-  background-position: 0 0;
-  background-size: auto;
 }
 
 .post-card_ico {
@@ -525,7 +579,6 @@ body.light-mode {
   aspect-ratio: 16 / 12;
   height: 100%;
   border: var(--border-width) solid var(--crema);
-  filter: saturate(0%);
   object-fit: cover;
   border-radius: 12px;
 }
@@ -831,12 +884,6 @@ footer {
   text-align: center; /* Center captions below images */
 }
 
-.sub-mobile-button {
-  margin: auto;
-  display: none;
-  background-color: var(--verde);
-}
-
 .featured-post-read-button {
   width: 200px;
   align-self: end;
@@ -853,6 +900,10 @@ footer {
 }
 
 @media screen and (max-width: 991px) {
+  .hero-mobile-suscribite-button {
+    display: block;
+  }
+
   .global-container {
     width: 100%;
     padding-left: 2rem;
@@ -981,6 +1032,32 @@ footer {
 }
 
 @media screen and (max-width: 767px) {
+  .hero-desktop {
+    display: none;
+  }
+
+  .hero-mobile {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .hero-mobile-header {
+    flex-shrink: 0;
+  }
+
+  .hero-mobile-image {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .hero-mobile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .hero-home_content {
     padding-bottom: 2rem;
   }
@@ -1039,13 +1116,6 @@ footer {
 
   .last-posts-section {
     grid-template-columns: 1fr;
-  }
-
-  .sub-mobile-button {
-    position: sticky;
-    display: block;
-    bottom: 20px;
-    z-index: 10;
   }
 
   .featured-post-read-button {

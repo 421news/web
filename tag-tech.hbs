@@ -1,11 +1,5 @@
 {{!< default}}
 
-<head>
-  {{> "global-head"}}
-  <title>421 | Tech</title>
-  <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
-</head>
-<body>
   <div class="page-wrapper">
     {{> "general-styling"}}
     {{> "site-nav-en"}}
@@ -23,6 +17,10 @@
       {{!-- {{> "wiki-section-en"}} --}}
     </main>
 
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser-en"}}
+    </div>
     {{> "site-footer" lang="en"}}
 
   </div>
@@ -72,4 +70,3 @@
       }
     });
   </script>
-</body>

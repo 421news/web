@@ -8,7 +8,7 @@
                 {{#get "posts"
                     include="tags,authors"
                     filter="tag:'hash-en'"
-                    limit="16"
+                    limit="20"
                     order="published_at desc"
                     as |articles|
                 }}
@@ -21,11 +21,10 @@
             </div>
             <button
                 class="button"
+                id="load-more-home"
                 style="display: block; margin: auto; margin-top: 50px;"
             >
-                <a href="/en/last-posts/" style="color: white; text-decoration: none;">
-                    See all
-                </a>
+                Load more
             </button>
         {{!-- <div class="post-cols w-dyn-list">
             {{> "tps_alt-en" tag="Culture" slug="culture"}}

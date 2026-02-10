@@ -189,6 +189,27 @@
       });
     }
 
+    // Intercept toolbar Home and Reload links (they are <a href="/"> that navigate away)
+    clone.querySelectorAll('.fb-toolbar .fb-toolbar-btn[href]').forEach(function(link) {
+      var newLink = link.cloneNode(true);
+      link.parentNode.replaceChild(newLink, link);
+      newLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Go to browser home (root)
+        navStack = [];
+        if (contentArea) contentArea.innerHTML = homeHTML;
+        setPathbar([]);
+        if (titleEl) titleEl.textContent = baseTitle;
+        if (winData) {
+          winData.title = baseTitle;
+          updateTaskbarItem(winData);
+        }
+        bindHomeFolderClicks();
+        updateBackBtn();
+      });
+    });
+
     function updateBackBtn() {
       if (backBtn) {
         if (navStack.length > 0) {
@@ -255,7 +276,7 @@
 
       var url = API_URL + '/posts/?key=' + API_KEY +
         '&filter=tag:' + encodeURIComponent(slug) +
-        '&limit=12&include=tags,authors' +
+        '&limit=all&include=tags,authors' +
         '&fields=title,slug,feature_image,published_at';
 
       fetch(url)
@@ -414,7 +435,8 @@
       var href = item.getAttribute('href');
       if (!href) return;
       var tagMatch = href.match(/\/tag\/([^\/]+)/);
-      if (!tagMatch) return;
+      var isHome = (href === '/' || href === '/en/');
+      if (!tagMatch && !isHome) return; // suscribite/revista navigate normally
       var newItem = item.cloneNode(true);
       item.parentNode.replaceChild(newItem, item);
       newItem.addEventListener('click', function(e) {
@@ -425,7 +447,14 @@
         setPathbar([]);
         updateBackBtn();
         if (titleEl) titleEl.textContent = baseTitle;
-        navigateToFolder(tagMatch[1], newItem.textContent.trim());
+        if (winData) {
+          winData.title = baseTitle;
+          updateTaskbarItem(winData);
+        }
+        bindHomeFolderClicks();
+        if (tagMatch) {
+          navigateToFolder(tagMatch[1], newItem.textContent.trim());
+        }
       });
     });
 

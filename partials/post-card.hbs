@@ -1,6 +1,22 @@
-<article role='listitem' class='w-dyn-item' data-post-id='{{id}}'>
+<div role='listitem' class='w-dyn-item' data-post-id='{{id}}'>
   <a href='{{url}}' class='post-card_link w-inline-block'>
-    <div class='post-card'>
+    <div
+      class='post-card'
+      onmouseover="
+        const overlay = this.querySelector('.post-card_overlay');
+        if (overlay) {
+          overlay.style.backgroundImage='linear-gradient(180deg, var(--verde), var(--amarillo)), url(\'{{asset "images/textura.png"}}\')';
+          overlay.style.backgroundBlendMode='overlay';
+        }
+      "
+      onmouseout="
+        const overlay = this.querySelector('.post-card_overlay');
+        if (overlay) {
+          overlay.style.backgroundImage='url(\'{{asset "images/textura.png"}}\')';
+          overlay.style.backgroundBlendMode='';
+        }
+      "
+    >
       <div
         class='post-card_cover'
         style="background-image: url('{{feature_image}}')"
@@ -23,18 +39,6 @@
             background-image: url('{{asset "images/textura.png"}}');
             background-size: cover;
             background-position: center;
-          "
-          onmouseover="
-            this.style.backgroundImage='linear-gradient(180deg, var(--verde), var(--amarillo)), url(\'{{asset
-            "images/textura.png"
-          }}\')';
-            this.style.backgroundBlendMode='overlay';
-          "
-          onmouseout="
-            this.style.backgroundImage='url(\'{{asset
-            "images/textura.png"
-          }}\')';
-            this.style.backgroundBlendMode='';
           "
         >
         </div>
@@ -61,4 +65,4 @@
       </div>
     </div>
   </a>
-</article>
+</div>

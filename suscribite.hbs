@@ -1,13 +1,6 @@
 {{!< default}}
 
-<html>
-  <head>
-    {{> "global-head"}}
-    <title>421 | Suscribite</title>
-    <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
     <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
-  </head>
-  <body>
     <div class="page-wrapper">
       {{> "general-styling"}}
       {{> "site-nav-es"}}
@@ -19,6 +12,12 @@
             <div class="text-center">
               <h2 class="title">Suscribite a 421</h2>
               <p class="subtitle">Elegí el tipo de suscripción que prefieras</p>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0 30px 0; padding: 15px; background-color: var(--negro); border-radius: 8px;">
+              <p style="margin: 0; font-size: 14px; line-height: 1.5;">
+                Esta pantalla de suscripción está sólo disponible para Argentina. Si sos de otro país, por favor <a href="/en/subscribe" style="color: var(--amarillo, #00ff00); text-decoration: underline;">clickeá acá</a> para suscribirte vía Stripe.
+              </p>
             </div>
 
             <div class="subscription-options-wrapper">
@@ -235,5 +234,3 @@
         });
       });
     </script>
-  </body>
-</html>

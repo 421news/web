@@ -1,622 +1,125 @@
 /**
- * 421 Desktop - Unix Window System
- * Window manager, file browser, article viewer
- * Resize + drag + taskbar
+ * File Browser - Unix Window Navigation
+ * Handles interactivity for the file browser component
+ * Exposed as window.FileBrowser for reuse by Window Manager
  */
-(function () {
-  "use strict";
+window.FileBrowser = {
+  init: function(windowEl) {
+    if (!windowEl) return;
 
-  /* ============ LANGUAGE (auto-detect from URL) ============ */
-  var p = window.location.pathname;
-  var LANG = (p.indexOf("/en/") === 0 || p === "/en") ? "en" : "es";
+    // ---- Window controls ----
+    var dotClose = windowEl.querySelector(".fb-dot--close");
+    var dotMinimize = windowEl.querySelector(".fb-dot--minimize");
+    var dotMaximize = windowEl.querySelector(".fb-dot--maximize");
 
-  var CFG = {
-    es: {
-      title: "421 \u2014 Explorador de archivos",
-      launcherLabel: "Explorador",
-      bookmarks: "Marcadores", system: "Sistema", home: "Inicio",
-      subscribe: "Suscribite", magazine: "Revista", latest: "\u00DAltimos posts",
-      items: "elementos", emptyMsg: "Carpeta vac\u00EDa",
-      categories: {
-        "cultura":     { icon: "\uD83C\uDFA8", subs: ["historieta","libros","musica","peliculas","series","memes"] },
-        "tecnologia":  { icon: "\uD83D\uDD0C", subs: ["cripto","internet","tutoriales","soberania"] },
-        "juegos":      { icon: "\uD83C\uDFAE", subs: ["magic-the-gathering","videojuegos","warhammer"] },
-        "vida-real":   { icon: "\uD83C\uDF0E", subs: ["cannabis","deportes","filosofia","argentina"] }
-      },
-      files: [
-        { name: "suscribite.sh", type: "exec", url: "/suscribite" },
-        { name: "revista.pdf",   type: "file", url: "/revista-421" },
-        { name: "ultimos.log",   type: "file", url: "/ultimos-posts" }
-      ]
-    },
-    en: {
-      title: "421 \u2014 File Browser",
-      launcherLabel: "Explorer",
-      bookmarks: "Bookmarks", system: "System", home: "Home",
-      subscribe: "Subscribe", magazine: "Magazine", latest: "Latest posts",
-      items: "items", emptyMsg: "Empty folder",
-      categories: {
-        "culture":    { icon: "\uD83C\uDFA8", subs: ["historieta","libros","musica","peliculas","series","memes"] },
-        "tech":       { icon: "\uD83D\uDD0C", subs: ["cripto","internet","tutoriales","soberania"] },
-        "games":      { icon: "\uD83C\uDFAE", subs: ["magic-the-gathering","videojuegos","warhammer"] },
-        "real-life":  { icon: "\uD83C\uDF0E", subs: ["cannabis","deportes","filosofia","argentina"] }
-      },
-      files: [
-        { name: "subscribe.sh", type: "exec", url: "/suscribite" },
-        { name: "magazine.pdf", type: "file", url: "/revista-421" },
-        { name: "latest.log",   type: "file", url: "/en/last-posts" }
-      ]
+    if (dotMinimize) {
+      dotMinimize.addEventListener("click", function () {
+        windowEl.classList.toggle("is-minimized");
+      });
     }
-  };
 
-  var L = CFG[LANG] || CFG.es;
-
-  /* ============ WINDOW MANAGER ============ */
-  var WM = {
-    wins: {},
-    counter: 0,
-    topZ: 1000,
-    desktop: null,
-    taskbar: null,
-    taskbarItems: null,
-
-    init: function () {
-      this.desktop = document.getElementById("fb-desktop");
-      this.taskbar = document.getElementById("fb-taskbar");
-      this.taskbarItems = document.getElementById("fb-taskbar-items");
-      if (!this.desktop) {
-        this.desktop = document.createElement("div");
-        this.desktop.id = "fb-desktop";
-        this.desktop.className = "fb-desktop";
-        document.body.appendChild(this.desktop);
-      }
-      if (!this.taskbar) {
-        this.taskbar = document.createElement("div");
-        this.taskbar.id = "fb-taskbar";
-        this.taskbar.className = "fb-taskbar";
-        this.taskbar.style.display = "none";
-        this.taskbar.innerHTML = '<div class="fb-taskbar-items" id="fb-taskbar-items"></div>';
-        document.body.appendChild(this.taskbar);
-        this.taskbarItems = this.taskbar.querySelector(".fb-taskbar-items");
-      }
-    },
-
-    create: function (opts) {
-      var id = "fbw-" + (++this.counter);
-      var off = (this.counter % 6) * 28;
-      var w = document.createElement("div");
-      w.className = "fb-window";
-      w.id = id;
-      w.style.width = (opts.width || 860) + "px";
-      w.style.height = (opts.height || 520) + "px";
-      w.style.left = (opts.x != null ? opts.x : 60 + off) + "px";
-      w.style.top = (opts.y != null ? opts.y : 40 + off) + "px";
-      w.style.zIndex = ++this.topZ;
-
-      // titlebar
-      var tb = document.createElement("div");
-      tb.className = "fb-titlebar";
-      tb.innerHTML =
-        '<div class="fb-titlebar-dots">' +
-          '<span class="fb-dot fb-dot--close"></span>' +
-          '<span class="fb-dot fb-dot--minimize"></span>' +
-          '<span class="fb-dot fb-dot--maximize"></span>' +
-        '</div>' +
-        '<span class="fb-titlebar-title">' + this._esc(opts.title || "Window") + '</span>' +
-        '<div class="fb-titlebar-spacer"></div>';
-      w.appendChild(tb);
-
-      // content
-      if (opts.html) {
-        var c = document.createElement("div");
-        c.style.cssText = "flex:1;display:flex;flex-direction:column;overflow:hidden;";
-        c.innerHTML = opts.html;
-        w.appendChild(c);
-      }
-
-      // resize handles
-      this._addResizeHandles(w);
-
-      this.desktop.appendChild(w);
-      this._drag(w, tb);
-      this._controls(w, id);
-      w.addEventListener("mousedown", function () { WM.front(w); });
-      this._taskbarAdd(id, opts.title || "Window");
-      this.taskbar.style.display = "flex";
-      this.wins[id] = { el: w, title: opts.title };
-      return id;
-    },
-
-    front: function (w) { w.style.zIndex = ++this.topZ; },
-
-    close: function (id) {
-      var w = this.wins[id];
-      if (!w) return;
-      w.el.remove();
-      delete this.wins[id];
-      this._taskbarRemove(id);
-      if (!Object.keys(this.wins).length) this.taskbar.style.display = "none";
-    },
-
-    minimize: function (id) {
-      var w = this.wins[id];
-      if (!w) return;
-      w.el.style.display = "none";
-      var ti = this.taskbar.querySelector('[data-wid="' + id + '"]');
-      if (ti) ti.classList.add("is-minimized");
-    },
-
-    restore: function (id) {
-      var w = this.wins[id];
-      if (!w) return;
-      w.el.style.display = "flex";
-      this.front(w.el);
-      var ti = this.taskbar.querySelector('[data-wid="' + id + '"]');
-      if (ti) ti.classList.remove("is-minimized");
-    },
-
-    maximize: function (id) {
-      var w = this.wins[id];
-      if (w) w.el.classList.toggle("is-maximized");
-    },
-
-    setTitle: function (id, t) {
-      var w = this.wins[id];
-      if (!w) return;
-      var el = w.el.querySelector(".fb-titlebar-title");
-      if (el) el.textContent = t;
-      var ti = this.taskbar.querySelector('[data-wid="' + id + '"]');
-      if (ti) ti.textContent = t.length > 22 ? t.substring(0, 22) + "\u2026" : t;
-    },
-
-    _esc: function (s) {
-      var d = document.createElement("div");
-      d.textContent = s;
-      return d.innerHTML;
-    },
-
-    /* -- Drag -- */
-    _drag: function (win, handle) {
-      var ox = 0, oy = 0, dragging = false;
-      function start(cx, cy) {
-        if (win.classList.contains("is-maximized")) return;
-        dragging = true; ox = cx - win.offsetLeft; oy = cy - win.offsetTop; WM.front(win);
-      }
-      function move(cx, cy) {
-        if (!dragging) return;
-        win.style.left = (cx - ox) + "px";
-        win.style.top = (cy - oy) + "px";
-      }
-      function end() { dragging = false; }
-      handle.addEventListener("mousedown", function (e) {
-        if (e.target.classList.contains("fb-dot")) return;
-        start(e.clientX, e.clientY); e.preventDefault();
+    if (dotMaximize) {
+      dotMaximize.addEventListener("click", function () {
+        windowEl.classList.toggle("is-minimized");
       });
-      document.addEventListener("mousemove", function (e) { move(e.clientX, e.clientY); });
-      document.addEventListener("mouseup", end);
-      handle.addEventListener("touchstart", function (e) {
-        if (e.target.classList.contains("fb-dot")) return;
-        var t = e.touches[0]; start(t.clientX, t.clientY);
-      }, { passive: true });
-      document.addEventListener("touchmove", function (e) {
-        if (!dragging) return; var t = e.touches[0]; move(t.clientX, t.clientY);
-      }, { passive: true });
-      document.addEventListener("touchend", end);
-    },
-
-    /* -- Resize -- */
-    _addResizeHandles: function (win) {
-      var dirs = ["n","s","e","w","ne","nw","se","sw"];
-      var minW = 320, minH = 200;
-      var edge = null, startX, startY, startW, startH, startL, startT;
-
-      dirs.forEach(function (dir) {
-        var h = document.createElement("div");
-        h.className = "fb-resize fb-resize--" + dir;
-        win.appendChild(h);
-
-        h.addEventListener("mousedown", function (e) {
-          if (win.classList.contains("is-maximized")) return;
-          e.preventDefault(); e.stopPropagation();
-          edge = dir;
-          startX = e.clientX; startY = e.clientY;
-          startW = win.offsetWidth; startH = win.offsetHeight;
-          startL = win.offsetLeft; startT = win.offsetTop;
-          WM.front(win);
-        });
-
-        h.addEventListener("touchstart", function (e) {
-          if (win.classList.contains("is-maximized")) return;
-          e.stopPropagation();
-          var t = e.touches[0];
-          edge = dir;
-          startX = t.clientX; startY = t.clientY;
-          startW = win.offsetWidth; startH = win.offsetHeight;
-          startL = win.offsetLeft; startT = win.offsetTop;
-          WM.front(win);
-        }, { passive: true });
-      });
-
-      function onMove(cx, cy) {
-        if (!edge) return;
-        var dx = cx - startX, dy = cy - startY;
-        if (edge.indexOf("e") !== -1) win.style.width = Math.max(minW, startW + dx) + "px";
-        if (edge.indexOf("w") !== -1) {
-          var nw = Math.max(minW, startW - dx);
-          win.style.width = nw + "px";
-          win.style.left = (startL + startW - nw) + "px";
-        }
-        if (edge.indexOf("s") !== -1) win.style.height = Math.max(minH, startH + dy) + "px";
-        if (edge.indexOf("n") !== -1) {
-          var nh = Math.max(minH, startH - dy);
-          win.style.height = nh + "px";
-          win.style.top = (startT + startH - nh) + "px";
-        }
-      }
-
-      document.addEventListener("mousemove", function (e) { onMove(e.clientX, e.clientY); });
-      document.addEventListener("touchmove", function (e) {
-        if (!edge) return; var t = e.touches[0]; onMove(t.clientX, t.clientY);
-      }, { passive: true });
-
-      function onEnd() { edge = null; }
-      document.addEventListener("mouseup", onEnd);
-      document.addEventListener("touchend", onEnd);
-    },
-
-    _controls: function (win, id) {
-      win.querySelector(".fb-dot--close").addEventListener("click", function () { WM.close(id); });
-      win.querySelector(".fb-dot--minimize").addEventListener("click", function () { WM.minimize(id); });
-      win.querySelector(".fb-dot--maximize").addEventListener("click", function () { WM.maximize(id); });
-    },
-
-    _taskbarAdd: function (id, title) {
-      var b = document.createElement("button");
-      b.className = "fb-taskbar-item";
-      b.setAttribute("data-wid", id);
-      b.textContent = title.length > 22 ? title.substring(0, 22) + "\u2026" : title;
-      b.addEventListener("click", function () {
-        var w = WM.wins[id];
-        if (w && w.el.style.display === "none") WM.restore(id);
-        else if (w) WM.front(w.el);
-      });
-      this.taskbarItems.appendChild(b);
-    },
-
-    _taskbarRemove: function (id) {
-      var b = this.taskbar.querySelector('[data-wid="' + id + '"]');
-      if (b) b.remove();
     }
-  };
 
-  /* ============ FILE SYSTEM ============ */
-  var FS = {
-    posts: [],
-    allSubs: [],
-
-    init: function () {
-      var cats = L.categories;
-      Object.keys(cats).forEach(function (k) { FS.allSubs = FS.allSubs.concat(cats[k].subs); });
-
-      // Read posts filtered by current language
-      var els = document.querySelectorAll('.fb-post-entry[data-lang="' + LANG + '"]');
-      // Fallback: if no data-lang attributes, read all (for preview/testing)
-      if (els.length === 0) els = document.querySelectorAll(".fb-post-entry");
-
-      els.forEach(function (el) {
-        FS.posts.push({
-          title: el.getAttribute("data-title") || "",
-          url: el.getAttribute("data-url") || "#",
-          image: el.getAttribute("data-image") || "",
-          date: el.getAttribute("data-date") || "",
-          primaryTag: el.getAttribute("data-primary-tag") || "",
-          tags: (el.getAttribute("data-tags") || "").split(",").filter(Boolean)
-        });
+    if (dotClose) {
+      dotClose.addEventListener("click", function () {
+        windowEl.style.display = "none";
       });
-    },
-
-    list: function (path) {
-      var items = [];
-      var cats = L.categories;
-
-      if (path === "/") {
-        Object.keys(cats).forEach(function (slug) {
-          items.push({ name: slug + "/", type: "folder", path: "/" + slug, icon: "\uD83D\uDCC1" });
-        });
-        L.files.forEach(function (f) {
-          var icon = f.type === "exec" ? "\uD83D\uDCC4" : f.type === "file" ? "\uD83D\uDCDC" : "\uD83D\uDCC3";
-          items.push({ name: f.name, type: f.type, url: f.url, icon: icon });
-        });
-        return items;
-      }
-
-      var parts = path.split("/").filter(Boolean);
-      var mainCat = parts[0];
-      var subCat = parts[1];
-
-      if (cats[mainCat] && !subCat) {
-        cats[mainCat].subs.forEach(function (sub) {
-          items.push({ name: sub + "/", type: "folder", path: "/" + mainCat + "/" + sub, icon: "\uD83D\uDCC2" });
-        });
-        FS.posts.forEach(function (p) {
-          var inMain = p.tags.indexOf(mainCat) !== -1 || p.primaryTag === mainCat;
-          var inSub = false;
-          cats[mainCat].subs.forEach(function (s) { if (p.tags.indexOf(s) !== -1) inSub = true; });
-          if (inMain && !inSub) {
-            items.push({ name: p.title, type: "article", url: p.url, image: p.image, date: p.date, icon: "\uD83D\uDCF0" });
-          }
-        });
-        return items;
-      }
-
-      if (cats[mainCat] && subCat) {
-        FS.posts.forEach(function (p) {
-          if (p.tags.indexOf(subCat) !== -1) {
-            items.push({ name: p.title, type: "article", url: p.url, image: p.image, date: p.date, icon: "\uD83D\uDCF0" });
-          }
-        });
-        return items;
-      }
-
-      return items;
     }
-  };
 
-  /* ============ FILE BROWSER ============ */
-  var FB = {
-    winId: null,
-    currentPath: "/",
-    history: [],
-    historyIdx: -1,
+    // ---- View toggle (grid / list) ----
+    var viewGridBtn = windowEl.querySelector(".fb-view-btn[data-view='grid']");
+    var viewListBtn = windowEl.querySelector(".fb-view-btn[data-view='list']");
+    var contentArea = windowEl.querySelector(".fb-content");
 
-    open: function () {
-      if (this.winId && WM.wins[this.winId]) {
-        var w = WM.wins[this.winId];
-        if (w.el.style.display === "none") WM.restore(this.winId);
-        else WM.front(w.el);
-        return;
-      }
-      this.currentPath = "/";
-      this.history = ["/"];
-      this.historyIdx = 0;
-
-      var html = this._buildChrome() + this._buildBody();
-      this.winId = WM.create({ title: L.title, width: 880, height: 520, html: html });
-      this._bind();
-      this._render();
-    },
-
-    _buildChrome: function () {
-      return (
-        '<div class="fb-toolbar">' +
-          '<button class="fb-toolbar-btn fb-nav-back is-disabled">\u2190</button>' +
-          '<button class="fb-toolbar-btn fb-nav-forward is-disabled">\u2192</button>' +
-          '<button class="fb-toolbar-btn fb-nav-home">\u2302</button>' +
-        '</div>' +
-        '<div class="fb-pathbar"><span class="fb-pathbar-content"></span></div>'
-      );
-    },
-
-    _buildBody: function () {
-      var cats = L.categories;
-      var sideHtml = '<div class="fb-sidebar-heading">' + L.bookmarks + '</div>';
-      sideHtml += '<button class="fb-sidebar-item fb-side-nav" data-path="/"><i class="fb-icon">\uD83C\uDFE0</i> ' + L.home + '</button>';
-      Object.keys(cats).forEach(function (slug) {
-        sideHtml += '<button class="fb-sidebar-item fb-side-nav" data-path="/' + slug + '"><i class="fb-icon">' + cats[slug].icon + '</i> ' + slug + '</button>';
-      });
-      sideHtml += '<div class="fb-sidebar-divider"></div>';
-      sideHtml += '<div class="fb-sidebar-heading">' + L.system + '</div>';
-      sideHtml += '<button class="fb-sidebar-item fb-side-nav" data-path="__sub">\u2709 ' + L.subscribe + '</button>';
-      sideHtml += '<button class="fb-sidebar-item fb-side-nav" data-path="__mag">\uD83D\uDCD6 ' + L.magazine + '</button>';
-
-      return (
-        '<div class="fb-body">' +
-          '<aside class="fb-sidebar">' + sideHtml + '</aside>' +
-          '<div class="fb-content"><div class="fb-content-grid"></div></div>' +
-        '</div>' +
-        '<div class="fb-statusbar"><span class="fb-status-count"></span></div>'
-      );
-    },
-
-    _bind: function () {
-      var w = WM.wins[this.winId];
-      if (!w) return;
-      var el = w.el;
-      var self = this;
-
-      el.querySelector(".fb-nav-back").addEventListener("click", function () { self._goBack(); });
-      el.querySelector(".fb-nav-forward").addEventListener("click", function () { self._goForward(); });
-      el.querySelector(".fb-nav-home").addEventListener("click", function () { self._navigate("/"); });
-
-      el.querySelectorAll(".fb-side-nav").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          var p = btn.getAttribute("data-path");
-          if (p === "__sub") { window.location.href = "/suscribite"; return; }
-          if (p === "__mag") { window.location.href = "/revista-421"; return; }
-          self._navigate(p);
-        });
-      });
-    },
-
-    _navigate: function (path) {
-      this.currentPath = path;
-      if (this.historyIdx < this.history.length - 1) {
-        this.history = this.history.slice(0, this.historyIdx + 1);
-      }
-      this.history.push(path);
-      this.historyIdx = this.history.length - 1;
-      this._render();
-    },
-
-    _goBack: function () {
-      if (this.historyIdx > 0) {
-        this.historyIdx--;
-        this.currentPath = this.history[this.historyIdx];
-        this._render();
-      }
-    },
-
-    _goForward: function () {
-      if (this.historyIdx < this.history.length - 1) {
-        this.historyIdx++;
-        this.currentPath = this.history[this.historyIdx];
-        this._render();
-      }
-    },
-
-    _render: function () {
-      var w = WM.wins[this.winId];
-      if (!w) return;
-      var el = w.el;
-      var self = this;
-      var items = FS.list(this.currentPath);
-      var grid = el.querySelector(".fb-content-grid");
-
-      // Update pathbar
-      var pathbar = el.querySelector(".fb-pathbar-content");
-      var parts = ["/"].concat(this.currentPath.split("/").filter(Boolean));
-      var pathHtml = "";
-      for (var i = 0; i < parts.length; i++) {
-        var fullPath = i === 0 ? "/" : "/" + parts.slice(1, i + 1).join("/");
-        var label = i === 0 ? "\uD83D\uDCBB 421" : parts[i];
-        var isLast = i === parts.length - 1;
-        pathHtml += '<button class="fb-pathbar-segment' + (isLast ? " is-active" : "") + '" data-path="' + fullPath + '">' + label + '</button>';
-        if (!isLast) pathHtml += '<span class="fb-pathbar-separator">/</span>';
-      }
-      pathbar.innerHTML = pathHtml;
-      pathbar.querySelectorAll(".fb-pathbar-segment").forEach(function (seg) {
-        seg.addEventListener("click", function () { self._navigate(seg.getAttribute("data-path")); });
-      });
-
-      // Update nav buttons
-      var backBtn = el.querySelector(".fb-nav-back");
-      var fwdBtn = el.querySelector(".fb-nav-forward");
-      backBtn.classList.toggle("is-disabled", this.historyIdx <= 0);
-      fwdBtn.classList.toggle("is-disabled", this.historyIdx >= this.history.length - 1);
-
-      // Update sidebar active
-      el.querySelectorAll(".fb-side-nav").forEach(function (btn) {
-        btn.classList.toggle("is-active", btn.getAttribute("data-path") === self.currentPath);
-      });
-
-      // Update title
-      var titleSuffix = this.currentPath === "/" ? "" : " \u2014 " + this.currentPath;
-      WM.setTitle(this.winId, L.title + titleSuffix);
-
-      // Render items
-      if (items.length === 0) {
-        grid.innerHTML = '<div class="fb-empty"><span class="fb-empty-icon">\uD83D\uDCC2</span><span>' + L.emptyMsg + '</span></div>';
+    function setView(mode) {
+      if (!contentArea) return;
+      if (mode === "list") {
+        contentArea.classList.add("is-list");
       } else {
-        grid.innerHTML = "";
-        items.forEach(function (item) {
-          var el = document.createElement("div");
-          el.className = "fb-item fb-item--" + item.type;
-          el.innerHTML = '<span class="fb-item-icon">' + item.icon + '</span><span class="fb-item-name">' + WM._esc(item.name) + '</span>';
-
-          el.addEventListener("click", function () {
-            grid.querySelectorAll(".fb-item").forEach(function (i) { i.classList.remove("is-selected"); });
-            el.classList.add("is-selected");
-          });
-
-          el.addEventListener("dblclick", function () {
-            if (item.type === "folder") {
-              self._navigate(item.path);
-            } else if (item.type === "article") {
-              self._openArticle(item);
-            } else if (item.url) {
-              window.location.href = item.url;
-            }
-          });
-
-          grid.appendChild(el);
-        });
+        contentArea.classList.remove("is-list");
       }
-
-      // Update status bar
-      var countEl = el.querySelector(".fb-status-count");
-      if (countEl) {
-        countEl.textContent = items.length + " " + L.items;
+      if (viewGridBtn && viewListBtn) {
+        viewGridBtn.classList.toggle("is-active", mode === "grid");
+        viewListBtn.classList.toggle("is-active", mode === "list");
       }
-    },
+      try {
+        localStorage.setItem("fb-view", mode);
+      } catch (e) { /* ignore */ }
+    }
 
-    _openArticle: function (article) {
-      var loadMsg = LANG === "en" ? "Loading\u2026" : "Cargando\u2026";
-      var errMsg = LANG === "en" ? "Could not load article." : "No se pudo cargar el art\u00EDculo.";
-      var openTab = LANG === "en" ? "Open in new tab" : "Abrir en nueva pesta\u00F1a";
+    // Restore saved view preference
+    try {
+      var savedView = localStorage.getItem("fb-view");
+      if (savedView === "list") setView("list");
+    } catch (e) { /* ignore */ }
 
-      var off = (WM.counter % 6) * 24;
-      var winId = WM.create({
-        title: article.name,
-        width: 680,
-        height: 520,
-        x: 100 + off,
-        y: 60 + off,
-        html: '<div class="fb-article-viewer"><p class="fb-article-loading">' + loadMsg + '</p></div>'
+    if (viewGridBtn) {
+      viewGridBtn.addEventListener("click", function () { setView("grid"); });
+    }
+    if (viewListBtn) {
+      viewListBtn.addEventListener("click", function () { setView("list"); });
+    }
+
+    // ---- Item selection ----
+    var items = windowEl.querySelectorAll(".fb-item");
+    items.forEach(function (item) {
+      item.addEventListener("click", function (e) {
+        items.forEach(function (i) { i.classList.remove("is-selected"); });
+        item.classList.add("is-selected");
       });
+    });
 
-      fetch(article.url)
-        .then(function (res) { return res.text(); })
-        .then(function (raw) {
-          var doc = new DOMParser().parseFromString(raw, "text/html");
-
-          // Extract title
-          var titleEl = doc.querySelector("h1.flashy-h1, h1.heading, h1");
-          var title = titleEl ? titleEl.textContent.trim() : article.name;
-
-          // Extract featured image
-          var imgHtml = "";
-          var imgEl = doc.querySelector(".post-header img[src]");
-          var featDiv = doc.querySelector(".alt-post_featimg");
-          if (imgEl && imgEl.getAttribute("src")) {
-            imgHtml = '<img class="fb-article-img" src="' + WM._esc(imgEl.getAttribute("src")) + '" />';
-          } else if (featDiv) {
-            var bg = (featDiv.getAttribute("style") || "").match(/url\(['"]?([^'")]+)/);
-            if (bg && bg[1]) imgHtml = '<img class="fb-article-img" src="' + WM._esc(bg[1]) + '" />';
-          }
-
-          // Extract article body
-          var bodyEl = doc.querySelector(".rich-text.w-richtext");
-          var bodyHtml = bodyEl ? bodyEl.innerHTML : "";
-
-          // Extract author
-          var authorEl = doc.querySelector(".author-name_link");
-          var author = authorEl ? authorEl.textContent.trim() : "";
-
-          // Build viewer
-          var out =
-            '<h1 class="fb-article-title">' + WM._esc(title) + '</h1>' +
-            (author ? '<p class="fb-article-meta">' + WM._esc(author) + (article.date ? " \u2014 " + article.date : "") + '</p>' : '') +
-            imgHtml +
-            '<div class="fb-article-content">' + bodyHtml + '</div>';
-
-          var w = WM.wins[winId];
-          if (w) {
-            var v = w.el.querySelector(".fb-article-viewer");
-            if (v) v.innerHTML = out;
-          }
-        })
-        .catch(function () {
-          var w = WM.wins[winId];
-          if (w) {
-            var v = w.el.querySelector(".fb-article-viewer");
-            if (v) v.innerHTML = '<p class="fb-article-loading">' + errMsg + ' <a href="' + WM._esc(article.url) + '" target="_blank">' + openTab + '</a></p>';
-          }
-        });
+    // ---- Toolbar back button ----
+    var backBtn = windowEl.querySelector(".fb-toolbar-btn[data-action='back']");
+    if (backBtn) {
+      backBtn.addEventListener("click", function (e) {
+        if (!backBtn.classList.contains("is-disabled")) {
+          e.preventDefault();
+          window.history.back();
+        }
+      });
     }
-  };
 
-  /* ============ INIT ============ */
-  document.addEventListener("DOMContentLoaded", function () {
-    WM.init();
-    FS.init();
+    // ---- Sidebar active state based on current URL ----
+    var sidebarItems = windowEl.querySelectorAll(".fb-sidebar-item[href]");
+    var currentPath = window.location.pathname;
 
-    // Set launcher label by language
-    var launcherText = document.getElementById("fb-launcher-text");
-    if (launcherText) launcherText.textContent = L.launcherLabel;
+    sidebarItems.forEach(function (item) {
+      var href = item.getAttribute("href");
+      if (href && currentPath.indexOf(href) === 0 && href !== "/" && href !== "/en/") {
+        item.classList.add("is-active");
+      }
+    });
 
-    var launcher = document.getElementById("fb-launcher");
-    if (launcher) {
-      launcher.addEventListener("click", function () { FB.open(); });
+    // ---- Path bar: highlight current segment ----
+    var pathSegments = windowEl.querySelectorAll(".fb-pathbar-segment");
+    if (pathSegments.length > 0) {
+      var lastSegment = pathSegments[pathSegments.length - 1];
+      lastSegment.classList.add("is-active");
     }
+
+    // ---- Update item count in status bar ----
+    var itemCount = windowEl.querySelector(".fb-statusbar-count");
+    var totalItems = windowEl.querySelectorAll(".fb-item").length;
+    if (itemCount) {
+      var isEnglish = window.location.pathname.startsWith('/en/');
+      if (isEnglish) {
+        itemCount.textContent = totalItems + (totalItems === 1 ? " item" : " items");
+      } else {
+        itemCount.textContent = totalItems + (totalItems === 1 ? " elemento" : " elementos");
+      }
+    }
+  }
+};
+
+// Auto-initialize on inline file browsers (mobile fallback)
+document.addEventListener("DOMContentLoaded", function () {
+  var inlineWindows = document.querySelectorAll(".fb-window:not(.wm-managed)");
+  inlineWindows.forEach(function (el) {
+    window.FileBrowser.init(el);
   });
-})();
+});

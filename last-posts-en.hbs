@@ -1,11 +1,5 @@
 {{!< default}}
 
-<head>
-  {{> "global-head"}}
-  <title>421 | Last Posts</title>
-  <link href="{{asset "css/index.css"}}" rel="stylesheet" type="text/css">
-</head>
-<body>
   <div class="page-wrapper">
     {{> "general-styling"}} <!-- TODO: Revisar -->
     {{> "site-nav-en"}}
@@ -26,15 +20,12 @@
             {{/if}}
         {{/get}}
       </div>
-
-      <!-- Suscribite button mobile  -->
-      {{!-- <a href="/suscribite" style="color: white; text-decoration: none;">
-        <button class="button sub-mobile-button">
-          Suscribite
-        </button>
-      </a> --}}
     </main>
 
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser-en"}}
+    </div>
     {{> "site-footer" lang="en"}}
 
   </div>
@@ -153,4 +144,3 @@
       });
     })
   </script>
-</body>
