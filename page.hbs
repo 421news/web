@@ -6,9 +6,11 @@
     <main>
       <div class="pv-xhuge">
         <div class="global-container">
+          {{#if @page.show_title_and_feature_image}}
           <div class="page-hero">
             <h1 class="flashy-h1">{{#page}}{{title}}{{/page}}</h1><img src="{{#page}}{{feature_image}}{{/page}}" loading="lazy" width="476" alt="{{#page}}{{title}}{{/page}}" class="page-hero_img">
           </div>
+          {{/if}}
           <div class="pt-medium">
             <div class="rich-text w-richtext">{{#page}}{{content}}{{/page}}</div>
           </div>
