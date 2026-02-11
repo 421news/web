@@ -76,23 +76,32 @@
                     {{#get "posts"
                         include="tags,authors"
                         limit="4"
-                        filter="tags:[{{primary_tag.slug}}],primary_tag:{{primary_tag.slug}}"
-                        as |items|
+                        filter="id:-{{id}}+tag:{{primary_tag.slug}}+tag:hash-en+tag:-Wiki"
+                        order="published_at desc"
                     }}
                         <div class="post-grid w-dyn-list">
-                            {{#if items}}
+                            <div role="list" class="post-cols w-dyn-items">
+                                {{#foreach posts}}
+                                    {{> "post-card"}}
+                                {{/foreach}}
+                            </div>
+                        </div>
+                    {{else}}
+                        {{!-- Fallback: any recent EN post --}}
+                        {{#get "posts"
+                            include="tags,authors"
+                            limit="4"
+                            filter="id:-{{id}}+tag:hash-en+tag:-Wiki"
+                            order="published_at desc"
+                        }}
+                            <div class="post-grid w-dyn-list">
                                 <div role="list" class="post-cols w-dyn-items">
                                     {{#foreach posts}}
                                         {{> "post-card"}}
                                     {{/foreach}}
                                 </div>
-                            {{/if}}
-                            {{#unless items}}
-                                <div class="post-grid-empty">
-                                    <div>Ups, nothing here yet.</div>
-                                </div>
-                            {{/unless}}
-                        </div>
+                            </div>
+                        {{/get}}
                     {{/get}}
                 </div>
             </div>
@@ -103,4 +112,5 @@
       {{> "file-browser-en"}}
     </div>
     {{> "site-footer" lang="en"}}
+    <script src="{{asset "js/related-posts.js"}}"></script>
 </div>
