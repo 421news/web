@@ -746,6 +746,14 @@ body.light-mode {
 }
 .rich-text h2, .rich-text h3 {
   align-self: start;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+.rich-text figure,
+.rich-text .kg-card {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
 }
 .rich-text blockquote {
   align-self: start;
@@ -907,8 +915,6 @@ footer {
 .page-hero {
   grid-column-gap: 0.75rem;
   grid-row-gap: 0.75rem;
-  border-top: 2px solid var(--crema);
-  border-bottom: 2px solid var(--crema);
   flex-flow: column;
   padding-top: 1.25rem;
   padding-bottom: 1.25rem;
