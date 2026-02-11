@@ -123,8 +123,30 @@
     {{> "window-manager"}}
     {{ghost_foot}}
     <script src='{{asset "js/udesly-ghost.min.js"}}'></script>
-    <script src='{{asset "built/portal.min.js"}}'></script>
     <script src='{{asset "js/seamless.js"}}'></script>
+    <script>
+      // Remove Ghost Portal subscribe CTA from bottom of posts
+      (function() {
+        function removePostCTA() {
+          document.querySelectorAll('.gh-post-upgrade-cta').forEach(function(el) { el.remove(); });
+        }
+        removePostCTA();
+        setTimeout(removePostCTA, 500);
+        setTimeout(removePostCTA, 1500);
+        setTimeout(removePostCTA, 3000);
+        new MutationObserver(function(mutations) {
+          mutations.forEach(function(m) {
+            m.addedNodes.forEach(function(node) {
+              if (node.nodeType === 1) {
+                if (node.classList && node.classList.contains('gh-post-upgrade-cta')) node.remove();
+                var nested = node.querySelectorAll && node.querySelectorAll('.gh-post-upgrade-cta');
+                if (nested) nested.forEach(function(el) { el.remove(); });
+              }
+            });
+          });
+        }).observe(document.body || document.documentElement, { childList: true, subtree: true });
+      })();
+    </script>
     <script src="{{asset "js/hide-show-nav.js"}}"></script>
     <script src="{{asset "js/file-browser.js"}}"></script>
     <script src="{{asset "js/window-manager.js"}}"></script>

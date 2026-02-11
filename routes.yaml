@@ -2,6 +2,8 @@ routes:
   /suscribite/: suscribite
   /gracias/: gracias
   /oh-yes/: oh-yes
+  /rutas/: rutas
+  /canon/: canon
   /ultimos-posts/: last-posts-es
   /en/last-posts/: last-posts-en
 

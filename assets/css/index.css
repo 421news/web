@@ -1,3 +1,9 @@
+/* Hide Ghost's default post signup CTA */
+.gh-post-upgrade-cta,
+.gh-post-upgrade-cta-content {
+  display: none !important;
+}
+
 /* Mobile Hero Styles */
 
 .hero-mobile {
@@ -871,10 +877,21 @@ body.light-mode {
   position: relative;
 }
 
+.post-cols .w-dyn-item {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+}
+
 .post-card_link {
   height: 100%;
   width: 100%;
   text-decoration: none;
+  display: flex;
+}
+
+.post-card {
+  width: 100%;
 }
 
 footer {
@@ -1613,6 +1630,222 @@ footer {
     font-size: 14px;
   }
   .kg-bookmark-description {
+    font-size: 12px;
+  }
+}
+
+/* =============================================
+   RUTAS DE LECTURA + CANON 421
+   ============================================= */
+
+/* Shared hero */
+.rutas-hero {
+  padding: 4rem 0 2.5rem;
+  text-align: center;
+}
+
+.rutas-hero-title {
+  font-size: 3rem;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.rutas-hero-subtitle {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  color: rgba(234, 230, 225, 0.65);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.rutas-gradient-divider {
+  height: 3px;
+  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  border: none;
+  border-radius: 2px;
+  margin: 0;
+}
+
+/* Ruta sections */
+.ruta-section {
+  padding: 3rem 0;
+  border-bottom: 1px solid rgba(234, 230, 225, 0.08);
+}
+
+.ruta-section:last-child {
+  border-bottom: none;
+}
+
+.ruta-header {
+  margin-bottom: 2rem;
+}
+
+.ruta-number {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--verde);
+  margin-bottom: 0.5rem;
+}
+
+.ruta-nombre {
+  font-size: 2rem;
+  font-style: italic;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.ruta-tesis {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 1.05rem;
+  color: rgba(234, 230, 225, 0.55);
+  line-height: 1.5;
+  max-width: 700px;
+}
+
+.ruta-posts-count {
+  font-size: 13px;
+  color: var(--amarillo);
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.ruta-cards {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* Canon list */
+.canon-list {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1rem;
+}
+
+.canon-item {
+  display: flex;
+  gap: 20px;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(234, 230, 225, 0.08);
+  align-items: flex-start;
+  text-decoration: none;
+  color: var(--crema);
+  transition: background 0.15s ease;
+}
+
+.canon-item:hover {
+  background: rgba(234, 230, 225, 0.03);
+}
+
+.canon-item:last-child {
+  border-bottom: none;
+}
+
+.canon-number-badge {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--negro);
+  background: var(--amarillo);
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.canon-cover {
+  width: 120px;
+  height: 80px;
+  border-radius: var(--radius);
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(234, 230, 225, 0.1);
+}
+
+.canon-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.canon-info h3 {
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--crema);
+  line-height: 1.3;
+}
+
+.canon-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--verde);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.canon-reason {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: rgba(234, 230, 225, 0.5);
+  line-height: 1.5;
+}
+
+/* Responsive: Rutas + Canon */
+@media screen and (max-width: 991px) {
+  .ruta-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .rutas-hero-title {
+    font-size: 2rem;
+  }
+
+  .ruta-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .canon-cover {
+    width: 80px;
+    height: 56px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .canon-item {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .canon-cover {
+    width: 100%;
+    height: 140px;
+    order: -1;
+  }
+
+  .canon-number-badge {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
     font-size: 12px;
   }
 }
