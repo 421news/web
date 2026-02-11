@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mockup: Rutas de lectura + Canon 421</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700;1,800&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --negro: #121212;
+      --crema: #eae6e1;
+      --amarillo: #fcd221;
+      --verde: #17a583;
+      --radius: 8px;
+      --border-width: 2px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Nunito Sans', sans-serif;
+      background: var(--negro);
+      color: var(--crema);
+      overflow-x: hidden;
+    }
+
+    /* Page switcher */
+    .page-switcher {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      display: flex;
+      background: var(--negro);
+      border-bottom: 2px solid rgba(234,230,225,0.15);
+      padding: 12px 24px;
+      gap: 12px;
+      align-items: center;
+    }
+    .page-switcher span {
+      font-size: 12px;
+      color: rgba(234,230,225,0.4);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+    .page-switcher button {
+      font-family: 'Nunito Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 4px;
+      border: 2px solid rgba(234,230,225,0.2);
+      background: transparent;
+      color: var(--crema);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .page-switcher button:hover { border-color: var(--amarillo); }
+    .page-switcher button.active {
+      background: var(--amarillo);
+      color: var(--negro);
+      border-color: var(--amarillo);
+    }
+
+    /* Nav mockup */
+    .nav-mockup {
+      background: var(--negro);
+      padding: 16px 24px;
+      padding-top: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid rgba(234,230,225,0.08);
+    }
+    .nav-logo {
+      font-size: 28px;
+      font-weight: 800;
+      font-style: italic;
+      color: var(--amarillo);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--crema);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-links a.is-active {
+      opacity: 1;
+      text-decoration: underline;
+      text-decoration-color: var(--verde);
+      text-underline-offset: 4px;
+    }
+
+    /* Shared page layout */
+    .page-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Page hero */
+    .page-hero {
+      padding: 4rem 0 2.5rem;
+      text-align: center;
+    }
+    .page-hero h1 {
+      font-size: 3rem;
+      font-style: italic;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+    .page-hero h1 .gradient-text {
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-hero .subtitle {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: rgba(234,230,225,0.65);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Gradient divider */
+    .gradient-divider {
+      height: 3px;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      border: none;
+      border-radius: 2px;
+      margin: 0;
+    }
+
+    /* ===================== */
+    /* RUTAS PAGE            */
+    /* ===================== */
+
+    .ruta-section {
+      padding: 3rem 0;
+      border-bottom: 1px solid rgba(234,230,225,0.08);
+    }
+    .ruta-section:last-of-type {
+      border-bottom: none;
+    }
+
+    .ruta-header {
+      margin-bottom: 2rem;
+    }
+    .ruta-number {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--verde);
+      margin-bottom: 0.5rem;
+    }
+    .ruta-header h2 {
+      font-size: 2rem;
+      font-style: italic;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+    .ruta-tesis {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      color: rgba(234,230,225,0.55);
+      line-height: 1.5;
+      max-width: 700px;
+    }
+    .ruta-posts-count {
+      font-size: 13px;
+      color: var(--amarillo);
+      font-weight: 700;
+      margin-top: 0.5rem;
+    }
+
+    /* Post cards grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .post-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: var(--border-width) solid rgba(234,230,225,0.1);
+      background: var(--negro);
+      transition: transform 0.15s ease, border-color 0.15s ease;
+      cursor: pointer;
+    }
+    .post-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--verde);
+    }
+
+    .post-card-cover {
+      width: 100%;
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .post-card-cover .tag-box {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: var(--negro);
+      color: var(--crema);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .post-card-overlay {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      background: linear-gradient(180deg, var(--verde), var(--amarillo));
+      mix-blend-mode: overlay;
+    }
+    .post-card:hover .post-card-overlay {
+      opacity: 0.6;
+    }
+
+    .post-card-info {
+      padding: 12px;
+    }
+    .post-card-info h3 {
+      font-size: 15px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 6px;
+      color: var(--crema);
+    }
+    .post-card-meta {
+      font-size: 12px;
+      font-style: italic;
+      color: rgba(234,230,225,0.45);
+    }
+
+    /* ===================== */
+    /* CANON PAGE            */
+    /* ===================== */
+
+    .canon-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .canon-item {
+      display: flex;
+      gap: 20px;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(234,230,225,0.08);
+      align-items: flex-start;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+    .canon-item:hover {
+      background: rgba(234,230,225,0.03);
+    }
+    .canon-item:last-child {
+      border-bottom: none;
+    }
+
+    .canon-number-badge {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--negro);
+      background: var(--amarillo);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .canon-cover {
+      width: 120px;
+      height: 80px;
+      border-radius: var(--radius);
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(234,230,225,0.1);
+    }
+
+    .canon-info {
+      flex: 1;
+    }
+    .canon-info h3 {
+      font-size: 1.1rem;
+      font-style: italic;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: var(--crema);
+      line-height: 1.3;
+    }
+    .canon-info .canon-tag {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--verde);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .canon-reason {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: rgba(234,230,225,0.5);
+      line-height: 1.5;
+    }
+
+    /* ===================== */
+    /* FILE BROWSER (mini)   */
+    /* ===================== */
+
+    .fb-mini {
+      border: var(--border-width) solid var(--negro);
+      border-radius: var(--radius);
+      background-color: var(--crema);
+      overflow: hidden;
+      max-width: 1100px;
+      margin: 3rem auto;
+      box-shadow: 4px 4px 0 var(--negro);
+      color: var(--negro);
+    }
+    .fb-mini-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--negro);
+      color: var(--crema);
+      padding: 8px 12px;
+    }
+    .fb-mini-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .fb-mini-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(234,230,225,0.3);
+    }
+    .fb-mini-dot.close { background: #ff5f57; }
+    .fb-mini-dot.min { background: var(--amarillo); }
+    .fb-mini-dot.max { background: var(--verde); }
+    .fb-mini-title {
+      font-weight: 700;
+      font-style: italic;
+      font-size: 13px;
+    }
+    .fb-mini-body {
+      display: flex;
+      min-height: 200px;
+    }
+    .fb-mini-sidebar {
+      width: 200px;
+      background: rgba(18,18,18,0.04);
+      border-right: var(--border-width) solid var(--negro);
+      padding: 12px 0;
+    }
+    .fb-mini-sidebar-heading {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: rgba(18,18,18,0.45);
+      padding: 8px 14px 4px;
+    }
+    .fb-mini-sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--negro);
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .fb-mini-sidebar-item:hover { background: rgba(18,18,18,0.07); }
+    .fb-mini-sidebar-item.highlight {
+      background: var(--amarillo);
+      font-weight: 800;
+      border-radius: 0;
+    }
+    .fb-mini-sidebar-divider {
+      height: 1px;
+      background: rgba(18,18,18,0.1);
+      margin: 8px 14px;
+    }
+    .fb-mini-content {
+      flex: 1;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 8px;
+      align-content: start;
+    }
+    .fb-mini-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 8px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--negro);
+      border: 2px solid transparent;
+      transition: background 0.12s;
+    }
+    .fb-mini-item:hover { background: rgba(18,18,18,0.06); }
+    .fb-mini-item-icon { font-size: 36px; }
+    .fb-mini-item-name { font-size: 12px; font-weight: 600; text-align: center; }
+    .fb-mini-statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 12px;
+      background: var(--negro);
+      color: rgba(234,230,225,0.6);
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Sections hidden by default */
+    .page-section { display: none; }
+    .page-section.active { display: block; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+      .canon-cover { width: 80px; height: 56px; }
+      .fb-mini-sidebar { display: none; }
+      .page-hero h1 { font-size: 2rem; }
+    }
+
+    /* Placeholder image patterns */
+    .placeholder-1 { background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460); }
+    .placeholder-2 { background: linear-gradient(135deg, #2d132c, #801336, #c72c41); }
+    .placeholder-3 { background: linear-gradient(135deg, #0a3d62, #3c6382, #60a3bc); }
+    .placeholder-4 { background: linear-gradient(135deg, #6a0572, #ab83a1, #e7b2b2); }
+    .placeholder-5 { background: linear-gradient(135deg, #1b4332, #2d6a4f, #52b788); }
+    .placeholder-6 { background: linear-gradient(135deg, #3d405b, #81b29a, #f2cc8f); }
+    .placeholder-7 { background: linear-gradient(135deg, #5f0a87, #a4508b, #e8751a); }
+    .placeholder-8 { background: linear-gradient(135deg, #212529, #495057, #adb5bd); }
+  </style>
+</head>
+<body>
+
+<!-- Page switcher -->
+<div class="page-switcher">
+  <span>Mockup</span>
+  <button class="active" onclick="showPage('rutas')">Rutas de lectura</button>
+  <button onclick="showPage('canon')">Canon 421</button>
+</div>
+
+<!-- ============================== -->
+<!-- RUTAS DE LECTURA PAGE          -->
+<!-- ============================== -->
+<div id="page-rutas" class="page-section active">
+
+  <nav class="nav-mockup">
+    <a class="nav-logo" href="#">421</a>
+    <ul class="nav-links">
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#" class="is-active">Rutas</a></li>
+      <li><a href="#">Canon</a></li>
+      <li><a href="#">Suscribite</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-hero">
+      <h1><span class="gradient-text">Rutas de lectura</span></h1>
+      <p class="subtitle">350 textos es un archivo. 7 caminos curados son un mapa. Cada ruta es una secuencia de 8-12 textos que construyen una idea. Elegí la que te llame y dejate llevar.</p>
+    </div>
+    <hr class="gradient-divider">
+
+    <!-- Ruta 1 -->
+    <div class="ruta-section">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 01</div>
+        <h2>Autonomia digital</h2>
+        <p class="ruta-tesis">Las herramientas que usas definen los limites de tu libertad.</p>
+        <div class="ruta-posts-count">11 textos</div>
+      </div>
+      <div class="cards-grid">
+        <div class="post-card">
+          <div class="post-card-cover placeholder-5">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Soberania</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Guia cyberciruja para la autodeterminacion digital</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 15/3/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-3">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Tecnologia</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Ya pagas internet, no pagues por lo demas</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 22/1/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-1">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Soberania</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Soberania cognitiva: introduccion a la autonomia psiquica</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 8/11/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-7">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Tecnologia</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Tecnomagia para la vida real</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 5/9/2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ruta 2 -->
+    <div class="ruta-section">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 02</div>
+        <h2>Cultura pop como teoria</h2>
+        <p class="ruta-tesis">Star Wars enseña derecho constitucional. Fallout enseña economia. La cultura popular no es baja cultura: es el lenguaje comun mas potente que tenemos.</p>
+        <div class="ruta-posts-count">12 textos</div>
+      </div>
+      <div class="cards-grid">
+        <div class="post-card">
+          <div class="post-card-cover placeholder-2">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Cultura</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Derecho constitucional en Star Wars</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 12/5/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-6">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Videojuegos</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Economia del videojuego: Fallout</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 3/4/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-4">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Juegos</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Magic: The Gathering como juego social</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 28/6/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-8">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Cultura</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Lecturas politicas sobre Lovecraft</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 19/7/2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ruta 3 -->
+    <div class="ruta-section">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 03</div>
+        <h2>Argentina como laboratorio</h2>
+        <p class="ruta-tesis">Argentina como caso de estudio permanente: crisis como metodo, periferia como ventaja, improvisacion como sistema.</p>
+        <div class="ruta-posts-count">11 textos</div>
+      </div>
+      <div class="cards-grid">
+        <div class="post-card">
+          <div class="post-card-cover placeholder-8">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Vida real</div>
+          </div>
+          <div class="post-card-info">
+            <h3>La anomalia Milei</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 20/11/2023</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-5">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Vida real</div>
+          </div>
+          <div class="post-card-info">
+            <h3>La historia del Parque Rivadavia</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 14/8/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-1">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Cultura</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Dinosaurios descubiertos en Argentina</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 2/2/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-3">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Vida real</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Cannabis en Argentina: guia completa</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 20/4/2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ruta 4 (collapsed preview) -->
+    <div class="ruta-section">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 04</div>
+        <h2>Filosofia para la vida real</h2>
+        <p class="ruta-tesis">Sloterdijk, Byung-Chul Han, Nick Land: pensadores que sirven para vivir, no solo para citar.</p>
+        <div class="ruta-posts-count">10 textos</div>
+      </div>
+      <div class="cards-grid">
+        <div class="post-card">
+          <div class="post-card-cover placeholder-4">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Filosofia</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Byung-Chul Han: la sociedad del cansancio</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 18/10/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-7">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Filosofia</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Volverse ingobernable: Peter Sloterdijk</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 9/9/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-2">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Filosofia</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Nick Land y el aceleracionismo</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 1/7/2024</div>
+          </div>
+        </div>
+        <div class="post-card">
+          <div class="post-card-cover placeholder-6">
+            <div class="post-card-overlay"></div>
+            <div class="tag-box">Filosofia</div>
+          </div>
+          <div class="post-card-info">
+            <h3>Deny, Defend, Depose: Luigi Mangione</h3>
+            <div class="post-card-meta">Juan Ruocco &middot; 12/12/2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rutas 5-7 teaser -->
+    <div class="ruta-section" style="opacity: 0.4; pointer-events: none;">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 05</div>
+        <h2>El canon del entretenimiento</h2>
+        <p class="ruta-tesis">12 textos &middot; Akira, Blade Runner, guias de sci-fi...</p>
+      </div>
+    </div>
+    <div class="ruta-section" style="opacity: 0.3; pointer-events: none;">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 06</div>
+        <h2>Internet no murio</h2>
+        <p class="ruta-tesis">10 textos &middot; 4chan, memes, Pepe, Milady...</p>
+      </div>
+    </div>
+    <div class="ruta-section" style="opacity: 0.2; pointer-events: none;">
+      <div class="ruta-header">
+        <div class="ruta-number">Ruta 07</div>
+        <h2>Hazlo tu mismo</h2>
+        <p class="ruta-tesis">10 textos &middot; Pan, milanesas, cannabis, fanzines, Bitsy...</p>
+      </div>
+    </div>
+
+    <!-- File browser at bottom -->
+    <div class="fb-mini">
+      <div class="fb-mini-titlebar">
+        <div class="fb-mini-dots">
+          <span class="fb-mini-dot close"></span>
+          <span class="fb-mini-dot min"></span>
+          <span class="fb-mini-dot max"></span>
+        </div>
+        <span class="fb-mini-title">421 &mdash; Explorador de archivos</span>
+        <div style="width:54px"></div>
+      </div>
+      <div class="fb-mini-body">
+        <div class="fb-mini-sidebar">
+          <div class="fb-mini-sidebar-heading">Marcadores</div>
+          <a class="fb-mini-sidebar-item" href="#">&#127968; Inicio</a>
+          <a class="fb-mini-sidebar-item" href="#">&#127912; Cultura</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128268; Tecnologia</a>
+          <a class="fb-mini-sidebar-item" href="#">&#127918; Juegos</a>
+          <a class="fb-mini-sidebar-item" href="#">&#127758; Vida real</a>
+          <div class="fb-mini-sidebar-divider"></div>
+          <div class="fb-mini-sidebar-heading">Sistema</div>
+          <a class="fb-mini-sidebar-item highlight" href="#">&#129517; Rutas</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128218; Canon</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128231; Suscribite</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128214; Revista</a>
+        </div>
+        <div class="fb-mini-content">
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">cultura/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">tecnologia/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">juegos/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">vida-real/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon" style="color:var(--verde)">&#128196;</span>
+            <span class="fb-mini-item-name">rutas.sh</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon" style="color:var(--verde)">&#128196;</span>
+            <span class="fb-mini-item-name">canon.sh</span>
+          </div>
+        </div>
+      </div>
+      <div class="fb-mini-statusbar">
+        <span>22 elementos</span>
+        <span>&#9783; &#9776;</span>
+      </div>
+    </div>
+  </div>
+  <div style="height:3rem"></div>
+</div>
+
+<!-- ============================== -->
+<!-- CANON 421 PAGE                 -->
+<!-- ============================== -->
+<div id="page-canon" class="page-section">
+
+  <nav class="nav-mockup">
+    <a class="nav-logo" href="#">421</a>
+    <ul class="nav-links">
+      <li><a href="#">Inicio</a></li>
+      <li><a href="#">Rutas</a></li>
+      <li><a href="#" class="is-active">Canon</a></li>
+      <li><a href="#">Suscribite</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-hero">
+      <h1><span class="gradient-text">Canon 421</span></h1>
+      <p class="subtitle">Si 421 fuera una biblioteca, estos serian los 25 libros que no se prestan. Los textos que mejor representan lo que hacemos, por que lo hacemos, y como lo hacemos.</p>
+    </div>
+    <hr class="gradient-divider">
+
+    <div class="canon-list" style="padding-top: 1rem;">
+
+      <div class="canon-item">
+        <div class="canon-number-badge">1</div>
+        <div class="canon-cover placeholder-2"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Internet</div>
+          <h3>Lo que aprendi leyendo /pol/ de 4chan</h3>
+          <p class="canon-reason">El texto fundacional de 421. Inmersion investigativa en el underground digital que definio el tono editorial del sitio.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">2</div>
+        <div class="canon-cover placeholder-4"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Filosofia</div>
+          <h3>Byung-Chul Han: la sociedad del cansancio</h3>
+          <p class="canon-reason">Filosofia aplicada a la vida cotidiana. El formato que 421 hace mejor: traducir pensadores complejos a lenguaje real.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">3</div>
+        <div class="canon-cover placeholder-8"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Vida real</div>
+          <h3>La anomalia Milei</h3>
+          <p class="canon-reason">Analisis politico antes de que fuera obvio. Demuestra la capacidad de anticipacion editorial de 421.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">4</div>
+        <div class="canon-cover placeholder-1"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Internet</div>
+          <h3>Memes y magnicidio</h3>
+          <p class="canon-reason">La interseccion entre cultura digital y violencia politica. Periodismo cultural en su forma mas necesaria.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">5</div>
+        <div class="canon-cover placeholder-6"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Vida real</div>
+          <h3>Lo que aprendi siendo evangelico</h3>
+          <p class="canon-reason">Cronica personal con alcance sociologico. El mejor ejemplo del registro autobiografico de 421.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">6</div>
+        <div class="canon-cover placeholder-3"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Cultura</div>
+          <h3>En el principio fue el canon</h3>
+          <p class="canon-reason">Meta-texto sobre por que importan los canones. El texto que justifica esta misma pagina.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">7</div>
+        <div class="canon-cover placeholder-7"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Cultura</div>
+          <h3>Akira (1988)</h3>
+          <p class="canon-reason">Critica cultural en su maxima expresion. Un texto que demuestra que hablar de anime es hablar de politica, urbanismo y futuro.</p>
+        </div>
+      </div>
+
+      <div class="canon-item">
+        <div class="canon-number-badge">8</div>
+        <div class="canon-cover placeholder-5"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Filosofia</div>
+          <h3>Volverse ingobernable: Peter Sloterdijk</h3>
+          <p class="canon-reason">Filosofia como herramienta de resistencia. El tono combativo y accesible que define a 421.</p>
+        </div>
+      </div>
+
+      <!-- More items faded -->
+      <div class="canon-item" style="opacity: 0.5;">
+        <div class="canon-number-badge">9</div>
+        <div class="canon-cover placeholder-2"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Filosofia</div>
+          <h3>Nick Land y el aceleracionismo</h3>
+          <p class="canon-reason">Pensamiento peligroso explicado sin miedo. El tipo de texto que no encontras en otros medios en español.</p>
+        </div>
+      </div>
+
+      <div class="canon-item" style="opacity: 0.35;">
+        <div class="canon-number-badge">10</div>
+        <div class="canon-cover placeholder-6"></div>
+        <div class="canon-info">
+          <div class="canon-tag">Soberania</div>
+          <h3>Soberania cognitiva: autonomia psiquica</h3>
+          <p class="canon-reason">El manifiesto de 421 sobre autonomia. Donde tecnologia, filosofia y vida real convergen.</p>
+        </div>
+      </div>
+
+      <div style="text-align:center; padding: 2rem 0; color: rgba(234,230,225,0.3); font-style: italic;">
+        ... 15 textos mas ...
+      </div>
+
+    </div>
+
+    <!-- File browser at bottom -->
+    <div class="fb-mini">
+      <div class="fb-mini-titlebar">
+        <div class="fb-mini-dots">
+          <span class="fb-mini-dot close"></span>
+          <span class="fb-mini-dot min"></span>
+          <span class="fb-mini-dot max"></span>
+        </div>
+        <span class="fb-mini-title">421 &mdash; Explorador de archivos</span>
+        <div style="width:54px"></div>
+      </div>
+      <div class="fb-mini-body">
+        <div class="fb-mini-sidebar">
+          <div class="fb-mini-sidebar-heading">Marcadores</div>
+          <a class="fb-mini-sidebar-item" href="#">&#127968; Inicio</a>
+          <a class="fb-mini-sidebar-item" href="#">&#127912; Cultura</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128268; Tecnologia</a>
+          <a class="fb-mini-sidebar-item" href="#">&#127918; Juegos</a>
+          <a class="fb-mini-sidebar-item" href="#">&#127758; Vida real</a>
+          <div class="fb-mini-sidebar-divider"></div>
+          <div class="fb-mini-sidebar-heading">Sistema</div>
+          <a class="fb-mini-sidebar-item" href="#">&#129517; Rutas</a>
+          <a class="fb-mini-sidebar-item highlight" href="#">&#128218; Canon</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128231; Suscribite</a>
+          <a class="fb-mini-sidebar-item" href="#">&#128214; Revista</a>
+        </div>
+        <div class="fb-mini-content">
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">cultura/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">tecnologia/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">juegos/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon">&#128193;</span>
+            <span class="fb-mini-item-name">vida-real/</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon" style="color:var(--verde)">&#128196;</span>
+            <span class="fb-mini-item-name">rutas.sh</span>
+          </div>
+          <div class="fb-mini-item">
+            <span class="fb-mini-item-icon" style="color:var(--verde)">&#128196;</span>
+            <span class="fb-mini-item-name">canon.sh</span>
+          </div>
+        </div>
+      </div>
+      <div class="fb-mini-statusbar">
+        <span>22 elementos</span>
+        <span>&#9783; &#9776;</span>
+      </div>
+    </div>
+  </div>
+  <div style="height:3rem"></div>
+</div>
+
+<script>
+function showPage(page) {
+  document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.page-switcher button').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
