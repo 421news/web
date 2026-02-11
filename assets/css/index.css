@@ -711,6 +711,7 @@ body.light-mode {
   margin-right: auto;
   font-size: 18px;
   line-height: 1.5;
+  font-family: 'Lora', Georgia, serif;
 }
 
 .rich-text figcaption {
@@ -753,6 +754,7 @@ body.light-mode {
   align-self: start;
   margin-top: 4rem;
   margin-bottom: 1.5rem;
+  font-family: 'Nunito Sans', sans-serif;
 }
 
 .rich-text figure,
