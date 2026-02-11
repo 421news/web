@@ -7,12 +7,12 @@
   "keywords": [
     "ghost-theme"
   ],
-  "version": "2.1.0",
+  "version": "2.3.0",
   "engines": {
     "ghost": ">=4.0.0"
   },
   "license": "MIT",
-  "card_assets": false,
+  "card_assets": true,
   "posts_per_page": 8,
   "image_sizes": {
     "xxs": {

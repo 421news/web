@@ -549,6 +549,47 @@ body.light-mode {
 
 /* FEATURED POST HEADER */
 
+
+.hl-post a,
+.hero-home a {
+  text-decoration: none;
+}
+
+/* Hover: gradient underline on titles (each line) and author */
+.hl-post .flashy-h1 span,
+.hero-home .flashy-h1 span {
+  background-image: linear-gradient(280deg, var(--verde), var(--amarillo));
+  background-size: 100% 0;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 0.3s ease;
+  padding-bottom: 3px;
+}
+
+.hl-post .flashy-h1_link:hover .flashy-h1 span,
+.hero-home a:hover .flashy-h1 span {
+  background-size: 100% 2px;
+}
+
+.hl-post .author-name_link {
+  background-image: linear-gradient(280deg, var(--verde), var(--amarillo));
+  background-size: 0% 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+}
+
+.hl-post .author-name_link:hover {
+  background-size: 100% 2px;
+}
+
+/* Hide shadow skew layer in tag sections (black bg, not needed) */
+.hl-post .flashy-h1.is-shadow {
+  display: none;
+}
+
 .hl-post_grid {
   grid-column-gap: 4rem;
   grid-row-gap: 6rem;
@@ -663,6 +704,7 @@ body.light-mode {
   font-size: 18px;
 }
 .rich-text a {
+  text-decoration: none;
   border-bottom: 1px solid var(--verde);
   background-image: linear-gradient(280deg, var(--verde), var(--amarillo));
   -webkit-text-fill-color: transparent;
@@ -675,13 +717,14 @@ body.light-mode {
 
 .rich-text a:hover {
   border-bottom-width: 2px;
-  border-bottom-color: var(--amarillo);
 }
 
 .rich-text img {
-  min-width: 740px;
+  max-width: 100%;
+  width: auto;
   height: auto;
-  display: inline-block;
+  display: block;
+  margin: 0 auto;
 }
 
 .rich-text p {
@@ -762,7 +805,6 @@ body.light-mode {
   transition: color 0.2s ease;
 }
 .author-name_link:hover {
-  color: var(--amarillo);
   border-bottom: 1px solid var(--verde);
 }
 .post_author-box.is-full {
@@ -997,8 +1039,10 @@ footer {
   }
 
   .rich-text img {
-    min-width: 100%;
-    display: inline-block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    display: block;
   }
 
   .rich-text p {
@@ -1121,6 +1165,31 @@ footer {
   .featured-post-read-button {
     align-self: center;
   }
+
+  /* Prevent embeds/videos from causing horizontal scroll */
+  .rich-text {
+    overflow: hidden;
+  }
+
+  .kg-embed-card,
+  .kg-embed-card iframe,
+  .kg-embed-card video,
+  .kg-video-card {
+    max-width: 100% !important;
+  }
+
+  /* Captions should not force width */
+  .kg-card-hascaption {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Gallery responsive */
+  .kg-gallery-card {
+    width: 100%;
+    left: 0;
+    transform: none;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -1190,8 +1259,10 @@ footer {
   }
 
   .rich-text img {
-    width: 100%;
-    min-width: 80vw;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    display: block;
   }
 
   .rich-text p {
@@ -1285,7 +1356,8 @@ footer {
 }
 
 .kg-card-hascaption {
-  width: 780px;
+  width: 100%;
+  max-width: 780px;
   padding-bottom: 1rem;
   padding-top: 1rem;
 }
@@ -1302,5 +1374,188 @@ footer {
   .kg-embed-card embed {
     width: 100%; /* Set width for mobile */
     max-width: 100%;
+  }
+}
+
+/* =============================================
+   GHOST CARD OVERRIDES
+   Only fix actual conflicts. webflow.css is NOT
+   loaded, so we only need to handle:
+   1. .rich-text a (gradient text) → exclude cards
+   2. globals.css figure:not(.kg-card) → already fixed
+   3. globals.css h2 italic → already fixed
+   Let cards.min.css handle the rest.
+   ============================================= */
+
+/* --- LINKS: remove gradient text effect inside cards --- */
+.rich-text .kg-card a,
+.rich-text .kg-card a * {
+  -webkit-text-fill-color: initial;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  background-image: none;
+  border-bottom: none;
+  font-style: normal;
+  text-decoration: none;
+}
+
+/* --- IMAGES: let cards control their own sizing --- */
+.rich-text .kg-card img {
+  min-width: auto;
+}
+
+/* --- GALLERY: break out of 780px text column --- */
+.kg-gallery-card {
+  width: 100vw;
+  max-width: 1100px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.kg-gallery-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* --- HEADER CARD: large typography, centered --- */
+.kg-header-card {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  text-align: center;
+}
+
+/* Force center on all header card variants (V1 + V2) */
+.kg-header-card.kg-v2 {
+  text-align: center !important;
+}
+
+.kg-header-card .kg-header-card-text {
+  text-align: center !important;
+  align-items: center !important;
+}
+
+.kg-header-card h2.kg-header-card-header,
+.kg-header-card h2.kg-header-card-heading {
+  font-size: 4rem;
+  font-weight: 800;
+  font-style: normal;
+  line-height: 1.1;
+  text-align: center !important;
+}
+
+.kg-header-card h3.kg-header-card-subheader,
+.kg-header-card .kg-header-card-subheading {
+  font-size: 1.5rem;
+  font-style: normal;
+  line-height: 1.4;
+  text-align: center !important;
+}
+
+/* --- BOOKMARK CARD: compact typography --- */
+.kg-bookmark-title {
+  font-size: 15px;
+  line-height: 1.3;
+  font-style: normal;
+}
+
+.kg-bookmark-description {
+  font-size: 13px;
+  line-height: 1.4;
+  font-style: normal;
+}
+
+/* Bookmark thumbnail: remove extra space below image */
+.kg-bookmark-thumbnail {
+  overflow: hidden;
+}
+
+.kg-bookmark-thumbnail img {
+  display: block;
+  margin: 0;
+}
+
+.kg-bookmark-metadata {
+  font-size: 12px;
+  line-height: 1.3;
+  font-style: normal;
+}
+
+/* Hide bookmark favicon - use high specificity to beat cards.min.css */
+.kg-bookmark-card .kg-bookmark-icon {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+
+.kg-bookmark-publisher {
+  font-size: 12px;
+  font-style: normal;
+}
+
+/* --- PRODUCT CARD: image fit to container --- */
+.kg-product-card .kg-product-card-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+/* --- CARD WIDTHS --- */
+.kg-bookmark-card,
+.kg-callout-card,
+.kg-toggle-card,
+.kg-file-card,
+.kg-product-card,
+.kg-video-card,
+.kg-cta-card,
+.kg-image-card,
+.kg-embed-card {
+  width: 100%;
+  max-width: 780px;
+}
+
+.kg-signup-card {
+  width: 100%;
+}
+
+.kg-width-wide {
+  max-width: 100%;
+}
+
+.kg-width-full {
+  max-width: none;
+}
+
+/* --- MOBILE --- */
+@media (max-width: 900px) {
+  .kg-header-card-heading,
+  .kg-header-card h2.kg-header-card-heading {
+    font-size: 2.5rem;
+  }
+  .kg-header-card-subheading,
+  .kg-header-card h3.kg-header-card-subheader {
+    font-size: 1.2rem;
+  }
+  .kg-bookmark-card,
+  .kg-callout-card,
+  .kg-toggle-card,
+  .kg-file-card,
+  .kg-product-card,
+  .kg-video-card,
+  .kg-cta-card,
+  .kg-image-card,
+  .kg-embed-card {
+    max-width: 100%;
+  }
+  .kg-bookmark-title {
+    font-size: 14px;
+  }
+  .kg-bookmark-description {
+    font-size: 12px;
   }
 }
