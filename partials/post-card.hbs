@@ -5,14 +5,14 @@
       onmouseover="
         const overlay = this.querySelector('.post-card_overlay');
         if (overlay) {
-          overlay.style.backgroundImage='linear-gradient(180deg, var(--verde), var(--amarillo)), url(\'{{asset "images/textura.png"}}\')';
+          overlay.style.backgroundImage='linear-gradient(180deg, var(--verde), var(--amarillo)), url(\'{{asset "images/textura.webp"}}\')';
           overlay.style.backgroundBlendMode='overlay';
         }
       "
       onmouseout="
         const overlay = this.querySelector('.post-card_overlay');
         if (overlay) {
-          overlay.style.backgroundImage='url(\'{{asset "images/textura.png"}}\')';
+          overlay.style.backgroundImage='url(\'{{asset "images/textura.webp"}}\')';
           overlay.style.backgroundBlendMode='';
         }
       "
@@ -36,7 +36,7 @@
         <div
           class='post-card_overlay'
           style="
-            background-image: url('{{asset "images/textura.png"}}');
+            background-image: url('{{asset "images/textura.webp"}}');
             background-size: cover;
             background-position: center;
           "

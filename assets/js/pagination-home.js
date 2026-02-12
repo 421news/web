@@ -1,10 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const feed = document.querySelector('.last-posts-section');
     const btn = document.querySelector('#load-more-home');
-    if (!feed || !btn) {
-        console.warn('Pagination elements not found:', { feed: !!feed, btn: !!btn });
-        return;
-    }
+    if (!feed || !btn) return;
 
     const API_KEY = "420da6f85b5cc903b347de9e33";
     const LIMIT = 20; // 20 posts per page requested;

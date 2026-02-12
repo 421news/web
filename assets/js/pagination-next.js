@@ -53,7 +53,6 @@
     }
 
     function renderPostCard(p) {
-        console.log({p})
         const primaryAuthor = p.primary_author?.name || p.authors?.[0]?.name || "";
         const primaryTag = p.primary_tag?.name || "Uncategorized";
         const primaryTagIco = p.primary_tag?.feature_image || "";

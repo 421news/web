@@ -27,13 +27,9 @@ document.addEventListener("DOMContentLoaded", function() {
         link.addEventListener("mouseenter", function() {
             hoverSound.currentTime = 0;
 
-            hoverSound.play().catch(function(error) {
-                console.log("Audio playback failed", error);
-            })
+            hoverSound.play().catch(function() {})
         })
     })
 
-    hoverSound.addEventListener("error", function() {
-        console.log("Failed to load audio file: assets/audio/balatro.mp3")
-    })
+    hoverSound.addEventListener("error", function() {})
 })
