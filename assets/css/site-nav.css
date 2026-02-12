@@ -1,76 +1,343 @@
+/* ===========================================
+   SITE NAVIGATION - 421.news
+   =========================================== */
+
+/* --- Header (fixed, hide/show on scroll) --- */
 .site-header {
     z-index: 8;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
     position: fixed;
     inset: 0% 0% auto;
+    background-color: var(--negro);
+    border-bottom: 2px solid rgba(234, 230, 225, 0.08);
     transform: translateY(0);
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out, background-color 0.3s ease, border-color 0.3s ease;
 }
+
 .site-header.nav-hidden {
     transform: translateY(-100%);
 }
 
-.site-logo {
-    background-position: 50%;
-    background-repeat: no-repeat;
-    background-size: 99%;
-    width: 167px;
-    height: 80px;
-    transition: all 0.325s;
+body.light-mode .site-header {
+    background-color: var(--crema);
+    border-bottom-color: rgba(18, 18, 18, 0.1);
 }
 
+/* --- Desktop nav layout --- */
 .site-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 24px;
+    gap: 16px;
+    padding: 10px 0;
 }
 
-.nav_categories {
+/* --- Logo --- */
+.site-logo {
+    display: block;
+    width: 110px;
+    height: 52px;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.site-logo:hover {
+    opacity: 0.8;
+}
+
+.site-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.site-logo--mobile {
+    width: 90px;
+    height: 42px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* --- Center nav links --- */
+.nav-links {
     display: flex;
+    gap: 4px;
+    align-items: center;
 }
 
+.nav-link {
+    color: var(--crema);
+    text-decoration: none;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.55;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 6px;
+}
+
+.nav-link:hover {
+    opacity: 1;
+    background-color: rgba(234, 230, 225, 0.06);
+}
+
+.nav-link.is-active {
+    opacity: 1;
+    background-color: rgba(234, 230, 225, 0.08);
+    position: relative;
+}
+
+.nav-link.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 10px;
+    right: 10px;
+    height: 2px;
+    background: var(--verde);
+    border-radius: 1px;
+}
+
+body.light-mode .nav-link {
+    color: var(--negro);
+}
+
+body.light-mode .nav-link:hover {
+    background-color: rgba(18, 18, 18, 0.06);
+}
+
+body.light-mode .nav-link.is-active {
+    background-color: rgba(18, 18, 18, 0.08);
+}
+
+/* --- Right side actions --- */
+.nav-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* --- Subscribe button (highlighted) --- */
+.nav-subscribe-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    color: var(--negro);
+    border: none;
+    border-radius: var(--radius);
+    padding: 8px 18px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    font-style: italic;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.nav-subscribe-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.nav-subscribe-btn:active {
+    transform: translateY(0);
+}
+
+/* --- Icon buttons (search, lang, mode toggle) --- */
+.nav-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 1.5px solid rgba(234, 230, 225, 0.15);
+    border-radius: var(--radius);
+    color: var(--crema);
+    padding: 7px;
+    cursor: pointer;
+    text-decoration: none;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    white-space: nowrap;
+    gap: 5px;
+    line-height: 1;
+}
+
+.nav-icon-btn:hover {
+    border-color: rgba(234, 230, 225, 0.35);
+    background-color: rgba(234, 230, 225, 0.05);
+}
+
+.nav-icon-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.nav-icon-btn img {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+body.light-mode .nav-icon-btn {
+    color: var(--negro);
+    border-color: rgba(18, 18, 18, 0.15);
+}
+
+body.light-mode .nav-icon-btn:hover {
+    border-color: rgba(18, 18, 18, 0.35);
+    background-color: rgba(18, 18, 18, 0.05);
+}
+
+body.light-mode .nav-icon-btn svg {
+    stroke: var(--negro);
+}
+
+body.light-mode .nav-icon-btn img {
+    filter: invert(1);
+}
+
+/* Do NOT invert flag images */
+body.light-mode .nav-flag {
+    filter: none;
+}
+
+/* Flag sizing */
+.nav-flag {
+    width: 1.2em !important;
+    height: 0.8em !important;
+}
+
+/* --- Mobile nav bar --- */
 .site-nav-mobile {
     display: none;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    position: relative;
 }
 
-.nav_category {
-    border-style: solid;
-    border-width: 2px 1px 2px 2px;
-    border-color: var(--negro);
-    background-color: var(--crema);
-    color: var(--negro);
-    text-align: center;
-    white-space: nowrap;
-    word-break: keep-all;
-    margin-right: -1px;
-    padding: 0.75rem 1.75rem;
-    font-style: italic;
-    font-weight: 700;
+.nav-mobile-left,
+.nav-mobile-right {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+/* --- Mobile expanded menu --- */
+.nav-mobile {
+    display: none;
+    flex-direction: column;
+    background-color: var(--negro);
+    border-top: 1px solid rgba(234, 230, 225, 0.08);
+}
+
+.nav-mobile a {
+    display: block;
+    padding: 14px 24px;
+    color: var(--crema);
     text-decoration: none;
-    transition: transform 0.2s ease;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(234, 230, 225, 0.06);
+    transition: background 0.15s ease, color 0.15s ease;
 }
-.nav_category:hover {
-    background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
-    transform: translateY(-2px);
+
+.nav-mobile a:hover {
+    background: rgba(234, 230, 225, 0.04);
+    color: var(--verde);
 }
-.nav_category.is-first {
-    border-right-width: 1px;
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
+
+.nav-mobile a.is-active {
+    color: var(--verde);
+    border-left: 3px solid var(--verde);
 }
-.nav_category.is-last {
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+
+.nav-mobile-subscribe {
+    color: var(--amarillo) !important;
+    font-style: italic;
+    font-weight: 800;
 }
+
+body.light-mode .nav-mobile {
+    background-color: var(--crema);
+    border-top-color: rgba(18, 18, 18, 0.08);
+}
+
+body.light-mode .nav-mobile a {
+    color: var(--negro);
+    border-bottom-color: rgba(18, 18, 18, 0.06);
+}
+
+body.light-mode .nav-mobile a:hover {
+    background: rgba(18, 18, 18, 0.04);
+    color: var(--verde);
+}
+
+body.light-mode .nav-mobile a.is-active {
+    color: var(--verde);
+}
+
+/* --- Hamburger trigger --- */
+#nav-mobile-trigger {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#nav-mobile-trigger.is-open {
+    color: var(--verde);
+    border-color: var(--verde);
+}
+
+/* ===========================================
+   RESPONSIVE BREAKPOINTS
+   =========================================== */
+
+@media screen and (max-width: 991px) {
+    .nav-links {
+        display: none;
+    }
+
+    .site-logo {
+        width: 90px;
+        height: 42px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .site-nav {
+        display: none;
+    }
+
+    .site-nav-mobile {
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .nav-mobile a {
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+}
+
+/* ===========================================
+   FOOTER NAV BUTTONS (backward compatibility)
+   =========================================== */
 
 .nav_buttons {
     display: flex;
     gap: 8px;
 }
+
 .nav_buttons.is-footer {
     gap: 1rem;
 }
@@ -87,24 +354,20 @@
     color: white;
     transition: transform 0.2s ease;
 }
+
 .site-nav-button.is-icon {
     padding: 0 10px;
 }
+
 .site-nav-button:hover {
     background-image: linear-gradient(90deg, var(--amarillo), var(--verde));
     color: var(--negro);
     transform: translateY(-2px);
 }
+
 .site-nav-button:active {
     color: var(--crema);
     background-image: none;
-}
-
-@media screen and (max-width: 991px) {
-    .site-nav {
-        justify-content: space-between;
-        align-items: center;
-    }
 }
 
 @media screen and (max-width: 768px) {
@@ -112,26 +375,9 @@
         display: flex;
         justify-content: center;
     }
-
-    .site-nav {
-        display: none;
-    }
-
-    .site-nav-mobile {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .site-nav-mobile .site-nav-button {
-        padding: 5px;
-    }
 }
 
 @media screen and (max-width: 600px) {
-    .site-nav {
-        justify-content: center;
-    }
-
     .nav_buttons {
         display: none;
     }

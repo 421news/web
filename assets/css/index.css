@@ -1006,24 +1006,6 @@ footer {
     padding-right: 1rem;
   }
 
-  .nav_categories {
-    flex-flow: row;
-    justify-content: flex-start;
-    align-items: stretch;
-    display: none;
-  }
-
-  .nav_category {
-    border-radius: var(--radius);
-    margin-top: 0.25rem;
-    margin-right: 0;
-  }
-
-  .nav_category.is-first {
-    border-radius: var(--radius);
-    margin-right: 0;
-  }
-
   .button.mobile-nav-toggle {
     display: block;
   }
@@ -1108,10 +1090,6 @@ footer {
     position: relative;
   }
 
-  .site-logo {
-    width: 167px;
-  }
-
   .post_author-box {
     width: 100%;
   }
@@ -1150,10 +1128,6 @@ footer {
 
   .hero-home_content {
     padding-bottom: 2rem;
-  }
-
-  .nav_categories {
-    display: none;
   }
 
   .post-cols {

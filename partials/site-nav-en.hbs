@@ -1,156 +1,103 @@
-<style>
-  .nav_buttons {
-    position: relative;
-  }
+<header class="site-header">
+  <div class="global-container">
 
-  .nav_category.is-open {
-    background: #000;
-    color: #fff;
-  }
-  .nav_category.is-open:hover {
-    transform: translateY(0);
-  }
+    {{!-- Desktop nav --}}
+    <nav class="site-nav" aria-label="Main navigation">
+      <a href="/en/" class="site-logo">
+        <img src='{{asset "images/frame-2.svg"}}' alt="421" />
+      </a>
 
-  .nav-mobile {
-    display: none;
-    flex-direction: column;
-    gap: 0;
-    border-radius: 0;
-    justify-content: start;
-    margin-top: 10px;
-    width: 100vw;
-    height: 100vh;
-    background-color: var(--crema);
-    z-index: 1000;
-    position: relative;
-  }
-  .nav-mobile a {
-    text-align: center;
-    white-space: nowrap;
-    word-break: keep-all;
-    color: var(--negro);
-    border-style: solid;
-    border-width: 2px 1px 2px 2px;
-    border-color: var(--negro);
-    background-color: var(--crema);
-    padding: 2rem 1.75rem;
-    font-style: italic;
-    font-weight: 700;
-    text-decoration: none;
-  }
+      <div class="nav-links">
+        <a href="/en/tag/culture" class="nav-link">Culture</a>
+        <a href="/en/tag/tech" class="nav-link">Tech</a>
+        <a href="/en/tag/games" class="nav-link">Games</a>
+        <a href="/en/tag/real-life" class="nav-link">Real life</a>
+        <a href="/en/routes" class="nav-link">Routes</a>
+        <a href="/en/canon" class="nav-link">Canon</a>
+        <a href="/revista-421" class="nav-link">Magazine</a>
+        <a href="/pitcheale-a-421/" class="nav-link">Pitch us</a>
+      </div>
 
-  #nav-mobile-trigger {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-</style>
-<header class='site-header'>
-  <div class='global-container'>
-    <div class='site-nav'>
-      <a
-        href='/en/'
-        id="logo"
-        class='site-logo'
-        style="background-image: url('{{asset "images/frame-2.svg"}}');"
-      ></a>
-      <nav class='nav_categories'>
-        <a href='/en/tag/culture' class='nav_category is-first'>Culture</a>
-        <a href='/en/tag/tech' class='nav_category'>Tech</a>
-        <a href='/en/tag/games' class='nav_category'>Games</a>
-        <a href='/en/tag/real-life' class='nav_category is-last'>Real life</a>
-      </nav>
-      <div class='nav_buttons'>
-        <a href='/en/subscribe/' class='site-nav-button'>Subscribe</a>
-        <a href='#' class='button is-icon w-inline-block' data-ghost-search>
-          <img
-            src='{{asset "images/vector-5.svg"}}'
-            class='button_icon is-smaller'
-            loading='lazy'
-            alt=''
-          />
-        </a>
+      <div class="nav-actions">
+        <a href="/en/subscribe/" class="nav-subscribe-btn">Subscribe</a>
+        <button class="nav-icon-btn" data-ghost-search aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
         <a
-          href='/'
-          class='site-nav-button'
-          style="display: flex; align-items: center;"
+          href="/"
+          class="nav-icon-btn"
           onclick="localStorage.setItem('prefersSpanish', 'true');"
         >
-          <img
-            src='{{asset "images/usa-flag.svg"}}'
-            alt="USA Flag"
-            style="width: 1.2em; height: 0.8em; vertical-align: middle; margin-right: 0.3em;"
-          />
+          <img src='{{asset "images/usa-flag.svg"}}' alt="" class="nav-flag" />
           EN
         </a>
+        <button id="mode-switch" class="nav-icon-btn" aria-label="Toggle theme">
+          <img src='{{asset "images/moon.svg"}}' class="is-moon" alt="Dark mode" />
+          <img src='{{asset "images/sun.svg"}}' class="is-sun" alt="Light mode" style="display:none;" />
+        </button>
       </div>
-    </div>
+    </nav>
+
+    {{!-- Mobile nav bar --}}
     <div class="site-nav-mobile">
-      <button id="nav-mobile-trigger" class="site-nav-button is-icon">☰</button>
-      <a
-        href="/en/"
-        id="logo"
-        class="site-logo"
-        style="background-image: url('{{asset "images/frame-2.svg"}}');"
-      />
-      <div>
+      <div class="nav-mobile-left">
+        <button id="nav-mobile-trigger" class="nav-icon-btn" aria-label="Menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
         <a
-          href='/'
-          class='site-nav-button'
-          style="display: flex; justify-content: center; align-items: center; margin-bottom: 10px;"
+          href="/"
+          class="nav-icon-btn"
           onclick="localStorage.setItem('prefersSpanish', 'true');"
         >
-            <img
-              src='{{asset "images/usa-flag.svg"}}'
-              alt="USA Flag"
-              style="width: 1.2em; height: 0.8em; vertical-align: middle;"
-            />
+          <img src='{{asset "images/usa-flag.svg"}}' alt="" class="nav-flag" />
         </a>
-        <a
-          href="#"
-          class="site-nav-button is-icon"
-          style="display: flex; justify-content: center; align-items: center;"
-          data-ghost-search
-        >
-          <img
-            src="{{asset "images/vector-5.svg"}}"
-            class="button_icon is-smaller"
-            loading="lazy"
-            alt=""
-          />
-        </a>
+      </div>
+      <a href="/en/" class="site-logo site-logo--mobile">
+        <img src='{{asset "images/frame-2.svg"}}' alt="421" />
+      </a>
+      <div class="nav-mobile-right">
+        <button id="mode-switch-mobile" class="nav-icon-btn" aria-label="Toggle theme">
+          <img src='{{asset "images/moon.svg"}}' class="is-moon-m" alt="" />
+          <img src='{{asset "images/sun.svg"}}' class="is-sun-m" alt="" style="display:none;" />
+        </button>
+        <button class="nav-icon-btn" data-ghost-search aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
       </div>
     </div>
   </div>
+
+  {{!-- Mobile expanded menu --}}
   <nav id="nav-mobile" class="nav-mobile">
-    <a href='/en/tag/culture'>Culture</a>
-    <a href='/en/tag/tech'>Tech</a>
-    <a href='/en/tag/games'>Games</a>
-    <a href='/en/tag/real-life'>Real life</a>
+    <a href="/en/tag/culture">Culture</a>
+    <a href="/en/tag/tech">Tech</a>
+    <a href="/en/tag/games">Games</a>
+    <a href="/en/tag/real-life">Real life</a>
+    <a href="/en/routes">Routes</a>
+    <a href="/en/canon">Canon</a>
+    <a href="/revista-421">Magazine</a>
+    <a href="/pitcheale-a-421/">Pitch us</a>
+    <a href="/en/subscribe/" class="nav-mobile-subscribe">Subscribe</a>
   </nav>
 </header>
+
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const mobileTrigger = document.getElementById("nav-mobile-trigger");
-    const mobileMenu = document.getElementById("nav-mobile");
-
-    if (!mobileTrigger || !mobileMenu) return
-
+    // Mobile menu toggle
+    var mobileTrigger = document.getElementById("nav-mobile-trigger");
+    var mobileMenu = document.getElementById("nav-mobile");
+    if (!mobileTrigger || !mobileMenu) return;
     mobileMenu.style.display = "none";
-
-    function openMobileMenu() {
-      mobileTrigger.classList.add("is-open");
-      mobileMenu.style.display = "flex";
-    }
-
-    function closeMobileMenu() {
-      mobileTrigger.classList.remove("is-open");
-      mobileMenu.style.display = "none";
-    }
 
     function toggleMobileMenu(e) {
       e.stopPropagation();
-      if (mobileMenu.style.display === "none") openMobileMenu();
-      else closeMobileMenu();
+      if (mobileMenu.style.display === "none") {
+        mobileTrigger.classList.add("is-open");
+        mobileMenu.style.display = "flex";
+      } else {
+        mobileTrigger.classList.remove("is-open");
+        mobileMenu.style.display = "none";
+      }
     }
 
     if ('ontouchstart' in window) {
@@ -158,5 +105,32 @@
     } else {
       mobileTrigger.addEventListener("click", toggleMobileMenu);
     }
-  })
+
+    // Active link highlighting
+    var currentPath = window.location.pathname;
+    document.querySelectorAll('.nav-link, .nav-mobile a:not(.nav-mobile-subscribe)').forEach(function(link) {
+      var href = link.getAttribute('href');
+      if (href && href !== '/en/' && currentPath.startsWith(href)) {
+        link.classList.add('is-active');
+      }
+    });
+
+    // Sync mobile mode-switch with desktop
+    var mobileSwitch = document.getElementById('mode-switch-mobile');
+    var desktopSwitch = document.getElementById('mode-switch');
+    if (mobileSwitch && desktopSwitch) {
+      mobileSwitch.addEventListener('click', function(e) {
+        e.preventDefault();
+        desktopSwitch.click();
+        var sunD = desktopSwitch.querySelector('.is-sun');
+        var moonD = desktopSwitch.querySelector('.is-moon');
+        var sunM = mobileSwitch.querySelector('.is-sun-m');
+        var moonM = mobileSwitch.querySelector('.is-moon-m');
+        if (sunD && moonD && sunM && moonM) {
+          sunM.style.display = sunD.style.display;
+          moonM.style.display = moonD.style.display;
+        }
+      });
+    }
+  });
 </script>
