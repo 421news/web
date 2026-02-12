@@ -939,18 +939,28 @@ footer {
     display: block;
   }
   .footer_copy {
-    justify-content: space-between;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem 1rem;
   }
   .mobile-footer-first-box {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    width: 150px;
+    align-items: center;
+    gap: 1rem;
+    width: auto;
+  }
+  .mobile-footer-first-box p {
+    color: var(--negro);
+    font-weight: 700;
+    font-style: italic;
   }
   .nav_buttons.is-footer {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 0.5rem;
   }
 }
 
@@ -1139,6 +1149,11 @@ footer {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Textura visible en cards mobile (sin hover, usar soft-light como el hero) */
+  .post-card_overlay {
+    mix-blend-mode: soft-light !important;
   }
 
   .hero-home_content {
