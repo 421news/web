@@ -1,0 +1,31 @@
+{{!< default}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-en"}}
+
+  <div class="rutas-page">
+    <div class="global-container">
+
+      <!-- Hero -->
+      <div class="rutas-hero">
+        <h1 class="rutas-hero-title">Reading Routes</h1>
+        <p class="rutas-hero-subtitle">350 texts is an archive. 7 curated paths are a map. Each route is a sequence of texts that build an idea. Pick the one that calls you and let yourself go.</p>
+      </div>
+      <hr class="rutas-gradient-divider">
+
+      <!-- Rutas container: JS will populate this -->
+      <div id="rutas-container"></div>
+
+    </div>
+
+    <!-- File Browser -->
+    <div class="global-container" style="padding: 3rem 0;">
+      {{> "file-browser-en"}}
+    </div>
+  </div>
+
+  {{> "site-footer"}}
+</div>
+
+<script src="{{asset "js/rutas.js"}}"></script>

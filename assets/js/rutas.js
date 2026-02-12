@@ -7,20 +7,27 @@
     var canonContainer = document.getElementById('canon-container');
     if (!rutasContainer && !canonContainer) return;
 
+    // Detect language from URL
+    var isEN = window.location.pathname.indexOf('/en/') === 0;
+
     fetch(JSON_PATH)
         .then(function (r) { return r.json(); })
         .then(function (data) {
+            // Pick language-appropriate data keys (fallback to ES)
+            var rutasKey = (isEN && data.rutas_en) ? 'rutas_en' : 'rutas';
+            var canonKey = (isEN && data.canon_en) ? 'canon_en' : 'canon';
+
             // Collect all unique slugs
             var allSlugs = [];
-            if (rutasContainer && data.rutas) {
-                data.rutas.forEach(function (ruta) {
+            if (rutasContainer && data[rutasKey]) {
+                data[rutasKey].forEach(function (ruta) {
                     ruta.slugs.forEach(function (s) {
                         if (allSlugs.indexOf(s) === -1) allSlugs.push(s);
                     });
                 });
             }
-            if (canonContainer && data.canon) {
-                data.canon.forEach(function (c) {
+            if (canonContainer && data[canonKey]) {
+                data[canonKey].forEach(function (c) {
                     if (allSlugs.indexOf(c.slug) === -1) allSlugs.push(c.slug);
                 });
             }
@@ -44,11 +51,14 @@
             var data = result.data;
             var postMap = result.postMap;
 
-            if (rutasContainer && data.rutas) {
-                renderRutas(data.rutas, postMap);
+            var rutasKey = (isEN && data.rutas_en) ? 'rutas_en' : 'rutas';
+            var canonKey = (isEN && data.canon_en) ? 'canon_en' : 'canon';
+
+            if (rutasContainer && data[rutasKey]) {
+                renderRutas(data[rutasKey], postMap);
             }
-            if (canonContainer && data.canon) {
-                renderCanon(data.canon, postMap);
+            if (canonContainer && data[canonKey]) {
+                renderCanon(data[canonKey], postMap);
             }
         })
         .catch(function (err) {
@@ -56,15 +66,17 @@
         });
 
     function renderRutas(rutas, postMap) {
+        var labelRoute = isEN ? 'Route' : 'Ruta';
+        var labelTexts = isEN ? 'texts' : 'textos';
         var html = '';
         rutas.forEach(function (ruta, i) {
             var num = String(i + 1).length < 2 ? '0' + (i + 1) : String(i + 1);
             html += '<div class="ruta-section">';
             html += '<div class="ruta-header">';
-            html += '<div class="ruta-number">Ruta ' + num + '</div>';
+            html += '<div class="ruta-number">' + labelRoute + ' ' + num + '</div>';
             html += '<h2 class="ruta-nombre">' + esc(ruta.nombre) + '</h2>';
             html += '<p class="ruta-tesis">' + esc(ruta.tesis) + '</p>';
-            html += '<div class="ruta-posts-count">' + ruta.slugs.length + ' textos</div>';
+            html += '<div class="ruta-posts-count">' + ruta.slugs.length + ' ' + labelTexts + '</div>';
             html += '</div>';
             html += '<div class="ruta-cards post-cols">';
             ruta.slugs.forEach(function (slug) {

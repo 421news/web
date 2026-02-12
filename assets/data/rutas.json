@@ -233,5 +233,240 @@
       "slug": "metajuego-que-es",
       "razon": "Del tablero a la vida real. Un concepto del gaming aplicado como herramienta de pensamiento."
     }
+  ],
+  "rutas_en": [
+    {
+      "id": "autonomia-digital",
+      "nombre": "Digital Autonomy",
+      "tesis": "The tools you use define the limits of your freedom.",
+      "slugs": [
+        "guia-cyberciruja-para-la-autodeterminacion-digital",
+        "soberania-cognitiva-introduccion-autonomia-psiquica",
+        "tecnomagia-para-la-vida-real",
+        "ingenieria-inversa-a-la-mierdificacion-de-internet",
+        "anonimato-en-internet",
+        "pop-os-linux",
+        "telefonos-android-sin-google",
+        "brave-navegador-web",
+        "urbit-privacidad-digital-curtis-yarvin",
+        "low-tech-high-life-cottagecore-cyberpunk",
+        "que-es-small-web-como-funciona",
+        "elogio-computadoras-escritorio"
+      ]
+    },
+    {
+      "id": "cultura-pop-como-teoria",
+      "nombre": "Pop Culture as Theory",
+      "tesis": "Star Wars teaches constitutional law. Fallout teaches economics. Popular culture isn't low culture: it's the most powerful common language we have.",
+      "slugs": [
+        "derecho-constitucional-en-star-wars",
+        "economia-videojuego-fallout",
+        "fallout-new-vegas-facciones-politica",
+        "crash-ballard-cronenberg",
+        "lecturas-politicas-sobre-lovecraft",
+        "la-voz-de-los-muertos-hauntologia",
+        "moda-estetica-en-la-politica",
+        "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
+        "la-trampa-de-la-cultura-joven",
+        "la-estetica-brutalista-arquitectura-diseno-ux",
+        "grant-morrison",
+        "alan-moore-comic-magia-anarquia"
+      ]
+    },
+    {
+      "id": "argentina-como-laboratorio",
+      "nombre": "Argentina as a Laboratory",
+      "tesis": "Argentina as a permanent case study: crisis as method, periphery as advantage, improvisation as system.",
+      "slugs": [
+        "la-anomalia-milei",
+        "la-historia-del-parque-rivadavia",
+        "parque-rivadavia-desalojo-manteros-feriantes-coleccionistas",
+        "dinosaurios-descubiertos-en-argentina-1",
+        "dinosaurios-descubiertos-en-argentina-2",
+        "de-donde-venimos-los-argentinos",
+        "cannabis-medicinal-reprocann-milei-bullrich",
+        "helado-heladerias-argentinas",
+        "la-historia-de-ricardo-fort",
+        "ufologia-argentina-casos-ovni",
+        "milei-libra-y-el-criptobardo-de-la-estafa",
+        "frontera-argentina-paraguay"
+      ]
+    },
+    {
+      "id": "filosofia-para-la-vida-real",
+      "nombre": "Philosophy for Real Life",
+      "tesis": "Sloterdijk, Byung-Chul Han, Nick Land: thinkers who are useful for living, not just for quoting.",
+      "slugs": [
+        "byung-chul-han-juan-ruocco",
+        "byung-chul-han-psicopolitica",
+        "volverse-ingobernable-peter-sloterdijk",
+        "nick-land-aceleracionismo",
+        "teleoplexia-nick-land",
+        "glosario-de-filosofia-de-la-tecnica",
+        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
+        "do-language-models-dream-of-electric-sheep",
+        "quinto-eon-peter-carroll",
+        "tecnomagia-para-la-vida-real",
+        "psicopatas-vs-esquizos-guerra-silenciosa",
+        "davey-wreden-the-stanley-parable"
+      ]
+    },
+    {
+      "id": "canon-del-entretenimiento",
+      "nombre": "The Entertainment Canon",
+      "tesis": "The works that defined entire genres. Reading guides, retrospectives, and analyses that go beyond the review.",
+      "slugs": [
+        "akira-1988",
+        "blade-runner-1982-ridley-scott",
+        "ghost-in-the-shell-1995",
+        "the-terminator-1984",
+        "robocop-1987-paul-verhoeven",
+        "gojira-1954-godzilla",
+        "animatrix-2003",
+        "jurassic-park-1993",
+        "guia-de-lectura-comics-batman",
+        "mejores-libros-ciencia-ficcion",
+        "guia-de-lectura-katsuhiro-otomo",
+        "en-el-principio-fue-el-canon"
+      ]
+    },
+    {
+      "id": "internet-no-murio",
+      "nombre": "The Internet Didn't Die",
+      "tesis": "4chan, memes, Pepe, Milady: the underground internet is still alive and still shaping reality.",
+      "slugs": [
+        "lo-que-aprendi-leyendo-4chan-pol",
+        "la-caida-de-4chan",
+        "pepe-meme-positive-feedback-loop",
+        "remilia-milady-charlotte-fang-nueva-internet",
+        "memes-y-magnicidio",
+        "etnosoldados-internet-memes-manifiestos",
+        "puede-hacer-memes-la-izquierda",
+        "gaturro-vs-pijurro",
+        "immunity-dog",
+        "death-by-saturation",
+        "epstein-4chan-reddit"
+      ]
+    },
+    {
+      "id": "hazlo-tu-mismo",
+      "nombre": "Do It Yourself",
+      "tesis": "Bread, milanesas, zines, video games, wargames: everything you can make with your own hands.",
+      "slugs": [
+        "como-hacer-milanesas-caseras",
+        "como-hacer-pan-casero",
+        "guia-cultivo-exterior-marihuana",
+        "tutorial-expres-para-cosechar-cannabis",
+        "como-hacer-fanzines-para-que-sirven",
+        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
+        "warhammer-40k-introduccion-wargames",
+        "como-hacer-un-juego-de-mesa",
+        "guia-low-cost-para-tener-porro-todo-el-ano",
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "hernan-panessi-como-ser-periodista-freelance"
+      ]
+    }
+  ],
+  "canon_en": [
+    {
+      "slug": "lo-que-aprendi-leyendo-4chan-pol",
+      "razon": "The founding text of 421. Investigative immersion into the digital underground that defined the site's editorial tone."
+    },
+    {
+      "slug": "byung-chul-han-juan-ruocco",
+      "razon": "Philosophy applied to everyday life. The format 421 does best: translating complex thinkers into real language."
+    },
+    {
+      "slug": "la-anomalia-milei",
+      "razon": "Political analysis before it was obvious. Demonstrates 421's capacity for editorial anticipation."
+    },
+    {
+      "slug": "memes-y-magnicidio",
+      "razon": "The intersection of digital culture and political violence. Cultural journalism in its most necessary form."
+    },
+    {
+      "slug": "lo-que-aprendi-siendo-evangelico",
+      "razon": "Personal chronicle with sociological reach. The best example of 421's autobiographical register."
+    },
+    {
+      "slug": "en-el-principio-fue-el-canon",
+      "razon": "A meta-text on why canons matter. The text that justifies this very page."
+    },
+    {
+      "slug": "akira-1988",
+      "razon": "Cultural criticism at its finest. Talking about anime means talking about politics, urbanism, and the future."
+    },
+    {
+      "slug": "volverse-ingobernable-peter-sloterdijk",
+      "razon": "Philosophy as a tool of resistance. The combative yet accessible tone that defines 421."
+    },
+    {
+      "slug": "nick-land-aceleracionismo",
+      "razon": "Dangerous thinking explained without fear. The kind of text you won't find in other Spanish-language media."
+    },
+    {
+      "slug": "soberania-cognitiva-introduccion-autonomia-psiquica",
+      "razon": "421's manifesto on autonomy. Where technology, philosophy, and real life converge."
+    },
+    {
+      "slug": "pepe-meme-positive-feedback-loop",
+      "razon": "The meme as a complete cultural phenomenon. Deep research on how an internet frog shaped global politics."
+    },
+    {
+      "slug": "tecnomagia-para-la-vida-real",
+      "razon": "Where technology meets the esoteric. The most unclassifiable and most 421 text of them all."
+    },
+    {
+      "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
+      "razon": "A practical manifesto for digital sovereignty. Philosophy turned into a tutorial."
+    },
+    {
+      "slug": "derecho-constitucional-en-star-wars",
+      "razon": "The perfect example of pop culture as theory: using Star Wars to teach constitutional law."
+    },
+    {
+      "slug": "lecturas-politicas-sobre-lovecraft",
+      "razon": "Yarvin, Houellebecq, Land, Fisher: four intersecting political readings of a cosmic horror author."
+    },
+    {
+      "slug": "deny-defend-depose-luigi-mangione-autodeterminacion-radical",
+      "razon": "Real-time cultural analysis. 421 as a medium that processes current events with philosophical depth."
+    },
+    {
+      "slug": "economia-videojuego-fallout",
+      "razon": "Economics explained through a video game. Proof that you can learn from any medium."
+    },
+    {
+      "slug": "magic-the-gathering-juego-social",
+      "razon": "Anthropology of board games. A text that turns a card game into social theory."
+    },
+    {
+      "slug": "crash-ballard-cronenberg",
+      "razon": "Machines, sex, and death. An analysis connecting literature, cinema, and philosophy in a single move."
+    },
+    {
+      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
+      "razon": "421's most practical and most punk text. Digital sovereignty for every day."
+    },
+    {
+      "slug": "como-hacer-milanesas-caseras",
+      "razon": "421 can talk about Nick Land and milanesas in the same week. That's the whole point."
+    },
+    {
+      "slug": "1998-videojuegos-musica-cine",
+      "razon": "Nostalgia turned into cultural essay. A journey through the last great year of the 20th century."
+    },
+    {
+      "slug": "la-caida-de-4chan",
+      "razon": "The counterpart to the founding text. From immersion to the autopsy of a space that is no longer what it was."
+    },
+    {
+      "slug": "la-historia-del-parque-rivadavia",
+      "razon": "Local history with universal resonance. A Buenos Aires park as a microcosm of niche culture."
+    },
+    {
+      "slug": "metajuego-que-es",
+      "razon": "From the board to real life. A gaming concept applied as a thinking tool."
+    }
   ]
 }

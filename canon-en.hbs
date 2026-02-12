@@ -1,0 +1,31 @@
+{{!< default}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-en"}}
+
+  <div class="canon-page">
+    <div class="global-container">
+
+      <!-- Hero -->
+      <div class="rutas-hero">
+        <h1 class="rutas-hero-title">Canon 421</h1>
+        <p class="rutas-hero-subtitle">If 421 were a library, these would be the 25 books that never leave the shelf. The texts that best represent what we do, why we do it, and how we do it.</p>
+      </div>
+      <hr class="rutas-gradient-divider">
+
+      <!-- Canon container: JS will populate this -->
+      <div id="canon-container"></div>
+
+    </div>
+
+    <!-- File Browser -->
+    <div class="global-container" style="padding: 3rem 0;">
+      {{> "file-browser-en"}}
+    </div>
+  </div>
+
+  {{> "site-footer"}}
+</div>
+
+<script src="{{asset "js/rutas.js"}}"></script>
