@@ -23,8 +23,12 @@ document.addEventListener("DOMContentLoaded", function() {
             mobileSubButton.classList.add("nav-hidden");
         }
 
-        // show nav when scrolling up
-        if (scrollingUp || currentScrollY <= scrollThreshold) {
+        // show nav when scrolling up (desktop only) or at top of page
+        var isMobile = window.innerWidth <= 768;
+        if (currentScrollY <= scrollThreshold) {
+            header.classList.remove("nav-hidden");
+            mobileSubButton.classList.remove("nav-hidden");
+        } else if (scrollingUp && !isMobile) {
             header.classList.remove("nav-hidden");
             mobileSubButton.classList.remove("nav-hidden");
         }

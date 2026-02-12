@@ -30,13 +30,22 @@
             </div>
 
             <!-- cover img -->
-            <div class="hero-mobile-image">
+            <div class="hero-mobile-image" style="position: relative;">
                 <img
                     src="{{feature_image}}"
                     alt="{{title}}"
                     loading="lazy"
                     style="width: 100%; display: block;"
                 />
+                <div class="hero-mobile-texture" style="
+                    position: absolute;
+                    inset: 0;
+                    background-image: url('{{asset "images/textura.webp"}}');
+                    background-size: auto;
+                    background-position: 0 0;
+                    mix-blend-mode: soft-light;
+                    pointer-events: none;
+                "></div>
 
                 <a href="{{url}}" class="hero-mobile-read-button" id="hero-mobile-read-button">
                     Leer nota →
