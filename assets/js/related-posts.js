@@ -40,7 +40,7 @@
         var tagImg = tag.feature_image
             ? '<img src="' + tag.feature_image + '" alt="' + esc(tag.name) + '" class="primary-tag-image" width="28" />'
             : '';
-        var textura = '/assets/images/textura.png';
+        var textura = '/assets/images/textura.webp';
 
         return '<div role="listitem" class="w-dyn-item">' +
             '<a href="' + post.url + '" class="post-card_link w-inline-block">' +
