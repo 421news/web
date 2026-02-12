@@ -801,6 +801,12 @@ body.light-mode {
 
 /* ALT POST HEADER */
 
+/* Featured post starts right below the nav bar */
+.pt-xhuge:has(> .alt-post-header) {
+  margin-top: 0;
+  padding-top: 80px;
+}
+
 .alt-post-header {
   grid-column-gap: 0px;
   grid-row-gap: 0px;
@@ -1371,6 +1377,10 @@ footer {
 
 .kg-embed-card {
   width: 780px; /* Set width for desktops */
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
 }
 
 .kg-embed-card iframe,
