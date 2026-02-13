@@ -235,6 +235,14 @@ Applied in bulk cleanup pass:
 - **BreadcrumbList JSON-LD**: Added to `post-es.hbs`, `post-en.hbs` (Home > Tag > Title), all 28 tag templates via `partials/breadcrumb-tag.hbs`, and `author.hbs` (Home > Author Name).
 - **Article JSON-LD fix**: Ghost's `{{ghost_head}}` generates Article schema with publisher logo but omits `width`/`height` (regardless of image format). Inline script in `default.hbs` patches the JSON-LD post-render to add the correct 125x60 PNG URL with dimensions. Google's renderer executes JS before reading structured data, so this works. Publisher logo PNG uploaded at `https://www.421.news/content/images/2026/02/logo-421-publisher.png`.
 - **Redirects**: `redirects.yaml` with 46 rules handles all GSC 404 errors. Key patterns: wildcard `^/posts/(.*)` → `/$1` for old URL structure, regex-anchored slug redirects, EN tags at ES paths → `/en/tag/...`, case-insensitive tag matching via `[Tt]` regex, incomplete author slugs → full slugs. 37/40 verified working; 3 URLs with Unicode accents (`/tag/Tecnología` etc.) cannot be redirected due to Ghost limitation.
+- **Non-www → www redirect (Cloudflare)**: DNS migrated from GoDaddy to Cloudflare (free) to fix non-www `421.news` → `www.421.news` redirect from 302 (Caddy VPS) to 301 (permanent). Setup:
+  - **DNS**: A record `@` → `192.0.2.1` (Proxied/orange cloud, dummy IP for redirect), CNAME `www` → `421bn.ghost.io` (DNS only/grey cloud), 5 MX records (Google Workspace), 3 TXT records (SPF + Google site verification)
+  - **Page Rule**: `421.news/*` → Forwarding URL 301 → `https://www.421.news/$1` (preserves path)
+  - **SSL/TLS**: Flexible mode (required because origin IP is dummy)
+  - **Always Use HTTPS**: Enabled (handles `http://` → `https://` upgrade)
+  - **Nameservers**: `evan.ns.cloudflare.com` / `stella.ns.cloudflare.com` (set in GoDaddy)
+  - **Redirect chain**: `http://421.news/path` → 301 → `https://421.news/path` → 301 → `https://www.421.news/path` → 200
+  - This fixes ~415 "Discovered - currently not indexed" URLs in GSC caused by the old 302 redirect
 
 ## Pending / Future Features (from "Filosofia 421" roadmap)
 
