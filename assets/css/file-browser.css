@@ -12,6 +12,12 @@
   max-width: 1100px;
   margin: 0 auto;
   box-shadow: 4px 4px 0 var(--negro);
+  opacity: 0;
+  animation: fbFadeIn 0.3s ease 0.1s forwards;
+}
+
+@keyframes fbFadeIn {
+  to { opacity: 1; }
 }
 
 /* ---- Title Bar ---- */

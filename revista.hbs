@@ -1,0 +1,31 @@
+{{!< default}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-es"}}
+
+  <div class="revista-page">
+    <div class="global-container">
+
+      <!-- Hero -->
+      <div class="rutas-hero">
+        <h1 class="rutas-hero-title">Revista 421</h1>
+        <p class="rutas-hero-subtitle">Los números de la revista digital de 421, donde compilamos las notas destacadas del sitio e invitamos a diseñadores, fotógrafos e ilustradores.</p>
+      </div>
+      <hr class="rutas-gradient-divider">
+
+      <!-- Revista container: JS will populate this -->
+      <div id="revista-container"></div>
+
+    </div>
+
+    <!-- File Browser -->
+    <div class="global-container" style="padding: 3rem 0;">
+      {{> "file-browser"}}
+    </div>
+  </div>
+
+  {{> "site-footer"}}
+</div>
+
+<script src="{{asset "js/revista.js"}}" defer></script>

@@ -4,6 +4,7 @@ routes:
   /oh-yes/: oh-yes
   /rutas/: rutas
   /canon/: canon
+  /revista-421/: revista
   /en/routes/: routes
   /en/canon/: canon-en
   /ultimos-posts/: last-posts-es
