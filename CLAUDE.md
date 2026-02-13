@@ -128,6 +128,10 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - **`update-related.py`** - Regenerates `related-posts.json` and uploads/activates the theme. Run: `python3 scripts/update-related.py`. Requires `scikit-learn` (`pip3 install scikit-learn`)
 - **`interlink-posts.py`** - Adds contextual internal links between posts via Ghost Admin API. Uses TF-IDF relatedness from `related-posts.json` + shared tags to find relevant targets. Has comprehensive Spanish stopwords, `PROMO_KEYWORDS` filter, requires `relevance >= 0.1`. Run: `python3 scripts/interlink-posts.py --dry-run --limit 10` to preview, `python3 scripts/interlink-posts.py --apply` to execute. Creates backup in `backups/`. Already applied to 428 posts (1544 links).
 - **`generate-hreflang-sitemap.py`** - Generates `assets/data/hreflang-sitemap.xml` and optionally injects `<meta>` tags into posts via Admin API. 3-phase ES/EN pairing algorithm: manual overrides → timestamp+slug similarity → day-based singleton matching. Run: `python3 scripts/generate-hreflang-sitemap.py` (sitemap only), `python3 scripts/generate-hreflang-sitemap.py --inject-meta --deploy` (full update). Already applied: 121 pairs, 242 posts updated with hreflang meta tags.
+- **`fix-feature-image-alt.py`** - Bulk sets `feature_image_alt` to post title for all posts missing alt text. Run: `python3 scripts/fix-feature-image-alt.py --dry-run` to preview, `--apply` to execute. Already applied: 490 posts updated. Backup at `backups/feature-image-alt-backup-*.json`.
+- **`fix-tag-descriptions.py`** - Sets `description` and `meta_title` for all 26 public tags. Editorial descriptions per tag (ES/EN). Run: `python3 scripts/fix-tag-descriptions.py --apply`. Already applied: 26 tags updated.
+- **`fix-author-bios.py`** - Sets bios for authors missing them. Bios researched from public sources + post history. Run: `python3 scripts/fix-author-bios.py --apply`. Note: Ghost Admin API token returns 403 for user modifications — requires cookie-based session auth (email + password + 2FA). Already applied: 15 authors updated.
+- **`fix-post-seo-fields.py`** - Bulk fills missing `meta_title`, `og_title`, `og_description`, `twitter_title`, `twitter_description` with sensible defaults (post title / excerpt). Run: `python3 scripts/fix-post-seo-fields.py --apply`. Already applied: 545 posts updated.
 - `compute-related.js` - Older Node.js version (deprecated, use the Python script)
 
 ### Other
@@ -137,7 +141,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `package.json` - Theme metadata and version (currently v2.11.3)
 - `layouts/default.hbs` - Express layout (dev server only)
 - `testeo/` - Mockup files for previewing features before implementation
-- `backups/` - API operation backups (lexical content, signup forms). Not committed.
+- `backups/` - API operation backups (lexical content, signup forms, feature image alt, tag descriptions, author bios, post SEO fields). Not committed.
 
 ## Bilingual System
 
@@ -212,6 +216,7 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - Internal tags (starting with `#`) are excluded from `primary_tag`
 - Ghost Admin API token CANNOT upload `routes.yaml` or `redirects.yaml` (returns 403). Must be done manually via Ghost Admin > Settings > Labs > Routes / Redirects.
 - Ghost Admin API token CANNOT modify site settings (`PUT /settings/`) either (returns 403). Publication logo, icon, etc. must be changed via Ghost Admin UI.
+- Ghost Admin API token CANNOT modify users/staff profiles (`PUT /users/`) either (returns 403). Author bios, meta_title, etc. require cookie-based session auth: `POST /ghost/api/admin/session/` with `{username, password, token}` (token = 2FA code sent to email). Session cookie name: `ghost-admin-api-session`.
 - Ghost redirects (YAML format) use regex matching on `from` patterns. **Always use `^` anchors** to prevent substring matching (e.g., `/magic-the-gathering/` without anchor also matches `/tag/magic-the-gathering/`). Ghost lowercases URLs before matching, so patterns must be lowercase. Ghost does NOT match URLs with Unicode/accented characters (URL-encoded paths like `/tag/tecnolog%c3%ada` bypass the redirect engine).
 - Post content is stored as Lexical JSON. Node types: `paragraph`, `html`, `image`, `embed`, `heading`, `list`, etc. The `html` type contains raw HTML strings.
 - When updating posts via Admin API, `updated_at` must match the current value (optimistic locking).
@@ -243,6 +248,16 @@ Applied in bulk cleanup pass:
   - **Nameservers**: `evan.ns.cloudflare.com` / `stella.ns.cloudflare.com` (set in GoDaddy)
   - **Redirect chain**: `http://421.news/path` → 301 → `https://421.news/path` → 301 → `https://www.421.news/path` → 200
   - This fixes ~415 "Discovered - currently not indexed" URLs in GSC caused by the old 302 redirect
+  - **mtg subdomain**: CNAME `mtg` → `cname.vercel-dns.com` (DNS only/grey cloud). Points to the MTG Collection app on Vercel. Must be DNS only — Vercel handles its own SSL.
+- **SEO Bulk Audit (completed)**: Comprehensive audit and fix of all Ghost SEO fields via Admin API scripts:
+  - `feature_image_alt`: 490 posts — set to post title (was 95% empty)
+  - Tag `description` + `meta_title`: 26 tags — editorial descriptions per tag (ES/EN)
+  - Author `bio`: 15 authors — researched from public sources (required cookie auth)
+  - Author `meta_title`: 73 authors — set to "Name | 421.news" (required cookie auth)
+  - Post `meta_title`: 191 posts — set to post title
+  - Post `og_title`/`og_description`: 510 posts — set to title/excerpt
+  - Post `twitter_title`/`twitter_description`: 504 posts — set to title/excerpt
+  - Backups for all operations in `backups/`
 
 ## Pending / Future Features (from "Filosofia 421" roadmap)
 
