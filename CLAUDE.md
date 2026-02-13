@@ -46,7 +46,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 ## File Structure
 
 ### Root templates (pages)
-- `default.hbs` - Main layout. Loads Google Fonts (Nunito Sans + Lora) via CSS `display=swap`, global CSS, `light-mode.js`. Has MutationObserver to remove Ghost Portal signup CTA, hreflang injection, browser language redirect to /en/.
+- `default.hbs` - Main layout. Loads Google Fonts (Nunito Sans + Lora) via CSS `display=swap`, global CSS, `light-mode.js`. Has MutationObserver to remove Ghost Portal signup CTA, hreflang injection, browser language redirect to /en/. Includes inline script to patch Ghost's Article JSON-LD publisher logo with correct PNG URL + width/height (Ghost omits dimensions).
 - `index.hbs` - Spanish homepage
 - `en.hbs` - English homepage
 - `post.hbs` - Post router: checks `#en` tag to pick `post-en.hbs` or `post-es.hbs`
@@ -133,7 +133,8 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 ### Other
 - `server.js` - Express dev server with mock data for local preview
 - `routes.yaml` - Ghost routing configuration. Custom routes include `/rutas/`, `/canon/`, `/en/routes/`, `/en/canon/`, `/suscribite/`, tag pages, EN equivalents. Collections: `/` filters `tag:-hash-en` (ES), `/en/` filters `tag:hash-en` (EN).
-- `package.json` - Theme metadata and version (currently v2.11.2)
+- `redirects.yaml` - Ghost redirects configuration (46 rules). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Uses regex patterns with `^` anchors for precise matching. Covers: `/posts/` prefix wildcard, truncated slugs, EN tags in ES paths, wrong-case tags, nonexistent tags → closest match, incomplete author slugs. **IMPORTANT**: Like `routes.yaml`, this CANNOT be uploaded via API token (returns 403).
+- `package.json` - Theme metadata and version (currently v2.11.3)
 - `layouts/default.hbs` - Express layout (dev server only)
 - `testeo/` - Mockup files for previewing features before implementation
 - `backups/` - API operation backups (lexical content, signup forms). Not committed.
@@ -209,7 +210,9 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - `{{#page}}` context is required to access page fields in `page.hbs`
 - Ghost's `cards.min.css` has high-specificity rules for `.kg-*` classes that need to be overridden carefully
 - Internal tags (starting with `#`) are excluded from `primary_tag`
-- Ghost Admin API token CANNOT upload `routes.yaml` (returns 403). Must be done manually via Ghost Admin > Settings > Labs > Routes.
+- Ghost Admin API token CANNOT upload `routes.yaml` or `redirects.yaml` (returns 403). Must be done manually via Ghost Admin > Settings > Labs > Routes / Redirects.
+- Ghost Admin API token CANNOT modify site settings (`PUT /settings/`) either (returns 403). Publication logo, icon, etc. must be changed via Ghost Admin UI.
+- Ghost redirects (YAML format) use regex matching on `from` patterns. **Always use `^` anchors** to prevent substring matching (e.g., `/magic-the-gathering/` without anchor also matches `/tag/magic-the-gathering/`). Ghost lowercases URLs before matching, so patterns must be lowercase. Ghost does NOT match URLs with Unicode/accented characters (URL-encoded paths like `/tag/tecnolog%c3%ada` bypass the redirect engine).
 - Post content is stored as Lexical JSON. Node types: `paragraph`, `html`, `image`, `embed`, `heading`, `list`, etc. The `html` type contains raw HTML strings.
 - When updating posts via Admin API, `updated_at` must match the current value (optimistic locking).
 
@@ -230,6 +233,8 @@ Applied in bulk cleanup pass:
 - **IndexNow**: Active on Ghost, key `3066583d158ea23df246f650cc680d48`
 - **Hreflang**: Server-side `<link rel="alternate" hreflang>` tags in `default.hbs` for homepage. Client-side JS reads `english-version`/`spanish-version` meta tags (injected via `codeinjection_head` by `generate-hreflang-sitemap.py`) for posts. Self-referential hreflang for all posts.
 - **BreadcrumbList JSON-LD**: Added to `post-es.hbs`, `post-en.hbs` (Home > Tag > Title), all 28 tag templates via `partials/breadcrumb-tag.hbs`, and `author.hbs` (Home > Author Name).
+- **Article JSON-LD fix**: Ghost's `{{ghost_head}}` generates Article schema with publisher logo but omits `width`/`height` (regardless of image format). Inline script in `default.hbs` patches the JSON-LD post-render to add the correct 125x60 PNG URL with dimensions. Google's renderer executes JS before reading structured data, so this works. Publisher logo PNG uploaded at `https://www.421.news/content/images/2026/02/logo-421-publisher.png`.
+- **Redirects**: `redirects.yaml` with 46 rules handles all GSC 404 errors. Key patterns: wildcard `^/posts/(.*)` → `/$1` for old URL structure, regex-anchored slug redirects, EN tags at ES paths → `/en/tag/...`, case-insensitive tag matching via `[Tt]` regex, incomplete author slugs → full slugs. 37/40 verified working; 3 URLs with Unicode accents (`/tag/Tecnología` etc.) cannot be redirected due to Ghost limitation.
 
 ## Pending / Future Features (from "Filosofia 421" roadmap)
 
