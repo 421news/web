@@ -1,0 +1,138 @@
+[
+  {
+    "numero": 11,
+    "titulo": "Especial Autonomía",
+    "fecha": "Enero 2026",
+    "cover": "https://www.421.news/content/images/2026/02/11_diciembre.jpg",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--11--enero-2026-.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Marcelo Carne", "url": "https://www.instagram.com/marcelo.carne/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" },
+      { "rol": "Ilustraciones", "nombre": "Galatemplo", "url": "https://www.instagram.com/galatemplo/" }
+    ]
+  },
+  {
+    "numero": 10,
+    "titulo": "Especial Videojuegos",
+    "fecha": "Diciembre 2025",
+    "cover": "https://www.421.news/content/images/2026/01/10_diciembre.jpg",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--10--diciembre-2025-.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Martín Pouso", "url": "https://www.instagram.com/terrorifico_napalm/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 9,
+    "titulo": "Especial Aparatos",
+    "fecha": "Noviembre 2025",
+    "cover": "https://www.421.news/content/images/2025/12/Revista-421--9-Especial-Aparatos.jpg",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--9--noviembre-2025-.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Agustín Calcagno", "url": "https://www.instagram.com/calcagno_ilustracion/" },
+      { "rol": "Ilustraciones", "nombre": "Galatemplo", "url": "https://www.instagram.com/galatemplo/" },
+      { "rol": "Fotografía", "nombre": "Alejandra Morasano", "url": "https://www.421.news/author/alejandra-morasano/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 8,
+    "titulo": "Especial Música",
+    "fecha": "Octubre 2025",
+    "cover": "https://www.421.news/content/images/2025/10/image-57.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--8--octubre-2025-.pdf",
+    "size": "6 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Agustín Calcagno", "url": "https://www.instagram.com/calcagno_ilustracion/" },
+      { "rol": "Ilustraciones", "nombre": "Galatemplo", "url": "https://www.instagram.com/galatemplo/" },
+      { "rol": "Fotografía", "nombre": "Alejandra Morasano", "url": "https://www.instagram.com/a.morasano" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 7,
+    "titulo": "Especial Tecnología",
+    "fecha": "Septiembre 2025",
+    "cover": "https://www.421.news/content/images/2025/10/image-10.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--7--septiembre-2025-.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Charlee", "url": "https://x.com/Charlee_777" },
+      { "rol": "Ilustraciones", "nombre": "Galatemplo", "url": "https://www.instagram.com/galatemplo/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 6,
+    "titulo": "Especial Magic: The Gathering",
+    "fecha": "Agosto 2025",
+    "cover": "https://www.421.news/content/images/2025/09/Revista-421--6--1-.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--6--agosto-2025-.pdf",
+    "size": "6 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Mato Saw", "url": "https://www.instagram.com/matosaw" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 5,
+    "titulo": "Especial Warhammer",
+    "fecha": "Julio 2025",
+    "cover": "https://www.421.news/content/images/2025/08/Revista-421--5.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--5--julio-2025-.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Alen Brujo", "url": "https://www.instagram.com/brujo.brn/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 4,
+    "titulo": "Revista 421 #4",
+    "fecha": "Junio 2025",
+    "cover": "https://www.421.news/content/images/2025/07/Revista-421--4-1.jpg",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--4--junio-2025-.pdf",
+    "size": "5 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Shoko", "url": "https://x.com/shokodibuja" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 3,
+    "titulo": "Revista 421 #3",
+    "fecha": "Mayo 2025",
+    "cover": "https://www.421.news/content/images/2025/05/Revista-421--3.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--3--mayo-2025-.pdf",
+    "size": "14 MB",
+    "creditos": [
+      { "rol": "Tapa", "nombre": "Kosmo", "url": "https://www.instagram.com/kosmotoys/" },
+      { "rol": "Diseño", "nombre": "Galatemplo", "url": "https://www.instagram.com/galatemplo/" }
+    ]
+  },
+  {
+    "numero": 2,
+    "titulo": "Revista 421 #2",
+    "fecha": "Febrero 2025",
+    "cover": "https://www.421.news/content/images/2025/05/Revista-421--2.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--2--febrero-2025-.pdf",
+    "size": "26 MB",
+    "creditos": [
+      { "rol": "Tapa y diseño", "nombre": "Galatemplo", "url": "https://www.instagram.com/galatemplo/" }
+    ]
+  },
+  {
+    "numero": 1,
+    "titulo": "Revista 421 #1",
+    "fecha": "Noviembre 2024",
+    "cover": "https://www.421.news/content/images/2025/05/Revista-421--1.png",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--1--noviembre-2024-.pdf",
+    "size": "3 MB",
+    "creditos": [
+      { "rol": "Tapa y diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  }
+]

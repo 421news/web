@@ -53,6 +53,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `page.hbs` - Static pages. Has `{{#page}}` context for title/feature_image
 - **`rutas.hbs`** - Reading routes page (`/rutas/`). Loads `rutas.js` which fetches posts from Content API and renders 7 curated thematic routes.
 - **`canon.hbs`** - Canon 421 page (`/canon/`). Loads `rutas.js` which fetches 25 essential posts with editorial reasons.
+- **`revista.hbs`** - Revista 421 page (`/revista-421/`). Loads `revista.js` which fetches `revista.json` and renders magazine issue cards with covers, download links, and collaborator credits.
 - `tag.hbs` - Tag listing page
 - `tags.hbs` - All tags page
 - `author.hbs` - Author page
@@ -105,6 +106,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 ### JavaScript (`assets/js/`)
 - **`related-posts.js`** - Client-side semantic related posts. Loads `related-posts.json`, fetches related posts from Content API, renders cards replacing the Handlebars fallback
 - **`rutas.js`** - Client-side Rutas + Canon renderer. Loads `rutas.json`, fetches all posts by slug via Content API, renders card grids (for `/rutas/`) or numbered list with reasons (for `/canon/`). Same `renderCard()` pattern as `related-posts.js`.
+- **`revista.js`** - Client-side Revista 421 renderer. Loads `revista.json` and renders magazine issue cards with cover image, download button, "ver tapa" button, and collaborator credits with links. No Content API needed.
 - `file-browser.js` - File browser navigation logic
 - `window-manager.js` - Desktop-style window manager
 - `reading-progress.js` - Reading progress bar
@@ -123,6 +125,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
   - `canon[]` / `canon_en[]`: 25 essential posts (ES/EN), each with `slug` and `razon` (editorial reason)
   - All slugs verified against Content API. To add/remove posts from routes or canon, edit this file and redeploy.
   - **7 routes**: Autonomia digital (12), Cultura pop como teoria (12), Argentina como laboratorio (12), Filosofia para la vida real (12), El canon del entretenimiento (12), Internet no murio (11), Hazlo tu mismo (11)
+- **`revista.json`** - Magazine issue data for Revista 421. Array of 11 objects (newest first), each with `numero`, `titulo`, `fecha`, `cover` (image URL), `pdf` (download URL), `size`, and `creditos[]` (array of `{rol, nombre, url}`). To add a new issue: add object at the beginning of the array and redeploy theme.
 
 ### Scripts (`scripts/`)
 - **`update-related.py`** - Regenerates `related-posts.json` and uploads/activates the theme. Run: `python3 scripts/update-related.py`. Requires `scikit-learn` (`pip3 install scikit-learn`)
@@ -138,7 +141,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `server.js` - Express dev server with mock data for local preview
 - `routes.yaml` - Ghost routing configuration. Custom routes include `/rutas/`, `/canon/`, `/en/routes/`, `/en/canon/`, `/suscribite/`, tag pages, EN equivalents. Collections: `/` filters `tag:-hash-en` (ES), `/en/` filters `tag:hash-en` (EN).
 - `redirects.yaml` - Ghost redirects configuration (46 rules). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Uses regex patterns with `^` anchors for precise matching. Covers: `/posts/` prefix wildcard, truncated slugs, EN tags in ES paths, wrong-case tags, nonexistent tags → closest match, incomplete author slugs. **IMPORTANT**: Like `routes.yaml`, this CANNOT be uploaded via API token (returns 403).
-- `package.json` - Theme metadata and version (currently v2.11.3)
+- `package.json` - Theme metadata and version (currently v2.12.0)
 - `layouts/default.hbs` - Express layout (dev server only)
 - `testeo/` - Mockup files for previewing features before implementation
 - `backups/` - API operation backups (lexical content, signup forms, feature image alt, tag descriptions, author bios, post SEO fields). Not committed.
@@ -179,6 +182,42 @@ Architecture: `rutas.json` (static data) + `rutas.js` (client-side Content API f
 English versions at `/en/routes/` (`routes.hbs`) and `/en/canon/` (`canon-en.hbs`). `rutas.js` detects language via URL prefix (`/en/`) and uses `rutas_en`/`canon_en` keys from the JSON.
 
 **To edit curation**: Modify `assets/data/rutas.json` and redeploy theme. All slugs must exist in Ghost.
+
+## Revista 421 System
+
+Digital magazine archive page at `/revista-421/` showing all 11 issues as cards.
+
+Architecture: `revista.json` (static data) + `revista.js` (client-side renderer) + `revista.hbs` (template) + CSS in `index.css` (`.revista-*` classes). Same pattern as rutas/canon but simpler — no Content API calls needed since all data is in the JSON.
+
+Each card shows:
+- Cover image (clickable to full resolution)
+- Issue number badge (gradient), date, title
+- Collaborator credits with links (Instagram/X/421.news author pages)
+- "Descargar PDF" button (gradient, with file size) + "Ver tapa" button (outline)
+
+Responsive: horizontal cards on desktop, vertical stacking on mobile (<768px).
+Light mode: card backgrounds, borders, and credit link colors adapt automatically.
+
+**To add a new issue monthly**:
+1. Upload cover image and PDF to Ghost
+2. Add a new object at the **beginning** of `assets/data/revista.json`:
+```json
+{
+  "numero": 12,
+  "titulo": "Especial Tema",
+  "fecha": "Febrero 2026",
+  "cover": "https://www.421.news/content/images/...",
+  "pdf": "https://storage.ghost.io/.../Revista-421--12--.pdf",
+  "size": "X MB",
+  "creditos": [
+    { "rol": "Tapa", "nombre": "Artista", "url": "https://instagram.com/..." },
+    { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+  ]
+}
+```
+3. Redeploy theme (zip + upload + activate)
+
+**Route**: `/revista-421/: revista` in `routes.yaml` (uploaded manually via Ghost Admin > Settings > Labs > Routes).
 
 ## Internal Linking System
 

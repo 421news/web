@@ -28,14 +28,14 @@ body.light-mode .site-header {
     justify-content: space-between;
     align-items: center;
     gap: 16px;
-    padding: 10px 0;
+    padding: 14px 0;
 }
 
 /* --- Logo --- */
 .site-logo {
     display: block;
-    width: 110px;
-    height: 52px;
+    width: 140px;
+    height: 66px;
     flex-shrink: 0;
     transition: opacity 0.2s ease;
 }
@@ -51,8 +51,8 @@ body.light-mode .site-header {
 }
 
 .site-logo--mobile {
-    width: 90px;
-    height: 42px;
+    width: 110px;
+    height: 52px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -69,10 +69,10 @@ body.light-mode .site-header {
     color: var(--crema);
     text-decoration: none;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 600;
     opacity: 0.55;
-    transition: opacity 0.15s ease, background-color 0.15s ease;
+    transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
     padding: 6px 10px;
     border-radius: 6px;
@@ -80,7 +80,8 @@ body.light-mode .site-header {
 
 .nav-link:hover {
     opacity: 1;
-    background-color: rgba(234, 230, 225, 0.06);
+    background-color: var(--amarillo);
+    color: var(--negro);
 }
 
 .nav-link.is-active {
@@ -105,7 +106,8 @@ body.light-mode .nav-link {
 }
 
 body.light-mode .nav-link:hover {
-    background-color: rgba(18, 18, 18, 0.06);
+    background-color: var(--amarillo);
+    color: var(--negro);
 }
 
 body.light-mode .nav-link.is-active {
@@ -116,7 +118,7 @@ body.light-mode .nav-link.is-active {
 .nav-actions {
     display: flex;
     gap: 8px;
-    align-items: center;
+    align-items: stretch;
     flex-shrink: 0;
 }
 
@@ -129,9 +131,9 @@ body.light-mode .nav-link.is-active {
     color: var(--negro);
     border: none;
     border-radius: var(--radius);
-    padding: 8px 18px;
+    padding: 9px 20px;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 800;
     font-style: italic;
     text-decoration: none;
@@ -157,7 +159,7 @@ body.light-mode .nav-link.is-active {
     border: 1.5px solid rgba(234, 230, 225, 0.15);
     border-radius: var(--radius);
     color: var(--crema);
-    padding: 7px;
+    padding: 8px;
     cursor: pointer;
     text-decoration: none;
     font-family: 'Nunito Sans', sans-serif;
@@ -175,14 +177,14 @@ body.light-mode .nav-link.is-active {
 }
 
 .nav-icon-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     flex-shrink: 0;
 }
 
 .nav-icon-btn img {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: block;
 }
 
@@ -220,7 +222,7 @@ body.light-mode .nav-flag {
     display: none;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 10px 0;
     position: relative;
 }
 
@@ -307,8 +309,8 @@ body.light-mode .nav-mobile a.is-active {
     }
 
     .site-logo {
-        width: 90px;
-        height: 42px;
+        width: 110px;
+        height: 52px;
     }
 }
 
