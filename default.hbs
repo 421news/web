@@ -20,30 +20,33 @@
       <link href='{{asset "images/webclip.png"}}' rel='apple-touch-icon' />
     {{/unless}}
     <link href='{{asset "css/udesly-ghost.css"}}' rel='stylesheet' />
+    {{!-- Server-side hreflang: homepage --}}
+    {{#is "home"}}
+    <link rel="alternate" hreflang="es" href="https://www.421.news/" />
+    <link rel="alternate" hreflang="en" href="https://www.421.news/en/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
+    {{/is}}
+    {{!-- Server-side hreflang: post self-referential --}}
+    {{#is "post"}}{{#post}}{{#has tag="#en"}}
+    <link rel="alternate" hreflang="en" href="{{url absolute=true}}" />
+    {{else}}
+    <link rel="alternate" hreflang="es" href="{{url absolute=true}}" />
+    {{/has}}{{/post}}{{/is}}
     <script>
       (function() {
-        // Set lang for collection pages (posts are handled server-side)
+        // Set lang for collection pages (posts handled server-side)
         if (window.location.pathname.startsWith('/en/')) {
           document.documentElement.lang = 'en';
         }
-        // Hreflang for homepages
-        var path = window.location.pathname;
-        function addHreflang(lang, href) {
-          var link = document.createElement('link');
-          link.rel = 'alternate'; link.hreflang = lang; link.href = href;
-          document.head.appendChild(link);
-        }
-        if (path === '/' || path === '/en/' || path === '/en') {
-          addHreflang('es', 'https://www.421.news/');
-          addHreflang('en', 'https://www.421.news/en/');
-          addHreflang('x-default', 'https://www.421.news/');
-        }
       })();
     </script>
+    {{ghost_head}}
+    {{!-- Post cross-language hreflang: runs sync AFTER ghost_head injects meta tags --}}
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      (function() {
         var enMeta = document.querySelector('meta[name="english-version"]');
         var esMeta = document.querySelector('meta[name="spanish-version"]');
+        if (!enMeta && !esMeta) return;
         function addHreflang(lang, href) {
           var link = document.createElement('link');
           link.rel = 'alternate'; link.hreflang = lang; link.href = href;
@@ -57,9 +60,8 @@
           addHreflang('en', window.location.href);
           addHreflang('es', 'https://www.421.news/' + esMeta.content + '/');
         }
-      });
+      })();
     </script>
-    {{ghost_head}}
     <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
     <link href='{{asset "css/globals.css"}}' rel='stylesheet' />
     <link href='{{asset "css/site-nav.css"}}' rel='stylesheet' />
