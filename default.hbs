@@ -1,4 +1,4 @@
-<html lang="es">
+{{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}<html lang="es">{{/has}}{{/post}}{{else}}<html lang="es">{{/is}}
   <head>
     <title>{{meta_title}}</title>
     <meta charset='utf-8' />
@@ -22,9 +22,11 @@
     <link href='{{asset "css/udesly-ghost.css"}}' rel='stylesheet' />
     <script>
       (function() {
+        // Set lang for collection pages (posts are handled server-side)
         if (window.location.pathname.startsWith('/en/')) {
           document.documentElement.lang = 'en';
         }
+        // Hreflang for homepages
         var path = window.location.pathname;
         function addHreflang(lang, href) {
           var link = document.createElement('link');

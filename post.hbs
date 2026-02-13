@@ -1,23 +1,5 @@
 {{!< default}}
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "NewsArticle",
-  "mainEntityOfPage": { "@type": "WebPage", "@id": "{{url absolute="true"}}" },
-  "headline": "{{title}}",
-  "image": ["{{feature_image}}"],
-  "datePublished": "{{date published_at format="YYYY-MM-DDTHH:mm:ssZ"}}",
-  "dateModified": "{{date updated_at format="YYYY-MM-DDTHH:mm:ssZ"}}",
-  "author": [{ "@type": "Person", "name": "{{primary_author.name}}" }],
-  "publisher": {
-    "@type": "Organization",
-    "name": "421.news",
-    "logo": { "@type": "ImageObject", "url": "{{@site.logo}}" }
-  }
-}
-</script>
-
 {{#post}}
   {{#has tag="#en"}}
     {{> "post-en"}}
