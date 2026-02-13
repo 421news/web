@@ -1,0 +1,65 @@
+301:
+  # === Existentes (migrados del YAML original) ===
+  ^/nick-land-aceleracionismo-parte-2/: /nick-land-aceleracionismo/
+  ^/nick-land-aceleracionismo-parte-1/: /nick-land-aceleracionismo/
+  ^/en/nick-land-the-apostle-of-chaos-part-2/: /en/nick-land-the-apostle-of-chaos/
+  ^/la-historia-de-ricardo-fort-parte-dos/: /la-historia-de-ricardo-fort-parte-uno/
+  ^/la-historia-de-ricardo-fort-parte-uno/: /la-historia-de-ricardo-fort/
+  ^/como-empezar-a-leer-ciencia-ficcion/: /mejores-libros-ciencia-ficcion/
+  ^/en/ricardo-fort-the-real-super-chad-part-1/: /en/ricardo-fort-the-real-super-chad/
+  ^/en/ricardo-fort-the-real-super-chad-part-2/: /en/ricardo-fort-the-real-super-chad/
+  ^/historia-de-antonio-mamerto-gil/: /gauchito-gil-historia/
+  ^/cronica-de-la-triple-frontera/: /frontera-argentina-paraguay/
+  ^/osint-tu-transa-de-telegram-en-la-mira/: /ciberpatrullaje-policia-federal-argentina/
+  ^/clasicos-basicos-retro-gaming/: /retrogaming-juegos-viejos-facil/
+  # FIX: anchor con $ para que no matchee /tag/magic-the-gathering/
+  "^/magic-the-gathering/$": /magic-the-gathering-juego-social/
+
+  # === Wildcard /posts/ (estructura vieja) ===
+  "^/posts/(.*)": "/$1"
+
+  # === Posts con slug truncado o cambiado ===
+  ^/en/heart-in-your-heels-a-chronicle-of-the-triple-frontier/: /en/argentina-paraguay-border/
+  "^/la-historia-de-ricardo-fort-$": /la-historia-de-ricardo-fort/
+  "^/soberania-cognitiva-introduccion-autonomia-$": /soberania-cognitiva-introduccion-autonomia-psiquica/
+  "^/godzilla-minus-one/$": /godzilla-minus-one-shin-godzilla/
+  ^/cannabis-medicinal-geneticas-argentinas/: /autocultivo-geneticas-cannabis-favoritas-421/
+  ^/cannabis-medicinal-argentino/: /cannabis-medicinal-reprocann-milei-bullrich/
+  ^/mtg-arena-como-conseguir-gemas/: /mtg-arena-farm-gold-and-gems-2/
+  ^/osint-inteligencia-open-source/: /ciberpatrullaje-policia-federal-argentina/
+  ^/super-lemon-haze/: /autocultivo-geneticas-cannabis-favoritas-421/
+  ^/revista-421-edicion-11/: /revista-421/
+
+  # === Ruta bilingue ===
+  "^/en/suscribite/?$": /en/subscribe/
+
+  # === Tags EN en path ES ===
+  "^/tag/culture/?$": /en/tag/culture/
+  "^/tag/games/?$": /en/tag/games/
+  "^/tag/real-life/?$": /en/tag/real-life/
+  "^/tag/tech/?$": /en/tag/tech/
+
+  # === Tags con case incorrecto (uppercase + lowercase con acentos) ===
+  "^/tag/[Tt]ecnolog": /tag/tecnologia/
+  "^/tag/Tech/?$": /en/tag/tech/
+  "^/tag/[Cc]ripto/?$": /tag/cripto/
+
+  # === Tags inexistentes → tag relacionado ===
+  "^/tag/autocultivo/?$": /tag/vida-real/
+  "^/tag/magia/?$": /tag/magic-the-gathering/
+  "^/tag/comics/?$": /tag/historieta/
+  "^/tag/coleccionables/?$": /tag/magic-the-gathering/
+  "^/tag/lucha/?$": /tag/deportes/
+  "^/tag/aceleracionismo/?$": /tag/filosofia/
+  "^/tag/skate/?$": /tag/deportes/
+
+  # === Authors con slug incompleto ===
+  "^/author/paula/$": /author/paula-yeyati/
+  "^/author/cristobal/$": /author/cristobal-soto/
+  "^/author/marcelo/$": /author/marcelo_acevedo/
+
+302:
+  # === Tags/paths sin match real → homepage (temporary) ===
+  "^/tag/[Gg]uerra/?$": /
+  "^/tag/[Pp]ol": /
+  "^/tag/[Ee]conom": /
