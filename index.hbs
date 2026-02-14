@@ -1,5 +1,20 @@
 {{!< default}}
 
+<script>
+  document.title = '421 | Información de calidad para tu dieta cognitiva';
+  (function() {
+    var esDesc = 'Medio digital argentino sobre cultura, tecnología, juegos y la vida real. Ensayos, crónicas, guías y entrevistas.';
+    var esTitle = '421 | Información de calidad para tu dieta cognitiva';
+    var m = document.querySelector('meta[name="description"]');
+    if (m) m.content = esDesc;
+    var pairs = [['og:title', esTitle], ['og:description', esDesc], ['twitter:title', esTitle], ['twitter:description', esDesc]];
+    pairs.forEach(function(p) {
+      var el = document.querySelector('meta[property="' + p[0] + '"]') || document.querySelector('meta[name="' + p[0] + '"]');
+      if (el) el.content = p[1];
+    });
+  })();
+</script>
+
 <div class="page-wrapper">
   {{> "general-styling"}} <!-- TODO: Revisar -->
   {{> "site-nav-es"}}

@@ -298,6 +298,48 @@ Applied in bulk cleanup pass:
   - Post `twitter_title`/`twitter_description`: 504 posts — set to title/excerpt
   - Backups for all operations in `backups/`
 
+## Migration: `/` → `/es/` (planned)
+
+Migrate Spanish content from root (`/{slug}/`) to `/es/{slug}/` so both languages have explicit prefixes. Root `/` becomes a neutral landing that redirects by browser language. This eliminates SEO ambiguity where Google confuses ES/EN content on the root URL.
+
+### Current state
+- Spanish: `https://www.421.news/{slug}/` (root collection)
+- English: `https://www.421.news/en/{slug}/`
+- Problem: `/` is ambiguous — serves Spanish content but Googlebot (Chrome, lang=en) gets JS-redirected to `/en/`, causing Google to index English content for the root URL
+
+### Target state
+- Spanish: `https://www.421.news/es/{slug}/`
+- English: `https://www.421.news/en/{slug}/`
+- Root `/`: neutral landing page or auto-redirect (no collection)
+
+### Automated steps (Claude does all of these)
+
+1. **`routes.yaml`**: Change ES collection from `/` to `/es/` with `permalink: /es/{slug}/`. Add root `/` as a route pointing to a landing template or redirect
+2. **Theme templates**: Update all ES templates (`index.hbs`, `rutas.hbs`, `canon.hbs`, `revista.hbs`, `pitcheale.hbs`, `suscribite.hbs`, tag templates, etc.) — internal links from `/{slug}/` → `/es/{slug}/`
+3. **`default.hbs`**: Update browser language redirect to point to `/es/` or `/en/` from root. Update hreflang tags
+4. **Navigation partials**: Update `site-nav-es.hbs`, `file-browser.hbs` links to use `/es/` prefix
+5. **`redirects.yaml`**: Generate ~450 redirect rules: `^/{slug}/$ → /es/{slug}/` for every existing Spanish post. Also redirect ES tag pages `^/tag/{slug}/ → /es/tag/{slug}/`, author pages, etc.
+6. **Hreflang sitemap**: Regenerate `hreflang-sitemap.xml` with `/es/` URLs
+7. **Hreflang post meta tags**: Re-run `generate-hreflang-sitemap.py --inject-meta` to update `codeinjection_head` on all paired posts
+8. **Internal links in posts**: Script to update the ~1544 internal links in post content from `/{slug}/` to `/es/{slug}/` via Admin API
+9. **`related-posts.json`**: No change needed (stores slugs, not full URLs — JS builds URLs dynamically)
+10. **`rutas.json`**: No change needed (stores slugs, not full URLs)
+
+### Manual steps (user must do these — ~5 actions)
+
+1. **Upload `routes.yaml`**: Ghost Admin > Settings > Labs > Routes > Upload YAML
+2. **Upload `redirects.yaml`**: Ghost Admin > Settings > Labs > Redirects > Upload YAML
+3. **Google Search Console**: Submit updated sitemap URL. Use "Request Indexing" on `https://www.421.news/es/` to accelerate crawl. Monitor "Page indexing" report over the next 2-4 weeks for the URL migration
+4. **Cloudflare Page Rule** (optional): If we want a server-side fallback redirect for `/` → `/es/` (in case JS doesn't execute), add a Page Rule: `www.421.news/` → 302 → `https://www.421.news/es/` (use 302 not 301, since the root should remain neutral). Current Page Rule `421.news/*` for non-www redirect stays as-is
+5. **Verify**: Check a few pages at `/es/{slug}/` work, old `/{slug}/` URLs 301-redirect correctly, and hreflang tags are correct
+
+### Risks and notes
+- Ghost's `redirects.yaml` has a practical limit (~500 rules). With ~450 Spanish posts, we're close. If needed, use a wildcard `^/(?!es/|en/|ghost/|assets/|tag/|author/)([^/]+)/$ → /es/$1/` instead of per-slug rules
+- Google will show a temporary dip in indexed pages during re-crawl (2-4 weeks)
+- All existing backlinks and shared URLs will continue to work via 301 redirects
+- The `/en/` collection and all EN URLs remain unchanged
+- RSS feed URL may change — verify after migration
+
 ## Pending / Future Features (from "Filosofia 421" roadmap)
 
 Features identified but not yet implemented:

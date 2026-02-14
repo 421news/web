@@ -1,6 +1,22 @@
 {{!< default}}
 
-<script>document.title = '421 | Quality content for your cognitive diet';</script>
+<script>
+  document.title = '421 | Quality content for your cognitive diet';
+  (function() {
+    var enDesc = 'Argentine digital media about culture, technology, games, and real life. Essays, features, guides, and interviews.';
+    var enTitle = '421 | Quality content for your cognitive diet';
+    function setMeta(attr, key, val) {
+      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
+      if (el) { el.content = val; }
+      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
+    }
+    setMeta('name', 'description', enDesc);
+    setMeta('property', 'og:title', enTitle);
+    setMeta('property', 'og:description', enDesc);
+    setMeta('name', 'twitter:title', enTitle);
+    setMeta('name', 'twitter:description', enDesc);
+  })();
+</script>
 
 <div class="page-wrapper">
   {{> "general-styling"}}

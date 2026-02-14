@@ -71,7 +71,7 @@ body.light-mode .site-header {
     font-family: 'Nunito Sans', sans-serif;
     font-size: 17px;
     font-weight: 600;
-    opacity: 0.55;
+    opacity: 0.75;
     transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
     padding: 6px 10px;
