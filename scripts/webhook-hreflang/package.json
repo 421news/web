@@ -1,0 +1,13 @@
+{
+  "name": "webhook-hreflang",
+  "version": "1.0.0",
+  "description": "Ghost webhook: auto-inject hreflang meta tags when posts are published",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
