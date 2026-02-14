@@ -269,6 +269,16 @@ app.post('/webhook/hreflang', async (req, res) => {
   }
 });
 
+// Synchronous test endpoint (returns full result for debugging)
+app.post('/test', async (req, res) => {
+  try {
+    const result = await handleWebhook(req.body);
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message, stack: err.stack });
+  }
+});
+
 // --- Start ---
 
 app.listen(PORT, () => {
