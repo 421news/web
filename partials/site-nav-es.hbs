@@ -115,6 +115,29 @@
       }
     });
 
+    // Smart language switch: go to EN equivalent of current page
+    var enUrl = '/en/';
+    var enMeta = document.querySelector('meta[name="english-version"]');
+    if (enMeta && enMeta.content) {
+      enUrl = '/en/' + enMeta.content + '/';
+    } else {
+      var langMap = {
+        '/': '/en/',
+        '/tag/cultura/': '/en/tag/culture/',
+        '/tag/tecnologia/': '/en/tag/tech/',
+        '/tag/juegos/': '/en/tag/games/',
+        '/tag/vida-real/': '/en/tag/real-life/',
+        '/rutas/': '/en/routes/',
+        '/canon/': '/en/canon/',
+        '/suscribite/': '/en/subscribe/'
+      };
+      var path = currentPath.replace(/\/?$/, '/');
+      if (langMap[path]) enUrl = langMap[path];
+    }
+    document.querySelectorAll('a[href="/en/"]').forEach(function(a) {
+      if (a.closest('.nav-actions') || a.closest('.nav-mobile-left')) a.href = enUrl;
+    });
+
     // Sync mobile mode-switch with desktop
     var mobileSwitch = document.getElementById('mode-switch-mobile');
     var desktopSwitch = document.getElementById('mode-switch');
