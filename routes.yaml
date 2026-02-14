@@ -5,6 +5,7 @@ routes:
   /rutas/: rutas
   /canon/: canon
   /revista-421/: revista
+  /pitcheale-a-421/: pitcheale
   /en/routes/: routes
   /en/canon/: canon-en
   /ultimos-posts/: last-posts-es

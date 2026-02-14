@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup - Pitcheale a 421</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --negro: #121212;
+      --crema: #eae6e1;
+      --amarillo: #fcd221;
+      --verde: #17a583;
+      --radius: 8px;
+      --border-width: 2px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background-color: var(--negro);
+      color: var(--crema);
+      font-family: 'Nunito Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .global-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ---- Hero ---- */
+    .pitch-hero {
+      padding: 6rem 0 2.5rem;
+      text-align: center;
+    }
+
+    .pitch-hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .pitch-hero-subtitle {
+      font-family: 'Lora', serif;
+      font-size: 1.15rem;
+      line-height: 1.7;
+      color: rgba(234, 230, 225, 0.75);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .pitch-hero-subtitle a {
+      color: var(--crema);
+      text-decoration: underline;
+      text-decoration-color: var(--verde);
+      text-underline-offset: 3px;
+    }
+
+    .pitch-hero-subtitle strong {
+      color: var(--crema);
+    }
+
+    .pitch-hero-subtitle em {
+      color: var(--amarillo);
+    }
+
+    .pitch-cta-line {
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+      color: rgba(234, 230, 225, 0.5);
+      font-style: italic;
+    }
+
+    /* ---- Gradient Divider ---- */
+    .pitch-gradient-divider {
+      border: none;
+      height: 3px;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      border-radius: 2px;
+      margin: 0 auto 3rem;
+      max-width: 900px;
+    }
+
+    /* ---- Category Cards ---- */
+    .pitch-categories {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .pitch-category-card {
+      background: rgba(234, 230, 225, 0.04);
+      border: 1px solid rgba(234, 230, 225, 0.08);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pitch-category-card:hover {
+      background: rgba(234, 230, 225, 0.07);
+      transform: translateY(-2px);
+    }
+
+    .pitch-category-card.is-active {
+      border-color: var(--amarillo);
+      background: rgba(252, 210, 33, 0.08);
+    }
+
+    .pitch-category-card.is-active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    }
+
+    .pitch-category-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .pitch-category-name {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .pitch-category-desc {
+      font-size: 0.8rem;
+      color: rgba(234, 230, 225, 0.45);
+      margin-top: 0.4rem;
+      line-height: 1.4;
+    }
+
+    /* ---- Form Container ---- */
+    .pitch-form-wrapper {
+      display: none;
+      animation: pitchFadeIn 0.3s ease forwards;
+    }
+
+    .pitch-form-wrapper.is-visible {
+      display: block;
+    }
+
+    @keyframes pitchFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pitch-form-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pitch-form-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      color: var(--negro);
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .pitch-form-hint {
+      font-size: 0.85rem;
+      color: rgba(234, 230, 225, 0.45);
+      font-style: italic;
+    }
+
+    .pitch-iframe-container {
+      background: rgba(234, 230, 225, 0.03);
+      border: 1px solid rgba(234, 230, 225, 0.08);
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pitch-iframe-container iframe {
+      display: block;
+      width: 100%;
+      height: 1693px;
+      border: none;
+    }
+
+    /* ---- Bottom CTA ---- */
+    .pitch-bottom {
+      text-align: center;
+      padding: 3rem 0 1rem;
+      color: rgba(234, 230, 225, 0.4);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .pitch-bottom strong {
+      color: rgba(234, 230, 225, 0.65);
+    }
+
+    /* ---- Responsive ---- */
+    @media screen and (max-width: 768px) {
+      .pitch-hero-title {
+        font-size: 2.2rem;
+      }
+
+      .pitch-hero-subtitle {
+        font-size: 1rem;
+      }
+
+      .pitch-categories {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .pitch-category-card {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-align: left;
+        padding: 1rem 1.25rem;
+      }
+
+      .pitch-category-icon {
+        font-size: 2rem;
+        margin-bottom: 0;
+        flex-shrink: 0;
+      }
+
+      .pitch-category-info {
+        flex: 1;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .pitch-hero {
+        padding: 5rem 0 2rem;
+      }
+
+      .pitch-hero-title {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Simulated nav -->
+  <div style="background: var(--negro); border-bottom: 2px solid rgba(234,230,225,0.08); padding: 14px 20px; text-align: center; font-weight: 800; font-size: 1.2rem; position: fixed; top: 0; left: 0; right: 0; z-index: 100;">
+    421
+  </div>
+
+  <div class="global-container">
+
+    <!-- Hero -->
+    <div class="pitch-hero">
+      <h1 class="pitch-hero-title">Pitcheale a 421</h1>
+      <p class="pitch-hero-subtitle">
+        ¿Tenés una idea que querés compartir con el mundo? ¿Estás cansado de <a href="https://www.421.news/entrevista-luciano-lamberti-cuentos/">escribir</a> gratis? ¿Querés poder contarle a tus viejos que finalmente <strong>te publicaron</strong>? ¿Hiciste un videojuego y querés que el mundo lo conozca? <em>Esta es tu oportunidad.</em>
+      </p>
+      <p class="pitch-cta-line">Elegí tu categoría, completá el formulario y prendele una vela a la Virgen de Luján.</p>
+    </div>
+
+    <hr class="pitch-gradient-divider">
+
+    <!-- Category Selector -->
+    <div class="pitch-categories">
+      <div class="pitch-category-card is-active" data-form="escritura">
+        <span class="pitch-category-icon">✍️</span>
+        <div class="pitch-category-info">
+          <div class="pitch-category-name">Escritura</div>
+          <div class="pitch-category-desc">Ensayos, crónicas, guías, tutoriales</div>
+        </div>
+      </div>
+      <div class="pitch-category-card" data-form="ilustracion">
+        <span class="pitch-category-icon">🎨</span>
+        <div class="pitch-category-info">
+          <div class="pitch-category-name">Ilustración</div>
+          <div class="pitch-category-desc">Tapas, arte editorial, historieta</div>
+        </div>
+      </div>
+      <div class="pitch-category-card" data-form="videojuegos">
+        <span class="pitch-category-icon">🎮</span>
+        <div class="pitch-category-info">
+          <div class="pitch-category-name">Videojuegos</div>
+          <div class="pitch-category-desc">Indie devs, demos, game jams</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Forms -->
+    <div id="form-escritura" class="pitch-form-wrapper is-visible">
+      <div class="pitch-form-header">
+        <span class="pitch-form-badge">✍️ Escritura</span>
+        <span class="pitch-form-hint">Completá todos los campos del formulario</span>
+      </div>
+      <div class="pitch-iframe-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeFAhXfdqVJN_pHkx72r50G0ZD93zRjZPMUJmZn4ma0cmLhtg/viewform?embedded=true" loading="lazy">Cargando…</iframe>
+      </div>
+    </div>
+
+    <div id="form-ilustracion" class="pitch-form-wrapper">
+      <div class="pitch-form-header">
+        <span class="pitch-form-badge">🎨 Ilustración</span>
+        <span class="pitch-form-hint">Completá todos los campos del formulario</span>
+      </div>
+      <div class="pitch-iframe-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdYfl_iJDj3TV9xk0LYq-AGKjLvYS9eC1foElGLuxL0q575nw/viewform?embedded=true" loading="lazy">Cargando…</iframe>
+      </div>
+    </div>
+
+    <div id="form-videojuegos" class="pitch-form-wrapper">
+      <div class="pitch-form-header">
+        <span class="pitch-form-badge">🎮 Videojuegos</span>
+        <span class="pitch-form-hint">Completá todos los campos del formulario</span>
+      </div>
+      <div class="pitch-iframe-container">
+        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfvHQ_NaqWaW1ie8AI0Q-k57vnPyOITxT7J00QX9IZR-ZgQww/viewform?embedded=true" loading="lazy">Cargando…</iframe>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="pitch-bottom">
+      <p>En caso de que nos guste mucho tu propuesta, <strong>vamos a comunicarnos con vos</strong>.</p>
+    </div>
+
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.pitch-category-card');
+    const forms = document.querySelectorAll('.pitch-form-wrapper');
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        const formId = card.dataset.form;
+
+        cards.forEach(c => c.classList.remove('is-active'));
+        card.classList.add('is-active');
+
+        forms.forEach(f => f.classList.remove('is-visible'));
+        const target = document.getElementById('form-' + formId);
+        if (target) {
+          // Re-trigger animation
+          target.style.animation = 'none';
+          target.offsetHeight;
+          target.style.animation = '';
+          target.classList.add('is-visible');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -99,6 +99,11 @@
           return;
         }
 
+        // skip redirect for bots/crawlers (Googlebot renders with lang=en, poisoning SEO)
+        if (navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent)) {
+          return;
+        }
+
         // get browser lang
         const browserLang = navigator.language || navigator.userLanguage;
         // get primary lang code 
