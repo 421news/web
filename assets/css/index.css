@@ -36,7 +36,7 @@ body {
 }
 
 .hero-mobile-author {
-  color: white;
+  color: var(--crema);
   font-size: 1rem;
   font-style: italic;
   text-align: center;
@@ -52,9 +52,9 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background-color: transparent;
-  color: white;
+  color: var(--crema);
   text-decoration: underline;
-  text-decoration-color: white;
+  text-decoration-color: var(--crema);
   font-style: italic;
   font-weight: 700;
   padding: 0.75rem 1.5rem;
@@ -66,7 +66,7 @@ body {
   display: none;
   width: 100%;
   background-color: #121212;
-  color: white;
+  color: var(--crema);
   text-align: center;
   padding: 1rem 2rem;
   font-style: italic;
@@ -115,7 +115,7 @@ body.light-mode {
 .w-button {
   display: inline-block;
   padding: 9px 15px;
-  color: white;
+  color: var(--crema);
   border: 0;
   line-height: inherit;
   text-decoration: none;

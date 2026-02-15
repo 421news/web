@@ -159,6 +159,37 @@ Posts are tagged with internal tags `#es` (slug: `hash-es`) or `#en` (slug: `has
 
 `default.hbs` has a script that redirects English-language browsers from `/` to `/en/` (unless `prefersSpanish` is set in localStorage).
 
+### Language filtering in tag pages
+
+Tag page templates use 3 partials that filter by language via a `languageFilter` parameter:
+- `tag-page-featured-post.hbs` — defaults to `-'hash-en'` if `languageFilter` not passed (safe for ES)
+- `tag-page-highlighted-posts-es.hbs` — defaults to `-'hash-en'` if `languageFilter` not passed
+- `tag-page-highlighted-posts-en.hbs` — requires `languageFilter="'hash-en'"` explicitly
+- `last-posts-es-tag.hbs` / `last-posts-en-tag.hbs` — hardcoded language filter
+
+ES tag templates pass `languageFilter="-'hash-en'"`, EN templates pass `languageFilter="'hash-en'"`.
+
+### Adding a third language (~March 2026)
+
+Current approach uses **exclusion** (`-'hash-en'`): each language excludes others. This doesn't scale because adding a language (e.g., `#zh`) means updating all existing filters to also exclude the new tag.
+
+**Recommended migration**: switch from exclusion to **inclusion** (`+'hash-es'`). Each language filters for its own tag only:
+- ES partials: `tag:'hash-es'` instead of `tag:-'hash-en'`
+- EN partials: `tag:'hash-en'` (unchanged)
+- ZH partials: `tag:'hash-zh'`
+
+Steps to implement:
+1. Ensure ALL posts have their own language tag (`#es` on every Spanish post — currently most do, verify with Content API)
+2. Update `tag-page-featured-post.hbs` default from `-'hash-en'` to `'hash-es'`
+3. Update `tag-page-highlighted-posts-es.hbs` default from `-'hash-en'` to `'hash-es'`
+4. Update `last-posts-es-tag.hbs` hardcoded filter from `tag:-'hash-en'` to `tag:'hash-es'`
+5. Update `last-posts-es-secondary-tag.hbs` same change
+6. Update all ES tag template invocations: `languageFilter="'hash-es'"`
+7. Create ZH equivalents: `post-zh.hbs`, `site-nav-zh.hbs`, `file-browser-zh.hbs`, tag templates, etc.
+8. Add `/zh/` collection in `routes.yaml` with `filter: 'tag:hash-zh'`
+9. Update `default.hbs` browser redirect logic for 3 languages
+10. Update hreflang system (sitemap + meta tags + webhook) for 3-way pairing
+
 ## Related Posts System
 
 Two layers:
