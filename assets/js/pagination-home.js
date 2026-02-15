@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const LIMIT = 20; // 20 posts per page requested;
     let nextPage = 2;
     let loading = false;
+    let prefetched = null; // pre-loaded data for instant render
 
     // detect if is english or spanish homepage
     const cleanPath = location.pathname.replace(/\/+$/, '');
@@ -44,6 +45,17 @@ document.addEventListener("DOMContentLoaded", () => {
         if (filter) params.set("filter", filter);
         url.search = params.toString();
         return url;
+    }
+
+    async function fetchPage(page) {
+        const res = await fetch(buildURL(page), { headers: { 'Accept-Version': 'v5.0' }});
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+    }
+
+    function prefetchNext() {
+        if (!nextPage) return;
+        prefetched = fetchPage(nextPage);
     }
 
     function renderPostCard(p) {
@@ -146,12 +158,10 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.textContent = isEnglish ? "Loading..." : "Cargando...";
 
         try {
-            const res = await fetch(buildURL(nextPage), { headers: { 'Accept-Version': 'v5.0' }});
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    
-            const data = await res.json();
+            const data = await (prefetched || fetchPage(nextPage));
+            prefetched = null;
             const posts = data.posts || [];
-    
+
             if (posts.length) renderPosts(posts);
 
             const next = data.meta?.pagination?.next || null;
@@ -162,9 +172,11 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 btn.disabled = false;
                 btn.textContent = prev;
+                prefetchNext();
             }
         } catch (err) {
             console.error("Load more failed:", err);
+            prefetched = null;
             btn.disabled = false;
             btn.textContent = prev;
         } finally {
@@ -173,4 +185,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     btn.addEventListener("click", loadMore);
+
+    // prefetch page 2 immediately so first click is instant
+    prefetchNext();
 });

@@ -62,6 +62,7 @@ STOPWORDS = {
     'hacemos', 'tenemos', 'dicen', 'busca', 'lleva', 'espera',
     'tenga', 'hagan', 'quede', 'pueda',
     # Common generic nouns that make bad anchors
+    'episodio', 'episodios',
     'parte', 'forma', 'manera', 'mundo', 'vida', 'tiempo', 'momento',
     'nombre', 'acción', 'poder', 'punto', 'lado', 'caso', 'hecho',
     'tipo', 'nivel', 'medio', 'final', 'serie', 'historia', 'sistema',

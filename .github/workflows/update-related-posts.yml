@@ -1,0 +1,41 @@
+name: Update Related Posts
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC (03:00 Argentina time)
+    - cron: '0 6 * * 1'
+  workflow_dispatch: # Manual trigger from GitHub UI
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Python dependencies
+        run: pip install scikit-learn numpy
+
+      - name: Install Node dependencies
+        run: npm install
+        working-directory: .
+
+      - name: Run update-related.py
+        run: python3 scripts/update-related.py
+
+      - name: Commit updated related-posts.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet assets/data/related-posts.json || {
+            git add assets/data/related-posts.json
+            git commit -m "chore: update related-posts.json (automated weekly)"
+            git push
+          }

@@ -54,20 +54,23 @@
                 </div>
                 {{#get "posts"
                   include="tags,authors"
-                  limit="all"
+                  limit="24"
                   filter="tag:-'hash-en'+primary_author:{{slug}}"
                   order="published_at desc"
-                  as |posts|
+                  as |posts pagination|
                 }}
                   <div class="post-grid w-dyn-list">
                     {{#if posts}}
-                      <div role="list" class="post-cols w-dyn-items">
+                      <div role="list" class="post-cols w-dyn-items last-posts-section">
                         {{#foreach posts}}
                           {{> "post-card"}}
                         {{/foreach}}
                       </div>
                     {{/if}}
                   </div>
+                  {{#if pagination.next}}
+                    <button class="button" id="load-more-author" style="display: block; margin: auto; margin-top: 50px;">Cargar m&aacute;s</button>
+                  {{/if}}
                 {{/get}}
               </div>
             </div>
@@ -82,3 +85,4 @@
       {{> "file-browser"}}
     </div>
 {{> "site-footer"}}
+<script src="{{asset "js/pagination-author.js"}}" defer></script>
