@@ -279,6 +279,19 @@ app.post('/test', async (req, res) => {
   }
 });
 
+// --- Keep-alive ping (prevents Render free tier spindown after 15 min) ---
+
+const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
+
+setInterval(() => {
+  const mod = SELF_URL.startsWith('https') ? https : require('http');
+  mod.get(`${SELF_URL}/`, (res) => {
+    console.log(`[keep-alive] ping ${res.statusCode}`);
+  }).on('error', (err) => {
+    console.log(`[keep-alive] ping failed: ${err.message}`);
+  });
+}, 14 * 60 * 1000); // every 14 minutes
+
 // --- Start ---
 
 app.listen(PORT, () => {
@@ -290,4 +303,5 @@ app.listen(PORT, () => {
     console.warn(`[hreflang] WARNING: Missing env vars: ${missing.join(', ')}`);
   }
   console.log(`[hreflang] Listening on port ${PORT}`);
+  console.log(`[keep-alive] Self-ping every 14min → ${SELF_URL}`);
 });
