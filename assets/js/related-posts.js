@@ -1,14 +1,16 @@
 (function () {
     var CONTENT_KEY = '420da6f85b5cc903b347de9e33';
     var API_BASE = '/ghost/api/content';
-    var JSON_PATH = '/assets/data/related-posts.json';
-
     // Get current post slug from URL
     var slug = window.location.pathname.replace(/^\/+|\/+$/g, '').split('/').pop();
     if (!slug) return;
 
     var container = document.querySelector('.preview-section .post-cols');
     if (!container) return;
+
+    // Read JSON URL from data attribute (cache-busted by Ghost's {{asset}})
+    var section = document.querySelector('.preview-section[data-json]');
+    var JSON_PATH = section ? section.getAttribute('data-json') : '/assets/data/related-posts.json';
 
     fetch(JSON_PATH)
         .then(function (r) { return r.json(); })

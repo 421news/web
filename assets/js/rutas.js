@@ -1,11 +1,14 @@
 (function () {
     var CONTENT_KEY = '420da6f85b5cc903b347de9e33';
     var API_BASE = '/ghost/api/content';
-    var JSON_PATH = '/assets/data/rutas.json';
 
     var rutasContainer = document.getElementById('rutas-container');
     var canonContainer = document.getElementById('canon-container');
     if (!rutasContainer && !canonContainer) return;
+
+    // Read JSON URL from data attribute (cache-busted by Ghost's {{asset}})
+    var container = rutasContainer || canonContainer;
+    var JSON_PATH = container.getAttribute('data-json') || '/assets/data/rutas.json';
 
     // Detect language from URL
     var isEN = window.location.pathname.indexOf('/en/') === 0;
