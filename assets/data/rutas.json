@@ -134,24 +134,76 @@
   ],
   "canon": [
     {
-      "slug": "lo-que-aprendi-leyendo-4chan-pol",
-      "razon": "El texto fundacional de 421. Inmersion investigativa en el underground digital que definio el tono editorial del sitio."
+      "slug": "soberania-cognitiva-introduccion-autonomia-psiquica",
+      "razon": "El manifiesto de 421 sobre autonomia. Donde tecnologia, filosofia y vida real convergen en una sola idea."
     },
     {
-      "slug": "byung-chul-han-juan-ruocco",
-      "razon": "Filosofia aplicada a la vida cotidiana. El formato que 421 hace mejor: traducir pensadores complejos a lenguaje real."
+      "slug": "low-tech-high-life-cottagecore-cyberpunk",
+      "razon": "El reverso del cyberpunk: evaluar costos y beneficios de cada tecnologia como acto de soberania."
     },
     {
-      "slug": "la-anomalia-milei",
-      "razon": "Analisis politico antes de que fuera obvio. Demuestra la capacidad de anticipacion editorial de 421."
+      "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
+      "razon": "Manifiesto practico de soberania digital. Filosofia convertida en tutorial."
     },
     {
-      "slug": "memes-y-magnicidio",
-      "razon": "La interseccion entre cultura digital y violencia politica. Periodismo cultural en su forma mas necesaria."
+      "slug": "nick-land-aceleracionismo",
+      "razon": "Pensamiento peligroso explicado sin miedo. El tipo de texto que no encontras en otros medios en espanol."
     },
     {
-      "slug": "lo-que-aprendi-siendo-evangelico",
-      "razon": "Cronica personal con alcance sociologico. El mejor ejemplo del registro autobiografico de 421."
+      "slug": "volverse-ingobernable-peter-sloterdijk",
+      "razon": "Filosofia como herramienta de resistencia. El tono combativo y accesible que define a 421."
+    },
+    {
+      "slug": "metajuego-que-es",
+      "razon": "Del tablero a la vida real. Un concepto del gaming aplicado como herramienta de pensamiento."
+    },
+    {
+      "slug": "la-ley-secreta-de-las-coincidencias",
+      "razon": "La voluntad como juego probabilistico. Cuanto mas accionas, mas nodos posibilitas a futuro."
+    },
+    {
+      "slug": "ingenieria-inversa-a-la-mierdificacion-de-internet",
+      "razon": "Reversear como modo de resistencia. Doctorow, Hypponen y el combate contra la degradacion tecnologica."
+    },
+    {
+      "slug": "elogio-computadoras-escritorio",
+      "razon": "Modular, personalizable, actualizable. Un elogio a la PC como artefacto de libertad."
+    },
+    {
+      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
+      "razon": "El texto mas practico y mas punk de 421. Soberania digital para todos los dias."
+    },
+    {
+      "slug": "psicopatas-vs-esquizos-guerra-silenciosa",
+      "razon": "Un mapa simbolico de dos formas de ser anidadas en los sistemas de sentido. Diagnostico cultural en clave filosofica."
+    },
+    {
+      "slug": "pepe-meme-positive-feedback-loop",
+      "razon": "El meme como fenomeno cultural completo. Investigacion profunda sobre como una rana de internet moldeo la politica global."
+    },
+    {
+      "slug": "hauntologia-internet-ruinas-digitales",
+      "razon": "Las huellas que nunca se borran del todo. Arqueologia de los rincones fantasmas de la red."
+    },
+    {
+      "slug": "lecturas-politicas-sobre-lovecraft",
+      "razon": "Yarvin, Houellebecq, Land, Fisher: cuatro lecturas politicas cruzadas sobre un autor de horror cosmico."
+    },
+    {
+      "slug": "alan-moore-comic-magia-anarquia",
+      "razon": "El Magus de Northampton: comics, ocultismo y anarquismo. Un repaso profundo por la carrera del autor mas influyente del medio."
+    },
+    {
+      "slug": "san-jorge-santo-matadragones",
+      "razon": "Quien fue San Jorge y que significa la leyenda del dragon. De la Edad Media hasta hoy."
+    },
+    {
+      "slug": "argentum-online",
+      "razon": "A veinticinco anos, sigue rompiendo records. Logica comunitaria e independiente desde la periferia argentina."
+    },
+    {
+      "slug": "luis-cannobio-capitan-thule-warhammer",
+      "razon": "El heroe de metal argentino. Como un tipo de Villa Recondo cambio la historia del coleccionismo y la nerdencia nacional."
     },
     {
       "slug": "en-el-principio-fue-el-canon",
@@ -162,76 +214,24 @@
       "razon": "Critica cultural en su maxima expresion. Hablar de anime es hablar de politica, urbanismo y futuro."
     },
     {
-      "slug": "volverse-ingobernable-peter-sloterdijk",
-      "razon": "Filosofia como herramienta de resistencia. El tono combativo y accesible que define a 421."
-    },
-    {
-      "slug": "nick-land-aceleracionismo",
-      "razon": "Pensamiento peligroso explicado sin miedo. El tipo de texto que no encontras en otros medios en espanol."
-    },
-    {
-      "slug": "soberania-cognitiva-introduccion-autonomia-psiquica",
-      "razon": "El manifiesto de 421 sobre autonomia. Donde tecnologia, filosofia y vida real convergen."
-    },
-    {
-      "slug": "pepe-meme-positive-feedback-loop",
-      "razon": "El meme como fenomeno cultural completo. Investigacion profunda sobre como una rana de internet moldeo la politica global."
-    },
-    {
-      "slug": "tecnomagia-para-la-vida-real",
-      "razon": "Donde la tecnologia se cruza con lo esoterico. El texto mas inclasificable y mas 421 de todos."
-    },
-    {
-      "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
-      "razon": "Manifiesto practico de soberania digital. Filosofia convertida en tutorial."
-    },
-    {
-      "slug": "derecho-constitucional-en-star-wars",
-      "razon": "El ejemplo perfecto de cultura pop como teoria: usar Star Wars para ensenar derecho constitucional."
-    },
-    {
-      "slug": "lecturas-politicas-sobre-lovecraft",
-      "razon": "Yarvin, Houellebecq, Land, Fisher: cuatro lecturas politicas cruzadas sobre un autor de horror cosmico."
-    },
-    {
-      "slug": "deny-defend-depose-luigi-mangione-autodeterminacion-radical",
-      "razon": "Analisis cultural en tiempo real. 421 como medio que procesa la actualidad con profundidad filosofica."
-    },
-    {
-      "slug": "economia-videojuego-fallout",
-      "razon": "Economia explicada a traves de un videojuego. Demostracion de que se puede aprender de cualquier medio."
+      "slug": "como-hacer-fanzines-para-que-sirven",
+      "razon": "De la idea a la version final. Guia paso a paso de estas publicaciones transmisoras de cultura."
     },
     {
       "slug": "magic-the-gathering-juego-social",
       "razon": "Antropologia de los juegos de mesa. Un texto que convierte una partida de cartas en teoria social."
     },
     {
-      "slug": "crash-ballard-cronenberg",
-      "razon": "Maquinas, sexo y muerte. Analisis que conecta literatura, cine y filosofia en un solo movimiento."
+      "slug": "warhammer-40k-introduccion-wargames",
+      "razon": "Juego, lore y hobby en el wargame por excelencia. La puerta de entrada a un universo inagotable."
     },
     {
-      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
-      "razon": "El texto mas practico y mas punk de 421. Soberania digital para todos los dias."
+      "slug": "dungeons-dragons-historia-y-legado-lis",
+      "razon": "Como se creo el juego de rol mas trascendente de todos. Historia esencial desde la Caja Blanca hasta hoy."
     },
     {
-      "slug": "como-hacer-milanesas-caseras",
-      "razon": "421 puede hablar de Nick Land y de milanesas en la misma semana. Esa es la gracia."
-    },
-    {
-      "slug": "1998-videojuegos-musica-cine",
-      "razon": "Nostalgia convertida en ensayo cultural. Un viaje por el ultimo gran ano del siglo XX."
-    },
-    {
-      "slug": "la-caida-de-4chan",
-      "razon": "La contracara del texto fundacional. De la inmersion a la autopsia de un espacio que ya no es lo que era."
-    },
-    {
-      "slug": "la-historia-del-parque-rivadavia",
-      "razon": "Historia local con resonancia universal. Un parque de Buenos Aires como microcosmos de la cultura de nicho."
-    },
-    {
-      "slug": "metajuego-que-es",
-      "razon": "Del tablero a la vida real. Un concepto del gaming aplicado como herramienta de pensamiento."
+      "slug": "entrevista-luciano-lamberti-cuentos",
+      "razon": "Una charla sobre las motivaciones y condiciones de la escritura. Spoiler: vas a necesitar mucho tiempo a solas."
     }
   ],
   "rutas_en": [
@@ -369,24 +369,76 @@
   ],
   "canon_en": [
     {
-      "slug": "lo-que-aprendi-leyendo-4chan-pol",
-      "razon": "The founding text of 421. Investigative immersion into the digital underground that defined the site's editorial tone."
+      "slug": "soberania-cognitiva-introduccion-autonomia-psiquica",
+      "razon": "421's manifesto on autonomy. Where technology, philosophy, and real life converge into a single idea."
     },
     {
-      "slug": "byung-chul-han-juan-ruocco",
-      "razon": "Philosophy applied to everyday life. The format 421 does best: translating complex thinkers into real language."
+      "slug": "low-tech-high-life-cottagecore-cyberpunk",
+      "razon": "The reverse side of cyberpunk: evaluating the costs and benefits of each technology as an act of sovereignty."
     },
     {
-      "slug": "la-anomalia-milei",
-      "razon": "Political analysis before it was obvious. Demonstrates 421's capacity for editorial anticipation."
+      "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
+      "razon": "A practical manifesto for digital sovereignty. Philosophy turned into a tutorial."
     },
     {
-      "slug": "memes-y-magnicidio",
-      "razon": "The intersection of digital culture and political violence. Cultural journalism in its most necessary form."
+      "slug": "nick-land-aceleracionismo",
+      "razon": "Dangerous thinking explained without fear. The kind of text you won't find in other Spanish-language media."
     },
     {
-      "slug": "lo-que-aprendi-siendo-evangelico",
-      "razon": "Personal chronicle with sociological reach. The best example of 421's autobiographical register."
+      "slug": "volverse-ingobernable-peter-sloterdijk",
+      "razon": "Philosophy as a tool of resistance. The combative yet accessible tone that defines 421."
+    },
+    {
+      "slug": "metajuego-que-es",
+      "razon": "From the board to real life. A gaming concept applied as a thinking tool."
+    },
+    {
+      "slug": "la-ley-secreta-de-las-coincidencias",
+      "razon": "Willpower as a probabilistic game. The more you act, the more nodes you enable for the future."
+    },
+    {
+      "slug": "ingenieria-inversa-a-la-mierdificacion-de-internet",
+      "razon": "Reverse engineering as a mode of resistance. Doctorow, Hypponen, and the fight against technological decay."
+    },
+    {
+      "slug": "elogio-computadoras-escritorio",
+      "razon": "Modular, customizable, upgradeable. A love letter to the desktop PC as an artifact of freedom."
+    },
+    {
+      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
+      "razon": "421's most practical and most punk text. Digital sovereignty for every day."
+    },
+    {
+      "slug": "psicopatas-vs-esquizos-guerra-silenciosa",
+      "razon": "A symbolic map of two ways of being nested within systems of meaning. Cultural diagnosis in a philosophical key."
+    },
+    {
+      "slug": "pepe-meme-positive-feedback-loop",
+      "razon": "The meme as a complete cultural phenomenon. Deep research on how an internet frog shaped global politics."
+    },
+    {
+      "slug": "hauntologia-internet-ruinas-digitales",
+      "razon": "The traces that never fully disappear. Archaeology of the internet's ghost corners."
+    },
+    {
+      "slug": "lecturas-politicas-sobre-lovecraft",
+      "razon": "Yarvin, Houellebecq, Land, Fisher: four intersecting political readings of a cosmic horror author."
+    },
+    {
+      "slug": "alan-moore-comic-magia-anarquia",
+      "razon": "The Magus of Northampton: comics, occultism, and anarchism. A deep dive into the most influential author in the medium."
+    },
+    {
+      "slug": "san-jorge-santo-matadragones",
+      "razon": "Who was Saint George and what does the dragon legend mean. From the Middle Ages to the present."
+    },
+    {
+      "slug": "argentum-online",
+      "razon": "Twenty-five years later, still breaking records. Community-driven and independent logic from the Argentine periphery."
+    },
+    {
+      "slug": "luis-cannobio-capitan-thule-warhammer",
+      "razon": "Argentina's metal hero. How a man from Villa Recondo changed the history of collecting and national nerd culture."
     },
     {
       "slug": "en-el-principio-fue-el-canon",
@@ -397,76 +449,24 @@
       "razon": "Cultural criticism at its finest. Talking about anime means talking about politics, urbanism, and the future."
     },
     {
-      "slug": "volverse-ingobernable-peter-sloterdijk",
-      "razon": "Philosophy as a tool of resistance. The combative yet accessible tone that defines 421."
-    },
-    {
-      "slug": "nick-land-aceleracionismo",
-      "razon": "Dangerous thinking explained without fear. The kind of text you won't find in other Spanish-language media."
-    },
-    {
-      "slug": "soberania-cognitiva-introduccion-autonomia-psiquica",
-      "razon": "421's manifesto on autonomy. Where technology, philosophy, and real life converge."
-    },
-    {
-      "slug": "pepe-meme-positive-feedback-loop",
-      "razon": "The meme as a complete cultural phenomenon. Deep research on how an internet frog shaped global politics."
-    },
-    {
-      "slug": "tecnomagia-para-la-vida-real",
-      "razon": "Where technology meets the esoteric. The most unclassifiable and most 421 text of them all."
-    },
-    {
-      "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
-      "razon": "A practical manifesto for digital sovereignty. Philosophy turned into a tutorial."
-    },
-    {
-      "slug": "derecho-constitucional-en-star-wars",
-      "razon": "The perfect example of pop culture as theory: using Star Wars to teach constitutional law."
-    },
-    {
-      "slug": "lecturas-politicas-sobre-lovecraft",
-      "razon": "Yarvin, Houellebecq, Land, Fisher: four intersecting political readings of a cosmic horror author."
-    },
-    {
-      "slug": "deny-defend-depose-luigi-mangione-autodeterminacion-radical",
-      "razon": "Real-time cultural analysis. 421 as a medium that processes current events with philosophical depth."
-    },
-    {
-      "slug": "economia-videojuego-fallout",
-      "razon": "Economics explained through a video game. Proof that you can learn from any medium."
+      "slug": "como-hacer-fanzines-para-que-sirven",
+      "razon": "From idea to final version. A step-by-step guide to these culture-transmitting publications."
     },
     {
       "slug": "magic-the-gathering-juego-social",
       "razon": "Anthropology of board games. A text that turns a card game into social theory."
     },
     {
-      "slug": "crash-ballard-cronenberg",
-      "razon": "Machines, sex, and death. An analysis connecting literature, cinema, and philosophy in a single move."
+      "slug": "warhammer-40k-introduccion-wargames",
+      "razon": "Game, lore, and hobby in the quintessential wargame. The gateway to an inexhaustible universe."
     },
     {
-      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
-      "razon": "421's most practical and most punk text. Digital sovereignty for every day."
+      "slug": "dungeons-dragons-historia-y-legado-lis",
+      "razon": "How the most transcendent role-playing game was created. Essential history from the White Box to the present."
     },
     {
-      "slug": "como-hacer-milanesas-caseras",
-      "razon": "421 can talk about Nick Land and milanesas in the same week. That's the whole point."
-    },
-    {
-      "slug": "1998-videojuegos-musica-cine",
-      "razon": "Nostalgia turned into cultural essay. A journey through the last great year of the 20th century."
-    },
-    {
-      "slug": "la-caida-de-4chan",
-      "razon": "The counterpart to the founding text. From immersion to the autopsy of a space that is no longer what it was."
-    },
-    {
-      "slug": "la-historia-del-parque-rivadavia",
-      "razon": "Local history with universal resonance. A Buenos Aires park as a microcosm of niche culture."
-    },
-    {
-      "slug": "metajuego-que-es",
-      "razon": "From the board to real life. A gaming concept applied as a thinking tool."
+      "slug": "entrevista-luciano-lamberti-cuentos",
+      "razon": "A conversation about the motivations and conditions of writing. Spoiler: you'll need a lot of time alone."
     }
   ]
 }
