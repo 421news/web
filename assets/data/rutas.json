@@ -2,18 +2,14 @@
   "rutas": [
     {
       "id": "autonomia-digital",
-      "nombre": "Autonomia digital",
-      "tesis": "Las herramientas que usas definen los limites de tu libertad.",
+      "nombre": "Autonomía digital",
+      "tesis": "Las herramientas que usás definen los límites de tu libertad.",
       "slugs": [
         "guia-cyberciruja-para-la-autodeterminacion-digital",
         "soberania-cognitiva-introduccion-autonomia-psiquica",
         "tecnomagia-para-la-vida-real",
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "anonimato-en-internet",
-        "pop-os-linux",
-        "telefonos-android-sin-google",
-        "brave-navegador-web",
-        "urbit-privacidad-digital-curtis-yarvin",
         "low-tech-high-life-cottagecore-cyberpunk",
         "que-es-small-web-como-funciona",
         "elogio-computadoras-escritorio"
@@ -21,19 +17,15 @@
     },
     {
       "id": "cultura-pop-como-teoria",
-      "nombre": "Cultura pop como teoria",
-      "tesis": "Star Wars ensena derecho constitucional. Fallout ensena economia. La cultura popular no es baja cultura: es el lenguaje comun mas potente que tenemos.",
+      "nombre": "Cultura pop como teoría",
+      "tesis": "Star Wars enseña derecho constitucional. Fallout enseña economía. La cultura popular no es baja cultura: es el lenguaje común más potente que tenemos.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
         "economia-videojuego-fallout",
         "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
-        "la-voz-de-los-muertos-hauntologia",
-        "moda-estetica-en-la-politica",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "la-trampa-de-la-cultura-joven",
-        "la-estetica-brutalista-arquitectura-diseno-ux",
         "grant-morrison",
         "alan-moore-comic-magia-anarquia"
       ]
@@ -41,63 +33,51 @@
     {
       "id": "argentina-como-laboratorio",
       "nombre": "Argentina como laboratorio",
-      "tesis": "Argentina como caso de estudio permanente: crisis como metodo, periferia como ventaja, improvisacion como sistema.",
+      "tesis": "Argentina como caso de estudio permanente: crisis como método, periferia como ventaja, improvisación como sistema.",
       "slugs": [
         "la-anomalia-milei",
         "la-historia-del-parque-rivadavia",
-        "parque-rivadavia-desalojo-manteros-feriantes-coleccionistas",
         "dinosaurios-descubiertos-en-argentina-1",
-        "dinosaurios-descubiertos-en-argentina-2",
         "de-donde-venimos-los-argentinos",
-        "cannabis-medicinal-reprocann-milei-bullrich",
         "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
-        "ufologia-argentina-casos-ovni",
         "milei-libra-y-el-criptobardo-de-la-estafa",
         "frontera-argentina-paraguay"
       ]
     },
     {
       "id": "filosofia-para-la-vida-real",
-      "nombre": "Filosofia para la vida real",
+      "nombre": "Filosofía para la vida real",
       "tesis": "Sloterdijk, Byung-Chul Han, Nick Land: pensadores que sirven para vivir, no solo para citar.",
       "slugs": [
         "byung-chul-han-juan-ruocco",
-        "byung-chul-han-psicopolitica",
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "teleoplexia-nick-land",
         "glosario-de-filosofia-de-la-tecnica",
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
-        "do-language-models-dream-of-electric-sheep",
-        "quinto-eon-peter-carroll",
         "tecnomagia-para-la-vida-real",
-        "psicopatas-vs-esquizos-guerra-silenciosa",
-        "davey-wreden-the-stanley-parable"
+        "psicopatas-vs-esquizos-guerra-silenciosa"
       ]
     },
     {
       "id": "canon-del-entretenimiento",
       "nombre": "El canon del entretenimiento",
-      "tesis": "Las obras que definieron generos enteros. Guias de lectura, retrospectivas y analisis que van mas alla de la resena.",
+      "tesis": "Las obras que definieron géneros enteros. Guías de lectura, retrospectivas y análisis que van más allá de la reseña.",
       "slugs": [
         "akira-1988",
         "blade-runner-1982-ridley-scott",
         "ghost-in-the-shell-1995",
-        "the-terminator-1984",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "animatrix-2003",
-        "jurassic-park-1993",
         "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "guia-de-lectura-katsuhiro-otomo",
         "en-el-principio-fue-el-canon"
       ]
     },
     {
       "id": "internet-no-murio",
-      "nombre": "Internet no murio",
+      "nombre": "Internet no murió",
       "tesis": "4chan, memes, Pepe, Milady: la internet underground sigue viva y sigue moldeando la realidad.",
       "slugs": [
         "lo-que-aprendi-leyendo-4chan-pol",
@@ -107,51 +87,45 @@
         "memes-y-magnicidio",
         "etnosoldados-internet-memes-manifiestos",
         "puede-hacer-memes-la-izquierda",
-        "gaturro-vs-pijurro",
-        "immunity-dog",
-        "death-by-saturation",
         "epstein-4chan-reddit"
       ]
     },
     {
       "id": "hazlo-tu-mismo",
-      "nombre": "Hazlo tu mismo",
-      "tesis": "Pan, milanesas, fanzines, videojuegos, wargames: todo lo que podes hacer con tus propias manos.",
+      "nombre": "Hazlo tú mismo",
+      "tesis": "Pan, milanesas, fanzines, videojuegos, wargames: todo lo que podés hacer con tus propias manos.",
       "slugs": [
         "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
         "guia-cultivo-exterior-marihuana",
-        "tutorial-expres-para-cosechar-cannabis",
         "como-hacer-fanzines-para-que-sirven",
         "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "warhammer-40k-introduccion-wargames",
         "como-hacer-un-juego-de-mesa",
-        "guia-low-cost-para-tener-porro-todo-el-ano",
-        "introduccion-al-mundo-de-los-drones-fpv",
-        "hernan-panessi-como-ser-periodista-freelance"
+        "introduccion-al-mundo-de-los-drones-fpv"
       ]
     }
   ],
   "canon": [
     {
       "slug": "soberania-cognitiva-introduccion-autonomia-psiquica",
-      "razon": "El manifiesto de 421 sobre autonomia. Donde tecnologia, filosofia y vida real convergen en una sola idea."
+      "razon": "El manifiesto de 421 sobre autonomía. Donde tecnología, filosofía y vida real convergen en una sola idea."
     },
     {
       "slug": "low-tech-high-life-cottagecore-cyberpunk",
-      "razon": "El reverso del cyberpunk: evaluar costos y beneficios de cada tecnologia como acto de soberania."
+      "razon": "El reverso del cyberpunk: evaluar costos y beneficios de cada tecnología como acto de soberanía."
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
-      "razon": "Manifiesto practico de soberania digital. Filosofia convertida en tutorial."
+      "razon": "Manifiesto práctico de soberanía digital. Filosofía convertida en tutorial."
     },
     {
       "slug": "nick-land-aceleracionismo",
-      "razon": "Pensamiento peligroso explicado sin miedo. El tipo de texto que no encontras en otros medios en espanol."
+      "razon": "Pensamiento peligroso explicado sin miedo. El tipo de texto que no encontrás en otros medios en español."
     },
     {
       "slug": "volverse-ingobernable-peter-sloterdijk",
-      "razon": "Filosofia como herramienta de resistencia. El tono combativo y accesible que define a 421."
+      "razon": "Filosofía como herramienta de resistencia. El tono combativo y accesible que define a 421."
     },
     {
       "slug": "metajuego-que-es",
@@ -159,11 +133,11 @@
     },
     {
       "slug": "la-ley-secreta-de-las-coincidencias",
-      "razon": "La voluntad como juego probabilistico. Cuanto mas accionas, mas nodos posibilitas a futuro."
+      "razon": "La voluntad como juego probabilístico. Cuanto más accionás, más nodos posibilitás a futuro."
     },
     {
       "slug": "ingenieria-inversa-a-la-mierdificacion-de-internet",
-      "razon": "Reversear como modo de resistencia. Doctorow, Hypponen y el combate contra la degradacion tecnologica."
+      "razon": "Reversear como modo de resistencia. Doctorow, Hypponen y el combate contra la degradación tecnológica."
     },
     {
       "slug": "elogio-computadoras-escritorio",
@@ -171,55 +145,55 @@
     },
     {
       "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
-      "razon": "El texto mas practico y mas punk de 421. Soberania digital para todos los dias."
+      "razon": "El texto más práctico y más punk de 421. Soberanía digital para todos los días."
     },
     {
       "slug": "psicopatas-vs-esquizos-guerra-silenciosa",
-      "razon": "Un mapa simbolico de dos formas de ser anidadas en los sistemas de sentido. Diagnostico cultural en clave filosofica."
+      "razon": "Un mapa simbólico de dos formas de ser anidadas en los sistemas de sentido. Diagnóstico cultural en clave filosófica."
     },
     {
       "slug": "pepe-meme-positive-feedback-loop",
-      "razon": "El meme como fenomeno cultural completo. Investigacion profunda sobre como una rana de internet moldeo la politica global."
+      "razon": "El meme como fenómeno cultural completo. Investigación profunda sobre cómo una rana de internet moldeó la política global."
     },
     {
       "slug": "hauntologia-internet-ruinas-digitales",
-      "razon": "Las huellas que nunca se borran del todo. Arqueologia de los rincones fantasmas de la red."
+      "razon": "Las huellas que nunca se borran del todo. Arqueología de los rincones fantasmas de la red."
     },
     {
       "slug": "lecturas-politicas-sobre-lovecraft",
-      "razon": "Yarvin, Houellebecq, Land, Fisher: cuatro lecturas politicas cruzadas sobre un autor de horror cosmico."
+      "razon": "Yarvin, Houellebecq, Land, Fisher: cuatro lecturas políticas cruzadas sobre un autor de horror cósmico."
     },
     {
       "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "El Magus de Northampton: comics, ocultismo y anarquismo. Un repaso profundo por la carrera del autor mas influyente del medio."
+      "razon": "El Magus de Northampton: cómics, ocultismo y anarquismo. Un repaso profundo por la carrera del autor más influyente del medio."
     },
     {
       "slug": "san-jorge-santo-matadragones",
-      "razon": "Quien fue San Jorge y que significa la leyenda del dragon. De la Edad Media hasta hoy."
+      "razon": "Quién fue San Jorge y qué significa la leyenda del dragón. De la Edad Media hasta hoy."
     },
     {
       "slug": "argentum-online",
-      "razon": "A veinticinco anos, sigue rompiendo records. Logica comunitaria e independiente desde la periferia argentina."
+      "razon": "A veinticinco años, sigue rompiendo récords. Lógica comunitaria e independiente desde la periferia argentina."
     },
     {
       "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "El heroe de metal argentino. Como un tipo de Villa Recondo cambio la historia del coleccionismo y la nerdencia nacional."
+      "razon": "El héroe de metal argentino. Cómo un tipo de Villa Recondo cambió la historia del coleccionismo y la nerdencia nacional."
     },
     {
       "slug": "en-el-principio-fue-el-canon",
-      "razon": "Meta-texto sobre por que importan los canones. El texto que justifica esta misma pagina."
+      "razon": "Meta-texto sobre por qué importan los cánones. El texto que justifica esta misma página."
     },
     {
       "slug": "akira-1988",
-      "razon": "Critica cultural en su maxima expresion. Hablar de anime es hablar de politica, urbanismo y futuro."
+      "razon": "Crítica cultural en su máxima expresión. Hablar de anime es hablar de política, urbanismo y futuro."
     },
     {
       "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "De la idea a la version final. Guia paso a paso de estas publicaciones transmisoras de cultura."
+      "razon": "De la idea a la versión final. Guía paso a paso de estas publicaciones transmisoras de cultura."
     },
     {
       "slug": "magic-the-gathering-juego-social",
-      "razon": "Antropologia de los juegos de mesa. Un texto que convierte una partida de cartas en teoria social."
+      "razon": "Antropología de los juegos de mesa. Un texto que convierte una partida de cartas en teoría social."
     },
     {
       "slug": "warhammer-40k-introduccion-wargames",
@@ -227,7 +201,7 @@
     },
     {
       "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "Como se creo el juego de rol mas trascendente de todos. Historia esencial desde la Caja Blanca hasta hoy."
+      "razon": "Cómo se creó el juego de rol más trascendente de todos. Historia esencial desde la Caja Blanca hasta hoy."
     },
     {
       "slug": "entrevista-luciano-lamberti-cuentos",
@@ -245,10 +219,6 @@
         "tecnomagia-para-la-vida-real",
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "anonimato-en-internet",
-        "pop-os-linux",
-        "telefonos-android-sin-google",
-        "brave-navegador-web",
-        "urbit-privacidad-digital-curtis-yarvin",
         "low-tech-high-life-cottagecore-cyberpunk",
         "que-es-small-web-como-funciona",
         "elogio-computadoras-escritorio"
@@ -264,11 +234,7 @@
         "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
-        "la-voz-de-los-muertos-hauntologia",
-        "moda-estetica-en-la-politica",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "la-trampa-de-la-cultura-joven",
-        "la-estetica-brutalista-arquitectura-diseno-ux",
         "grant-morrison",
         "alan-moore-comic-magia-anarquia"
       ]
@@ -280,14 +246,10 @@
       "slugs": [
         "la-anomalia-milei",
         "la-historia-del-parque-rivadavia",
-        "parque-rivadavia-desalojo-manteros-feriantes-coleccionistas",
         "dinosaurios-descubiertos-en-argentina-1",
-        "dinosaurios-descubiertos-en-argentina-2",
         "de-donde-venimos-los-argentinos",
-        "cannabis-medicinal-reprocann-milei-bullrich",
         "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
-        "ufologia-argentina-casos-ovni",
         "milei-libra-y-el-criptobardo-de-la-estafa",
         "frontera-argentina-paraguay"
       ]
@@ -298,17 +260,13 @@
       "tesis": "Sloterdijk, Byung-Chul Han, Nick Land: thinkers who are useful for living, not just for quoting.",
       "slugs": [
         "byung-chul-han-juan-ruocco",
-        "byung-chul-han-psicopolitica",
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "teleoplexia-nick-land",
         "glosario-de-filosofia-de-la-tecnica",
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
-        "do-language-models-dream-of-electric-sheep",
-        "quinto-eon-peter-carroll",
         "tecnomagia-para-la-vida-real",
-        "psicopatas-vs-esquizos-guerra-silenciosa",
-        "davey-wreden-the-stanley-parable"
+        "psicopatas-vs-esquizos-guerra-silenciosa"
       ]
     },
     {
@@ -319,14 +277,10 @@
         "akira-1988",
         "blade-runner-1982-ridley-scott",
         "ghost-in-the-shell-1995",
-        "the-terminator-1984",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "animatrix-2003",
-        "jurassic-park-1993",
         "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "guia-de-lectura-katsuhiro-otomo",
         "en-el-principio-fue-el-canon"
       ]
     },
@@ -342,9 +296,6 @@
         "memes-y-magnicidio",
         "etnosoldados-internet-memes-manifiestos",
         "puede-hacer-memes-la-izquierda",
-        "gaturro-vs-pijurro",
-        "immunity-dog",
-        "death-by-saturation",
         "epstein-4chan-reddit"
       ]
     },
@@ -356,14 +307,11 @@
         "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
         "guia-cultivo-exterior-marihuana",
-        "tutorial-expres-para-cosechar-cannabis",
         "como-hacer-fanzines-para-que-sirven",
         "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "warhammer-40k-introduccion-wargames",
         "como-hacer-un-juego-de-mesa",
-        "guia-low-cost-para-tener-porro-todo-el-ano",
-        "introduccion-al-mundo-de-los-drones-fpv",
-        "hernan-panessi-como-ser-periodista-freelance"
+        "introduccion-al-mundo-de-los-drones-fpv"
       ]
     }
   ],

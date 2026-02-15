@@ -10,7 +10,7 @@
       <!-- Hero -->
       <div class="rutas-hero">
         <h1 class="rutas-hero-title">Rutas de lectura</h1>
-        <p class="rutas-hero-subtitle">350 textos es un archivo. 7 caminos curados son un mapa. Cada ruta es una secuencia de textos que construyen una idea. Elegi la que te llame y dejate llevar.</p>
+        <p class="rutas-hero-subtitle">350 textos es un archivo. 7 caminos curados son un mapa. Cada ruta es una secuencia de textos que construye una idea. Elegí la que te llame y dejate llevar.</p>
       </div>
       <hr class="rutas-gradient-divider">
 
@@ -28,7 +28,7 @@
   {{> "site-footer"}}
 </div>
 
-{{#get "posts" include="tags,authors" limit="12" filter="slug:[guia-cyberciruja-para-la-autodeterminacion-digital,soberania-cognitiva-introduccion-autonomia-psiquica,tecnomagia-para-la-vida-real,ingenieria-inversa-a-la-mierdificacion-de-internet,anonimato-en-internet,pop-os-linux,telefonos-android-sin-google,brave-navegador-web,urbit-privacidad-digital-curtis-yarvin,low-tech-high-life-cottagecore-cyberpunk,que-es-small-web-como-funciona,elogio-computadoras-escritorio]"}}
+{{#get "posts" include="tags,authors" limit="8" filter="slug:[guia-cyberciruja-para-la-autodeterminacion-digital,soberania-cognitiva-introduccion-autonomia-psiquica,tecnomagia-para-la-vida-real,ingenieria-inversa-a-la-mierdificacion-de-internet,anonimato-en-internet,low-tech-high-life-cottagecore-cyberpunk,que-es-small-web-como-funciona,elogio-computadoras-escritorio]"}}
 <div id="first-posts-data" style="display:none">{{#foreach posts}}<div data-slug="{{slug}}" data-url="{{url}}" data-title="{{title}}" data-img="{{feature_image}}" data-tag="{{#if primary_tag}}{{primary_tag.name}}{{/if}}" data-tag-img="{{#if primary_tag}}{{primary_tag.feature_image}}{{/if}}" data-author="{{#if primary_author}}{{primary_author.name}}{{/if}}" data-date="{{published_at}}"></div>{{/foreach}}</div>
 {{/get}}
 
