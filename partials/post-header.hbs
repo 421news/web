@@ -5,7 +5,7 @@
         <div class="hl-post_meta">
           <div class="plain-tags">
             {{#foreach tags}}
-              <a href="/tag/{{slug}}">{{name}}</a>{{#unless @last}}, {{/unless}}
+              <a href="{{#if ../lang}}/en{{else}}/es{{/if}}/tag/{{slug}}">{{name}}</a>{{#unless @last}}, {{/unless}}
             {{/foreach}}
           </div>
           <h1 class="flashy-h1 no-highlight">{{title}}</h1>

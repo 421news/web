@@ -14,7 +14,7 @@
 
   // Don't initialize on suscribite/subscribe pages
   var path = window.location.pathname;
-  if (path === '/suscribite' || path === '/suscribite/' ||
+  if (path === '/es/suscribite' || path === '/es/suscribite/' ||
       path === '/en/subscribe' || path === '/en/subscribe/') {
     return;
   }
@@ -167,7 +167,7 @@
     var contentArea = clone.querySelector('.fb-content');
     var pathbar = clone.querySelector('.fb-pathbar');
     var titleEl = clone.querySelector('.fb-titlebar-title');
-    var homeBase = isEnglish ? '/en/' : '/';
+    var homeBase = isEnglish ? '/en/' : '/es/';
 
     // Save original home content
     var homeHTML = contentArea ? contentArea.innerHTML : '';
@@ -364,7 +364,7 @@
           var excerpt = stripHtml(post.html || '').substring(0, 800);
           if ((post.html || '').length > 800) excerpt += '...';
           html += '<div class="wm-post-excerpt">' + escapeHtml(excerpt) + '</div>';
-          var postUrl = isEnglish ? '/en/' + post.slug + '/' : '/' + post.slug + '/';
+          var postUrl = isEnglish ? '/en/' + post.slug + '/' : '/es/' + post.slug + '/';
           html += '<a href="' + postUrl + '" class="wm-post-link">' +
             (isEnglish ? 'Read full &rarr;' : 'Leer completo &rarr;') + '</a>';
           html += '</div>';
@@ -435,7 +435,7 @@
       var href = item.getAttribute('href');
       if (!href) return;
       var tagMatch = href.match(/\/tag\/([^\/]+)/);
-      var isHome = (href === '/' || href === '/en/');
+      var isHome = (href === '/es/' || href === '/en/');
       if (!tagMatch && !isHome) return; // suscribite/revista navigate normally
       var newItem = item.cloneNode(true);
       item.parentNode.replaceChild(newItem, item);

@@ -285,14 +285,14 @@ def generate_sitemap(pairs, unpaired_es, unpaired_en):
         '',
         '  <!-- Homepage -->',
         '  <url>',
-        f'    <loc>{SITE_URL}/</loc>',
-        f'    <xhtml:link rel="alternate" hreflang="es" href="{SITE_URL}/" />',
+        f'    <loc>{SITE_URL}/es/</loc>',
+        f'    <xhtml:link rel="alternate" hreflang="es" href="{SITE_URL}/es/" />',
         f'    <xhtml:link rel="alternate" hreflang="en" href="{SITE_URL}/en/" />',
         f'    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/" />',
         '  </url>',
         '  <url>',
         f'    <loc>{SITE_URL}/en/</loc>',
-        f'    <xhtml:link rel="alternate" hreflang="es" href="{SITE_URL}/" />',
+        f'    <xhtml:link rel="alternate" hreflang="es" href="{SITE_URL}/es/" />',
         f'    <xhtml:link rel="alternate" hreflang="en" href="{SITE_URL}/en/" />',
         f'    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/" />',
         '  </url>',
@@ -303,7 +303,7 @@ def generate_sitemap(pairs, unpaired_es, unpaired_en):
     if pairs:
         lines.append('  <!-- Bilingual post pairs -->')
     for es_p, en_p in pairs:
-        es_url = f'{SITE_URL}/{es_p["slug"]}/'
+        es_url = f'{SITE_URL}/es/{es_p["slug"]}/'
         en_url = f'{SITE_URL}/en/{en_p["slug"]}/'
         lines.extend([
             '  <url>',
@@ -323,7 +323,7 @@ def generate_sitemap(pairs, unpaired_es, unpaired_en):
         lines.append('')
         lines.append('  <!-- Spanish-only posts -->')
     for p in unpaired_es:
-        url = f'{SITE_URL}/{p["slug"]}/'
+        url = f'{SITE_URL}/es/{p["slug"]}/'
         lines.extend([
             '  <url>',
             f'    <loc>{url}</loc>',
