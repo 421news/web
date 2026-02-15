@@ -71,21 +71,18 @@ body.light-mode .site-header {
     font-family: 'Nunito Sans', sans-serif;
     font-size: 17px;
     font-weight: 600;
-    opacity: 0.75;
-    transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
     padding: 6px 10px;
     border-radius: 6px;
 }
 
 .nav-link:hover {
-    opacity: 1;
     background-color: var(--amarillo);
     color: var(--negro);
 }
 
 .nav-link.is-active {
-    opacity: 1;
     background-color: rgba(234, 230, 225, 0.08);
     position: relative;
 }
@@ -112,6 +109,76 @@ body.light-mode .nav-link:hover {
 
 body.light-mode .nav-link.is-active {
     background-color: rgba(18, 18, 18, 0.08);
+}
+
+/* --- Dropdown (Canon) --- */
+.nav-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    flex-direction: column;
+    background-color: var(--negro);
+    border: 1px solid rgba(234, 230, 225, 0.12);
+    border-radius: var(--radius);
+    padding: 4px 0;
+    min-width: 150px;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+    display: flex;
+}
+
+.nav-dropdown-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--crema);
+    text-decoration: none;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    opacity: 0.8;
+    transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.nav-dropdown-menu a:hover {
+    opacity: 1;
+    background-color: var(--amarillo);
+    color: var(--negro);
+}
+
+body.light-mode .nav-dropdown-menu {
+    background-color: var(--crema);
+    border-color: rgba(18, 18, 18, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .nav-dropdown-menu a {
+    color: var(--negro);
+}
+
+body.light-mode .nav-dropdown-menu a:hover {
+    background-color: var(--amarillo);
+    color: var(--negro);
+}
+
+/* --- Mobile sub-items (indented under Canon) --- */
+.nav-mobile-sub {
+    padding-left: 40px !important;
+    font-size: 14px !important;
+    opacity: 0.7;
+}
+
+body.light-mode .nav-mobile-sub {
+    opacity: 0.6;
 }
 
 /* --- Right side actions --- */
@@ -353,7 +420,7 @@ body.light-mode .nav-mobile a.is-active {
     font-style: italic;
     font-weight: 700;
     text-decoration: none;
-    color: white;
+    color: var(--crema);
     transition: transform 0.2s ease;
 }
 
