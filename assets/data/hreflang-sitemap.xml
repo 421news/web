@@ -448,6 +448,26 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/how-is-time-measured-timeless-living/" />
   </url>
   <url>
+    <loc>https://www.421.news/ciberdelitos-calle-online/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/ciberdelitos-calle-online/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/cybercrime/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/cybercrime/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/ciberdelitos-calle-online/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/cybercrime/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/adiccion-digital-maelstrom/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/adiccion-digital-maelstrom/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/digital-adiction-maelstrom-en/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/digital-adiction-maelstrom-en/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/adiccion-digital-maelstrom/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/digital-adiction-maelstrom-en/" />
+  </url>
+  <url>
     <loc>https://www.421.news/juegos-de-mesa-argentinos/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/juegos-de-mesa-argentinos/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/argentine-board-games/" />
@@ -2159,6 +2179,54 @@
   </url>
 
   <!-- English-only posts -->
+  <url>
+    <loc>https://www.421.news/en/pepe-the-infinite-feedback-loop/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/pepe-the-infinite-feedback-loop/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/akira-1988-en/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/akira-1988-en/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/reverse-engineering-the-enshittification-of-the-internet/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/reverse-engineering-the-enshittification-of-the-internet/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/dungeons-and-dragons-history-and-legacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/dungeons-and-dragons-history-and-legacy/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/cyberciruja-guide-digital-self-determination/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/cyberciruja-guide-digital-self-determination/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/you-already-pay-for-internet-dont-pay-for-the-rest/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/you-already-pay-for-internet-dont-pay-for-the-rest/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/how-to-make-fanzines-and-why-they-matter/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/how-to-make-fanzines-and-why-they-matter/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/warhammer-40k-introduction-to-wargames/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/warhammer-40k-introduction-to-wargames/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/luis-cannobio-captain-thule-warhammer/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/luis-cannobio-captain-thule-warhammer/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/magic-the-gathering-social-nature/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/magic-the-gathering-social-nature/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/in-the-beginning-was-the-canon/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/in-the-beginning-was-the-canon/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/in-praise-of-desktop-computers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/in-praise-of-desktop-computers/" />
+  </url>
   <url>
     <loc>https://www.421.news/en/nes-and-the-8-bit-consoles/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/nes-and-the-8-bit-consoles/" />
