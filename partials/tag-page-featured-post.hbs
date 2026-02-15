@@ -1,4 +1,4 @@
- {{#get "posts" include="tags,authors" limit="1" filter="tag:-'wiki'+(tag:{{slug}})+tag:{{#if languageFilter}}{{languageFilter}}{{else}}-'hash-en'{{/if}}" as |items|}}
+ {{#get "posts" include="tags,authors" limit="1" filter="tag:-'wiki'+(tag:{{slug}})+tag:{{languageFilter}}" as |items|}}
   <div class="w-dyn-list">
     {{#if items}}
       <div role="list" class="w-dyn-items">
