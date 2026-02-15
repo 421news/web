@@ -162,8 +162,8 @@ Posts are tagged with internal tags `#es` (slug: `hash-es`) or `#en` (slug: `has
 ### Language filtering in tag pages
 
 Tag page templates use 3 partials that filter by language via a `languageFilter` parameter:
-- `tag-page-featured-post.hbs` — defaults to `-'hash-en'` if `languageFilter` not passed (safe for ES)
-- `tag-page-highlighted-posts-es.hbs` — defaults to `-'hash-en'` if `languageFilter` not passed
+- `tag-page-featured-post.hbs` — `languageFilter` MUST be passed (no default — `{{#if}}` inside `{{#get}}` filter breaks Ghost's NQL parser)
+- `tag-page-highlighted-posts-es.hbs` — `languageFilter` MUST be passed (same reason)
 - `tag-page-highlighted-posts-en.hbs` — requires `languageFilter="'hash-en'"` explicitly
 - `last-posts-es-tag.hbs` / `last-posts-en-tag.hbs` — hardcoded language filter
 

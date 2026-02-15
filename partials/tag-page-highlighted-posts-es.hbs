@@ -8,7 +8,7 @@
             include="tags,authors"
             limit="4"
             order="published_at desc"
-            filter="primary_tag:{{tag}}+featured:true+tag:-'Wiki'+tag:{{#if languageFilter}}{{languageFilter}}{{else}}-'hash-en'{{/if}}"
+            filter="primary_tag:{{tag}}+featured:true+tag:-'Wiki'+tag:{{languageFilter}}"
             as |items|
         }}
             <div class="post-grid w-dyn-list">

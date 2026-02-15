@@ -1680,6 +1680,11 @@ footer {
   margin: 0;
 }
 
+#rutas-container,
+#canon-container {
+  min-height: 80vh;
+}
+
 /* Ruta sections */
 .ruta-section {
   padding: 3rem 0;
