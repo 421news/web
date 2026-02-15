@@ -16,9 +16,9 @@
         <div class="nav-dropdown">
           <a href="/en/canon" class="nav-link">Canon ▾</a>
           <div class="nav-dropdown-menu">
-            <a href="/revista-421">Magazine</a>
-            <a href="/pitcheale-a-421/">Pitch us</a>
-            <a href="/rss/">RSS</a>
+            <a href="/es/revista-421">Magazine</a>
+            <a href="/es/pitcheale-a-421/">Pitch us</a>
+            <a href="/en/rss/">RSS</a>
           </div>
         </div>
       </div>
@@ -29,9 +29,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
         <a
-          href="/"
+          href="/es/"
           class="nav-icon-btn"
-          onclick="localStorage.setItem('prefersSpanish', 'true');"
         >
           <img src='{{asset "images/usa-flag.svg"}}' alt="" class="nav-flag" />
           EN
@@ -50,9 +49,8 @@
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
         <a
-          href="/"
+          href="/es/"
           class="nav-icon-btn"
-          onclick="localStorage.setItem('prefersSpanish', 'true');"
         >
           <img src='{{asset "images/usa-flag.svg"}}' alt="" class="nav-flag" />
         </a>
@@ -80,8 +78,8 @@
     <a href="/en/tag/real-life">Real life</a>
     <a href="/en/routes">Routes</a>
     <a href="/en/canon">Canon</a>
-    <a href="/revista-421" class="nav-mobile-sub">Magazine</a>
-    <a href="/pitcheale-a-421/" class="nav-mobile-sub">Pitch us</a>
+    <a href="/es/revista-421" class="nav-mobile-sub">Magazine</a>
+    <a href="/es/pitcheale-a-421/" class="nav-mobile-sub">Pitch us</a>
     <a href="/en/subscribe/" class="nav-mobile-subscribe">Subscribe</a>
   </nav>
 </header>
@@ -121,25 +119,25 @@
     });
 
     // Smart language switch: go to ES equivalent of current page
-    var esUrl = '/';
+    var esUrl = '/es/';
     var esMeta = document.querySelector('meta[name="spanish-version"]');
     if (esMeta && esMeta.content) {
-      esUrl = '/' + esMeta.content + '/';
+      esUrl = '/es/' + esMeta.content + '/';
     } else {
       var langMap = {
-        '/en/': '/',
-        '/en/tag/culture/': '/tag/cultura/',
-        '/en/tag/tech/': '/tag/tecnologia/',
-        '/en/tag/games/': '/tag/juegos/',
-        '/en/tag/real-life/': '/tag/vida-real/',
-        '/en/routes/': '/rutas/',
-        '/en/canon/': '/canon/',
-        '/en/subscribe/': '/suscribite/'
+        '/en/': '/es/',
+        '/en/tag/culture/': '/es/tag/cultura/',
+        '/en/tag/tech/': '/es/tag/tecnologia/',
+        '/en/tag/games/': '/es/tag/juegos/',
+        '/en/tag/real-life/': '/es/tag/vida-real/',
+        '/en/routes/': '/es/rutas/',
+        '/en/canon/': '/es/canon/',
+        '/en/subscribe/': '/es/suscribite/'
       };
       var path = currentPath.replace(/\/?$/, '/');
       if (langMap[path]) esUrl = langMap[path];
     }
-    document.querySelectorAll('a[href="/"]').forEach(function(a) {
+    document.querySelectorAll('a[href="/es/"]').forEach(function(a) {
       if (a.closest('.nav-actions') || a.closest('.nav-mobile-left')) a.href = esUrl;
     });
 

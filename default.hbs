@@ -22,7 +22,7 @@
     <link href='{{asset "css/udesly-ghost.css"}}' rel='stylesheet' />
     {{!-- Server-side hreflang: homepage --}}
     {{#is "home"}}
-    <link rel="alternate" hreflang="es" href="https://www.421.news/" />
+    <link rel="alternate" hreflang="es" href="https://www.421.news/es/" />
     <link rel="alternate" hreflang="en" href="https://www.421.news/en/" />
     <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
     {{/is}}
@@ -75,7 +75,7 @@
         }
         if (esMeta && esMeta.content) {
           addHreflang('en', window.location.href);
-          addHreflang('es', 'https://www.421.news/' + esMeta.content + '/');
+          addHreflang('es', 'https://www.421.news/es/' + esMeta.content + '/');
         }
       })();
     </script>
@@ -88,34 +88,10 @@
     <link href='{{asset "css/window-manager.css"}}' rel='stylesheet' />
     <script>
       (function() {
-        // only run on root path to avoid redirect loops
-        if (window.location.pathname !== "/" && !window.location.pathname.match(/^\/$/)) {
-          return;
-        }
-
-        // check if user has already set a language preference
-        const prefersSpanish = localStorage.getItem('prefersSpanish');
-        if (prefersSpanish === "true") {
-          return;
-        }
-
-        // skip redirect for bots/crawlers (Googlebot renders with lang=en, poisoning SEO)
-        if (navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent)) {
-          return;
-        }
-
-        // get browser lang
-        const browserLang = navigator.language || navigator.userLanguage;
-        // get primary lang code 
-        const langCode = browserLang.toLowerCase().split('-')[0];
-
-        // list of english lang codes
-        const englishCodes = ['en'];
-
-        // check if browser language is english
-        if (englishCodes.includes(langCode)) {
-          window.location.href = '/en/';
-        }
+        if (window.location.pathname !== '/') return;
+        if (navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent)) return;
+        var lang = (navigator.language || navigator.userLanguage || '').toLowerCase().split('-')[0];
+        window.location.replace(lang === 'en' ? '/en/' : '/es/');
       })();
     </script>
   </head>
@@ -130,7 +106,7 @@
           const subscribeButton = document.getElementById('hero-mobile-subscribe-button');
           if (subscribeButton) {
             subscribeButton.textContent = "Subscribe";
-            subscribeButton.href = "/en/subscribe";
+            subscribeButton.href = "/en/subscribe/";
           }
         }
       })();

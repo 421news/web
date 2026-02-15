@@ -1,41 +1,42 @@
 routes:
-  /suscribite/: suscribite
+  /: landing
+  /es/suscribite/: suscribite
   /gracias/: gracias
   /oh-yes/: oh-yes
-  /rutas/: rutas
-  /canon/: canon
-  /revista-421/: revista
-  /pitcheale-a-421/: pitcheale
+  /es/rutas/: rutas
+  /es/canon/: canon
+  /es/revista-421/: revista
+  /es/pitcheale-a-421/: pitcheale
   /en/routes/: routes
   /en/canon/: canon-en
-  /ultimos-posts/: last-posts-es
+  /es/ultimos-posts/: last-posts-es
   /en/last-posts/: last-posts-en
 
-  /tag/cultura/: tag-cultura
-  /tag/tecnologia/: tag-tecnologia
-  /tag/juegos/: tag-juegos
-  /tag/vida-real/: tag-vida-real
+  /es/tag/cultura/: tag-cultura
+  /es/tag/tecnologia/: tag-tecnologia
+  /es/tag/juegos/: tag-juegos
+  /es/tag/vida-real/: tag-vida-real
 
-  /tag/el-canon/: tag-el-canon
+  /es/tag/el-canon/: tag-el-canon
 
-  /tag/cannabis/: tag-secundario-cannabis
-  /tag/tutoriales/: tag-secundario-tutoriales
-  /tag/argentina/: tag-secundario-argentina
-  /tag/cripto/: tag-secundario-cripto
-  /tag/deportes/: tag-secundario-deportes
-  /tag/filosofia/: tag-secundario-filosofia
-  /tag/historieta/: tag-secundario-historieta
-  /tag/internet/: tag-secundario-internet
-  /tag/libros/: tag-secundario-libros
-  /tag/magic-the-gathering/: tag-secundario-magicthegathering
-  /tag/memes/: tag-secundario-memes
-  /tag/musica/: tag-secundario-musica
-  /tag/peliculas/: tag-secundario-peliculas
-  /tag/series/: tag-secundario-series
-  /tag/soberania/: tag-secundario-soberania
-  /tag/videojuegos/: tag-secundario-videojuegos
-  /tag/warhammer/: tag-secundario-warhammer
-  /tag/wiki/: tag-secundario-wiki
+  /es/tag/cannabis/: tag-secundario-cannabis
+  /es/tag/tutoriales/: tag-secundario-tutoriales
+  /es/tag/argentina/: tag-secundario-argentina
+  /es/tag/cripto/: tag-secundario-cripto
+  /es/tag/deportes/: tag-secundario-deportes
+  /es/tag/filosofia/: tag-secundario-filosofia
+  /es/tag/historieta/: tag-secundario-historieta
+  /es/tag/internet/: tag-secundario-internet
+  /es/tag/libros/: tag-secundario-libros
+  /es/tag/magic-the-gathering/: tag-secundario-magicthegathering
+  /es/tag/memes/: tag-secundario-memes
+  /es/tag/musica/: tag-secundario-musica
+  /es/tag/peliculas/: tag-secundario-peliculas
+  /es/tag/series/: tag-secundario-series
+  /es/tag/soberania/: tag-secundario-soberania
+  /es/tag/videojuegos/: tag-secundario-videojuegos
+  /es/tag/warhammer/: tag-secundario-warhammer
+  /es/tag/wiki/: tag-secundario-wiki
 
   /en/tag/culture/: tag-culture
   /en/tag/tech/: tag-tech
@@ -44,8 +45,8 @@ routes:
   /en/subscribe/: subscribe
 
 collections:
-  /:
-    permalink: /{slug}/
+  /es/:
+    permalink: /es/{slug}/
     template: index
     filter: 'tag:-hash-en'
   /en/:

@@ -3,35 +3,34 @@
 
     {{!-- Desktop nav --}}
     <nav class="site-nav" aria-label="Navegacion principal">
-      <a href="/" class="site-logo">
+      <a href="/es/" class="site-logo">
         <img src='{{asset "images/frame-2.svg"}}' alt="421" />
       </a>
 
       <div class="nav-links">
-        <a href="/tag/cultura" class="nav-link">Cultura</a>
-        <a href="/tag/tecnologia" class="nav-link">Tecnologia</a>
-        <a href="/tag/juegos" class="nav-link">Juegos</a>
-        <a href="/tag/vida-real" class="nav-link">Vida real</a>
-        <a href="/rutas" class="nav-link">Rutas</a>
+        <a href="/es/tag/cultura" class="nav-link">Cultura</a>
+        <a href="/es/tag/tecnologia" class="nav-link">Tecnologia</a>
+        <a href="/es/tag/juegos" class="nav-link">Juegos</a>
+        <a href="/es/tag/vida-real" class="nav-link">Vida real</a>
+        <a href="/es/rutas" class="nav-link">Rutas</a>
         <div class="nav-dropdown">
-          <a href="/canon" class="nav-link">Canon ▾</a>
+          <a href="/es/canon" class="nav-link">Canon ▾</a>
           <div class="nav-dropdown-menu">
-            <a href="/revista-421">Revista</a>
-            <a href="/pitcheale-a-421/">Pitcheanos</a>
-            <a href="/rss/">RSS</a>
+            <a href="/es/revista-421">Revista</a>
+            <a href="/es/pitcheale-a-421/">Pitcheanos</a>
+            <a href="/es/rss/">RSS</a>
           </div>
         </div>
       </div>
 
       <div class="nav-actions">
-        <a href="/suscribite" class="nav-subscribe-btn">Suscribite</a>
+        <a href="/es/suscribite" class="nav-subscribe-btn">Suscribite</a>
         <button class="nav-icon-btn" data-ghost-search aria-label="Buscar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
         <a
           href="/en/"
           class="nav-icon-btn"
-          onclick="localStorage.removeItem('prefersSpanish');"
         >
           <img src='{{asset "images/argentina-flag.svg"}}' alt="" class="nav-flag" />
           ES
@@ -52,12 +51,11 @@
         <a
           href="/en/"
           class="nav-icon-btn"
-          onclick="localStorage.removeItem('prefersSpanish');"
         >
           <img src='{{asset "images/argentina-flag.svg"}}' alt="" class="nav-flag" />
         </a>
       </div>
-      <a href="/" class="site-logo site-logo--mobile">
+      <a href="/es/" class="site-logo site-logo--mobile">
         <img src='{{asset "images/frame-2.svg"}}' alt="421" />
       </a>
       <div class="nav-mobile-right">
@@ -74,15 +72,15 @@
 
   {{!-- Mobile expanded menu --}}
   <nav id="nav-mobile" class="nav-mobile">
-    <a href="/tag/cultura">Cultura</a>
-    <a href="/tag/tecnologia">Tecnologia</a>
-    <a href="/tag/juegos">Juegos</a>
-    <a href="/tag/vida-real">Vida real</a>
-    <a href="/rutas">Rutas</a>
-    <a href="/canon">Canon</a>
-    <a href="/revista-421" class="nav-mobile-sub">Revista</a>
-    <a href="/pitcheale-a-421/" class="nav-mobile-sub">Pitcheanos</a>
-    <a href="/suscribite" class="nav-mobile-subscribe">Suscribite</a>
+    <a href="/es/tag/cultura">Cultura</a>
+    <a href="/es/tag/tecnologia">Tecnologia</a>
+    <a href="/es/tag/juegos">Juegos</a>
+    <a href="/es/tag/vida-real">Vida real</a>
+    <a href="/es/rutas">Rutas</a>
+    <a href="/es/canon">Canon</a>
+    <a href="/es/revista-421" class="nav-mobile-sub">Revista</a>
+    <a href="/es/pitcheale-a-421/" class="nav-mobile-sub">Pitcheanos</a>
+    <a href="/es/suscribite" class="nav-mobile-subscribe">Suscribite</a>
   </nav>
 </header>
 
@@ -115,7 +113,7 @@
     var currentPath = window.location.pathname;
     document.querySelectorAll('.nav-link, .nav-mobile a:not(.nav-mobile-subscribe)').forEach(function(link) {
       var href = link.getAttribute('href');
-      if (href && href !== '/' && currentPath.startsWith(href)) {
+      if (href && href !== '/es/' && currentPath.startsWith(href)) {
         link.classList.add('is-active');
       }
     });
@@ -127,14 +125,14 @@
       enUrl = '/en/' + enMeta.content + '/';
     } else {
       var langMap = {
-        '/': '/en/',
-        '/tag/cultura/': '/en/tag/culture/',
-        '/tag/tecnologia/': '/en/tag/tech/',
-        '/tag/juegos/': '/en/tag/games/',
-        '/tag/vida-real/': '/en/tag/real-life/',
-        '/rutas/': '/en/routes/',
-        '/canon/': '/en/canon/',
-        '/suscribite/': '/en/subscribe/'
+        '/es/': '/en/',
+        '/es/tag/cultura/': '/en/tag/culture/',
+        '/es/tag/tecnologia/': '/en/tag/tech/',
+        '/es/tag/juegos/': '/en/tag/games/',
+        '/es/tag/vida-real/': '/en/tag/real-life/',
+        '/es/rutas/': '/en/routes/',
+        '/es/canon/': '/en/canon/',
+        '/es/suscribite/': '/en/subscribe/'
       };
       var path = currentPath.replace(/\/?$/, '/');
       if (langMap[path]) enUrl = langMap[path];

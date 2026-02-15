@@ -8,7 +8,7 @@
           >
             <div class='plain-tags tags-in-featured'>
               {{#foreach tags}}
-                <a href='/tag/{{slug}}'>{{name}}</a>
+                <a href='{{#if ../lang}}/en{{else}}/es{{/if}}/tag/{{slug}}'>{{name}}</a>
                 {{#unless @last}}, {{/unless}}
               {{/foreach}}
             </div>

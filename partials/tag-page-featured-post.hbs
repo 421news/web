@@ -19,7 +19,7 @@
                             {{/if}}
                           {{/if}}
                           {{#foreach tags from="2"}}
-                            , <strong><a href="/tag/{{slug}}">{{name}}</a></strong>
+                            , <strong><a href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{slug}}">{{name}}</a></strong>
                           {{/foreach}}
                         </span>
                       </div>
