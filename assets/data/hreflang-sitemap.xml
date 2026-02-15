@@ -2138,6 +2138,10 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/meme-vector-de-ideas-ecosistemas-digitales/" />
   </url>
   <url>
+    <loc>https://www.421.news/es/row-rouzed-4chan-argentino/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/row-rouzed-4chan-argentino/" />
+  </url>
+  <url>
     <loc>https://www.421.news/es/memes-y-magnicidio/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/memes-y-magnicidio/" />
   </url>
@@ -2156,6 +2160,10 @@
   <url>
     <loc>https://www.421.news/es/bitcoin-juan-ruocco/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/bitcoin-juan-ruocco/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/cenital-reddit-vs-wall-street/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/cenital-reddit-vs-wall-street/" />
   </url>
   <url>
     <loc>https://www.421.news/es/qanon-una-conspiracion-todas-las-conspiraciones/</loc>
@@ -2254,8 +2262,20 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/p12-cuentos-de-la-criptomoneda/" />
   </url>
   <url>
+    <loc>https://www.421.news/es/nan-la-paradoja-retro/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/nan-la-paradoja-retro/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/nan-pop-para-divertirse/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/nan-pop-para-divertirse/" />
+  </url>
+  <url>
     <loc>https://www.421.news/es/p12-que-haces-maquina/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/p12-que-haces-maquina/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/starcraft-cyber/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/starcraft-cyber/" />
   </url>
 
   <!-- English-only posts -->
@@ -2370,5 +2390,9 @@
   <url>
     <loc>https://www.421.news/en/new-wave-progressive-death-metal/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/new-wave-progressive-death-metal/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/row-rouzed-argentina-4chan/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/row-rouzed-argentina-4chan/" />
   </url>
 </urlset>

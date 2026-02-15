@@ -268,9 +268,11 @@ def extract_anchor_candidates(title):
 
 
 def find_anchor_in_text(text_lower, candidates):
-    """Find the best matching candidate in the text. Prefers longer matches."""
+    """Find the best matching candidate in the text. Prefers longer matches.
+    Only matches complete words (word boundaries on both sides)."""
     for candidate in candidates:
-        if candidate.lower() in text_lower:
+        pattern = r'\b' + re.escape(candidate.lower()) + r'\b'
+        if re.search(pattern, text_lower):
             return candidate
     return None
 
@@ -297,10 +299,12 @@ def add_link_to_lexical(lexical, anchor_text, url):
                 continue
 
             text = child.get('text', '')
-            idx = text.lower().find(anchor_lower)
-            if idx == -1:
+            # Use word boundary regex to avoid matching partial words
+            match = re.search(r'\b' + re.escape(anchor_lower) + r'\b', text.lower())
+            if not match:
                 continue
 
+            idx = match.start()
             # Found the anchor text - extract the EXACT case from original
             actual_anchor = text[idx:idx + len(anchor_text)]
             before = text[:idx]
@@ -446,7 +450,8 @@ def compute_links(posts):
             if is_promo_title(newer['title']):
                 continue
 
-            newer_url = f"{SITE_URL}/{newer['slug']}/"
+            lang_prefix = 'en' if lang == 'en' else 'es'
+            newer_url = f"{SITE_URL}/{lang_prefix}/{newer['slug']}/"
 
             if newer_url in existing_urls or newer_url.replace('https://', 'http://') in existing_urls:
                 continue
