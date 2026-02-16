@@ -5,171 +5,273 @@
       {{> "general-styling"}}
       {{> "site-nav-en"}}
 
-      <!-- Formulario de suscripcion -->
-      <div class="subscription-section">
-        <div class="global-container">
-          <div class="pv-huge">
-            <div class="text-center">
-              <h2 class="title">Subscribe to 421</h2>
-              <p class="subtitle">Choose the type of subscrition you prefer</p>
+      <div class="sub-page">
+        <div class="sub-container">
+
+          <!-- ===== SECTION 1: HERO + PLAN ===== -->
+          <div id="sub-section-plan">
+
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Join us!</h1>
+              <p class="sub-hero-subtitle">421 is an intellectual orientation outlet for navigating a world saturated with technology, images, and discourse. Our goal is to help you navigate a world that runs you over.</p>
+              <p class="sub-hero-callout">Your financial support is essential for the project's survival.</p>
             </div>
+            <hr class="sub-gradient-divider">
 
-            <div class="subscription-options-wrapper">
-              <div class="paid-subs">
-                <!-- Opcion Wizard Anual -->
-                <div class="subscription-option premium" id="wizard-annual-option">
-                  <h3>Wizard Annual</h3>
-                  <div class="price">
-                    <b>$100USD</b>
-                    <div>
-                      <div class="striked-price">
-                        $120USD
-                      </div>
-                      <div>annual</div>
-                    </div>
-                  </div>
-                  <p class="savings">¡Save 2 months!</p>
-                  <ul class="features">
-                    <li>All benefits of Wizard Plan</li>
-                    <li>2 months discount</li>
-                  </ul>
-                  <a href="https://buy.stripe.com/00wcN67KUaO0056cBIeUU01">
-                    <button class="select-plan-btn premium-btn" data-plan="wizard-yearly">
-                      Select
-                    </button>
-                  </a>
-                </div>
-
-                <!-- Opcion Wizard Mensual -->
-                <div class="subscription-option" id="wizard-monthly-option" style="margin: 10px 0">
-                  <h3 style="font-size: 2rem; font-style: normal">Wizard</h3>
-                  <div
-                    style="display: flex; gap: 10px; align-items: center;"
-                    class="price"
-                  >
-                    <b style="font-size: 2rem;">$10USD</b>
-                    <div>
-                      <div>monthly</div>
-                    </div>
-                  </div>
-                  <ul class="features">
-                    <li>Monthly premium newsletter</li>
-                    <li>Digital 421 Magazine</li>
-                    <li>AFK Events</li>
-                  </ul>
-                  <a href="https://buy.stripe.com/00weVeaX6cW805659geUU00">
-                    <button class="select-plan-btn">
-                      Select
-                    </button>
-                  </a>
-                </div>
+            <div class="sub-card" id="sub-plan-card">
+              <div class="plan-toggle">
+                <button class="plan-toggle-btn" id="toggle-monthly">Monthly</button>
+                <button class="plan-toggle-btn active" id="toggle-yearly">
+                  Annual
+                  <span class="toggle-badge">-17%</span>
+                </button>
               </div>
 
-              <!-- Opcion Goblin (Gratis) -->
-              <a href="#/portal/signup">
-                <div class="subscription-option">
-                  <h3>Goblin</h3>
-                  <ul class="features">
-                    <li>Receive articles via mail</li>
-                  </ul>
-                  <button class="select-plan-btn" data-plan="goblin">
-                    Select
-                  </button>
+              <div id="plan-price">
+                <div class="plan-price-row">
+                  <span class="plan-price-big" id="price-amount">...</span>
+                  <span class="plan-price-period" id="price-period">USD / year</span>
                 </div>
-              </a>
+                <div class="plan-price-detail" id="price-detail"></div>
+              </div>
+
+              <ul class="plan-benefits">
+                <li>Monthly premium newsletter</li>
+                <li>Digital edition of Revista 421</li>
+                <li>Early access to articles</li>
+                <li>AFK event invitations</li>
+                <li>Wizards community access</li>
+              </ul>
+
+              <button class="btn-gradient" id="btn-suscribirme">Subscribe</button>
+            </div>
+
+            <div class="free-tier-link">
+              <p>Just want to receive articles by email?</p>
+              <button class="btn-outline" id="btn-free">Sign up for free</button>
             </div>
           </div>
+
+          <!-- ===== SECTION 2: PAYMENT METHOD CHOOSER ===== -->
+          <div id="sub-section-chooser" style="display: none;">
+
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Choose payment</h1>
+            </div>
+            <hr class="sub-gradient-divider">
+
+            <div class="sub-card" style="max-width: 600px;">
+              <div class="sub-card-label" id="chooser-plan-name"></div>
+
+              <div class="payment-methods">
+                <button class="payment-method-btn" id="btn-stripe">
+                  <span class="payment-method-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <rect width="40" height="40" rx="8" fill="#635BFF"/>
+                      <path d="M18.5 16.5c0-.83.68-1.15 1.81-1.15 1.62 0 3.67.49 5.29 1.37V11.8c-1.77-.7-3.52-.98-5.29-.98-4.33 0-7.21 2.26-7.21 6.04 0 5.89 8.11 4.95 8.11 7.49 0 .98-.85 1.3-2.05 1.3-1.77 0-4.04-.73-5.83-1.71v4.98c1.98.85 3.99 1.22 5.83 1.22 4.43 0 7.48-2.19 7.48-6.02-.02-6.36-8.14-5.23-8.14-7.62z" fill="white"/>
+                    </svg>
+                  </span>
+                  <span class="payment-method-name">Stripe</span>
+                  <span class="payment-method-desc">International credit card (USD)</span>
+                </button>
+
+                <button class="payment-method-btn" id="btn-mp">
+                  <span class="payment-method-icon">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                      <rect width="40" height="40" rx="8" fill="#009EE3"/>
+                      <path d="M28.5 18.5c0-4.14-3.36-6-7.5-6-4.14 0-8 2.36-8 7s3.36 8.5 8 8.5c3.14 0 5.5-1.36 6.5-3" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                      <circle cx="21" cy="19.5" r="2" fill="white"/>
+                    </svg>
+                  </span>
+                  <span class="payment-method-name">MercadoPago</span>
+                  <span class="payment-method-desc">Argentine pesos (blue dollar rate)</span>
+                </button>
+              </div>
+
+              <p class="payment-method-note">
+                Stripe charges in USD. MercadoPago converts to ARS at today's blue dollar rate.
+              </p>
+            </div>
+
+            <button class="btn-back" id="btn-back-plan">&larr; Back to plans</button>
+          </div>
+
+          <!-- ===== SECTION 3: MERCADOPAGO FORM ===== -->
+          <div id="sub-section-mp" style="display: none;">
+
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Complete your subscription</h1>
+            </div>
+            <hr class="sub-gradient-divider">
+
+            <div class="sub-card">
+              <div class="sub-card-label" id="mp-plan-name"></div>
+
+              <form id="mp-form">
+                <input type="hidden" id="mp-sub-type" value="">
+                <div class="form-group">
+                  <label for="mp-name">Full name</label>
+                  <input type="text" id="mp-name" name="name" required placeholder="Your name">
+                </div>
+                <div class="form-group">
+                  <label for="mp-email">Email</label>
+                  <input type="email" id="mp-email" name="email" required placeholder="you@email.com">
+                </div>
+                <p class="form-note">Email must match your MercadoPago account.</p>
+                <button type="submit" class="btn-solid" id="mp-submit-btn">Go to MercadoPago</button>
+              </form>
+              <div id="mp-form-message" class="form-message"></div>
+            </div>
+
+            <button class="btn-back" id="btn-back-chooser">&larr; Change payment method</button>
+          </div>
+
         </div>
       </div>
 
       {{> "site-footer" lang="en"}}
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6669c61faddc5cdc1cf55c96" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous" defer></script>
-    <!-- Script para el formulario de suscripcion -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        // Elementos del DOM
-        const planButtons = document.querySelectorAll(".select-plan-btn");
-        const formContainer = document.getElementById("subscription-form-container");
-        const subTypeInput = document.getElementById("subType");
-        const selectedPlanTitle = document.getElementById("selected-plan-title");
-        const subscriptionForm = document.getElementById("subscription-form");
-        const formMessage = document.getElementById("form-message");
+    <script defer>
+      document.addEventListener('DOMContentLoaded', function() {
+        var currentCadence = 'yearly';
+        var tierData = null;
 
-        // Manejar seleccion de plan
-        planButtons.forEach(function(button) {
-          button.addEventListener("click", function() {
-            const plan = this.getAttribute("data-plan");
+        var sectionPlan = document.getElementById('sub-section-plan');
+        var sectionChooser = document.getElementById('sub-section-chooser');
+        var sectionMp = document.getElementById('sub-section-mp');
 
-            if (plan === "goblin") return;
-
-            // Actualizar form con el plan seleccionado
-            subTypeInput.value = plan;
-
-            // Actualizar titulo con el plan seleccionado
-            let planDisplay = "";
-            if (plan === "goblin") {
-              planDisplay = "Goblin (Gratis)";
-            } else if (plan === "wizard-monthly") {
-              planDisplay = "Wizard Mensual";
-            } else if (plan === "wizard-yearly") {
-              planDisplay = "Wizard Anual";
+        fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var tiers = data.tiers || [];
+            for (var i = 0; i < tiers.length; i++) {
+              if (tiers[i].type === 'paid' && tiers[i].active) {
+                tierData = tiers[i];
+                break;
+              }
             }
-
-            selectedPlanTitle.textContent = `Complete su suscripción: ${planDisplay}`;
-
-            // Mostrar el form
-            formContainer.style.display = "block";
-
-            // Desplazarse al formulario
-            formContainer.scrollIntoView({ behavior: "smooth" });
+            if (tierData) updatePriceDisplay();
           });
+
+        function formatPrice(cents) {
+          var dollars = cents / 100;
+          return '$' + (dollars % 1 === 0 ? dollars : dollars.toFixed(2));
+        }
+
+        function updatePriceDisplay() {
+          if (!tierData) return;
+          var amountEl = document.getElementById('price-amount');
+          var periodEl = document.getElementById('price-period');
+          var detailEl = document.getElementById('price-detail');
+
+          if (currentCadence === 'yearly') {
+            amountEl.textContent = formatPrice(tierData.yearly_price);
+            periodEl.textContent = 'USD / year';
+            var monthlyTotal = tierData.monthly_price * 12;
+            detailEl.innerHTML = '<span class="striked">' + formatPrice(monthlyTotal) + '</span> \u2014 save 2 months';
+          } else {
+            amountEl.textContent = formatPrice(tierData.monthly_price);
+            periodEl.textContent = 'USD / month';
+            detailEl.textContent = 'No commitment, cancel anytime';
+          }
+        }
+
+        function showSection(section) {
+          sectionPlan.style.display = 'none';
+          sectionChooser.style.display = 'none';
+          sectionMp.style.display = 'none';
+          section.style.display = 'block';
+          window.scrollTo(0, 0);
+        }
+
+        function getPlanLabel() {
+          if (!tierData) return '';
+          if (currentCadence === 'yearly') {
+            return 'Wizard Annual \u2014 ' + formatPrice(tierData.yearly_price) + ' USD/year';
+          }
+          return 'Wizard Monthly \u2014 ' + formatPrice(tierData.monthly_price) + ' USD/month';
+        }
+
+        var toggleM = document.getElementById('toggle-monthly');
+        var toggleY = document.getElementById('toggle-yearly');
+
+        toggleM.addEventListener('click', function() {
+          currentCadence = 'monthly';
+          toggleM.classList.add('active');
+          toggleY.classList.remove('active');
+          updatePriceDisplay();
         });
 
-        // Manejar el envio del form
-        subscriptionForm.addEventListener("submit", function(event) {
-          event.preventDefault();
+        toggleY.addEventListener('click', function() {
+          currentCadence = 'yearly';
+          toggleY.classList.add('active');
+          toggleM.classList.remove('active');
+          updatePriceDisplay();
+        });
 
-          // recopilar datos del form
-          const formData = {
-            formSubType: subTypeInput.value,
-            formName: document.getElementById("name").value,
-            formEmail: document.getElementById("email").value
-          };
+        document.getElementById('btn-suscribirme').addEventListener('click', function() {
+          document.getElementById('chooser-plan-name').textContent = getPlanLabel();
+          showSection(sectionChooser);
+        });
 
-          // mostrar msj de carga
-          formMessage.textContent = "Procesando la solicitud...";
-          formMessage.className = "form-message";
+        document.getElementById('btn-free').addEventListener('click', function() {
+          window.location.hash = '#/portal/signup/free';
+        });
 
-          // enviar datos al servicio externo
-          fetch("https://mercado-pago-ghost.onrender.com/subscribe", {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
+        document.getElementById('btn-stripe').addEventListener('click', function() {
+          if (!tierData) return;
+          window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
+        });
+
+        document.getElementById('btn-mp').addEventListener('click', function() {
+          document.getElementById('mp-plan-name').textContent = getPlanLabel() + ' \u2014 MercadoPago';
+          document.getElementById('mp-sub-type').value = currentCadence === 'yearly' ? 'wizard-yearly' : 'wizard-monthly';
+          showSection(sectionMp);
+        });
+
+        document.getElementById('btn-back-plan').addEventListener('click', function() {
+          showSection(sectionPlan);
+        });
+        document.getElementById('btn-back-chooser').addEventListener('click', function() {
+          showSection(sectionChooser);
+        });
+
+        document.getElementById('mp-form').addEventListener('submit', function(e) {
+          e.preventDefault();
+          var msg = document.getElementById('mp-form-message');
+          var btn = document.getElementById('mp-submit-btn');
+          msg.textContent = 'Processing...';
+          msg.className = 'form-message';
+          btn.disabled = true;
+          btn.textContent = 'Processing...';
+
+          fetch('https://mercado-pago-ghost.onrender.com/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              formSubType: document.getElementById('mp-sub-type').value,
+              formName: document.getElementById('mp-name').value,
+              formEmail: document.getElementById('mp-email').value
+            })
           })
-          .then(function(response) {
-            if (!response.ok) {
-              throw new Error('Error en la respuesta del servidor');
-            }
-            return response.json();
+          .then(function(r) {
+            if (!r.ok) throw new Error('Server error');
+            return r.json();
           })
           .then(function(data) {
             if (data.success && data.redirectUrl) {
-              // redirigir a la pagina de mercadopago
               window.location.href = data.redirectUrl;
             } else {
-              throw new Error(data.message || "Error al procesar la suscripción")
+              throw new Error(data.message || 'Processing error');
             }
           })
-          .catch(function(error) {
-            formMessage.textContent = 'Ha ocurrido un error al procesar tu suscripción. Por favor, intenta nuevamente.';
-            formMessage.className = 'form-message error';
-            console.error('Error:', error);
-          })
+          .catch(function(err) {
+            msg.textContent = 'Error processing subscription. Please try again.';
+            msg.className = 'form-message error';
+            btn.disabled = false;
+            btn.textContent = 'Go to MercadoPago';
+          });
         });
       });
     </script>

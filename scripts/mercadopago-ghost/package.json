@@ -1,0 +1,13 @@
+{
+  "name": "mercadopago-ghost",
+  "version": "1.0.0",
+  "description": "MercadoPago subscription + Ghost member integration for 421.news",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
