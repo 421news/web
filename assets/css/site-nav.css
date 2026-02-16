@@ -259,6 +259,11 @@ body.light-mode .nav-mobile-sub {
     display: block;
 }
 
+body.light-mode .nav-subscribe-btn {
+    background: var(--verde);
+    color: var(--crema);
+}
+
 body.light-mode .nav-icon-btn {
     color: var(--negro);
     border-color: rgba(18, 18, 18, 0.15);
@@ -278,7 +283,7 @@ body.light-mode .nav-icon-btn img {
 }
 
 /* Do NOT invert flag images */
-body.light-mode .nav-flag {
+body.light-mode .nav-icon-btn .nav-flag {
     filter: none;
 }
 
@@ -357,6 +362,10 @@ body.light-mode .nav-mobile a:hover {
 
 body.light-mode .nav-mobile a.is-active {
     color: var(--verde);
+}
+
+body.light-mode .nav-mobile-subscribe {
+    color: var(--verde) !important;
 }
 
 /* --- Hamburger trigger --- */

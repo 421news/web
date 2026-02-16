@@ -3,7 +3,7 @@
     {
       "id": "autonomia-digital",
       "nombre": "Autonomía digital",
-      "tesis": "Las herramientas que usás definen los límites de tu libertad.",
+      "tesis": "Las herramientas que usás definen los límites de tu autonomía.",
       "slugs": [
         "guia-cyberciruja-para-la-autodeterminacion-digital",
         "soberania-cognitiva-introduccion-autonomia-psiquica",
@@ -11,14 +11,15 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "anonimato-en-internet",
         "low-tech-high-life-cottagecore-cyberpunk",
-        "que-es-small-web-como-funciona",
+        "pop-os-linux",
+        "selfhosting-alojar-nube-hogarena",
         "elogio-computadoras-escritorio"
       ]
     },
     {
       "id": "cultura-pop-como-teoria",
       "nombre": "Cultura pop como teoría",
-      "tesis": "Star Wars enseña derecho constitucional. Fallout enseña economía. La cultura popular no es baja cultura: es el lenguaje común más potente que tenemos.",
+      "tesis": "Encontrar en Star Wars principios del derecho constitucional. Encontrar en Fallout principios rudimentarios de economía. La cultura popular puede ser sólo entretenimiento o un nexo a ideas más complejas.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
         "economia-videojuego-fallout",
@@ -48,21 +49,23 @@
     {
       "id": "filosofia-para-la-vida-real",
       "nombre": "Filosofía para la vida real",
-      "tesis": "Sloterdijk, Byung-Chul Han, Nick Land: pensadores que sirven para vivir, no solo para citar.",
+      "tesis": "Sloterdijk, Byung-Chul Han, Nick Land. Pequeñas guías para intentar pensar el presente.",
       "slugs": [
         "byung-chul-han-juan-ruocco",
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
-        "teleoplexia-nick-land",
         "glosario-de-filosofia-de-la-tecnica",
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "tecnomagia-para-la-vida-real",
-        "psicopatas-vs-esquizos-guerra-silenciosa"
+        "quinto-eon-peter-carroll",
+        "psicopatas-vs-esquizos-guerra-silenciosa",
+        "mcluhan-ia-llm"
       ]
     },
     {
       "id": "canon-del-entretenimiento",
       "nombre": "El canon del entretenimiento",
+      "link": "/es/tag/el-canon/",
       "tesis": "Las obras que definieron géneros enteros. Guías de lectura, retrospectivas y análisis que van más allá de la reseña.",
       "slugs": [
         "akira-1988",
@@ -100,7 +103,7 @@
         "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
         "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
-        "warhammer-40k-introduccion-wargames",
+        "telefonos-android-sin-google",
         "como-hacer-un-juego-de-mesa",
         "introduccion-al-mundo-de-los-drones-fpv"
       ]
@@ -212,31 +215,31 @@
     {
       "id": "autonomia-digital",
       "nombre": "Digital Autonomy",
-      "tesis": "The tools you use define the limits of your freedom.",
+      "tesis": "The tools you use define the limits of your autonomy.",
       "slugs": [
-        "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "soberania-cognitiva-introduccion-autonomia-psiquica",
-        "tecnomagia-para-la-vida-real",
-        "ingenieria-inversa-a-la-mierdificacion-de-internet",
-        "anonimato-en-internet",
-        "low-tech-high-life-cottagecore-cyberpunk",
-        "que-es-small-web-como-funciona",
-        "elogio-computadoras-escritorio"
+        "cyberciruja-guide-digital-self-determination",
+        "cognitive-sovereignty-an-introduction-to-psychic-autonomy",
+        "reverse-engineering-the-enshittification-of-the-internet",
+        "defense-internet-anonymity",
+        "low-tech-high-life-a-response-to-cyberpunk",
+        "pop-os-guide-to-installing-linux-pc",
+        "self-hosting-home-cloud",
+        "in-praise-of-desktop-computers"
       ]
     },
     {
       "id": "cultura-pop-como-teoria",
       "nombre": "Pop Culture as Theory",
-      "tesis": "Star Wars teaches constitutional law. Fallout teaches economics. Popular culture isn't low culture: it's the most powerful common language we have.",
+      "tesis": "Finding constitutional law principles in Star Wars. Finding rudimentary economics in Fallout. Popular culture can be just entertainment or a bridge to more complex ideas.",
       "slugs": [
-        "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
-        "crash-ballard-cronenberg",
-        "lecturas-politicas-sobre-lovecraft",
-        "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "constitutional-law-in-star-wars",
+        "economics-lessons-from-fallout",
+        "fallout-new-vegas-political-factions",
+        "ballard-crash-cronenberg-movie",
+        "yarvin-houellebecq-land-fisher-political-readings-of-lovecraft",
+        "kayfabe-pro-wrestling-is-real",
+        "grant-morrison-batman",
+        "alan-moore-comic-magic-anarchy"
       ]
     },
     {
@@ -244,44 +247,44 @@
       "nombre": "Argentina as a Laboratory",
       "tesis": "Argentina as a permanent case study: crisis as method, periphery as advantage, improvisation as system.",
       "slugs": [
-        "la-anomalia-milei",
-        "la-historia-del-parque-rivadavia",
-        "dinosaurios-descubiertos-en-argentina-1",
-        "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
-        "la-historia-de-ricardo-fort",
-        "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "the-milei-anomaly",
+        "history-of-parque-rivadavia",
+        "dinosaurs-discovered-in-argentina",
+        "argentina-before-argentina",
+        "argentina-ice-cream-story",
+        "ricardo-fort-the-real-super-chad",
+        "milei-libra-crypto-scam",
+        "argentina-paraguay-border"
       ]
     },
     {
       "id": "filosofia-para-la-vida-real",
       "nombre": "Philosophy for Real Life",
-      "tesis": "Sloterdijk, Byung-Chul Han, Nick Land: thinkers who are useful for living, not just for quoting.",
+      "tesis": "Sloterdijk, Byung-Chul Han, Nick Land. Small guides for trying to think the present.",
       "slugs": [
-        "byung-chul-han-juan-ruocco",
-        "volverse-ingobernable-peter-sloterdijk",
-        "nick-land-aceleracionismo",
-        "teleoplexia-nick-land",
-        "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
-        "tecnomagia-para-la-vida-real",
-        "psicopatas-vs-esquizos-guerra-silenciosa"
+        "byung-chul-han-sovereignty-mental-states",
+        "becoming-ungovernable-peter-sloterdijk",
+        "nick-land-the-apostle-of-chaos",
+        "teleoplexia-nick-land-en",
+        "glossary-philosophy-of-technology",
+        "do-language-models-dream-of-electric-sheep-2",
+        "psychos-versus-schizos"
       ]
     },
     {
       "id": "canon-del-entretenimiento",
       "nombre": "The Entertainment Canon",
+      "link": "/en/tag/the-canon/",
       "tesis": "The works that defined entire genres. Reading guides, retrospectives, and analyses that go beyond the review.",
       "slugs": [
-        "akira-1988",
-        "blade-runner-1982-ridley-scott",
-        "ghost-in-the-shell-1995",
-        "robocop-1987-paul-verhoeven",
-        "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
-        "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "akira-1988-en",
+        "blade-runner-1982-ridley-scott-movie",
+        "ghost-in-the-shell-1995-en",
+        "robocop-1987",
+        "gojira-1954-godzilla-2",
+        "batman-comics-reading-guide",
+        "science-fiction-reading-guide",
+        "in-the-beginning-was-the-canon"
       ]
     },
     {
@@ -289,14 +292,14 @@
       "nombre": "The Internet Didn't Die",
       "tesis": "4chan, memes, Pepe, Milady: the underground internet is still alive and still shaping reality.",
       "slugs": [
-        "lo-que-aprendi-leyendo-4chan-pol",
-        "la-caida-de-4chan",
-        "pepe-meme-positive-feedback-loop",
-        "remilia-milady-charlotte-fang-nueva-internet",
-        "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "what-i-learned-reading-4chan-pol",
+        "the-fall-of-4chan",
+        "pepe-the-infinite-feedback-loop",
+        "remilia-milady-charlotte-fang-nueva-internet-en",
+        "memes-and-assassination",
+        "ethnosoldiers-internet-memes-manifestos",
+        "can-the-left-make-memes",
+        "epstein-4chan-reddit-en"
       ]
     },
     {
@@ -304,14 +307,14 @@
       "nombre": "Do It Yourself",
       "tesis": "Bread, milanesas, zines, video games, wargames: everything you can make with your own hands.",
       "slugs": [
-        "como-hacer-milanesas-caseras",
-        "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
-        "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
-        "warhammer-40k-introduccion-wargames",
-        "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "how-to-make-homemade-milanesas",
+        "how-to-make-homemade-bread",
+        "outdoor-cannabis-growing-guide",
+        "how-to-make-fanzines-and-why-they-matter",
+        "make-your-first-narrative-game-with-bitsy",
+        "warhammer-40k-introduction-to-wargames",
+        "making-and-playtesting-a-board-game",
+        "introduction-to-fpv-drones"
       ]
     }
   ],

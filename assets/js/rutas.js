@@ -93,13 +93,17 @@
     }
 
     function renderOneRuta(ruta, index, postMap) {
-        var labelRoute = isEN ? 'Route' : 'Ruta';
+        var labelRoute = isEN ? 'Path' : 'Ruta';
         var labelTexts = isEN ? 'texts' : 'textos';
         var num = String(index + 1).length < 2 ? '0' + (index + 1) : String(index + 1);
         var html = '<div class="ruta-section">';
         html += '<div class="ruta-header">';
         html += '<div class="ruta-number">' + labelRoute + ' ' + num + '</div>';
-        html += '<h2 class="ruta-nombre">' + esc(ruta.nombre) + '</h2>';
+        if (ruta.link) {
+            html += '<h2 class="ruta-nombre"><a href="' + esc(ruta.link) + '" class="gradient-link">' + esc(ruta.nombre) + '</a></h2>';
+        } else {
+            html += '<h2 class="ruta-nombre">' + esc(ruta.nombre) + '</h2>';
+        }
         html += '<p class="ruta-tesis">' + esc(ruta.tesis) + '</p>';
         html += '<div class="ruta-posts-count">' + ruta.slugs.length + ' ' + labelTexts + '</div>';
         html += '</div>';

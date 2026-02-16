@@ -1,0 +1,55 @@
+[
+  {"from": "^/nick-land-aceleracionismo-parte-2/", "to": "/nick-land-aceleracionismo/", "permanent": true},
+  {"from": "^/nick-land-aceleracionismo-parte-1/", "to": "/nick-land-aceleracionismo/", "permanent": true},
+  {"from": "^/en/nick-land-the-apostle-of-chaos-part-2/", "to": "/en/nick-land-the-apostle-of-chaos/", "permanent": true},
+  {"from": "^/la-historia-de-ricardo-fort-parte-dos/", "to": "/la-historia-de-ricardo-fort-parte-uno/", "permanent": true},
+  {"from": "^/la-historia-de-ricardo-fort-parte-uno/", "to": "/la-historia-de-ricardo-fort/", "permanent": true},
+  {"from": "^/como-empezar-a-leer-ciencia-ficcion/", "to": "/mejores-libros-ciencia-ficcion/", "permanent": true},
+  {"from": "^/en/ricardo-fort-the-real-super-chad-part-1/", "to": "/en/ricardo-fort-the-real-super-chad/", "permanent": true},
+  {"from": "^/en/ricardo-fort-the-real-super-chad-part-2/", "to": "/en/ricardo-fort-the-real-super-chad/", "permanent": true},
+  {"from": "^/historia-de-antonio-mamerto-gil/", "to": "/gauchito-gil-historia/", "permanent": true},
+  {"from": "^/cronica-de-la-triple-frontera/", "to": "/frontera-argentina-paraguay/", "permanent": true},
+  {"from": "^/osint-tu-transa-de-telegram-en-la-mira/", "to": "/ciberpatrullaje-policia-federal-argentina/", "permanent": true},
+  {"from": "^/clasicos-basicos-retro-gaming/", "to": "/retrogaming-juegos-viejos-facil/", "permanent": true},
+  {"from": "^/magic-the-gathering/$", "to": "/magic-the-gathering-juego-social/", "permanent": true},
+
+  {"from": "^/posts/(.*)", "to": "/$1", "permanent": true},
+
+  {"from": "^/en/heart-in-your-heels-a-chronicle-of-the-triple-frontier/", "to": "/en/argentina-paraguay-border/", "permanent": true},
+  {"from": "^/la-historia-de-ricardo-fort-$", "to": "/la-historia-de-ricardo-fort/", "permanent": true},
+  {"from": "^/soberania-cognitiva-introduccion-autonomia-$", "to": "/soberania-cognitiva-introduccion-autonomia-psiquica/", "permanent": true},
+  {"from": "^/godzilla-minus-one/$", "to": "/godzilla-minus-one-shin-godzilla/", "permanent": true},
+  {"from": "^/cannabis-medicinal-geneticas-argentinas/", "to": "/autocultivo-geneticas-cannabis-favoritas-421/", "permanent": true},
+  {"from": "^/cannabis-medicinal-argentino/", "to": "/cannabis-medicinal-reprocann-milei-bullrich/", "permanent": true},
+  {"from": "^/mtg-arena-como-conseguir-gemas/", "to": "/mtg-arena-farm-gold-and-gems-2/", "permanent": true},
+  {"from": "^/osint-inteligencia-open-source/", "to": "/ciberpatrullaje-policia-federal-argentina/", "permanent": true},
+  {"from": "^/super-lemon-haze/", "to": "/autocultivo-geneticas-cannabis-favoritas-421/", "permanent": true},
+  {"from": "^/revista-421-edicion-11/", "to": "/revista-421/", "permanent": true},
+
+  {"from": "^/en/suscribite/?$", "to": "/en/subscribe/", "permanent": true},
+
+  {"from": "^/tag/culture/?$", "to": "/en/tag/culture/", "permanent": true},
+  {"from": "^/tag/games/?$", "to": "/en/tag/games/", "permanent": true},
+  {"from": "^/tag/real-life/?$", "to": "/en/tag/real-life/", "permanent": true},
+  {"from": "^/tag/tech/?$", "to": "/en/tag/tech/", "permanent": true},
+
+  {"from": "^/tag/Tecnolog", "to": "/tag/tecnologia/", "permanent": true},
+  {"from": "^/tag/Tech/?$", "to": "/en/tag/tech/", "permanent": true},
+  {"from": "^/tag/Cripto/?$", "to": "/tag/cripto/", "permanent": true},
+  {"from": "^/tag/Guerra/?$", "to": "/", "permanent": false},
+  {"from": "^/tag/Pol", "to": "/", "permanent": false},
+  {"from": "^/tag/Econom", "to": "/", "permanent": false},
+
+  {"from": "^/tag/autocultivo/?$", "to": "/tag/vida-real/", "permanent": true},
+  {"from": "^/tag/magia/?$", "to": "/tag/magic-the-gathering/", "permanent": true},
+  {"from": "^/tag/comics/?$", "to": "/tag/historieta/", "permanent": true},
+  {"from": "^/tag/coleccionables/?$", "to": "/tag/magic-the-gathering/", "permanent": true},
+  {"from": "^/tag/guerra/?$", "to": "/", "permanent": false},
+  {"from": "^/tag/lucha/?$", "to": "/tag/deportes/", "permanent": true},
+  {"from": "^/tag/aceleracionismo/?$", "to": "/tag/filosofia/", "permanent": true},
+  {"from": "^/tag/skate/?$", "to": "/tag/deportes/", "permanent": true},
+
+  {"from": "^/author/paula/$", "to": "/author/paula-yeyati/", "permanent": true},
+  {"from": "^/author/cristobal/$", "to": "/author/cristobal-soto/", "permanent": true},
+  {"from": "^/author/marcelo/$", "to": "/author/marcelo_acevedo/", "permanent": true}
+]

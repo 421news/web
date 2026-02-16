@@ -314,7 +314,7 @@ Express.js service on Render that automatically injects hreflang meta tags when 
 - `{{asset "path"}}` resolves to `/assets/path?v=HASH`
 - `{{#page}}` context is required to access page fields in `page.hbs`
 - Ghost's `cards.min.css` has high-specificity rules for `.kg-*` classes that need to be overridden carefully
-- Internal tags (starting with `#`) are excluded from `primary_tag`
+- Internal tags (starting with `#`) are excluded from `primary_tag`. **IMPORTANT**: When creating posts via Admin API, always put public tags FIRST and language tags (`#en`, `#es`) LAST in the tags array. If an internal tag is first, Ghost won't assign a visible `primary_tag`, and the post will appear as "uncategorized" on the site.
 - Ghost Admin API token CANNOT upload `routes.yaml` or `redirects.yaml` (returns 403). Must be done manually via Ghost Admin > Settings > Labs > Routes / Redirects.
 - Ghost Admin API token CANNOT modify site settings (`PUT /settings/`) either (returns 403). Publication logo, icon, etc. must be changed via Ghost Admin UI.
 - Ghost Admin API token CANNOT modify users/staff profiles (`PUT /users/`) either (returns 403). Author bios, meta_title, etc. require cookie-based session auth: `POST /ghost/api/admin/session/` with `{username, password, token}` (token = 2FA code sent to email). Session cookie name: `ghost-admin-api-session`.

@@ -298,6 +298,74 @@ body.wm-desktop .fb-window:not(.wm-managed) {
   display: none;
 }
 
+/* ---- Light Mode ---- */
+body.light-mode .wm-launcher {
+  background-color: var(--crema);
+  color: var(--negro);
+  border-color: var(--negro);
+}
+body.light-mode .wm-window {
+  border-color: var(--crema);
+  background-color: var(--negro);
+  box-shadow: 4px 4px 0 rgba(18, 18, 18, 0.15);
+}
+body.light-mode .wm-window.wm-focused {
+  box-shadow: 6px 6px 0 rgba(18, 18, 18, 0.15), 0 0 0 1px rgba(18, 18, 18, 0.15);
+}
+body.light-mode .wm-resize-handle::after {
+  border-right-color: rgba(234, 230, 225, 0.3);
+  border-bottom-color: rgba(234, 230, 225, 0.3);
+}
+body.light-mode .wm-taskbar {
+  background-color: var(--crema);
+  color: var(--negro);
+  border-top-color: var(--negro);
+}
+body.light-mode .wm-taskbar-item {
+  background: rgba(18, 18, 18, 0.08);
+  border-color: rgba(18, 18, 18, 0.15);
+  color: var(--negro);
+}
+body.light-mode .wm-taskbar-item:hover {
+  background: rgba(18, 18, 18, 0.15);
+}
+body.light-mode .wm-taskbar-item.is-active {
+  background: rgba(18, 18, 18, 0.15);
+  border-color: var(--negro);
+}
+body.light-mode .wm-post-body {
+  background-color: var(--negro);
+}
+body.light-mode .wm-post-image {
+  border-bottom-color: rgba(234, 230, 225, 0.15);
+}
+body.light-mode .wm-post-details h2 {
+  color: var(--crema);
+}
+body.light-mode .wm-post-meta {
+  color: rgba(234, 230, 225, 0.5);
+}
+body.light-mode .wm-post-excerpt {
+  color: var(--crema);
+}
+body.light-mode .wm-post-link {
+  background-color: var(--crema);
+  color: var(--negro);
+  border-color: var(--crema);
+}
+body.light-mode .wm-post-link:hover {
+  box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.15);
+}
+body.light-mode .wm-folder-item {
+  color: var(--crema);
+}
+body.light-mode .wm-folder-item:hover {
+  background-color: rgba(234, 230, 225, 0.06);
+}
+body.light-mode .wm-loading {
+  color: rgba(234, 230, 225, 0.5);
+}
+
 /* ---- Responsive: hide everything on mobile ---- */
 @media screen and (max-width: 1023px) {
   .wm-launcher,

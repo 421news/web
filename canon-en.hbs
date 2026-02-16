@@ -28,12 +28,7 @@
   {{> "site-footer"}}
 </div>
 
-{{#get "posts" include="tags,authors" limit="8" filter="slug:[cognitive-sovereignty-an-introduction-to-psychic-autonomy,low-tech-high-life-a-response-to-cyberpunk,cyberciruja-guide-digital-self-determination,nick-land-the-apostle-of-chaos,becoming-ungovernable-peter-sloterdijk,what-is-the-metagame,the-secret-law-of-coincidences,reverse-engineering-the-enshittification-of-the-internet]"}}
-<div id="first-posts-data" style="display:none">{{#foreach posts}}<div data-slug="{{slug}}" data-url="{{url}}" data-title="{{title}}" data-img="{{feature_image}}" data-tag="{{#if primary_tag}}{{primary_tag.name}}{{/if}}" data-tag-img="{{#if primary_tag}}{{primary_tag.feature_image}}{{/if}}" data-author="{{#if primary_author}}{{primary_author.name}}{{/if}}" data-date="{{published_at}}"></div>{{/foreach}}</div>
-{{/get}}
-
 <script>
 window.__rutasJson = fetch('{{asset "data/rutas.json"}}').then(function(r){return r.json()});
-(function(){var el=document.getElementById('first-posts-data');if(!el)return;var divs=el.children,m={};for(var i=0;i<divs.length;i++){var d=divs[i];m[d.getAttribute('data-slug')]={slug:d.getAttribute('data-slug'),url:d.getAttribute('data-url'),title:d.getAttribute('data-title'),feature_image:d.getAttribute('data-img')||'',primary_tag:{name:d.getAttribute('data-tag')||'',feature_image:d.getAttribute('data-tag-img')||''},primary_author:{name:d.getAttribute('data-author')||''},published_at:d.getAttribute('data-date')||''};}window.__firstPosts=Promise.resolve(m);})();
 </script>
 <script src="{{asset "js/rutas.js"}}" defer></script>

@@ -4,14 +4,14 @@
    ======================================== */
 
 .fb-window {
-  border: var(--border-width) solid var(--negro);
+  border: var(--border-width) solid var(--crema);
   border-radius: var(--radius);
   background-color: var(--crema);
   overflow: hidden;
   font-family: 'Nunito Sans', sans-serif;
   max-width: 1100px;
   margin: 0 auto;
-  box-shadow: 4px 4px 0 var(--negro);
+  box-shadow: 4px 4px 0 rgba(18, 18, 18, 0.15);
   opacity: 0;
   animation: fbFadeIn 0.3s ease 0.1s forwards;
 }
@@ -25,8 +25,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--negro);
-  color: var(--crema);
+  background-color: var(--crema);
+  color: var(--negro);
   padding: 8px 12px;
   cursor: default;
   user-select: none;
@@ -41,7 +41,7 @@
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: 1.5px solid rgba(234, 230, 225, 0.3);
+  border: 1.5px solid rgba(18, 18, 18, 0.3);
   cursor: pointer;
   transition: opacity 0.15s ease;
 }
@@ -75,14 +75,14 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  background-color: var(--negro);
-  border-bottom: var(--border-width) solid var(--negro);
+  background-color: var(--crema);
+  border-bottom: var(--border-width) solid rgba(18, 18, 18, 0.15);
 }
 
 .fb-toolbar-btn {
-  background: rgba(234, 230, 225, 0.1);
-  border: 1.5px solid rgba(234, 230, 225, 0.2);
-  color: var(--crema);
+  background: rgba(18, 18, 18, 0.08);
+  border: 1.5px solid rgba(18, 18, 18, 0.15);
+  color: var(--negro);
   border-radius: 4px;
   padding: 4px 10px;
   font-size: 14px;
@@ -95,7 +95,7 @@
   text-decoration: none;
 }
 .fb-toolbar-btn:hover {
-  background: rgba(234, 230, 225, 0.2);
+  background: rgba(18, 18, 18, 0.15);
   transform: translateY(-1px);
 }
 .fb-toolbar-btn:active {
@@ -109,7 +109,7 @@
 .fb-toolbar-separator {
   width: 1px;
   height: 20px;
-  background-color: rgba(234, 230, 225, 0.15);
+  background-color: rgba(18, 18, 18, 0.15);
   margin: 0 4px;
 }
 
@@ -295,11 +295,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 5px 12px;
-  background-color: var(--negro);
-  color: rgba(234, 230, 225, 0.6);
+  background-color: var(--crema);
+  color: rgba(18, 18, 18, 0.6);
   font-size: 11px;
   font-weight: 600;
-  border-top: var(--border-width) solid var(--negro);
+  border-top: var(--border-width) solid rgba(18, 18, 18, 0.15);
 }
 
 .fb-statusbar-left {
@@ -316,8 +316,8 @@
 
 .fb-view-btn {
   background: none;
-  border: 1px solid rgba(234, 230, 225, 0.2);
-  color: rgba(234, 230, 225, 0.5);
+  border: 1px solid rgba(18, 18, 18, 0.2);
+  color: rgba(18, 18, 18, 0.5);
   border-radius: 3px;
   padding: 2px 6px;
   font-size: 12px;
@@ -326,13 +326,13 @@
   transition: all 0.12s ease;
 }
 .fb-view-btn:hover {
-  color: var(--crema);
-  border-color: rgba(234, 230, 225, 0.4);
+  color: var(--negro);
+  border-color: rgba(18, 18, 18, 0.4);
 }
 .fb-view-btn.is-active {
-  color: var(--crema);
-  background-color: rgba(234, 230, 225, 0.15);
-  border-color: rgba(234, 230, 225, 0.3);
+  color: var(--negro);
+  background-color: rgba(18, 18, 18, 0.1);
+  border-color: rgba(18, 18, 18, 0.3);
 }
 
 /* ---- List View (alternative to grid) ---- */
@@ -441,7 +441,7 @@
   }
 
   .fb-window {
-    box-shadow: 2px 2px 0 var(--negro);
+    box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.15);
   }
 }
 

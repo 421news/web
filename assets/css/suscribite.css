@@ -208,32 +208,103 @@ a {
   border: 1px solid #e74c3c;
 }
 
+/* NOTICE BANNER (base) */
+.sub-notice {
+  text-align: center;
+  margin: 20px 0 30px 0;
+  padding: 15px;
+  background-color: var(--negro);
+  border-radius: 8px;
+}
+.sub-notice-link {
+  color: var(--amarillo);
+  text-decoration: underline;
+}
+
 /* LIGHT MODE */
 .light-mode .subscription-section {
-  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
-  color: #121212;
+  background: linear-gradient(180deg, var(--verde), var(--crema));
+  color: var(--negro);
+}
+
+.light-mode .subscription-section a {
+  color: var(--negro);
+}
+
+.light-mode .title {
+  color: var(--crema);
+}
+
+.light-mode .subtitle {
+  color: var(--negro);
+}
+
+.light-mode .sub-notice {
+  background-color: var(--crema);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.light-mode .sub-notice-link {
+  color: var(--verde);
 }
 
 .light-mode .subscription-option {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: var(--negro);
 }
 
 .light-mode .subscription-option.premium {
-  background: linear-gradient(145deg, #e6d8ff, #d8c4ff);
-  border: 1px solid #6c3eb8;
-  color: #121212;
+  background: linear-gradient(170deg, var(--crema), rgba(23, 165, 131, 0.15));
+  border: 1px solid var(--verde);
+  color: var(--negro);
+}
+
+.light-mode .features li:before {
+  color: var(--verde);
+}
+
+.light-mode .select-plan-btn {
+  background: var(--verde);
+  color: var(--crema);
+}
+.light-mode .select-plan-btn:hover {
+  background: var(--negro);
+  color: var(--crema);
+}
+
+.light-mode .select-plan-btn.premium-btn {
+  background: var(--verde) !important;
+  color: var(--crema) !important;
+}
+
+.light-mode .savings {
+  background: var(--verde);
+  color: var(--crema);
+}
+
+.light-mode .sub-pesificado {
+  color: var(--verde) !important;
 }
 
 .light-mode #subscription-form-container {
-  background: rgba(0, 0, 0, 0.03);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: var(--negro);
 }
 
 .light-mode .form-group input {
   border: 1px solid rgba(0, 0, 0, 0.2);
   background: rgba(255, 255, 255, 0.8);
-  color: #121212;
+  color: var(--negro);
+}
+
+.light-mode .submit-btn {
+  background: var(--verde);
+  color: var(--crema);
+}
+.light-mode .submit-btn:hover {
+  background: var(--negro);
 }
 
 /* Responsive */

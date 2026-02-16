@@ -24,9 +24,10 @@
     if (!isDesktop) return;
     document.body.classList.add('wm-desktop');
 
-    var launcher = document.getElementById('wm-launcher');
-    if (launcher) {
-      launcher.addEventListener('click', function(e) {
+    // Nav bar "Explorar" button triggers file browser
+    var navExplore = document.getElementById('nav-explore-btn');
+    if (navExplore) {
+      navExplore.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         WM.openFileBrowser();
@@ -310,74 +311,6 @@
         });
     }
 
-    function navigateToPost(postSlug) {
-      var currentPathSegs = getCurrentPathSegs();
-      navStack.push({
-        prevHTML: contentArea.innerHTML,
-        prevTitle: titleEl ? titleEl.textContent : '',
-        prevPathSegs: currentPathSegs
-      });
-
-      var newSegs = currentPathSegs.slice();
-      newSegs.push(postSlug);
-      setPathbar(newSegs);
-      updateBackBtn();
-
-      if (contentArea) {
-        contentArea.innerHTML = '<div class="wm-loading">' +
-          (isEnglish ? 'Loading...' : 'Cargando...') + '</div>';
-      }
-
-      var url = API_URL + '/posts/slug/' + encodeURIComponent(postSlug) +
-        '/?key=' + API_KEY + '&include=authors';
-
-      fetch(url)
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          var post = data.posts && data.posts[0];
-          if (!post) {
-            if (contentArea) contentArea.innerHTML = '<div class="wm-error">' +
-              (isEnglish ? 'Post not found' : 'Post no encontrado') + '</div>';
-            return;
-          }
-
-          if (titleEl) titleEl.textContent = '421 — ' + post.title;
-          if (winData) {
-            winData.title = post.title;
-            updateTaskbarItem(winData);
-          }
-
-          if (!contentArea) return;
-          var html = '';
-          if (post.feature_image) {
-            html += '<img class="wm-post-image" src="' + escapeAttr(post.feature_image) +
-              '" alt="' + escapeAttr(post.title) + '" />';
-          }
-          html += '<div class="wm-post-details">';
-          html += '<h2>' + escapeHtml(post.title) + '</h2>';
-          var authorName = post.primary_author ? post.primary_author.name :
-            (post.authors && post.authors[0] ? post.authors[0].name : '');
-          var pubDate = post.published_at ?
-            new Date(post.published_at).toLocaleDateString(isEnglish ? 'en-US' : 'es-AR') : '';
-          html += '<div class="wm-post-meta">' + escapeHtml(authorName) +
-            (pubDate ? ' &middot; ' + pubDate : '') + '</div>';
-          var excerpt = stripHtml(post.html || '').substring(0, 800);
-          if ((post.html || '').length > 800) excerpt += '...';
-          html += '<div class="wm-post-excerpt">' + escapeHtml(excerpt) + '</div>';
-          var postUrl = isEnglish ? '/en/' + post.slug + '/' : '/es/' + post.slug + '/';
-          html += '<a href="' + postUrl + '" class="wm-post-link">' +
-            (isEnglish ? 'Read full &rarr;' : 'Leer completo &rarr;') + '</a>';
-          html += '</div>';
-          contentArea.innerHTML = html;
-        })
-        .catch(function() {
-          if (contentArea) {
-            contentArea.innerHTML = '<div class="wm-error">' +
-              (isEnglish ? 'Error loading post' : 'Error al cargar el post') + '</div>';
-          }
-        });
-    }
-
     function getCurrentPathSegs() {
       if (!pathbar) return [];
       var segs = [];
@@ -425,7 +358,7 @@
       contentArea.querySelectorAll('.wm-folder-item').forEach(function(item) {
         item.addEventListener('click', function() {
           var slug = item.getAttribute('data-slug');
-          if (slug) navigateToPost(slug);
+          if (slug) WM.openPostWindow(slug);
         });
       });
     }
@@ -511,6 +444,91 @@
       var taskbar = document.getElementById('wm-taskbar');
       if (taskbar) taskbar.style.display = 'none';
     }
+  };
+
+  // ---- Open Post Window (new floating window for article preview) ----
+  WM.openPostWindow = function(postSlug) {
+    var loadingTitle = isEnglish ? 'Loading...' : 'Cargando...';
+
+    var win = WM.createWindow({
+      title: loadingTitle,
+      width: 600,
+      height: 500,
+      type: 'post'
+    });
+
+    var body = win.querySelector('.wm-window-body');
+
+    // Build titlebar
+    var titlebar = document.createElement('div');
+    titlebar.className = 'fb-titlebar';
+    titlebar.innerHTML = '<div class="fb-titlebar-dots">' +
+      '<span class="fb-dot fb-dot--close" title="Cerrar"></span>' +
+      '<span class="fb-dot fb-dot--minimize" title="Minimizar"></span>' +
+      '<span class="fb-dot fb-dot--maximize" title="Maximizar"></span>' +
+      '</div>' +
+      '<span class="fb-titlebar-title">' + escapeHtml(loadingTitle) + '</span>' +
+      '<div class="fb-titlebar-spacer"></div>';
+
+    var postBody = document.createElement('div');
+    postBody.className = 'wm-post-body';
+    postBody.innerHTML = '<div class="wm-loading">' + loadingTitle + '</div>';
+
+    body.innerHTML = '';
+    body.appendChild(titlebar);
+    body.appendChild(postBody);
+
+    setupDrag(win, titlebar);
+
+    var winData = getWinData(win);
+    if (winData) setupWindowControls(win, winData);
+
+    var url = API_URL + '/posts/slug/' + encodeURIComponent(postSlug) +
+      '/?key=' + API_KEY + '&include=authors';
+
+    fetch(url)
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var post = data.posts && data.posts[0];
+        if (!post) {
+          postBody.innerHTML = '<div class="wm-error">' +
+            (isEnglish ? 'Post not found' : 'Post no encontrado') + '</div>';
+          return;
+        }
+
+        var titleEl = titlebar.querySelector('.fb-titlebar-title');
+        if (titleEl) titleEl.textContent = post.title;
+        if (winData) {
+          winData.title = post.title;
+          updateTaskbarItem(winData);
+        }
+
+        var html = '';
+        if (post.feature_image) {
+          html += '<img class="wm-post-image" src="' + escapeAttr(post.feature_image) +
+            '" alt="' + escapeAttr(post.title) + '" />';
+        }
+        html += '<div class="wm-post-details">';
+        html += '<h2>' + escapeHtml(post.title) + '</h2>';
+        var authorName = post.primary_author ? post.primary_author.name :
+          (post.authors && post.authors[0] ? post.authors[0].name : '');
+        var pubDate = post.published_at ?
+          new Date(post.published_at).toLocaleDateString(isEnglish ? 'en-US' : 'es-AR') : '';
+        html += '<div class="wm-post-meta">' + escapeHtml(authorName) +
+          (pubDate ? ' &middot; ' + pubDate : '') + '</div>';
+        var excerpt = stripHtml(post.html || '').substring(0, 800);
+        if ((post.html || '').length > 800) excerpt += '...';
+        html += '<div class="wm-post-excerpt">' + escapeHtml(excerpt) + '</div>';
+        var postUrl = isEnglish ? '/en/' + post.slug + '/' : '/es/' + post.slug + '/';
+        html += '<a href="' + postUrl + '" class="wm-post-link">' +
+          (isEnglish ? 'Read full &rarr;' : 'Leer completo &rarr;') + '</a>';
+        html += '</div>';
+        postBody.innerHTML = html;
+      })
+      .catch(function() {
+        postBody.innerHTML = '<div class="wm-error">' +
+          (isEnglish ? 'Error loading post' : 'Error al cargar el post') + '</div>';
+      });
   };
 
   // ---- Taskbar ----

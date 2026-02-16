@@ -110,6 +110,205 @@ body.light-mode {
   color: var(--negro);
 }
 
+/* Light mode: amarillo → verde swap for accents */
+body.light-mode .hero-mobile-title {
+  color: var(--verde);
+}
+body.light-mode .tag-box {
+  border-color: var(--verde);
+  background-color: var(--crema);
+}
+body.light-mode .post-card_ico {
+  border-color: var(--negro);
+  background-color: var(--crema);
+}
+body.light-mode .post-card_ico .primary-tag-image {
+  filter: invert(1);
+}
+body.light-mode .ruta-posts-count {
+  color: var(--verde);
+}
+body.light-mode .canon-number-badge {
+  background: var(--verde);
+  color: var(--crema);
+}
+body.light-mode .rich-text blockquote {
+  border-image: linear-gradient(180deg, var(--verde), var(--amarillo)) 1;
+}
+
+/* Light mode: flashy title → green */
+body.light-mode .flashy-h1 {
+  color: var(--verde);
+}
+
+/* Light mode: gradients → mostly green */
+body.light-mode .preview-section.bg-gradient {
+  background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
+}
+body.light-mode .alt-post-header {
+  background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
+}
+body.light-mode .button:hover {
+  background-image: linear-gradient(90deg, var(--verde), var(--amarillo));
+}
+body.light-mode .hl-post .flashy-h1 span,
+body.light-mode .hero-home .flashy-h1 span {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .hl-post .author-name_link:hover,
+body.light-mode .hero-home .author-name_link:hover {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .rich-text a {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .rutas-hero-title {
+  background: linear-gradient(280deg, var(--amarillo), var(--verde));
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+body.light-mode .rutas-gradient-divider {
+  background: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .ruta-nombre a {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+
+/* Light mode: hero mobile */
+body.light-mode .hero-mobile-header {
+  background-color: var(--crema) !important;
+}
+body.light-mode .hero-mobile-author {
+  color: var(--negro);
+}
+body.light-mode .hero-mobile-author a {
+  color: var(--negro) !important;
+}
+body.light-mode .hero-mobile-read-button {
+  color: var(--negro);
+  text-decoration-color: var(--negro);
+}
+body.light-mode .hero-mobile-suscribite-button {
+  background-color: var(--crema);
+  color: var(--negro);
+}
+
+/* Light mode: featured post tags */
+body.light-mode .plain-tags {
+  background-color: var(--crema) !important;
+}
+
+/* Light mode: flashy title shadow */
+body.light-mode .flashy-h1.is-alt.flashy-h1-shadow span::before,
+body.light-mode .flashy-h1.is-alt.is-shadow .flashy-h1_shadow::before {
+  background: var(--crema);
+}
+
+/* Light mode: author box mobile */
+@media screen and (max-width: 600px) {
+  body.light-mode .author-box.is-home {
+    background: var(--crema);
+  }
+}
+
+/* Light mode: code blocks */
+body.light-mode .rich-text pre {
+  background: #e8e4df;
+  color: #333;
+}
+
+/* Light mode: buttons */
+body.light-mode .button {
+  border-color: var(--negro);
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .button:active {
+  color: var(--negro);
+}
+body.light-mode .button.is-icon {
+  color: var(--negro);
+}
+
+/* Light mode: post author box */
+body.light-mode .post_author-box {
+  border-color: var(--negro);
+}
+
+/* Light mode: post cards */
+body.light-mode .post-card {
+  border-color: var(--negro);
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .post-card:hover {
+  background-color: var(--negro);
+}
+body.light-mode .post-card:hover .post-card_info {
+  color: var(--crema);
+}
+body.light-mode .post-card:hover .tag-box {
+  color: var(--negro);
+}
+
+/* Footer base styles (moved from inline) */
+.footer-logo-link {
+  color: var(--negro);
+}
+.footer-slogan {
+  color: var(--negro);
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Light mode: footer → green bg, white text */
+body.light-mode footer {
+  background-color: var(--verde);
+}
+body.light-mode footer .footer_copy,
+body.light-mode footer p,
+body.light-mode footer a,
+body.light-mode footer .is-italic {
+  color: var(--crema);
+}
+body.light-mode .footer-logo-link {
+  color: var(--crema);
+}
+body.light-mode .footer-slogan {
+  color: var(--crema);
+}
+body.light-mode footer svg path {
+  fill: var(--crema);
+}
+body.light-mode footer svg {
+  stroke: var(--crema);
+}
+body.light-mode .button.is-icon.footer-button {
+  background-color: transparent;
+  border-color: var(--crema);
+  color: var(--crema);
+}
+body.light-mode .button.is-icon.footer-button:hover {
+  background-color: var(--crema);
+  color: var(--verde);
+}
+body.light-mode .footer-button:hover svg path {
+  fill: var(--verde);
+}
+body.light-mode .footer-button:hover svg {
+  stroke: var(--verde);
+}
+body.light-mode .footer_newsletter-form {
+  background-color: rgba(234, 230, 225, 0.15);
+}
+body.light-mode .form-field {
+  background-color: rgba(234, 230, 225, 0.15);
+  color: var(--crema);
+}
+body.light-mode .technomagic-link {
+  color: var(--crema) !important;
+}
+
 /* BUTTONS */
 
 .w-button {
@@ -927,10 +1126,11 @@ footer {
   gap: 1rem;
   flex-wrap: wrap;
 }
-.footer-button {
-  border: 2px solid black;
+.button.is-icon.footer-button {
+  border: 2px solid var(--negro);
   border-radius: 0;
   background-color: var(--amarillo);
+  color: var(--negro);
 }
 
 @media screen and (max-width: 600px) {
@@ -1641,6 +1841,55 @@ footer {
 }
 
 /* =============================================
+   HOME: RUTA SECTION (rotating route on homepage)
+   ============================================= */
+
+.home-ruta-meta {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: rgba(0, 0, 0, 0.55);
+  margin-top: 1.25rem;
+}
+
+.home-ruta-nombre {
+  font-size: 2.75rem;
+  font-style: italic;
+  font-weight: 800;
+  color: #121212;
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+
+.home-ruta-tesis {
+  font-style: italic;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 1.5;
+  max-width: 750px;
+  margin: 0 auto;
+}
+
+.home-ruta-cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.home-ruta-cta a {
+  color: #121212;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+  padding-bottom: 2px;
+  transition: border-color 0.2s;
+}
+
+.home-ruta-cta a:hover {
+  border-color: #121212;
+}
+
+/* =============================================
    RUTAS DE LECTURA + CANON 421
    ============================================= */
 
@@ -1663,7 +1912,6 @@ footer {
 }
 
 .rutas-hero-subtitle {
-  font-family: 'Lora', Georgia, serif;
   font-style: italic;
   font-size: 1.15rem;
   color: var(--crema);
@@ -1716,8 +1964,22 @@ footer {
   line-height: 1.2;
 }
 
+.ruta-nombre a {
+  color: inherit;
+  text-decoration: none;
+  background-image: linear-gradient(280deg, var(--verde), var(--amarillo));
+  background-size: 0% 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  padding-bottom: 3px;
+  transition: background-size 0.3s ease;
+}
+
+.ruta-nombre a:hover {
+  background-size: 100% 2px;
+}
+
 .ruta-tesis {
-  font-family: 'Lora', Georgia, serif;
   font-style: italic;
   font-size: 1.05rem;
   color: rgba(234, 230, 225, 0.75);
@@ -1812,7 +2074,6 @@ footer {
 }
 
 .canon-reason {
-  font-family: 'Lora', Georgia, serif;
   font-style: italic;
   font-size: 0.9rem;
   color: rgba(234, 230, 225, 0.75);
@@ -1859,6 +2120,33 @@ footer {
     min-width: 28px;
     font-size: 12px;
   }
+}
+
+/* Light mode: Rutas + Canon */
+body.light-mode .rutas-hero-subtitle {
+  color: var(--negro);
+}
+body.light-mode .ruta-section {
+  border-bottom-color: rgba(18, 18, 18, 0.08);
+}
+body.light-mode .ruta-tesis {
+  color: rgba(18, 18, 18, 0.6);
+}
+body.light-mode .canon-item {
+  border-bottom-color: rgba(18, 18, 18, 0.08);
+  color: var(--negro);
+}
+body.light-mode .canon-item:hover {
+  background: rgba(18, 18, 18, 0.03);
+}
+body.light-mode .canon-cover {
+  border-color: rgba(18, 18, 18, 0.1);
+}
+body.light-mode .canon-info h3 {
+  color: var(--negro);
+}
+body.light-mode .canon-reason {
+  color: rgba(18, 18, 18, 0.6);
 }
 
 /* =============================================
@@ -2313,5 +2601,103 @@ body.light-mode .pitch-bottom strong {
 
   .pitch-form-hint {
     font-size: 0.8rem;
+  }
+}
+
+/* =============================================
+   SECTION TITLE LINK (homepage → archive)
+   ============================================= */
+
+.section-title-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.section-title-link:hover {
+  text-decoration: underline;
+}
+
+/* =============================================
+   FILTER BAR (ultimos-posts / last-posts)
+   ============================================= */
+
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-select {
+  background-color: var(--negro);
+  color: var(--crema);
+  border: var(--border-width) solid var(--crema);
+  border-radius: var(--radius);
+  padding: 0.6rem 2.25rem 0.6rem 1rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 700;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23eae6e1'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--amarillo);
+}
+
+.filter-select option {
+  background-color: var(--negro);
+  color: var(--crema);
+}
+
+body.light-mode .filter-select {
+  background-color: var(--crema);
+  color: var(--negro);
+  border-color: var(--negro);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23121212'/%3E%3C/svg%3E");
+}
+
+body.light-mode .filter-select option {
+  background-color: var(--crema);
+  color: var(--negro);
+}
+
+body.light-mode .filter-select:focus {
+  border-color: var(--verde);
+}
+
+.filter-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  font-style: italic;
+  color: rgba(234, 230, 225, 0.5);
+}
+
+body.light-mode .filter-empty {
+  color: rgba(18, 18, 18, 0.4);
+}
+
+@media screen and (max-width: 600px) {
+  .filter-bar {
+    flex-direction: column;
+  }
+
+  .filter-select {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px;
+    padding: 0.75rem 1rem;
+    appearance: auto;
+    -webkit-appearance: menulist;
+    background-image: none;
   }
 }
