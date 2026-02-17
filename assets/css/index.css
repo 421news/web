@@ -1929,7 +1929,8 @@ footer {
 }
 
 #rutas-container,
-#canon-container {
+#canon-container,
+#revista-container {
   min-height: 80vh;
 }
 

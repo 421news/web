@@ -11,6 +11,11 @@ Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming
 - **GitHub repo**: `https://github.com/421news/web.git` (branch: `main`)
 - **Render API Key**: `RENDER_API_KEY_REDACTED`
 - **Render webhook-hreflang service**: `srv-d68brdg6fj8s73c1foqg` (URL: `https://webhook-hreflang.onrender.com`)
+- **Render mercadopago-ghost service**: `srv-d69qel86fj8s73cotlo0` (URL: `https://mercadopago-ghost.onrender.com`)
+- **MercadoPago Access Token**: `MERCADOPAGO_ACCESS_TOKEN_REDACTED`
+- **MercadoPago Secret Key**: `MERCADOPAGO_SECRET_KEY_REDACTED`
+- **Resend API Key** (MTG Collection emails): `RESEND_API_KEY_REDACTED`
+- **Ghost Wizard Tier ID**: `66c8fcf131e80b000183e05d`
 
 ## Deploy Workflow
 
