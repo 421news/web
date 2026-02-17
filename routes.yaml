@@ -7,6 +7,8 @@ routes:
   /es/canon/: canon
   /es/revista-421/: revista
   /es/pitcheale-a-421/: pitcheale
+  /es/mi-suscripcion/: mi-suscripcion
+  /en/my-subscription/: my-subscription
   /en/routes/: routes
   /en/canon/: canon-en
   /es/ultimos-posts/: last-posts-es

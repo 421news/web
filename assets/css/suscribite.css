@@ -417,6 +417,54 @@
   color: var(--negro);
 }
 
+/* ===== ACCOUNT PAGE ===== */
+.account-info {
+  font-size: 15px;
+  opacity: 0.7;
+  margin-bottom: 2rem;
+}
+.account-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.account-desc {
+  font-size: 14px;
+  opacity: 0.6;
+  margin-bottom: 1.5rem;
+}
+.account-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+.account-help {
+  font-size: 14px;
+  opacity: 0.5;
+  text-align: center;
+}
+.account-help a {
+  color: var(--amarillo);
+  text-decoration: none;
+}
+.account-help a:hover {
+  text-decoration: underline;
+}
+
+.light-mode .account-info {
+  color: var(--negro);
+}
+.light-mode .account-section-title {
+  color: var(--negro);
+}
+.light-mode .account-desc {
+  color: var(--negro);
+}
+.light-mode .account-help a {
+  color: var(--verde);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .sub-hero {

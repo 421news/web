@@ -1,0 +1,115 @@
+{{#unless @member}}
+<div id="sub-popup" class="sub-popup" style="display:none;">
+  <div class="sub-popup-backdrop"></div>
+  <div class="sub-popup-card">
+    <button class="sub-popup-close" aria-label="Cerrar">&times;</button>
+    <div class="sub-popup-icon">&#9889;</div>
+    <h3 class="sub-popup-title">{{#has tag="#en"}}Don't miss a thing{{else}}No te pierdas nada{{/has}}</h3>
+    <p class="sub-popup-text">{{#has tag="#en"}}Subscribe to 421 and get access to all our content, the digital magazine, and exclusive benefits.{{else}}Suscribite a 421 y acced&eacute; a todo nuestro contenido, la revista digital y beneficios exclusivos.{{/has}}</p>
+    <a href="{{#has tag="#en"}}/en/subscribe/{{else}}/es/suscribite/{{/has}}" class="sub-popup-btn">{{#has tag="#en"}}See plans{{else}}Ver planes{{/has}}</a>
+    <button class="sub-popup-later">{{#has tag="#en"}}Maybe later{{else}}Ahora no{{/has}}</button>
+  </div>
+</div>
+
+<style>
+.sub-popup { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.sub-popup-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+.sub-popup-card {
+  position: relative;
+  max-width: 400px;
+  width: 90%;
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(234,230,225,0.12);
+  border-radius: var(--radius);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center;
+  animation: subPopupIn 0.3s ease;
+}
+@keyframes subPopupIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.sub-popup-close {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; color: var(--crema); opacity: 0.4;
+  font-size: 24px; cursor: pointer; line-height: 1; transition: opacity 0.2s;
+}
+.sub-popup-close:hover { opacity: 1; }
+.sub-popup-icon { font-size: 36px; margin-bottom: 0.8rem; }
+.sub-popup-title {
+  font-size: 1.4rem; font-weight: 800; font-style: italic;
+  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  margin: 0 0 0.8rem;
+}
+.sub-popup-text {
+  font-family: 'Lora', serif; font-style: italic;
+  font-size: 0.95rem; color: var(--crema); opacity: 0.75;
+  line-height: 1.6; margin: 0 0 1.5rem;
+}
+.sub-popup-btn {
+  display: block; width: 100%; padding: 13px;
+  border: none; border-radius: 6px;
+  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  color: var(--negro); font-weight: 700; font-size: 15px;
+  text-decoration: none; text-align: center;
+  font-family: inherit; cursor: pointer; transition: opacity 0.2s;
+}
+.sub-popup-btn:hover { opacity: 0.9; }
+.sub-popup-later {
+  display: block; margin: 1rem auto 0;
+  background: none; border: none; color: var(--crema); opacity: 0.4;
+  font-size: 13px; font-family: inherit; cursor: pointer; transition: opacity 0.2s;
+}
+.sub-popup-later:hover { opacity: 0.8; }
+
+/* Light mode */
+.light-mode .sub-popup-card { background: rgba(234, 230, 225, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-color: rgba(0,0,0,0.1); }
+.light-mode .sub-popup-close { color: var(--negro); }
+.light-mode .sub-popup-text { color: var(--negro); }
+.light-mode .sub-popup-later { color: var(--negro); }
+</style>
+
+<script>
+(function() {
+  var COOLDOWN_DAYS = 7;
+  var SCROLL_TRIGGER = 0.20;
+  var KEY = 'sub_popup_dismissed';
+
+  var dismissed = localStorage.getItem(KEY);
+  if (dismissed && (Date.now() - parseInt(dismissed, 10)) < COOLDOWN_DAYS * 86400000) return;
+
+  var triggered = false;
+  function onScroll() {
+    if (triggered) return;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight <= 0) return;
+    var pct = window.scrollY / docHeight;
+    if (pct >= SCROLL_TRIGGER) {
+      triggered = true;
+      window.removeEventListener('scroll', onScroll);
+      var popup = document.getElementById('sub-popup');
+      if (popup) popup.style.display = 'flex';
+    }
+  }
+
+  function dismiss() {
+    var popup = document.getElementById('sub-popup');
+    if (popup) popup.style.display = 'none';
+    localStorage.setItem(KEY, Date.now().toString());
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var popup = document.getElementById('sub-popup');
+    if (!popup) return;
+    popup.querySelector('.sub-popup-close').addEventListener('click', dismiss);
+    popup.querySelector('.sub-popup-later').addEventListener('click', dismiss);
+    popup.querySelector('.sub-popup-backdrop').addEventListener('click', dismiss);
+  });
+})();
+</script>
+{{/unless}}

@@ -1,0 +1,87 @@
+{{!< default}}
+
+    <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
+    <div class="page-wrapper">
+      {{> "general-styling"}}
+      {{> "site-nav-es"}}
+
+      <div class="sub-page">
+        <div class="sub-container">
+
+          {{#if @member.paid}}
+          <!-- PAID MEMBER -->
+          <div class="sub-hero">
+            <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
+            <p class="sub-hero-subtitle">Gracias por ser parte de 421, {{@member.name}}. Tu apoyo hace posible este proyecto.</p>
+          </div>
+          <hr class="sub-gradient-divider">
+
+          <div class="sub-card" style="max-width: 600px;">
+            <div class="sub-card-label">Wizard activo</div>
+            <p class="account-info">Email: <strong>{{@member.email}}</strong></p>
+
+            <p class="account-section-title">Gestion&aacute; tu suscripci&oacute;n</p>
+            <p class="account-desc">Eleg&iacute; la opci&oacute;n seg&uacute;n c&oacute;mo te suscribiste:</p>
+
+            <div class="account-options">
+              <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
+                Stripe (tarjeta internacional)
+              </button>
+              <a href="https://www.mercadopago.com.ar/subscriptions" target="_blank" rel="noopener" class="btn-solid" style="text-align:center; text-decoration:none;">
+                MercadoPago (pesos argentinos)
+              </a>
+            </div>
+
+            <p class="account-help">
+              &iquest;Necesit&aacute;s ayuda? Escrib&iacute;nos a <a href="mailto:contacto@421.news">contacto@421.news</a>
+            </p>
+          </div>
+
+          {{else if @member}}
+          <!-- FREE MEMBER -->
+          <div class="sub-hero">
+            <h1 class="sub-hero-title">Mi cuenta</h1>
+            <p class="sub-hero-subtitle">Est&aacute;s registrado como miembro gratuito. Suscribite para acceder a todos los beneficios.</p>
+          </div>
+          <hr class="sub-gradient-divider">
+
+          <div class="sub-card" style="max-width: 600px;">
+            <div class="sub-card-label">Goblin (gratuito)</div>
+            <p class="account-info">Email: <strong>{{@member.email}}</strong></p>
+
+            <a href="/es/suscribite/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
+              Upgrade a Wizard
+            </a>
+
+            <div style="margin-top: 1.5rem;">
+              <button class="btn-outline" onclick="window.location.hash='#/portal/account';">
+                Gestionar mi cuenta
+              </button>
+            </div>
+          </div>
+
+          {{else}}
+          <!-- NOT LOGGED IN -->
+          <div class="sub-hero">
+            <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
+            <p class="sub-hero-subtitle">Inici&aacute; sesi&oacute;n para gestionar tu suscripci&oacute;n.</p>
+          </div>
+          <hr class="sub-gradient-divider">
+
+          <div class="sub-card" style="max-width: 600px; text-align: center;">
+            <button class="btn-gradient" onclick="window.location.hash='#/portal/signin';">
+              Iniciar sesi&oacute;n
+            </button>
+
+            <div class="free-tier-link">
+              <p>&iquest;No ten&eacute;s cuenta?</p>
+              <a href="/es/suscribite/" class="btn-outline" style="text-decoration:none;">Suscribite</a>
+            </div>
+          </div>
+          {{/if}}
+
+        </div>
+      </div>
+
+      {{> "site-footer"}}
+    </div>
