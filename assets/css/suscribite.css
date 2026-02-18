@@ -475,6 +475,78 @@
   color: var(--verde);
 }
 
+/* ===== EDIT EMAIL LINK ===== */
+.account-edit-link {
+  color: var(--amarillo);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.account-edit-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+.light-mode .account-edit-link {
+  color: var(--verde);
+}
+
+/* ===== APP LINK (MTG) ===== */
+.account-app-link {
+  margin-bottom: 2rem;
+}
+.account-app-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(234, 230, 225, 0.1);
+  background: rgba(234, 230, 225, 0.04);
+  color: var(--crema);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.account-app-btn:hover {
+  border-color: var(--amarillo);
+  background: rgba(234, 230, 225, 0.06);
+}
+.account-app-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+.account-app-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.account-app-text strong {
+  font-size: 15px;
+  font-weight: 700;
+}
+.account-app-text small {
+  font-size: 12px;
+  opacity: 0.5;
+}
+.account-app-arrow {
+  font-size: 1.2rem;
+  opacity: 0.4;
+  transition: opacity 0.2s;
+}
+.account-app-btn:hover .account-app-arrow {
+  opacity: 0.8;
+}
+.light-mode .account-app-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: var(--negro);
+}
+.light-mode .account-app-btn:hover {
+  border-color: var(--verde);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .sub-hero {

@@ -20,7 +20,18 @@
 
           <div class="sub-card" style="max-width: 600px;">
             <div class="sub-card-label">Wizard activo</div>
-            <p class="account-info">Email: <strong>{{@member.email}}</strong></p>
+            <p class="account-info">Email: <strong>{{@member.email}}</strong> &middot; <a href="#" class="account-edit-link" onclick="event.preventDefault(); window.location.hash='#/portal/account';">cambiar</a></p>
+
+            <div class="account-app-link">
+              <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
+                <span class="account-app-icon">&#x1F9D9;</span>
+                <span class="account-app-text">
+                  <strong>MTG Collection</strong>
+                  <small>Tu colecci&oacute;n de cartas Magic</small>
+                </span>
+                <span class="account-app-arrow">&rarr;</span>
+              </a>
+            </div>
 
             <p class="account-section-title">Gestion&aacute; tu suscripci&oacute;n</p>
             <p class="account-desc">Eleg&iacute; la opci&oacute;n seg&uacute;n c&oacute;mo te suscribiste:</p>
@@ -71,6 +82,9 @@
           <hr class="sub-gradient-divider">
 
           <div class="sub-card" style="max-width: 600px; text-align: center;">
+            <div style="font-size: 4rem; line-height: 1; margin-bottom: 0.5rem;">&#x1F9D9;</div>
+            <p style="font-size: 0.9rem; opacity: 0.5; margin-bottom: 1.5rem;">Portal de Wizards</p>
+
             <button class="btn-gradient" onclick="window.location.hash='#/portal/signin';">
               Iniciar sesi&oacute;n
             </button>
