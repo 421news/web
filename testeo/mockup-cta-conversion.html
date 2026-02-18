@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mockup: CTA en posts + Footer newsletter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --negro: #121212;
+      --crema: #eae6e1;
+      --amarillo: #fcd221;
+      --verde: #17a583;
+      --radius: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--negro);
+      color: var(--crema);
+      font-family: 'Nunito Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .mockup-label {
+      text-align: center;
+      padding: 2rem 1rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--verde);
+      border-top: 1px dashed rgba(234,230,225,0.15);
+      margin-top: 3rem;
+    }
+    .mockup-label:first-child { margin-top: 0; border-top: none; }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* =============================================
+       MOCKUP 1: Fin del artículo + CTA
+       ============================================= */
+
+    .fake-article-end {
+      padding: 2rem 0;
+      font-family: 'Lora', serif;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: rgba(234,230,225,0.8);
+    }
+    .fake-article-end p { margin-bottom: 1rem; }
+
+    /* Author box (simplified) */
+    .author-box {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 0;
+      border-top: 1px solid rgba(234,230,225,0.1);
+    }
+    .author-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      flex-shrink: 0;
+    }
+    .author-name { font-weight: 700; font-size: 0.95rem; }
+    .author-bio { font-size: 0.8rem; color: rgba(234,230,225,0.5); margin-top: 2px; }
+
+    /* === POST CTA BLOCK === */
+    .post-cta {
+      margin: 2.5rem 0;
+      padding: 2rem;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.025);
+      border: 2px solid transparent;
+      border-image: linear-gradient(280deg, var(--verde), var(--amarillo)) 1;
+      text-align: center;
+    }
+
+    .post-cta-text {
+      font-family: 'Lora', serif;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: rgba(234,230,225,0.85);
+      max-width: 560px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .post-cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .post-cta-btn-primary {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      color: var(--negro);
+      font-weight: 800;
+      font-size: 0.95rem;
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .post-cta-btn-primary:hover { opacity: 0.9; }
+
+    .post-cta-btn-secondary {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      background: transparent;
+      color: var(--crema);
+      font-weight: 600;
+      font-size: 0.85rem;
+      border: 1px solid rgba(234,230,225,0.25);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+    .post-cta-btn-secondary:hover { border-color: var(--crema); }
+
+    /* Related posts header (simplified) */
+    .related-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 0 1rem;
+    }
+    .related-header h2 { font-size: 1.3rem; }
+    .related-header a {
+      font-size: 0.8rem;
+      color: var(--crema);
+      text-decoration: none;
+      border: 1px solid rgba(234,230,225,0.3);
+      padding: 0.4rem 1rem;
+      border-radius: var(--radius);
+    }
+
+    .fake-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      padding-bottom: 3rem;
+    }
+    .fake-card {
+      background: rgba(255,255,255,0.04);
+      border-radius: var(--radius);
+      height: 200px;
+      border: 1px solid rgba(234,230,225,0.08);
+    }
+
+    /* =============================================
+       MOCKUP 2: Newsletter footer
+       ============================================= */
+
+    .newsletter-mockup {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: Georgia, serif;
+      color: #333;
+    }
+
+    .newsletter-header {
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+    .newsletter-header img {
+      height: 30px;
+    }
+    .newsletter-header h3 {
+      font-size: 0.85rem;
+      color: #888;
+      font-weight: 400;
+      margin-top: 0.5rem;
+    }
+
+    .newsletter-body {
+      padding: 2rem;
+    }
+    .newsletter-body h2 {
+      font-size: 1.4rem;
+      color: #1a1a1a;
+      margin-bottom: 1rem;
+    }
+    .newsletter-body p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+    .newsletter-body .fake-content {
+      height: 60px;
+      background: repeating-linear-gradient(
+        0deg,
+        #f5f5f5,
+        #f5f5f5 12px,
+        transparent 12px,
+        transparent 20px
+      );
+      border-radius: 4px;
+      margin: 1rem 0;
+    }
+
+    /* The CTA footer */
+    .newsletter-cta-footer {
+      padding: 1.5rem 2rem;
+      background: #f8f7f5;
+      border-top: 2px solid;
+      border-image: linear-gradient(280deg, #17a583, #fcd221) 1;
+      text-align: center;
+    }
+    .newsletter-cta-footer p {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: #444;
+      margin: 0;
+    }
+    .newsletter-cta-footer a {
+      color: #17a583;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .newsletter-cta-footer a:hover { text-decoration: underline; }
+
+    .newsletter-footer {
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid #eee;
+    }
+    .newsletter-footer p {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 0.78rem;
+      color: #999;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* =============================================
+       MOCKUP 3: Precio en pesos
+       ============================================= */
+
+    .price-mockup {
+      max-width: 420px;
+      margin: 2rem auto;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(234,230,225,0.12);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .price-usd {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(280deg, var(--verde), var(--amarillo));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .price-period {
+      font-size: 1rem;
+      color: rgba(234,230,225,0.6);
+      margin-bottom: 1rem;
+    }
+    .price-ars {
+      display: inline-block;
+      margin-top: 0.75rem;
+      padding: 0.5rem 1.25rem;
+      background: rgba(23,165,131,0.12);
+      border: 1px solid rgba(23,165,131,0.3);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--verde);
+      font-weight: 600;
+    }
+    .price-ars-note {
+      font-size: 0.75rem;
+      color: rgba(234,230,225,0.4);
+      margin-top: 0.5rem;
+    }
+
+    /* =============================================
+       LIGHT MODE
+       ============================================= */
+    .light-section {
+      background: #f5f3f0;
+      color: #1a1a1a;
+      padding: 1rem 0 3rem;
+    }
+    .light-section .post-cta {
+      background: rgba(0,0,0,0.03);
+    }
+    .light-section .post-cta-text {
+      color: rgba(0,0,0,0.75);
+    }
+    .light-section .post-cta-btn-secondary {
+      color: #1a1a1a;
+      border-color: rgba(0,0,0,0.2);
+    }
+    .light-section .author-name { color: #1a1a1a; }
+    .light-section .author-bio { color: rgba(0,0,0,0.5); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .fake-cards { grid-template-columns: repeat(2, 1fr); }
+      .post-cta { padding: 1.5rem; }
+      .post-cta-text { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== MOCKUP 1: CTA en post (dark mode) ========== -->
+  <div class="mockup-label">Mockup 1 — CTA en post (dark mode)</div>
+
+  <div class="container">
+    <div class="fake-article-end">
+      <p>...y por eso la cultura pop no es un escape de la realidad: es una herramienta para pensarla. Cada meme, cada serie, cada juego de cartas codifica una forma de ver el mundo. La pregunta no es si vale la pena analizarlos — la pregunta es qué nos perdemos si no lo hacemos.</p>
+    </div>
+
+    <!-- Author box -->
+    <div class="author-box">
+      <div class="author-avatar"></div>
+      <div>
+        <div class="author-name">Juan Ruocco</div>
+        <div class="author-bio">Editor de 421. Escribe sobre cultura, tecnología y la vida real.</div>
+      </div>
+    </div>
+
+    <!-- === THE CTA === -->
+    <div class="post-cta">
+      <p class="post-cta-text">
+        Este texto es gratis porque nos parece importante. Pero no es gratis de hacer. 421 sobrevive porque un grupo de personas elige bancarlo. Si lo que leés te sirve, sumate.
+      </p>
+      <div class="post-cta-buttons">
+        <a href="#" class="post-cta-btn-primary">Hacete Wizard →</a>
+        <a href="#" class="post-cta-btn-secondary">¿Qué es?</a>
+      </div>
+    </div>
+
+    <!-- Related posts -->
+    <div class="related-header">
+      <h2>Textos relacionados</h2>
+      <a href="#">Leer más</a>
+    </div>
+    <div class="fake-cards">
+      <div class="fake-card"></div>
+      <div class="fake-card"></div>
+      <div class="fake-card"></div>
+      <div class="fake-card"></div>
+    </div>
+  </div>
+
+  <!-- ========== MOCKUP 1B: CTA en post (light mode) ========== -->
+  <div class="mockup-label">Mockup 1B — CTA en post (light mode)</div>
+
+  <div class="light-section">
+    <div class="container">
+      <div class="author-box">
+        <div class="author-avatar"></div>
+        <div>
+          <div class="author-name">Juan Ruocco</div>
+          <div class="author-bio">Editor de 421. Escribe sobre cultura, tecnología y la vida real.</div>
+        </div>
+      </div>
+
+      <div class="post-cta">
+        <p class="post-cta-text">
+          Este texto es gratis porque nos parece importante. Pero no es gratis de hacer. 421 sobrevive porque un grupo de personas elige bancarlo. Si lo que leés te sirve, sumate.
+        </p>
+        <div class="post-cta-buttons">
+          <a href="#" class="post-cta-btn-primary">Hacete Wizard →</a>
+          <a href="#" class="post-cta-btn-secondary">¿Qué es?</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MOCKUP 2: Newsletter footer ========== -->
+  <div class="mockup-label">Mockup 2 — Footer en newsletter (como se ve en el mail)</div>
+
+  <div style="padding: 1rem; background: #e8e8e8;">
+    <div class="newsletter-mockup">
+      <div class="newsletter-header">
+        <h3>421 — Nueva nota publicada</h3>
+      </div>
+      <div class="newsletter-body">
+        <h2>La guía definitiva para entender el meta de Standard</h2>
+        <p>Después de tres meses de un formato dominado por Azorius Control, la baneada de Temporary Lockdown cambió todo. Ahora las aggro volvieron y...</p>
+        <div class="fake-content"></div>
+        <p style="color: #999; font-size: 0.85rem;">[ ... resto del artículo ... ]</p>
+      </div>
+
+      <!-- THIS IS THE NEW CTA FOOTER -->
+      <div class="newsletter-cta-footer">
+        <p><strong>¿Te gusta lo que leés?</strong> 421 es gratis, pero no es gratis de hacer. <a href="#">Bancá al proyecto →</a></p>
+      </div>
+
+      <div class="newsletter-footer">
+        <p><strong>421</strong> — Información de calidad para tu dieta cognitiva | 2024-2026<br>Seguinos en todas las redes @421net</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MOCKUP 3: Precio en pesos ========== -->
+  <div class="mockup-label">Mockup 3 — Precio en pesos en /es/suscribite/ (dentro del card de plan)</div>
+
+  <div class="container" style="padding: 2rem 1.5rem 4rem;">
+    <div class="price-mockup">
+      <div class="price-usd">$99.90</div>
+      <div class="price-period">USD / año</div>
+      <div class="price-ars">≈ $134.865 ARS/año con MercadoPago</div>
+      <div class="price-ars-note">Cotización dólar blue: $1.350 — se actualiza en tiempo real</div>
+    </div>
+
+    <div class="price-mockup" style="margin-top: 1.5rem;">
+      <div class="price-usd">$9.99</div>
+      <div class="price-period">USD / mes</div>
+      <div class="price-ars">≈ $13.487 ARS/mes con MercadoPago</div>
+      <div class="price-ars-note">Cotización dólar blue: $1.350 — se actualiza en tiempo real</div>
+    </div>
+  </div>
+
+</body>
+</html>

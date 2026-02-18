@@ -95,6 +95,20 @@
             </div>
         </div>
 
+        {{#unless @member.paid}}
+        <div class="global-container">
+          <div class="post-cta">
+            <p class="post-cta-text">
+              Este texto es gratis porque nos parece importante. Pero no es gratis de hacer. 421 sobrevive porque un grupo de personas elige bancarlo. Si lo que leés te sirve, sumate.
+            </p>
+            <div class="post-cta-buttons">
+              <a href="/es/suscribite/" class="post-cta-btn-primary">Hacete Wizard →</a>
+              <a href="/es/suscribite/" class="post-cta-btn-secondary">¿Qué es?</a>
+            </div>
+          </div>
+        </div>
+        {{/unless}}
+
         <!-- RELATED POSTS -->
         <div class="preview-section" data-json="{{asset "data/related-posts.json"}}">
             <div class="global-container">

@@ -1,50 +1,132 @@
 routes:
   /: landing
-  /es/suscribite/: suscribite
-  /gracias/: gracias
-  /oh-yes/: oh-yes
-  /es/rutas/: rutas
-  /es/canon/: canon
-  /es/revista-421/: revista
-  /es/pitcheale-a-421/: pitcheale
-  /es/mi-suscripcion/: mi-suscripcion
-  /en/my-subscription/: my-subscription
-  /en/routes/: routes
-  /en/canon/: canon-en
-  /es/ultimos-posts/: last-posts-es
-  /en/last-posts/: last-posts-en
+  /es/suscribite/:
+    template: suscribite
+    data: page.suscribite
+  /gracias/:
+    template: gracias
+    data: page.gracias
+  /oh-yes/:
+    template: oh-yes
+    data: page.oh-yes
+  /es/rutas/:
+    template: rutas
+    data: page.rutas
+  /es/canon/:
+    template: canon
+    data: page.canon
+  /es/revista-421/:
+    template: revista
+    data: page.revista-421
+  /es/pitcheale-a-421/:
+    template: pitcheale
+    data: page.pitcheale-a-421
+  /es/mi-suscripcion/:
+    template: mi-suscripcion
+    data: page.mi-suscripcion
+  /en/my-subscription/:
+    template: my-subscription
+    data: page.my-subscription
+  /en/routes/:
+    template: routes
+    data: page.routes
+  /en/canon/:
+    template: canon-en
+    data: page.canon-en
+  /es/ultimos-posts/:
+    template: last-posts-es
+    data: page.ultimos-posts
+  /en/last-posts/:
+    template: last-posts-en
+    data: page.last-posts
+  /en/subscribe/:
+    template: subscribe
+    data: page.subscribe
 
-  /es/tag/cultura/: tag-cultura
-  /es/tag/tecnologia/: tag-tecnologia
-  /es/tag/juegos/: tag-juegos
-  /es/tag/vida-real/: tag-vida-real
+  /es/tag/cultura/:
+    template: tag-cultura
+    data: tag.cultura
+  /es/tag/tecnologia/:
+    template: tag-tecnologia
+    data: tag.tecnologia
+  /es/tag/juegos/:
+    template: tag-juegos
+    data: tag.juegos
+  /es/tag/vida-real/:
+    template: tag-vida-real
+    data: tag.vida-real
 
-  /es/tag/el-canon/: tag-el-canon
+  /es/tag/el-canon/:
+    template: tag-el-canon
+    data: tag.el-canon
 
-  /es/tag/cannabis/: tag-secundario-cannabis
-  /es/tag/tutoriales/: tag-secundario-tutoriales
-  /es/tag/argentina/: tag-secundario-argentina
-  /es/tag/cripto/: tag-secundario-cripto
-  /es/tag/deportes/: tag-secundario-deportes
-  /es/tag/filosofia/: tag-secundario-filosofia
-  /es/tag/historieta/: tag-secundario-historieta
-  /es/tag/internet/: tag-secundario-internet
-  /es/tag/libros/: tag-secundario-libros
-  /es/tag/magic-the-gathering/: tag-secundario-magicthegathering
-  /es/tag/memes/: tag-secundario-memes
-  /es/tag/musica/: tag-secundario-musica
-  /es/tag/peliculas/: tag-secundario-peliculas
-  /es/tag/series/: tag-secundario-series
-  /es/tag/soberania/: tag-secundario-soberania
-  /es/tag/videojuegos/: tag-secundario-videojuegos
-  /es/tag/warhammer/: tag-secundario-warhammer
-  /es/tag/wiki/: tag-secundario-wiki
+  /es/tag/cannabis/:
+    template: tag-secundario-cannabis
+    data: tag.cannabis
+  /es/tag/tutoriales/:
+    template: tag-secundario-tutoriales
+    data: tag.tutoriales
+  /es/tag/argentina/:
+    template: tag-secundario-argentina
+    data: tag.argentina
+  /es/tag/cripto/:
+    template: tag-secundario-cripto
+    data: tag.cripto
+  /es/tag/deportes/:
+    template: tag-secundario-deportes
+    data: tag.deportes
+  /es/tag/filosofia/:
+    template: tag-secundario-filosofia
+    data: tag.filosofia
+  /es/tag/historieta/:
+    template: tag-secundario-historieta
+    data: tag.historieta
+  /es/tag/internet/:
+    template: tag-secundario-internet
+    data: tag.internet
+  /es/tag/libros/:
+    template: tag-secundario-libros
+    data: tag.libros
+  /es/tag/magic-the-gathering/:
+    template: tag-secundario-magicthegathering
+    data: tag.magic-the-gathering
+  /es/tag/memes/:
+    template: tag-secundario-memes
+    data: tag.memes
+  /es/tag/musica/:
+    template: tag-secundario-musica
+    data: tag.musica
+  /es/tag/peliculas/:
+    template: tag-secundario-peliculas
+    data: tag.peliculas
+  /es/tag/series/:
+    template: tag-secundario-series
+    data: tag.series
+  /es/tag/soberania/:
+    template: tag-secundario-soberania
+    data: tag.soberania
+  /es/tag/videojuegos/:
+    template: tag-secundario-videojuegos
+    data: tag.videojuegos
+  /es/tag/warhammer/:
+    template: tag-secundario-warhammer
+    data: tag.warhammer
+  /es/tag/wiki/:
+    template: tag-secundario-wiki
+    data: tag.wiki
 
-  /en/tag/culture/: tag-culture
-  /en/tag/tech/: tag-tech
-  /en/tag/games/: tag-games
-  /en/tag/real-life/: tag-real-life
-  /en/subscribe/: subscribe
+  /en/tag/culture/:
+    template: tag-culture
+    data: tag.culture
+  /en/tag/tech/:
+    template: tag-tech
+    data: tag.tech
+  /en/tag/games/:
+    template: tag-games
+    data: tag.games
+  /en/tag/real-life/:
+    template: tag-real-life
+    data: tag.real-life
 
 collections:
   /es/:

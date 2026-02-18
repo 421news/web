@@ -19,10 +19,7 @@
   font-size: 3rem;
   font-style: italic;
   font-weight: 800;
-  background: linear-gradient(280deg, var(--verde), var(--amarillo));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--amarillo);
   margin-bottom: 1rem;
 }
 .sub-hero-subtitle {
@@ -131,6 +128,18 @@
   text-decoration: line-through;
 }
 
+.plan-price-ars {
+  display: inline-block;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(23, 165, 131, 0.12);
+  border: 1px solid rgba(23, 165, 131, 0.3);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  color: var(--verde);
+  font-weight: 600;
+}
+
 /* ===== BENEFITS ===== */
 .plan-benefits {
   list-style: none;
@@ -218,11 +227,12 @@
   margin: 1.5rem auto 0;
   background: none;
   border: none;
-  color: var(--crema);
-  opacity: 0.5;
+  color: #ffffff;
+  opacity: 0.8;
   cursor: pointer;
-  font-size: 14px;
-  font-family: inherit;
+  font-size: 1rem;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 .btn-back:hover {

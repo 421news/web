@@ -93,6 +93,20 @@
             </div>
         </div>
 
+        {{#unless @member.paid}}
+        <div class="global-container">
+          <div class="post-cta">
+            <p class="post-cta-text">
+              This article is free because we think it matters. But it's not free to make. 421 survives because a group of people choose to support it. If what you read is useful, join them.
+            </p>
+            <div class="post-cta-buttons">
+              <a href="/en/subscribe/" class="post-cta-btn-primary">Become a Wizard →</a>
+              <a href="/en/subscribe/" class="post-cta-btn-secondary">What's this?</a>
+            </div>
+          </div>
+        </div>
+        {{/unless}}
+
         <!-- RELATED POSTS -->
         <div class="preview-section" data-json="{{asset "data/related-posts.json"}}">
             <div class="global-container">

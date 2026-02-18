@@ -5,17 +5,21 @@ Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming
 
 ## Credentials
 
-- **Ghost Admin API Key**: `GHOST_ADMIN_API_KEY_REDACTED`
-- **Ghost Content API Key**: `420da6f85b5cc903b347de9e33`
+All secret keys are stored in environment variables or `.env` files (not committed). See `.env.example` for the required variables.
+
 - **Ghost instance**: `421bn.ghost.io` (redirects to `www.421.news`)
 - **GitHub repo**: `https://github.com/421news/web.git` (branch: `main`)
-- **Render API Key**: `RENDER_API_KEY_REDACTED`
+- **Ghost Content API Key**: `420da6f85b5cc903b347de9e33` (public, read-only — used in client-side JS)
 - **Render webhook-hreflang service**: `srv-d68brdg6fj8s73c1foqg` (URL: `https://webhook-hreflang.onrender.com`)
 - **Render mercadopago-ghost service**: `srv-d69qel86fj8s73cotlo0` (URL: `https://mercadopago-ghost.onrender.com`)
-- **MercadoPago Access Token**: `MERCADOPAGO_ACCESS_TOKEN_REDACTED`
-- **MercadoPago Secret Key**: `MERCADOPAGO_SECRET_KEY_REDACTED`
-- **Resend API Key** (MTG Collection emails): `RESEND_API_KEY_REDACTED`
 - **Ghost Wizard Tier ID**: `66c8fcf131e80b000183e05d`
+
+Required env vars (store in `.env`, never commit):
+- `GHOST_ADMIN_API_KEY` - Ghost Admin API key (id:secret format)
+- `RENDER_API_KEY` - Render deploy API key
+- `MERCADOPAGO_ACCESS_TOKEN` - MercadoPago access token
+- `MERCADOPAGO_SECRET_KEY` - MercadoPago secret key
+- `RESEND_API_KEY` - Resend API key (MTG Collection emails)
 
 ## Deploy Workflow
 
@@ -37,7 +41,7 @@ const jwt = require('jsonwebtoken');
 const FormData = require('form-data');
 const fs = require('fs');
 const https = require('https');
-const [id, secret] = 'GHOST_ADMIN_API_KEY_REDACTED'.split(':');
+const [id, secret] = process.env.GHOST_ADMIN_API_KEY.split(':');
 const token = jwt.sign({}, Buffer.from(secret, 'hex'), { keyid: id, algorithm: 'HS256', expiresIn: '5m', audience: '/admin/' });
 const form = new FormData();
 form.append('file', fs.createReadStream('/tmp/421-theme.zip'));
