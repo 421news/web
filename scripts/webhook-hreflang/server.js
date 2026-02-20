@@ -632,6 +632,49 @@ app.options('/api/related-posts.json', (req, res) => {
   res.status(204).end();
 });
 
+// --- Hreflang cron: check recent posts every 30 min ---
+
+async function hreflangCron() {
+  console.log('[hreflang-cron] Checking recent posts for missing hreflang...');
+  try {
+    // Fetch last 10 posts (covers ~5 days of daily ES+EN pairs)
+    const data = await contentAPIGet(
+      `/ghost/api/content/posts/?key=${GHOST_CONTENT_KEY}` +
+      `&limit=10&order=published_at%20desc` +
+      `&include=tags&fields=id,slug,title,published_at,codeinjection_head`
+    );
+    const posts = data.posts || [];
+    let processed = 0;
+
+    for (const post of posts) {
+      const tags = (post.tags || []).map(t => t.slug);
+      const isEnglish = tags.includes('hash-en');
+      const metaName = isEnglish ? 'spanish-version' : 'english-version';
+
+      // Skip if already has hreflang meta
+      if (post.codeinjection_head && post.codeinjection_head.includes(`name="${metaName}"`)) {
+        continue;
+      }
+
+      // Run the pairing handler
+      const result = await handleWebhook({
+        post: { current: { id: post.id, slug: post.slug, title: post.title, published_at: post.published_at, tags: post.tags } }
+      });
+
+      if (result.status === 'matched') {
+        processed++;
+        console.log(`[hreflang-cron] Paired: ${result.pair.es} ↔ ${result.pair.en}`);
+      }
+    }
+
+    console.log(`[hreflang-cron] Done: ${processed} new pairs injected`);
+  } catch (err) {
+    console.error(`[hreflang-cron] Error: ${err.message}`);
+  }
+}
+
+setInterval(hreflangCron, 30 * 60 * 1000); // every 30 minutes
+
 // --- Keep-alive ping (prevents Render free tier spindown after 15 min) ---
 
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
@@ -660,4 +703,7 @@ app.listen(PORT, () => {
 
   // Bootstrap related posts on startup
   bootstrapRelatedPosts();
+
+  // Run first hreflang cron check 60s after startup
+  setTimeout(hreflangCron, 60 * 1000);
 });
