@@ -1,14 +1,29 @@
 {{!< default}}
 
-<meta property="og:title" content="Canon 421 | 421">
-<meta property="og:description" content="The 25 essential texts from 421. If it were a library, these would be the must-read books.">
-<meta property="og:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
-<meta property="og:url" content="https://www.421.news/en/canon/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Canon 421 | 421">
-<meta name="twitter:description" content="The 25 essential texts from 421. If it were a library, these would be the must-read books.">
-<meta name="twitter:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
+<script>
+  document.title = 'Canon 421 | 421.news';
+  (function() {
+    var title = 'Canon 421 | 421.news';
+    var desc = 'The 25 essential texts from 421. If it were a library, these would be the must-read books.';
+    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
+    var url = 'https://www.421.news/en/canon/';
+    function setMeta(attr, key, val) {
+      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
+      if (el) { el.content = val; }
+      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
+    }
+    setMeta('name', 'description', desc);
+    setMeta('property', 'og:title', title);
+    setMeta('property', 'og:description', desc);
+    setMeta('property', 'og:image', img);
+    setMeta('property', 'og:url', url);
+    setMeta('property', 'og:type', 'website');
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', title);
+    setMeta('name', 'twitter:description', desc);
+    setMeta('name', 'twitter:image', img);
+  })();
+</script>
 
 <div class="page-wrapper">
   {{> "general-styling"}}
