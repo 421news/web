@@ -22,12 +22,18 @@
   "^/la-historia-de-ricardo-fort-$": /es/la-historia-de-ricardo-fort/
   "^/soberania-cognitiva-introduccion-autonomia-$": /es/soberania-cognitiva-introduccion-autonomia-psiquica/
   "^/godzilla-minus-one/$": /es/godzilla-minus-one-shin-godzilla/
+  "^/es/godzilla-minus-one/?$": /es/godzilla-minus-one-shin-godzilla/
   ^/cannabis-medicinal-geneticas-argentinas/: /es/autocultivo-geneticas-cannabis-favoritas-421/
   ^/cannabis-medicinal-argentino/: /es/cannabis-medicinal-reprocann-milei-bullrich/
   ^/mtg-arena-como-conseguir-gemas/: /es/mtg-arena-farm-gold-and-gems-2/
   ^/osint-inteligencia-open-source/: /es/ciberpatrullaje-policia-federal-argentina/
   ^/super-lemon-haze/: /es/autocultivo-geneticas-cannabis-favoritas-421/
+  "^/es/super-lemon-haze/?$": /es/autocultivo-geneticas-cannabis-favoritas-421/
   ^/revista-421-edicion-11/: /es/revista-421/
+  "^/es/nick-land-aceleracionismo-parte-1/?$": /es/nick-land-aceleracionismo/
+  "^/es/nick-land-aceleracionismo-parte-2/?$": /es/nick-land-aceleracionismo/
+  "^/en/write-journalism-chronicles/?$": /en/write-journalism-chronicles-victoria-de-masi/
+  "^/go-slimey-go-argentine-mobile-games-en/?$": /en/tag/games/
 
   # === Ruta bilingue ===
   "^/en/suscribite/?$": /en/subscribe/
@@ -56,6 +62,31 @@
   "^/author/paula/$": /author/paula-yeyati/
   "^/author/cristobal/$": /author/cristobal-soto/
   "^/author/marcelo/$": /author/marcelo_acevedo/
+  "^/author/natalia/?$": /author/nataliatorres/
+  "^/author/dante/?$": /author/dante-sabatto/
+  "^/author/coco/?$": /author/coco-polinari-sabattini/
+  "^/author/pablo/?$": /author/pablo-gowezniansky/
+  "^/author/pablow/?$": /author/pablowasserman/
+  "^/author/debora/?$": /author/deboraraquel/
+
+  # === Tags ES en path EN ===
+  "^/en/tag/juegos/?$": /en/tag/games/
+  "^/en/tag/vida-real/?$": /en/tag/real-life/
+  "^/en/tag/tecnologia/?$": /en/tag/tech/
+  "^/en/tag/cultura/?$": /en/tag/culture/
+  "^/en/tag/el-canon/?$": /en/canon/
+  "^/en/tag/wiki/?$": /en/
+  "^/en/tag/books/?$": /en/
+  "^/en/tag/philosophy/?$": /en/
+  "^/en/tag/argentina/?$": /en/
+  "^/en/tag/magic-the-gathering/?$": /en/
+
+  # === Tags EN en path ES ===
+  "^/es/tag/tutorials/?$": /es/tag/tutoriales/
+
+  # === Posts EN en path raíz (antes del catch-all) ===
+  "^/playing-wasting-time-en/?$": /en/playing-wasting-time-en/
+  "^/who-makes-the-federal-laws/?$": /en/who-makes-the-federal-laws/
 
   # === Migración /es/: custom routes ===
   "^/rutas/?$": /es/rutas/

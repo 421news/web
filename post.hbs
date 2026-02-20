@@ -19,7 +19,7 @@
       const slug = englishMeta.getAttribute('content');
       const linkContainer = document.getElementById('translation-link');
       if (slug) {
-        linkContainer.innerHTML = `<a href="/en/${slug}" class="btn-translate">Read it in english.</a>`;
+        linkContainer.innerHTML = '<a href="/en/' + slug + '" class="btn-translate">Read it in english.</a>';
       }
     }
 
@@ -27,7 +27,7 @@
       const slug = spanishMeta.getAttribute('content');
       const linkContainer = document.getElementById('translation-link');
       if (slug) {
-        linkContainer.innerHTML = `<a href="/es/${slug}" class="btn-translate">Leer en español.</a>`;
+        linkContainer.innerHTML = '<a href="/es/' + slug + '" class="btn-translate">Leer en español.</a>';
       }
     }
   });
