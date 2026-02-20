@@ -6,7 +6,7 @@
     if (!container) return;
 
     var lang = container.getAttribute('data-lang') || 'es';
-    var JSON_PATH = '/assets/data/rutas.json';
+    var JSON_PATH = container.getAttribute('data-json') || '/assets/data/rutas.json';
 
     fetch(JSON_PATH)
         .then(function (r) { return r.json(); })
