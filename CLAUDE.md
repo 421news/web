@@ -1,25 +1,14 @@
 # 421.news - Ghost Theme Project
 
 ## Overview
-Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming, tech, and real life. The site runs on Ghost Pro at `421bn.ghost.io` (public URL: `www.421.news`).
+Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming, tech, and real life. The site runs on Ghost Pro at `421bn.ghost.io` (public URL: `www.421.news`). Spanish content lives at `/es/`, English at `/en/`, and root `/` is a minimal landing page with browser language redirect.
 
 ## Credentials
 
-All secret keys are stored in environment variables or `.env` files (not committed). See `.env.example` for the required variables.
-
+- **Ghost Admin API Key**: `680be497f896280001455172:50f2d88ff42197eb96adf838b5c4b4baccc3ff6ff2e7772390b16ca4bcc6d967`
+- **Ghost Content API Key**: `420da6f85b5cc903b347de9e33`
 - **Ghost instance**: `421bn.ghost.io` (redirects to `www.421.news`)
 - **GitHub repo**: `https://github.com/421news/web.git` (branch: `main`)
-- **Ghost Content API Key**: `420da6f85b5cc903b347de9e33` (public, read-only — used in client-side JS)
-- **Render webhook-hreflang service**: `srv-d68brdg6fj8s73c1foqg` (URL: `https://webhook-hreflang.onrender.com`)
-- **Render mercadopago-ghost service**: `srv-d69qel86fj8s73cotlo0` (URL: `https://mercadopago-ghost.onrender.com`)
-- **Ghost Wizard Tier ID**: `66c8fcf131e80b000183e05d`
-
-Required env vars (store in `.env`, never commit):
-- `GHOST_ADMIN_API_KEY` - Ghost Admin API key (id:secret format)
-- `RENDER_API_KEY` - Render deploy API key
-- `MERCADOPAGO_ACCESS_TOKEN` - MercadoPago access token
-- `MERCADOPAGO_SECRET_KEY` - MercadoPago secret key
-- `RESEND_API_KEY` - Resend API key (MTG Collection emails)
 
 ## Deploy Workflow
 
@@ -30,7 +19,7 @@ Required env vars (store in `.env`, never commit):
 5. Activate via Admin API (`PUT /ghost/api/admin/themes/421-theme/activate/`)
 6. Auth: JWT signed with HMAC-SHA256 using the Admin API key
 
-**IMPORTANT**: `routes.yaml` CANNOT be uploaded via API token (returns 403). It requires cookie-based staff auth. The user must upload it manually via Ghost Admin > Settings > Labs > Routes.
+**IMPORTANT**: `routes.yaml` and `redirects.yaml` CANNOT be uploaded via API token (returns 403). They require cookie-based staff auth. The user must upload them manually via Ghost Admin > Settings > Labs > Routes / Redirects.
 
 Quick deploy (zip + upload + activate):
 ```bash
@@ -41,7 +30,7 @@ const jwt = require('jsonwebtoken');
 const FormData = require('form-data');
 const fs = require('fs');
 const https = require('https');
-const [id, secret] = process.env.GHOST_ADMIN_API_KEY.split(':');
+const [id, secret] = '680be497f896280001455172:50f2d88ff42197eb96adf838b5c4b4baccc3ff6ff2e7772390b16ca4bcc6d967'.split(':');
 const token = jwt.sign({}, Buffer.from(secret, 'hex'), { keyid: id, algorithm: 'HS256', expiresIn: '5m', audience: '/admin/' });
 const form = new FormData();
 form.append('file', fs.createReadStream('/tmp/421-theme.zip'));
@@ -57,21 +46,33 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 ## File Structure
 
 ### Root templates (pages)
-- `default.hbs` - Main layout. Loads Google Fonts (Nunito Sans + Lora) via CSS `display=swap`, global CSS, `light-mode.js`. Has MutationObserver to remove Ghost Portal signup CTA, hreflang injection, browser language redirect to /en/. Includes inline script to patch Ghost's Article JSON-LD publisher logo with correct PNG URL + width/height (Ghost omits dimensions).
-- `index.hbs` - Spanish homepage
-- `en.hbs` - English homepage
-- `post.hbs` - Post router: checks `#en` tag to pick `post-en.hbs` or `post-es.hbs`
+- `default.hbs` - Main layout. Loads Google Fonts (Nunito Sans + Lora) via CSS `display=swap`, global CSS, `light-mode.js`. Has MutationObserver to remove Ghost Portal signup CTA, hreflang injection, browser language redirect to `/en/`. Includes inline script to patch Ghost's Article JSON-LD publisher logo with correct PNG URL + width/height (Ghost omits dimensions). Updates sticky subscribe button text/href for EN pages.
+- `landing.hbs` - Minimal landing page at `/`. Displays centered 421 logo. Actual routing is done by `default.hbs` browser language redirect (EN browsers → `/en/`, others → `/es/`).
+- `index.hbs` - Spanish homepage (`/es/`)
+- `en.hbs` - English homepage (`/en/`)
+- `post.hbs` - Post router: checks `#en` tag to pick `post-en.hbs` or `post-es.hbs`. Also loads translation link JS (reads `english-version`/`spanish-version` meta tags to build cross-language links with `/es/` and `/en/` prefixes).
 - `page.hbs` - Static pages. Has `{{#page}}` context for title/feature_image
-- **`rutas.hbs`** - Reading routes page (`/rutas/`). Loads `rutas.js` which fetches posts from Content API and renders 7 curated thematic routes.
-- **`canon.hbs`** - Canon 421 page (`/canon/`). Loads `rutas.js` which fetches 25 essential posts with editorial reasons.
-- **`revista.hbs`** - Revista 421 page (`/revista-421/`). Loads `revista.js` which fetches `revista.json` and renders magazine issue cards with covers, download links, and collaborator credits.
+- **`rutas.hbs`** - Spanish reading routes page (`/es/rutas/`). Loads `rutas.js` which fetches posts from Content API and renders 7 curated thematic routes.
+- **`routes.hbs`** - English reading routes page (`/en/routes/`). Same as `rutas.hbs` but EN.
+- **`canon.hbs`** - Spanish Canon 421 page (`/es/canon/`). Loads `rutas.js` which fetches 25 essential posts with editorial reasons.
+- **`canon-en.hbs`** - English Canon 421 page (`/en/canon/`).
+- **`revista.hbs`** - Revista 421 magazine archive page (`/es/revista-421/`). Loads `revista.js` which renders issue cards from `revista.json`. Custom OG/Twitter meta tags.
+- **`pitcheale.hbs`** - Community pitch/submission page (`/es/pitcheale-a-421/`). 3 category tabs (Escritura, Ilustracion, Videojuegos) with embedded Google Form iframes.
+- `suscribite.hbs` - Spanish subscription page (`/es/suscribite/`)
+- `subscribe.hbs` - English subscription page (`/en/subscribe/`)
+- `mi-suscripcion.hbs` - Spanish subscription management page (`/es/mi-suscripcion/`, noindex). Shows paid/free/guest states, links to MTG Collection app (https://mtg.421.news) for paid members.
+- `my-subscription.hbs` - English subscription management page (`/en/my-subscription/`, noindex).
+- `last-posts-es.hbs` - Spanish archive/all-posts page (`/es/ultimos-posts/`). Loads `filter-posts.js`.
+- `last-posts-en.hbs` - English archive page (`/en/last-posts/`). Loads `filter-posts.js`.
+- `gracias.hbs` - Thank you page (ES, `/gracias/`)
+- `oh-yes.hbs` - Confirmation page (EN, `/oh-yes/`)
 - `tag.hbs` - Tag listing page
 - `tags.hbs` - All tags page
 - `author.hbs` - Author page
 - `error-404.hbs` - 404 page
-- `tag-*.hbs` - Custom templates per tag (cultura, juegos, tech, vida-real, etc.)
-- `tag-secundario-*.hbs` - Secondary tag templates
-- `subscribe.hbs` / `suscribite.hbs` - Subscription pages (EN/ES)
+- `tag-cultura.hbs`, `tag-tecnologia.hbs`, `tag-juegos.hbs`, `tag-vida-real.hbs`, `tag-el-canon.hbs`, `tag-wiki.hbs` - Spanish primary tag templates
+- `tag-culture.hbs`, `tag-tech.hbs`, `tag-games.hbs`, `tag-real-life.hbs` - English primary tag templates
+- `tag-secundario-*.hbs` - Secondary tag templates (argentina, cannabis, cripto, deportes, filosofia, historieta, internet, libros, magicthegathering, memes, musica, peliculas, series, soberania, tutoriales, videojuegos, warhammer)
 
 ### Partials (`partials/`)
 - **`post-es.hbs`** - Spanish post template. Contains article body, author box, related posts query, file browser
@@ -86,8 +87,17 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `reading-progress-bar.hbs` - Reading progress bar component
 - `index-featured-post.hbs` / `index-featured-post-mobile.hbs` - Featured post on homepage
 - `index-highlighted-posts-es.hbs` / `index-highlighted-posts-en.hbs` - Highlighted posts grids
-- `last-posts-*.hbs` - Latest posts sections
+- `last-posts-es.hbs` / `last-posts-en.hbs` / `last-posts-es-tag.hbs` / `last-posts-en-tag.hbs` / `last-posts-es-secondary-tag.hbs` - Latest posts sections
 - `tag-preview-section.hbs` - Tag preview sections
+- `tag-page-featured-post.hbs` - Featured post for tag pages (accepts language filter parameter)
+- `tag-page-highlighted-posts-es.hbs` / `tag-page-highlighted-posts-en.hbs` - Highlighted posts for tag pages
+- `tag-cloud.hbs` - Tag cloud with post counts, links to tag pages
+- `highlighted-post.hbs` - Large featured post card for tag pages (two-column layout with hover overlay)
+- `wiki-section-es.hbs` / `wiki-section-en.hbs` - "Lo ultimo en la Wiki" sections (fetches 4 latest wiki-tagged posts)
+- `tps_alt-es.hbs` / `tps_alt-en.hbs` - Alternate posts list for tag page sidebars (3 posts by tag slug)
+- `subscribe-popup.hbs` - Modal subscription CTA. Appears at 20% scroll depth for non-members. 7-day cooldown via localStorage. Bilingual (checks `#en` tag).
+- `sticky-subscribe-mobile-button.hbs` - Mobile-only full-width sticky subscribe button. Text/href updated by `default.hbs` for EN pages.
+- `banner.hbs` - Wiki ad banner (placeholder/unused)
 - `window-manager.hbs` - Desktop-style window manager UI component
 
 ### CSS (`assets/css/`)
@@ -103,6 +113,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
   - Blockquote gradient border
   - Page hero (no borders)
   - **Rutas/Canon page styles**: hero with gradient title, route sections (number, name, tesis, post count, card grid), canon list (numbered badges, cover thumbnails, tag, reason text), responsive breakpoints
+  - **Revista styles**: magazine issue cards, cover images, collaborator grids
   - Post card grid normalization: `.post-cols .w-dyn-item` has `width: 100%` to ensure uniform card sizes
 - `globals.css` - CSS variables (`--verde`, `--amarillo`, etc.), font rendering (`antialiased`, `optimizeLegibility`)
 - `site-nav.css` - Navigation styles
@@ -115,48 +126,128 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `404.css` - 404 page styles
 
 ### JavaScript (`assets/js/`)
-- **`related-posts.js`** - Client-side semantic related posts. Tries Render JSON endpoint first (3s timeout), falls back to theme `related-posts.json`. Fetches related posts from Content API, renders cards replacing the Handlebars fallback
-- **`rutas.js`** - Client-side Rutas + Canon renderer. Loads `rutas.json`, fetches all posts by slug via Content API, renders card grids (for `/rutas/`) or numbered list with reasons (for `/canon/`). Same `renderCard()` pattern as `related-posts.js`.
-- **`revista.js`** - Client-side Revista 421 renderer. Loads `revista.json` and renders magazine issue cards with cover image, download button, "ver tapa" button, and collaborator credits with links. No Content API needed.
+- **`related-posts.js`** - Client-side semantic related posts. Tries Render endpoint first (`/api/related-posts.json`, 3s timeout), falls back to theme `related-posts.json`. Fetches related posts from Content API, renders cards replacing the Handlebars fallback.
+- **`rutas.js`** - Client-side Rutas + Canon renderer. Loads `rutas.json`, fetches all posts by slug via Content API, renders card grids (for `/rutas/`) or numbered list with reasons (for `/canon/`). Detects language via URL prefix (`/en/`). Same `renderCard()` pattern as `related-posts.js`.
+- **`revista.js`** - Magazine issue renderer. Fetches `revista.json`, renders cards with cover image, issue number badge, date/title, collaborator grid with links, PDF download + view cover buttons. No Content API needed (pure static JSON).
+- **`home-ruta.js`** - Weekly rotating reading route hero for homepage. Picks a different route each week (modulo 7), fetches up to 4 post cards via Content API. Bilingual via `data-lang` container attribute.
+- **`filter-posts.js`** - Archive page with filtering. 3 dropdowns (author, tag, order), load-more pagination (20 posts/page), auto language filtering via path detection. Cascading dropdown population from Content API.
 - `file-browser.js` - File browser navigation logic
 - `window-manager.js` - Desktop-style window manager
 - `reading-progress.js` - Reading progress bar
 - `hide-show-nav.js` - Scroll-based nav visibility
-- `pagination-home.js` / `pagination-next.js` - Pagination logic
+- `pagination-home.js` / `pagination-next.js` / `pagination-author.js` - Pagination logic
 - `light-mode.js` - Centralized light/dark mode toggle. Handles sun/moon icon swap, localStorage persistence, and `.text-amarillo`↔`.text-verde` class swap for light mode. Loaded globally from `default.hbs`.
 - `audio-effect.js` - Audio effects
 - `seamless.js` - CSS-only page fade-in (no JS link interception). Animation defined in `index.css`.
 - `udesly-ghost.min.js` - Framework JS (don't edit)
 
 ### Data (`assets/data/`)
-- **`related-posts.json`** - Semantic related posts mapping. Keys = post slugs, values = arrays of 4 related post slugs. Generated by `scripts/update-related.py`. Also served live from Render at `https://webhook-hreflang.onrender.com/api/related-posts.json` (auto-recomputed on `post.published` webhook)
+- **`related-posts.json`** - Semantic related posts mapping. Keys = post slugs, values = arrays of 4 related post slugs. Generated by `scripts/update-related.py` and also auto-recomputed by the Render webhook service.
 - **`hreflang-sitemap.xml`** - Hreflang sitemap with ES/EN post pairs. Submitted to Google Search Console. Generated by `scripts/generate-hreflang-sitemap.py`
 - **`rutas.json`** - Editorial curation data for Rutas de lectura + Canon 421. Contains:
   - `rutas[]` / `rutas_en[]`: 7 thematic routes (ES/EN), each with `id`, `nombre`, `tesis`, and `slugs[]` (8-12 verified post slugs)
   - `canon[]` / `canon_en[]`: 25 essential posts (ES/EN), each with `slug` and `razon` (editorial reason)
   - All slugs verified against Content API. To add/remove posts from routes or canon, edit this file and redeploy.
   - **7 routes**: Autonomia digital (12), Cultura pop como teoria (12), Argentina como laboratorio (12), Filosofia para la vida real (12), El canon del entretenimiento (12), Internet no murio (11), Hazlo tu mismo (11)
-- **`revista.json`** - Magazine issue data for Revista 421. Array of 11 objects (newest first), each with `numero`, `titulo`, `fecha`, `cover` (image URL), `pdf` (download URL), `size`, and `creditos[]` (array of `{rol, nombre, url}`). To add a new issue: add object at the beginning of the array and redeploy theme.
+- **`revista.json`** - Magazine issue data (11 issues, newest first). Each issue: `numero`, `titulo`, `fecha`, `cover` (image URL), `pdf` (download URL), `size`, `creditos[]` (array of `{rol, nombre, url}`). Issues range from #1 (Nov 2024) to #11 (Jan 2026).
 
 ### Scripts (`scripts/`)
+
+#### Core update scripts
 - **`update-related.py`** - Regenerates `related-posts.json` and uploads/activates the theme. Run: `python3 scripts/update-related.py`. Requires `scikit-learn` (`pip3 install scikit-learn`)
-- **`interlink-posts.py`** - Adds contextual internal links between posts via Ghost Admin API. Uses TF-IDF relatedness from `related-posts.json` + shared tags to find relevant targets. Has comprehensive Spanish stopwords, `PROMO_KEYWORDS` filter, requires `relevance >= 0.1`. Run: `python3 scripts/interlink-posts.py --dry-run --limit 10` to preview, `python3 scripts/interlink-posts.py --apply` to execute. Creates backup in `backups/`. Already applied to 428 posts (1544 links).
 - **`generate-hreflang-sitemap.py`** - Generates `assets/data/hreflang-sitemap.xml` and optionally injects `<meta>` tags into posts via Admin API. 3-phase ES/EN pairing algorithm: manual overrides → timestamp+slug similarity → day-based singleton matching. Run: `python3 scripts/generate-hreflang-sitemap.py` (sitemap only), `python3 scripts/generate-hreflang-sitemap.py --inject-meta --deploy` (full update). Already applied: 121 pairs, 242 posts updated with hreflang meta tags.
-- **`fix-feature-image-alt.py`** - Bulk sets `feature_image_alt` to post title for all posts missing alt text. Run: `python3 scripts/fix-feature-image-alt.py --dry-run` to preview, `--apply` to execute. Already applied: 490 posts updated. Backup at `backups/feature-image-alt-backup-*.json`.
-- **`fix-tag-descriptions.py`** - Sets `description` and `meta_title` for all 26 public tags. Editorial descriptions per tag (ES/EN). Run: `python3 scripts/fix-tag-descriptions.py --apply`. Already applied: 26 tags updated.
-- **`fix-author-bios.py`** - Sets bios for authors missing them. Bios researched from public sources + post history. Run: `python3 scripts/fix-author-bios.py --apply`. Note: Ghost Admin API token returns 403 for user modifications — requires cookie-based session auth (email + password + 2FA). Already applied: 15 authors updated.
-- **`fix-post-seo-fields.py`** - Bulk fills missing `meta_title`, `og_title`, `og_description`, `twitter_title`, `twitter_description` with sensible defaults (post title / excerpt). Run: `python3 scripts/fix-post-seo-fields.py --apply`. Already applied: 545 posts updated.
+- **`interlink-posts.py`** - Adds contextual internal links between posts via Ghost Admin API. Uses TF-IDF relatedness from `related-posts.json` + shared tags to find relevant targets. Has comprehensive Spanish stopwords, `PROMO_KEYWORDS` filter, requires `relevance >= 0.1`. Run: `python3 scripts/interlink-posts.py --dry-run --limit 10` to preview, `python3 scripts/interlink-posts.py --apply` to execute. Creates backup in `backups/`. Already applied to 428 posts (1544 links).
+- `bulk-update-internal-links.py` - Bulk internal link updates
+- `remove-episodio-links.py` - Remove episodio-specific links
+
+#### SEO bulk fix scripts
+- `fix-feature-image-alt.py` - Bulk sets `feature_image_alt` to post title for all posts
+- `fix-tag-descriptions.py` - Sets description + meta_title for 26 public tags (ES/EN)
+- `fix-author-bios.py` - Sets bios for missing author records
+- `fix-post-seo-fields.py` - Fills missing `meta_title`, `og_title`, `og_description`, `twitter_*` fields
+- `fix-tag-seo.py` - General tag SEO fixes
+- `fix-page-seo.py` - General page SEO fixes
+
+#### Content import scripts
+- `import-p12-articles.py` / `import-p12-batch2.py` / `update-p12-batch2.py` - Import/update articles from P12 source
+- `import-external-batch3.py` - External batch import
+- `import-nuso-articles.py` - NUSO article imports
+
+#### Webhook service (`scripts/webhook-hreflang/`)
+Express.js microservice deployed on Render (https://webhook-hreflang.onrender.com, service `srv-d68brdg6fj8s73c1foqg`). Automates hreflang injection and related posts recomputation on post publish.
+
+**Endpoints:**
+- `GET /` - Health check (returns version)
+- `POST /webhook/hreflang` - Ghost `post.published` webhook. Auto-detects ES/EN, finds matching pair via scoring (timestamp proximity + slug overlap), injects `<meta name="english-version">` / `<meta name="spanish-version">` tags. Threshold: score >= 0.3. Idempotent.
+- `POST /webhook/related-posts` - Ghost webhook for related posts recompute. 10s debounce to coalesce rapid publishes. Pure JS TF-IDF + cosine similarity with CONCEPT_MAP (~100 semantic bridges). Processes ES/EN separately.
+- `GET /api/related-posts.json` - Serves fresh related posts JSON. CORS for `www.421.news`, 60s cache. Client-side `related-posts.js` tries this first (3s timeout), falls back to theme asset.
+- `POST /test` - Synchronous debug endpoint for hreflang (returns full result)
+
+**Automation:**
+- Self-ping every 14 min (prevents Render free tier spindown)
+- Hreflang cron every 30 min (checks last 10 posts for missing hreflang, catches scheduled posts)
+- On startup: loads existing `related-posts.json` from theme, recomputes fresh in background
+
+#### Deprecated
 - `compute-related.js` - Older Node.js version (deprecated, use the Python script)
-- **`webhook-hreflang/`** - Express.js service deployed on Render (v1.1.0). Handles two automated tasks: (1) hreflang meta tag injection for ES/EN post pairs, (2) related posts TF-IDF recomputation. See "Render Webhook Service" section below.
 
 ### Other
 - `server.js` - Express dev server with mock data for local preview
-- `routes.yaml` - Ghost routing configuration. Custom routes include `/rutas/`, `/canon/`, `/en/routes/`, `/en/canon/`, `/suscribite/`, tag pages, EN equivalents. Collections: `/` filters `tag:-hash-en` (ES), `/en/` filters `tag:hash-en` (EN).
-- `redirects.yaml` - Ghost redirects configuration (46 rules). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Uses regex patterns with `^` anchors for precise matching. Covers: `/posts/` prefix wildcard, truncated slugs, EN tags in ES paths, wrong-case tags, nonexistent tags → closest match, incomplete author slugs. **IMPORTANT**: Like `routes.yaml`, this CANNOT be uploaded via API token (returns 403).
-- `package.json` - Theme metadata and version (currently v3.8.3)
+- `routes.yaml` - Ghost routing configuration. Root `/` points to `landing` template. Spanish collection at `/es/` (permalink `/es/{slug}/`, filters `tag:-hash-en`). English collection at `/en/` (permalink `/en/{slug}/`, filters `tag:hash-en`). ~50 custom routes + 28 tag page routes. See Routes section below.
+- `redirects.yaml` - Ghost redirects configuration (111 rules: 103 permanent 301 + 8 temporary 302). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Handles `/es/` migration catch-all, slug merges, tag mappings, author slug completion, case insensitivity. See Redirects section below.
+- `redirects.json` - JSON backup of redirects
+- `package.json` - Theme metadata and version (currently **v3.8.8**)
 - `layouts/default.hbs` - Express layout (dev server only)
-- `testeo/` - Mockup files for previewing features before implementation
-- `backups/` - API operation backups (lexical content, signup forms, feature image alt, tag descriptions, author bios, post SEO fields). Not committed.
+- `testeo/` - Mockup HTML files for previewing features before implementation (mockup-cta-conversion, mockup-pitcheale, mockup-revista, mockup-rutas-canon, mockup-suscripcion-dual)
+- `backups/` - API operation backups (lexical content, signup forms). Not committed.
+- `.env` - Environment variables (GHOST_ADMIN_API_KEY). Not committed (in `.gitignore`).
+
+## URL Structure (v3.0.0 migration)
+
+As of v3.0.0, Spanish content moved from root `/` to `/es/` prefix:
+- **Root `/`**: Landing page (minimal logo, browser language redirect)
+- **`/es/{slug}/`**: Spanish posts
+- **`/en/{slug}/`**: English posts
+- **`/es/tag/{slug}/`**: Spanish tag pages
+- **`/en/tag/{slug}/`**: English tag pages
+
+All old root URLs (`/{slug}/`, `/tag/{slug}/`) are redirected to `/es/` equivalents via `redirects.yaml` catch-all rules.
+
+## Routes Configuration (`routes.yaml`)
+
+**Custom routes (~50):**
+- `/` → `landing` template
+- `/es/suscribite/`, `/en/subscribe/` → subscription pages
+- `/es/rutas/`, `/en/routes/` → reading routes
+- `/es/canon/`, `/en/canon/` → canon pages
+- `/es/revista-421/` → magazine archive
+- `/es/pitcheale-a-421/` → pitch/submission page
+- `/es/mi-suscripcion/`, `/en/my-subscription/` → subscription management
+- `/es/ultimos-posts/`, `/en/last-posts/` → archive pages with filtering
+- `/gracias/`, `/oh-yes/` → thank you / confirmation pages
+- 28 tag page routes (18 ES primary+secondary, 4 EN primary, 6 ES wiki/el-canon)
+
+**Collections:**
+- `/es/` → Spanish (permalink `/es/{slug}/`, filters `tag:-hash-en`, template `index`)
+- `/en/` → English (permalink `/en/{slug}/`, filters `tag:hash-en`, template `en`)
+
+**Taxonomies:** `/author/{slug}/`
+
+## Redirects Configuration (`redirects.yaml`)
+
+111 rules (103 permanent 301, 8 temporary 302). Key categories:
+1. **Slug merges** (~15): Multi-part articles consolidated (Nick Land, Ricardo Fort, etc.)
+2. **Wildcard `/posts/`** (1): `^/posts/(.*)` → `/es/$1` (old URL structure)
+3. **Slug changes** (~30): Specific slug rewrites to `/es/` paths
+4. **Bilingual path fixes** (4): EN tags at root → `/en/tag/...`
+5. **Case insensitivity** (3): `[Tt]ecnolog`, `[Cc]ripto`, etc.
+6. **Tag mapping** (7): Nonexistent tags → closest match
+7. **Author slug completion** (9): Short slugs → full slugs
+8. **`/es/` migration** (~6+2 catch-alls):
+   - `/rutas/` → `/es/rutas/`, `/canon/` → `/es/canon/`, etc.
+   - `^/tag/(.+)$` → `/es/tag/$1` (all root tags)
+   - `^/(?!es/|en/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/)([a-z0-9][-a-z0-9]*)/?$` → `/es/$1/` (post catch-all)
+9. **302 temporary** (8): Tags without content (guerra, politica, economia) → `/es/`
 
 ## Bilingual System
 
@@ -165,104 +256,67 @@ Posts are tagged with internal tags `#es` (slug: `hash-es`) or `#en` (slug: `has
 - File browser (`file-browser` / `file-browser-en`)
 - Footer text
 - Related posts query (filtered by `tag:hash-es` or `tag:hash-en`)
+- Subscription flow (`/es/suscribite/` / `/en/subscribe/`)
+- Archive page (`/es/ultimos-posts/` / `/en/last-posts/`)
 
-`default.hbs` has a script that redirects English-language browsers from `/` to `/en/` (unless `prefersSpanish` is set in localStorage).
+`default.hbs` has a script that redirects English-language browsers from `/` to `/en/` (unless `prefersSpanish` is set in localStorage). Spanish browsers go to `/es/`.
 
-### Language filtering in tag pages
-
-Tag page templates use 3 partials that filter by language via a `languageFilter` parameter:
-- `tag-page-featured-post.hbs` — `languageFilter` MUST be passed (no default — `{{#if}}` inside `{{#get}}` filter breaks Ghost's NQL parser)
-- `tag-page-highlighted-posts-es.hbs` — `languageFilter` MUST be passed (same reason)
-- `tag-page-highlighted-posts-en.hbs` — requires `languageFilter="'hash-en'"` explicitly
-- `last-posts-es-tag.hbs` / `last-posts-en-tag.hbs` — hardcoded language filter
-
-ES tag templates pass `languageFilter="-'hash-en'"`, EN templates pass `languageFilter="'hash-en'"`.
-
-### Adding a third language (~March 2026)
-
-Current approach uses **exclusion** (`-'hash-en'`): each language excludes others. This doesn't scale because adding a language (e.g., `#zh`) means updating all existing filters to also exclude the new tag.
-
-**Recommended migration**: switch from exclusion to **inclusion** (`+'hash-es'`). Each language filters for its own tag only:
-- ES partials: `tag:'hash-es'` instead of `tag:-'hash-en'`
-- EN partials: `tag:'hash-en'` (unchanged)
-- ZH partials: `tag:'hash-zh'`
-
-Steps to implement:
-1. Ensure ALL posts have their own language tag (`#es` on every Spanish post — currently most do, verify with Content API)
-2. Update `tag-page-featured-post.hbs` default from `-'hash-en'` to `'hash-es'`
-3. Update `tag-page-highlighted-posts-es.hbs` default from `-'hash-en'` to `'hash-es'`
-4. Update `last-posts-es-tag.hbs` hardcoded filter from `tag:-'hash-en'` to `tag:'hash-es'`
-5. Update `last-posts-es-secondary-tag.hbs` same change
-6. Update all ES tag template invocations: `languageFilter="'hash-es'"`
-7. Create ZH equivalents: `post-zh.hbs`, `site-nav-zh.hbs`, `file-browser-zh.hbs`, tag templates, etc.
-8. Add `/zh/` collection in `routes.yaml` with `filter: 'tag:hash-zh'`
-9. Update `default.hbs` browser redirect logic for 3 languages
-10. Update hreflang system (sitemap + meta tags + webhook) for 3-way pairing
+`post.hbs` includes translation link JS that reads `english-version`/`spanish-version` meta tags and shows a cross-language link button ("Read it in english." / "Leer en espanol.") with `/es/` and `/en/` URL prefixes.
 
 ## Related Posts System
 
-Three fallback layers:
+Two layers:
 
-1. **Render JSON (fresh, auto-updated)**: `related-posts.js` first tries `https://webhook-hreflang.onrender.com/api/related-posts.json` with a 3s timeout. This JSON is recomputed automatically whenever a post is published (via Ghost webhook) and stays in memory on Render.
+1. **Handlebars (server-side, instant)**: `{{#get "posts"}}` query in `post-es.hbs`/`post-en.hbs` matches by `primary_tag` + language. Falls back to any recent posts in the same language if no match.
 
-2. **Theme asset JSON (static fallback)**: If Render is down or slow, falls back to the `related-posts.json` bundled in the theme. This is the last version generated by `update-related.py` and deployed.
+2. **JavaScript (client-side, semantic)**: `related-posts.js` tries the Render endpoint first (`/api/related-posts.json`, 3s timeout) for fresh data, then falls back to the theme's static `related-posts.json`. Looks up the current post's slug, fetches the 4 related posts via Content API, and replaces the Handlebars-rendered cards. If the slug isn't found, the Handlebars version stays.
 
-3. **Handlebars (server-side, always available)**: `{{#get "posts"}}` query in `post-es.hbs`/`post-en.hbs` matches by `primary_tag` + language. Falls back to any recent posts in the same language if no match. The JS layers replace this when they load.
+The JSON is generated by TF-IDF + cosine similarity with a semantic concept expansion layer (CONCEPT_MAP with ~100 bridges, e.g., "pokemon" -> anime, manga, tcg, videogame). Both the Python script and the Render webhook service use this algorithm.
 
-The JSON maps each post slug to 4 related slugs, computed by TF-IDF + cosine similarity with a semantic concept expansion layer (CONCEPT_MAP: ~100 entries bridging related topics like "pokemon" → anime, manga, tcg, videogame). ES and EN posts are processed separately with their own stopwords. Title is triple-weighted, tags double-weighted.
-
-**Automation**: Related posts are recomputed automatically when posts are published. The Render service receives the `post.published` webhook, debounces 10s, then fetches ALL posts via Content API and recomputes the full TF-IDF matrix (~580 posts, takes a few seconds). No manual intervention needed.
-
-**Manual update** (only if needed): `python3 scripts/update-related.py` regenerates the static theme asset + deploys. This also updates the theme's bundled fallback JSON.
+**To update after publishing new posts** (automated via webhook, but can be done manually):
+1. `python3 scripts/update-related.py` (regenerates related posts + deploys)
+2. `python3 scripts/generate-hreflang-sitemap.py --inject-meta --deploy` (updates hreflang pairs + deploys)
 
 ## Rutas de Lectura + Canon System
 
 Two curated editorial pages that transform the flat archive into navigable paths:
 
-- **`/rutas/`** - 7 thematic reading routes (83 posts total). Each route has a name, thesis statement, and 8-12 ordered posts. Think of it as "start here" for different interests.
-- **`/canon/`** - 25 essential texts with editorial reasons explaining why each one matters.
+- **`/es/rutas/`** - 7 thematic reading routes (83 posts total). Each route has a name, thesis statement, and 8-12 ordered posts. Think of it as "start here" for different interests.
+- **`/es/canon/`** - 25 essential texts with editorial reasons explaining why each one matters.
 
 Architecture: `rutas.json` (static data) + `rutas.js` (client-side Content API fetching) + `rutas.hbs`/`canon.hbs` (templates). Same pattern as `related-posts.js`.
 
 English versions at `/en/routes/` (`routes.hbs`) and `/en/canon/` (`canon-en.hbs`). `rutas.js` detects language via URL prefix (`/en/`) and uses `rutas_en`/`canon_en` keys from the JSON.
 
+Homepage features a weekly rotating route via `home-ruta.js` (picks a different route each week, shows 4 post cards).
+
 **To edit curation**: Modify `assets/data/rutas.json` and redeploy theme. All slugs must exist in Ghost.
 
-## Revista 421 System
+## Revista 421 (Magazine System)
 
-Digital magazine archive page at `/revista-421/` showing all 11 issues as cards.
+Digital magazine archive at `/es/revista-421/`. 11 issues (Nov 2024 - Jan 2026).
 
-Architecture: `revista.json` (static data) + `revista.js` (client-side renderer) + `revista.hbs` (template) + CSS in `index.css` (`.revista-*` classes). Same pattern as rutas/canon but simpler — no Content API calls needed since all data is in the JSON.
+Architecture: `revista.json` (static data with issue metadata, cover URLs, PDF download links, collaborator credits) + `revista.js` (client-side renderer) + `revista.hbs` (template). No Content API needed — pure static JSON rendering.
 
-Each card shows:
-- Cover image (clickable to full resolution)
-- Issue number badge (gradient), date, title
-- Collaborator credits with links (Instagram/X/421.news author pages)
-- "Descargar PDF" button (gradient, with file size) + "Ver tapa" button (outline)
+Each issue card shows: cover image, issue number badge (gradient), date/title, collaborator grid with links (Instagram, X, 421.news author pages), PDF download button with file size, view cover button.
 
-Responsive: horizontal cards on desktop, vertical stacking on mobile (<768px).
-Light mode: card backgrounds, borders, and credit link colors adapt automatically.
+**To add issues**: Add entry to `assets/data/revista.json` and redeploy theme.
 
-**To add a new issue monthly**:
-1. Upload cover image and PDF to Ghost
-2. Add a new object at the **beginning** of `assets/data/revista.json`:
-```json
-{
-  "numero": 12,
-  "titulo": "Especial Tema",
-  "fecha": "Febrero 2026",
-  "cover": "https://www.421.news/content/images/...",
-  "pdf": "https://storage.ghost.io/.../Revista-421--12--.pdf",
-  "size": "X MB",
-  "creditos": [
-    { "rol": "Tapa", "nombre": "Artista", "url": "https://instagram.com/..." },
-    { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
-  ]
-}
-```
-3. Redeploy theme (zip + upload + activate)
+## Subscription System
 
-**Route**: `/revista-421/: revista` in `routes.yaml` (uploaded manually via Ghost Admin > Settings > Labs > Routes).
+Multi-layered conversion flow:
+- **Subscribe popup** (`partials/subscribe-popup.hbs`): Modal CTA at 20% scroll depth for non-members. 7-day dismiss cooldown via localStorage. Bilingual.
+- **Sticky mobile button** (`partials/sticky-subscribe-mobile-button.hbs`): Full-width mobile subscribe button. Text/href adapted for EN by `default.hbs`.
+- **Subscription pages**: `/es/suscribite/` (ES) and `/en/subscribe/` (EN)
+- **Management pages**: `/es/mi-suscripcion/` and `/en/my-subscription/` (noindex). Shows paid/free/guest states. Paid members get link to MTG Collection app (https://mtg.421.news). Fetches `/members/api/member/` to check status.
+- **Thank you pages**: `/gracias/` (ES) and `/oh-yes/` (EN)
+
+## Pitcheale a 421 (Community Submissions)
+
+Page at `/es/pitcheale-a-421/` for community pitch submissions. Three category tabs with embedded Google Form iframes:
+1. **Escritura** - essays, chronicles, guides, tutorials
+2. **Ilustracion** - covers, editorial art, comics
+3. **Videojuegos** - indie devs, demos, game jams
 
 ## Internal Linking System
 
@@ -274,57 +328,6 @@ Light mode: card backgrounds, borders, and credit link colors adapt automaticall
 5. Skipping promo/newsletter posts
 
 Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexical-backup-*.json`.
-
-## Render Webhook Service
-
-Express.js service on Render (v1.1.0) that automates two tasks: hreflang meta tag injection and related posts computation.
-
-**Infrastructure**:
-- **Render service**: `srv-d68brdg6fj8s73c1foqg` (`https://webhook-hreflang.onrender.com`)
-- **Code**: `scripts/webhook-hreflang/` (server.js + package.json, no external dependencies beyond express + jsonwebtoken)
-- **Env vars** (in Render dashboard): `GHOST_ADMIN_KEY`, `GHOST_CONTENT_KEY`, `GHOST_URL`, `PORT`
-- Auto-deploys from GitHub `main` branch on push
-- Keep-alive self-ping every 14 min to prevent Render free tier spindown
-- Two Ghost webhooks registered (event: `post.published`), target URLs below
-
-**Endpoints**:
-- `GET /` — Health check (returns version)
-- `POST /webhook/hreflang` — Hreflang handler (responds 200 immediately, processes async)
-- `POST /webhook/related-posts` — Related posts handler (responds 200 immediately, schedules recompute with 10s debounce)
-- `GET /api/related-posts.json` — Serves current related posts JSON (CORS for `www.421.news`, 60s cache). Returns 503 if not yet computed
-- `POST /test` — Synchronous hreflang debug endpoint (returns full result JSON)
-
-### Hreflang Auto-Inject
-
-Automatically injects `<meta name="english-version">` / `<meta name="spanish-version">` tags when posts are published.
-
-**Flow**:
-1. Ghost fires `post.published` webhook → `/webhook/hreflang`
-2. Service determines language via `hash-en` tag presence
-3. Fetches 50 most recent posts in the other language via Content API
-4. Scores candidates: posts within 2 min auto-match (1.0); posts within 48h with shared slug words score 0.6 + temporal proximity (0..0.4); threshold 0.3
-5. If match found, injects meta tags in both posts via Admin API
-6. Idempotent: skips posts that already have the correct meta tag
-
-**Cron fallback (30 min)**: Ghost doesn't always fire `post.published` for scheduled posts. A `setInterval` runs every 30 min (first run 60s after startup) that fetches the last 10 posts, checks which ones are missing hreflang meta, and processes them through the same pairing handler. This guarantees no pair is missed even if the webhook doesn't fire.
-
-**Note**: For bulk updates (e.g., after adding manual pairs to `MANUAL_PAIRS` dict), still use `python3 scripts/generate-hreflang-sitemap.py --inject-meta --deploy`.
-
-### Related Posts Auto-Recompute
-
-Automatically recomputes the full TF-IDF related posts matrix when posts are published.
-
-**Flow**:
-1. Ghost fires `post.published` webhook → `/webhook/related-posts`
-2. Service debounces 10s (coalesces multiple rapid publishes)
-3. Fetches ALL posts via Content API (paginated, ~580 posts)
-4. Splits into ES/EN by `hash-es`/`hash-en` tag
-5. For each language: tokenizes (title 3x + tags 2x + excerpt), applies CONCEPT_MAP expansion (~100 semantic bridges), removes stopwords, computes TF-IDF with bigrams, L2-normalizes vectors, computes cosine similarity matrix, picks top 4 per post
-6. Stores result in memory, served via `GET /api/related-posts.json`
-
-**Bootstrap**: On startup, loads existing JSON from `https://www.421.news/assets/data/related-posts.json` for immediate availability, then recomputes fresh in background.
-
-**Client-side**: `related-posts.js` tries Render endpoint first (3s timeout), falls back to theme asset.
 
 ## Signup Form Removal
 
@@ -348,10 +351,9 @@ Automatically recomputes the full TF-IDF related posts matrix when posts are pub
 - `{{asset "path"}}` resolves to `/assets/path?v=HASH`
 - `{{#page}}` context is required to access page fields in `page.hbs`
 - Ghost's `cards.min.css` has high-specificity rules for `.kg-*` classes that need to be overridden carefully
-- Internal tags (starting with `#`) are excluded from `primary_tag`. **IMPORTANT**: When creating posts via Admin API, always put public tags FIRST and language tags (`#en`, `#es`) LAST in the tags array. If an internal tag is first, Ghost won't assign a visible `primary_tag`, and the post will appear as "uncategorized" on the site.
+- Internal tags (starting with `#`) are excluded from `primary_tag`
 - Ghost Admin API token CANNOT upload `routes.yaml` or `redirects.yaml` (returns 403). Must be done manually via Ghost Admin > Settings > Labs > Routes / Redirects.
 - Ghost Admin API token CANNOT modify site settings (`PUT /settings/`) either (returns 403). Publication logo, icon, etc. must be changed via Ghost Admin UI.
-- Ghost Admin API token CANNOT modify users/staff profiles (`PUT /users/`) either (returns 403). Author bios, meta_title, etc. require cookie-based session auth: `POST /ghost/api/admin/session/` with `{username, password, token}` (token = 2FA code sent to email). Session cookie name: `ghost-admin-api-session`.
 - Ghost redirects (YAML format) use regex matching on `from` patterns. **Always use `^` anchors** to prevent substring matching (e.g., `/magic-the-gathering/` without anchor also matches `/tag/magic-the-gathering/`). Ghost lowercases URLs before matching, so patterns must be lowercase. Ghost does NOT match URLs with Unicode/accented characters (URL-encoded paths like `/tag/tecnolog%c3%ada` bypass the redirect engine).
 - Post content is stored as Lexical JSON. Node types: `paragraph`, `html`, `image`, `embed`, `heading`, `list`, etc. The `html` type contains raw HTML strings.
 - When updating posts via Admin API, `updated_at` must match the current value (optimistic locking).
@@ -371,10 +373,11 @@ Applied in bulk cleanup pass:
 - **Google Analytics 4**: `G-ZN49MRKKCQ`, configured via Ghost Code Injection (not in theme files)
 - **Google Search Console**: Verified via GA property. Hreflang sitemap submitted at `https://www.421.news/assets/data/hreflang-sitemap.xml`
 - **IndexNow**: Active on Ghost, key `3066583d158ea23df246f650cc680d48`
-- **Hreflang**: Server-side `<link rel="alternate" hreflang>` tags in `default.hbs` for homepage. Client-side JS reads `english-version`/`spanish-version` meta tags (injected via `codeinjection_head` by `generate-hreflang-sitemap.py`) for posts. Self-referential hreflang for all posts.
+- **Hreflang**: Server-side `<link rel="alternate" hreflang>` tags in `default.hbs` for homepage. Client-side JS reads `english-version`/`spanish-version` meta tags (auto-injected by Render webhook on publish, or manually by `generate-hreflang-sitemap.py`) for posts. Self-referential hreflang for all posts.
 - **BreadcrumbList JSON-LD**: Added to `post-es.hbs`, `post-en.hbs` (Home > Tag > Title), all 28 tag templates via `partials/breadcrumb-tag.hbs`, and `author.hbs` (Home > Author Name).
 - **Article JSON-LD fix**: Ghost's `{{ghost_head}}` generates Article schema with publisher logo but omits `width`/`height` (regardless of image format). Inline script in `default.hbs` patches the JSON-LD post-render to add the correct 125x60 PNG URL with dimensions. Google's renderer executes JS before reading structured data, so this works. Publisher logo PNG uploaded at `https://www.421.news/content/images/2026/02/logo-421-publisher.png`.
-- **Redirects**: `redirects.yaml` with 46 rules handles all GSC 404 errors. Key patterns: wildcard `^/posts/(.*)` → `/$1` for old URL structure, regex-anchored slug redirects, EN tags at ES paths → `/en/tag/...`, case-insensitive tag matching via `[Tt]` regex, incomplete author slugs → full slugs. 37/40 verified working; 3 URLs with Unicode accents (`/tag/Tecnología` etc.) cannot be redirected due to Ghost limitation.
+- **SEO bulk fixes**: Scripts in `scripts/` for comprehensive Ghost field maintenance: `fix-feature-image-alt.py` (alt text), `fix-tag-descriptions.py` (26 tags), `fix-author-bios.py`, `fix-post-seo-fields.py` (meta_title, og_title, og_description, twitter_*), `fix-tag-seo.py`, `fix-page-seo.py`.
+- **Redirects**: `redirects.yaml` with 111 rules (103 permanent, 8 temporary). Handles `/es/` migration catch-all, slug merges, tag mappings, author slug completion, case insensitivity, old `/posts/` prefix, bilingual path corrections. Ghost limitation: URLs with Unicode accents (`/tag/Tecnologia` etc.) cannot be redirected.
 - **Non-www → www redirect (Cloudflare)**: DNS migrated from GoDaddy to Cloudflare (free) to fix non-www `421.news` → `www.421.news` redirect from 302 (Caddy VPS) to 301 (permanent). Setup:
   - **DNS**: A record `@` → `192.0.2.1` (Proxied/orange cloud, dummy IP for redirect), CNAME `www` → `421bn.ghost.io` (DNS only/grey cloud), 5 MX records (Google Workspace), 3 TXT records (SPF + Google site verification)
   - **Page Rule**: `421.news/*` → Forwarding URL 301 → `https://www.421.news/$1` (preserves path)
@@ -382,59 +385,16 @@ Applied in bulk cleanup pass:
   - **Always Use HTTPS**: Enabled (handles `http://` → `https://` upgrade)
   - **Nameservers**: `evan.ns.cloudflare.com` / `stella.ns.cloudflare.com` (set in GoDaddy)
   - **Redirect chain**: `http://421.news/path` → 301 → `https://421.news/path` → 301 → `https://www.421.news/path` → 200
-  - This fixes ~415 "Discovered - currently not indexed" URLs in GSC caused by the old 302 redirect
-  - **mtg subdomain**: CNAME `mtg` → `cname.vercel-dns.com` (DNS only/grey cloud). Points to the MTG Collection app on Vercel. Must be DNS only — Vercel handles its own SSL.
-- **SEO Bulk Audit (completed)**: Comprehensive audit and fix of all Ghost SEO fields via Admin API scripts:
-  - `feature_image_alt`: 490 posts — set to post title (was 95% empty)
-  - Tag `description` + `meta_title`: 26 tags — editorial descriptions per tag (ES/EN)
-  - Author `bio`: 15 authors — researched from public sources (required cookie auth)
-  - Author `meta_title`: 73 authors — set to "Name | 421.news" (required cookie auth)
-  - Post `meta_title`: 191 posts — set to post title
-  - Post `og_title`/`og_description`: 510 posts — set to title/excerpt
-  - Post `twitter_title`/`twitter_description`: 504 posts — set to title/excerpt
-  - Backups for all operations in `backups/`
 
-## Migration: `/` → `/es/` (planned)
+## Webhook Automation (Render)
 
-Migrate Spanish content from root (`/{slug}/`) to `/es/{slug}/` so both languages have explicit prefixes. Root `/` becomes a neutral landing that redirects by browser language. This eliminates SEO ambiguity where Google confuses ES/EN content on the root URL.
+Express.js microservice at https://webhook-hreflang.onrender.com handles two Ghost webhooks:
 
-### Current state
-- Spanish: `https://www.421.news/{slug}/` (root collection)
-- English: `https://www.421.news/en/{slug}/`
-- Problem: `/` is ambiguous — serves Spanish content but Googlebot (Chrome, lang=en) gets JS-redirected to `/en/`, causing Google to index English content for the root URL
+1. **Hreflang auto-injection** (`POST /webhook/hreflang`): On `post.published`, detects language, finds matching pair via scoring algorithm (timestamp proximity + slug word overlap, threshold >= 0.3), injects `<meta>` tags. Cron fallback every 30 min checks last 10 posts for missing hreflang (catches scheduled posts).
 
-### Target state
-- Spanish: `https://www.421.news/es/{slug}/`
-- English: `https://www.421.news/en/{slug}/`
-- Root `/`: neutral landing page or auto-redirect (no collection)
+2. **Related posts recompute** (`POST /webhook/related-posts`): On post publish, recomputes TF-IDF + cosine similarity for all posts (10s debounce). Serves fresh JSON at `GET /api/related-posts.json` (60s cache, CORS for www.421.news). Client-side `related-posts.js` tries this endpoint first (3s timeout) before falling back to theme asset.
 
-### Automated steps (Claude does all of these)
-
-1. **`routes.yaml`**: Change ES collection from `/` to `/es/` with `permalink: /es/{slug}/`. Add root `/` as a route pointing to a landing template or redirect
-2. **Theme templates**: Update all ES templates (`index.hbs`, `rutas.hbs`, `canon.hbs`, `revista.hbs`, `pitcheale.hbs`, `suscribite.hbs`, tag templates, etc.) — internal links from `/{slug}/` → `/es/{slug}/`
-3. **`default.hbs`**: Update browser language redirect to point to `/es/` or `/en/` from root. Update hreflang tags
-4. **Navigation partials**: Update `site-nav-es.hbs`, `file-browser.hbs` links to use `/es/` prefix
-5. **`redirects.yaml`**: Generate ~450 redirect rules: `^/{slug}/$ → /es/{slug}/` for every existing Spanish post. Also redirect ES tag pages `^/tag/{slug}/ → /es/tag/{slug}/`, author pages, etc.
-6. **Hreflang sitemap**: Regenerate `hreflang-sitemap.xml` with `/es/` URLs
-7. **Hreflang post meta tags**: Re-run `generate-hreflang-sitemap.py --inject-meta` to update `codeinjection_head` on all paired posts
-8. **Internal links in posts**: Script to update the ~1544 internal links in post content from `/{slug}/` to `/es/{slug}/` via Admin API
-9. **`related-posts.json`**: No change needed (stores slugs, not full URLs — JS builds URLs dynamically)
-10. **`rutas.json`**: No change needed (stores slugs, not full URLs)
-
-### Manual steps (user must do these — ~5 actions)
-
-1. **Upload `routes.yaml`**: Ghost Admin > Settings > Labs > Routes > Upload YAML
-2. **Upload `redirects.yaml`**: Ghost Admin > Settings > Labs > Redirects > Upload YAML
-3. **Google Search Console**: Submit updated sitemap URL. Use "Request Indexing" on `https://www.421.news/es/` to accelerate crawl. Monitor "Page indexing" report over the next 2-4 weeks for the URL migration
-4. **Cloudflare Page Rule** (optional): If we want a server-side fallback redirect for `/` → `/es/` (in case JS doesn't execute), add a Page Rule: `www.421.news/` → 302 → `https://www.421.news/es/` (use 302 not 301, since the root should remain neutral). Current Page Rule `421.news/*` for non-www redirect stays as-is
-5. **Verify**: Check a few pages at `/es/{slug}/` work, old `/{slug}/` URLs 301-redirect correctly, and hreflang tags are correct
-
-### Risks and notes
-- Ghost's `redirects.yaml` has a practical limit (~500 rules). With ~450 Spanish posts, we're close. If needed, use a wildcard `^/(?!es/|en/|ghost/|assets/|tag/|author/)([^/]+)/$ → /es/$1/` instead of per-slug rules
-- Google will show a temporary dip in indexed pages during re-crawl (2-4 weeks)
-- All existing backlinks and shared URLs will continue to work via 301 redirects
-- The `/en/` collection and all EN URLs remain unchanged
-- RSS feed URL may change — verify after migration
+Self-pings every 14 min to prevent Render free tier spindown.
 
 ## Pending / Future Features (from "Filosofia 421" roadmap)
 
@@ -442,4 +402,3 @@ Features identified but not yet implemented:
 - **Content type badges** - Visual indicators on cards (ensayo, guia, cronica, tutorial, wiki)
 - **"Que es 421" page** - Institutional about page
 - **Author territories** - Each author gets a visible territory/beat
-- **Archive as system** - Transform chronological archive into navigable system (partially done with rutas/canon)
