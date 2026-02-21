@@ -75,7 +75,7 @@
   ```
   Cargar en `default.hbs` con defer. Los 5 archivos llaman `window.renderCard()`.
 - **Ahorro:** ~8-12 KB de código eliminado
-- [ ] Completado
+- [x] Completado
 
 ### 2.2 Unificar los 3 scripts de paginación
 - **Archivos:** `pagination-home.js`, `pagination-next.js`, `pagination-author.js`
@@ -89,7 +89,7 @@
   Cada template lo llama con sus parámetros. Eliminar los 3 archivos individuales.
 - **Ahorro:** ~10-12 KB de código eliminado
 - **Nota:** Actualizar los `<script>` tags en `index.hbs`, `en.hbs`, todos los `tag-*.hbs`, y `author.hbs`.
-- [ ] Completado
+- [x] Completado
 
 ### 2.3 Arreglar `filter-posts.js` para usar endpoints nativos
 - **Archivo:** `assets/js/filter-posts.js`
@@ -101,7 +101,7 @@
   ```
   Filtrar por idioma client-side (es/en prefix check).
 - **Ahorro:** 50-80% menos payload en la carga inicial de `/es/ultimos-posts/` y `/en/last-posts/`
-- [ ] Completado
+- [x] Completado
 
 ### 2.4 Event delegation en paginación
 - **Archivos:** Los scripts de paginación (post-2.2, sería en `pagination.js`)
@@ -114,7 +114,7 @@
   });
   ```
 - **Ahorro:** Menos allocations de memoria, más limpio
-- [ ] Completado
+- [x] Completado
 
 ---
 
