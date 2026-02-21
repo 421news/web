@@ -6,6 +6,11 @@ document.addEventListener("DOMContentLoaded", function() {
     let scrollThreshold = 50;
     let isScrolling = false;
 
+    // Use matchMedia instead of window.innerWidth to avoid reflow on every scroll
+    var mobileQuery = window.matchMedia("(max-width: 768px)");
+    var isMobile = mobileQuery.matches;
+    mobileQuery.addEventListener("change", function(e) { isMobile = e.matches; });
+
     // auto-hide nav scroll
     function handleScroll() {
         const currentScrollY = window.scrollY;
@@ -24,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // show nav when scrolling up (desktop only) or at top of page
-        var isMobile = window.innerWidth <= 768;
         if (currentScrollY <= scrollThreshold) {
             if (header) header.classList.remove("nav-hidden");
             if (mobileSubButton) mobileSubButton.classList.remove("nav-hidden");

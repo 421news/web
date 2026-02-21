@@ -1,4 +1,4 @@
-// Shared post card rendering utilities + event delegation for hover
+// Shared post card rendering utilities + event delegation for hover + lazy texture
 (function () {
     var TEXTURA = '/assets/images/textura.webp';
 
@@ -26,7 +26,7 @@
             '<div class="post-card">' +
             '<div class="post-card_cover" style="background-image:url(\'' + window.escHtml(post.feature_image || '') + '\')">' +
             '<div class="post-card_ico">' + tagImg + '</div>' +
-            '<div class="post-card_overlay" style="background-image:url(\'' + TEXTURA + '\');background-size:cover;background-position:center"></div>' +
+            '<div class="post-card_overlay" style="background-size:cover;background-position:center"></div>' +
             '<div class="tag-box">' + window.escHtml(tag.name || 'Uncategorized') + '</div>' +
             '</div>' +
             '<div class="post-card_info">' +
@@ -36,6 +36,41 @@
             '<div class="is-italic">' + date + '</div>' +
             '</div></div></div></a></div>';
     };
+
+    // --- Lazy-load textura.webp via IntersectionObserver ---
+    var textureObserver = new IntersectionObserver(function (entries) {
+        for (var i = 0; i < entries.length; i++) {
+            if (entries[i].isIntersecting) {
+                entries[i].target.style.backgroundImage = "url('" + TEXTURA + "')";
+                textureObserver.unobserve(entries[i].target);
+            }
+        }
+    }, { rootMargin: '200px' });
+
+    function observeOverlay(el) {
+        if (!el.dataset.txObs) {
+            el.dataset.txObs = '1';
+            textureObserver.observe(el);
+        }
+    }
+
+    // Watch for new overlays added to the DOM (pagination, rutas, related posts, etc.)
+    new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+            var added = mutations[i].addedNodes;
+            for (var j = 0; j < added.length; j++) {
+                var node = added[j];
+                if (node.nodeType !== 1) continue;
+                if (node.classList && node.classList.contains('post-card_overlay')) {
+                    observeOverlay(node);
+                }
+                var overlays = node.querySelectorAll && node.querySelectorAll('.post-card_overlay');
+                if (overlays) {
+                    for (var k = 0; k < overlays.length; k++) observeOverlay(overlays[k]);
+                }
+            }
+        }
+    }).observe(document.documentElement, { childList: true, subtree: true });
 
     // Event delegation for post card hover (covers both server-rendered and JS-rendered cards)
     document.addEventListener('mouseover', function (e) {
@@ -54,7 +89,7 @@
         if (related && card.contains(related)) return;
         var overlay = card.querySelector('.post-card_overlay');
         if (overlay) {
-            overlay.style.backgroundImage = 'url(' + TEXTURA + ')';
+            overlay.style.backgroundImage = "url('" + TEXTURA + "')";
             overlay.style.backgroundBlendMode = '';
         }
     });

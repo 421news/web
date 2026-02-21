@@ -5,6 +5,7 @@
   --verde: #17a583;
   --radius: 8px;
   --border-width: 2px;
+  --gradient-main: linear-gradient(280deg, var(--verde), var(--amarillo));
 }
 
 * {

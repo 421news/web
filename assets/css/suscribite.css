@@ -41,7 +41,7 @@
 .sub-gradient-divider {
   border: none;
   height: 2px;
-  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  background: var(--gradient-main);
   margin: 2.5rem 0;
 }
 
@@ -170,7 +170,7 @@
   padding: 14px;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  background: var(--gradient-main);
   color: var(--negro);
   font-weight: 700;
   font-size: 16px;
@@ -387,7 +387,7 @@
   border-bottom-color: rgba(0, 0, 0, 0.06);
 }
 .light-mode .btn-gradient {
-  background: linear-gradient(280deg, var(--verde), var(--amarillo));
+  background: var(--gradient-main);
   color: var(--negro);
 }
 .light-mode .btn-solid {

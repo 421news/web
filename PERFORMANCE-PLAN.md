@@ -142,59 +142,34 @@
   - Mover `window-manager.css` a carga condicional (desktop only, igual que el JS de 1.1)
   - `file-browser.css` se necesita en casi todas las páginas, mantener global
 - **Ahorro:** ~21 KB diferidos en páginas que no los necesitan
-- [ ] Completado
+- [x] Completado
 
 ### 3.3 Lazy-load textura.webp
-- **Archivo:** `assets/css/index.css` (referencia a textura.webp como background-image)
+- **Archivo:** `render-card.js` + `post-card.hbs`
 - **Problema:** 779 KB se descargan en cada página aunque el usuario no scrollee hasta ver las cards.
-- **Solución:** No cargar la textura via CSS. En su lugar, asignarla via JS con Intersection Observer:
-  ```js
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.style.backgroundImage = "url('/assets/images/textura.webp')";
-        observer.unobserve(entry.target);
-      }
-    });
-  });
-  document.querySelectorAll('.post-card_overlay').forEach(function(el) {
-    observer.observe(el);
-  });
-  ```
+- **Solución:** Removida la URL de textura del HTML inline (post-card.hbs y renderCard). IntersectionObserver en `render-card.js` con rootMargin 200px lazy-carga la textura cuando los overlays se acercan al viewport. MutationObserver detecta cards dinámicas (paginación, rutas, etc.) y las observa automáticamente.
 - **Ahorro:** 779 KB diferidos hasta que el usuario scrollea
-- [ ] Completado
+- [x] Completado
 
 ### 3.4 Optimizar `hide-show-nav.js`
 - **Archivo:** `assets/js/hide-show-nav.js`
 - **Problema:** Consulta `window.innerWidth` en cada evento de scroll (fuerza reflow).
-- **Solución:** Usar `matchMedia`:
-  ```js
-  var mobileQuery = window.matchMedia('(max-width: 768px)');
-  var isMobile = mobileQuery.matches;
-  mobileQuery.addEventListener('change', function(e) { isMobile = e.matches; });
-  ```
+- **Solución:** Reemplazado con `matchMedia('(max-width: 768px)')` que se evalúa una vez y se actualiza via `change` event.
 - **Ahorro:** ~3-5ms por frame de scroll
-- [ ] Completado
+- [x] Completado
 
 ### 3.5 Reducir variantes de Google Fonts
 - **Archivo:** `default.hbs`
 - **Problema:** 9 variantes cargadas. `Nunito Sans italic 800` (`1,800`) puede no usarse.
-- **Solución:** Auditar uso de `font-weight: 800; font-style: italic` en CSS. Si solo se usa en 1-2 lugares (nav subscribe button), considerar eliminar la variante y usar `font-weight: 700` como fallback.
-- **Ahorro:** ~5-10 KB de fonts (1 variante menos)
-- [ ] Completado
+- **Resultado:** Auditado. `font-weight: 800` se usa en 15+ lugares (rutas títulos, canon badges, subscribe buttons, revista badges, pitcheale badges, etc.). No se puede eliminar.
+- [x] Completado (sin cambios — variante necesaria)
 
 ### 3.6 Gradient como variable CSS
-- **Archivo:** `assets/css/globals.css` + todos los CSS
-- **Problema:** `linear-gradient(280deg, var(--verde), var(--amarillo))` repetido 40+ veces.
-- **Solución:** Definir en `:root`:
-  ```css
-  :root {
-    --gradient-main: linear-gradient(280deg, var(--verde), var(--amarillo));
-  }
-  ```
-  Reemplazar todas las ocurrencias con `var(--gradient-main)`.
+- **Archivo:** `assets/css/globals.css` + `index.css` + `site-nav.css` + `suscribite.css`
+- **Problema:** `linear-gradient(280deg, var(--verde), var(--amarillo))` repetido 22 veces en 3 archivos.
+- **Solución:** Definida `--gradient-main` en `:root` de globals.css. Reemplazadas las 22 ocurrencias en index.css (15), site-nav.css (1), suscribite.css (3), incluyendo usos en `background`, `background-image` y `border-image`.
 - **Ahorro:** ~500 bytes + mejor mantenibilidad
-- [ ] Completado
+- [x] Completado
 
 ---
 
