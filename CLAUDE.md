@@ -57,11 +57,11 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - **`canon.hbs`** - Spanish Canon 421 page (`/es/canon/`). Loads `rutas.js` which fetches 25 essential posts with editorial reasons.
 - **`canon-en.hbs`** - English Canon 421 page (`/en/canon/`).
 - **`revista.hbs`** - Revista 421 magazine archive page (`/es/revista-421/`). Loads `revista.js` which renders issue cards from `revista.json`. Custom OG/Twitter meta tags.
-- **`pitcheale.hbs`** - Community pitch/submission page (`/es/pitcheale-a-421/`). 3 category tabs (Escritura, Ilustracion, Videojuegos) with embedded Google Form iframes.
+- **`pitcheale.hbs`** - Community pitch/submission page (`/es/pitcheale-a-421/`). 3 category tabs (Escritura, Ilustracion, Videojuegos) with custom SVG icons (`icono_escritura.svg`, `icono_ilustracion.svg`, `icono_videojuegos.svg`) and embedded Google Form iframes.
 - `suscribite.hbs` - Spanish subscription page (`/es/suscribite/`)
 - `subscribe.hbs` - English subscription page (`/en/subscribe/`)
-- `mi-suscripcion.hbs` - Spanish subscription management page (`/es/mi-suscripcion/`, noindex). Shows paid/free/guest states, links to MTG Collection app (https://mtg.421.news) for paid members.
-- `my-subscription.hbs` - English subscription management page (`/en/my-subscription/`, noindex).
+- `mi-suscripcion.hbs` - Spanish subscription management page (`/es/mi-suscripcion/`, noindex). Shows paid/free/guest states, links to MTG Collection app (https://mtg.421.news) for paid members. Sign out button (`DELETE /members/api/session`).
+- `my-subscription.hbs` - English subscription management page (`/en/my-subscription/`, noindex). Same as ES version with EN text.
 - `last-posts-es.hbs` - Spanish archive/all-posts page (`/es/ultimos-posts/`). Loads `filter-posts.js`.
 - `last-posts-en.hbs` - English archive page (`/en/last-posts/`). Loads `filter-posts.js`.
 - `gracias.hbs` - Thank you page (ES, `/gracias/`)
@@ -308,15 +308,15 @@ Multi-layered conversion flow:
 - **Subscribe popup** (`partials/subscribe-popup.hbs`): Modal CTA at 20% scroll depth for non-members. 7-day dismiss cooldown via localStorage. Bilingual.
 - **Sticky mobile button** (`partials/sticky-subscribe-mobile-button.hbs`): Full-width mobile subscribe button. Text/href adapted for EN by `default.hbs`.
 - **Subscription pages**: `/es/suscribite/` (ES) and `/en/subscribe/` (EN)
-- **Management pages**: `/es/mi-suscripcion/` and `/en/my-subscription/` (noindex). Shows paid/free/guest states. Paid members get link to MTG Collection app (https://mtg.421.news). Fetches `/members/api/member/` to check status.
+- **Management pages**: `/es/mi-suscripcion/` and `/en/my-subscription/` (noindex). Shows paid/free/guest states. Paid members get link to MTG Collection app (https://mtg.421.news). Fetches `/members/api/member/` to check status. Sign out button destroys session via `DELETE /members/api/session` and reloads page.
 - **Thank you pages**: `/gracias/` (ES) and `/oh-yes/` (EN)
 
 ## Pitcheale a 421 (Community Submissions)
 
-Page at `/es/pitcheale-a-421/` for community pitch submissions. Three category tabs with embedded Google Form iframes:
-1. **Escritura** - essays, chronicles, guides, tutorials
-2. **Ilustracion** - covers, editorial art, comics
-3. **Videojuegos** - indie devs, demos, game jams
+Page at `/es/pitcheale-a-421/` for community pitch submissions. Three category tabs with custom SVG icons and embedded Google Form iframes:
+1. **Escritura** (`icono_escritura.svg`) - essays, chronicles, guides, tutorials
+2. **Ilustracion** (`icono_ilustracion.svg`) - covers, editorial art, comics
+3. **Videojuegos** (`icono_videojuegos.svg`) - indie devs, demos, game jams
 
 ## Internal Linking System
 
