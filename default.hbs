@@ -44,6 +44,7 @@
     {{!-- Fix publisher logo in Ghost's Article JSON-LD: add width/height (GSC structured data error) --}}
     <script>
       (function() {
+        if (!document.querySelector('script[type="application/ld+json"]')) return;
         var scripts = document.querySelectorAll('script[type="application/ld+json"]');
         for (var i = 0; i < scripts.length; i++) {
           try {
@@ -117,29 +118,24 @@
     <script>
       // Remove Ghost Portal subscribe CTA from bottom of posts
       (function() {
-        function removePostCTA() {
+        function removeGhostCTA() {
           document.querySelectorAll('.gh-post-upgrade-cta').forEach(function(el) { el.remove(); });
         }
-        removePostCTA();
-        setTimeout(removePostCTA, 500);
-        setTimeout(removePostCTA, 1500);
-        setTimeout(removePostCTA, 3000);
-        new MutationObserver(function(mutations) {
-          mutations.forEach(function(m) {
-            m.addedNodes.forEach(function(node) {
-              if (node.nodeType === 1) {
-                if (node.classList && node.classList.contains('gh-post-upgrade-cta')) node.remove();
-                var nested = node.querySelectorAll && node.querySelectorAll('.gh-post-upgrade-cta');
-                if (nested) nested.forEach(function(el) { el.remove(); });
-              }
-            });
-          });
-        }).observe(document.body || document.documentElement, { childList: true, subtree: true });
+        removeGhostCTA();
+        setTimeout(removeGhostCTA, 1000);
+        setTimeout(removeGhostCTA, 3000);
       })();
     </script>
     <script src="{{asset "js/light-mode.js"}}" defer></script>
     <script src="{{asset "js/hide-show-nav.js"}}" defer></script>
     <script src="{{asset "js/file-browser.js"}}" defer></script>
-    <script src="{{asset "js/window-manager.js"}}" defer></script>
+    <script>
+    if (window.innerWidth >= 1024) {
+      var s = document.createElement('script');
+      s.src = '{{asset "js/window-manager.js"}}';
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+    </script>
   </body>
 </html>
