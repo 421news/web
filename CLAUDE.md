@@ -46,7 +46,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 ## File Structure
 
 ### Root templates (pages)
-- `default.hbs` - Main layout. Loads Google Fonts (Nunito Sans + Lora) via CSS `display=swap`, global CSS, `light-mode.js`. Has MutationObserver to remove Ghost Portal signup CTA, hreflang injection, browser language redirect to `/en/`. Includes inline script to patch Ghost's Article JSON-LD publisher logo with correct PNG URL + width/height (Ghost omits dimensions). Updates sticky subscribe button text/href for EN pages.
+- `default.hbs` - Main layout. Loads Google Fonts (Nunito Sans + Lora) via CSS `display=swap`, global CSS, `render-card.js` (sync, in `<head>`), `light-mode.js`. Removes Ghost Portal signup CTA via querySelectorAll + setTimeout (no MutationObserver). Hreflang injection, browser language redirect to `/en/`. Inline script patches Ghost's Article JSON-LD publisher logo (guarded: only runs on pages with ld+json). Updates sticky subscribe button text/href for EN pages. `window-manager.css` and `window-manager.js` load conditionally (desktop only, `>=1024px`).
 - `landing.hbs` - Minimal landing page at `/`. Displays centered 421 logo. Actual routing is done by `default.hbs` browser language redirect (EN browsers → `/en/`, others → `/es/`).
 - `index.hbs` - Spanish homepage (`/es/`)
 - `en.hbs` - English homepage (`/en/`)
@@ -77,7 +77,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 ### Partials (`partials/`)
 - **`post-es.hbs`** - Spanish post template. Contains article body, author box, related posts query, file browser
 - **`post-en.hbs`** - English post template. Same structure as post-es but with EN text and `hash-en` filters
-- `post-card.hbs` - Post card component (used in grids). Has hover effect with texture overlay
+- `post-card.hbs` - Post card component (used in grids). Texture overlay is lazy-loaded via IntersectionObserver in `render-card.js` (no inline `background-image`). Hover effect handled by event delegation in `render-card.js`.
 - `post-header.hbs` / `featured-post-header.hbs` - Post header with feature image
 - `site-nav-es.hbs` / `site-nav-en.hbs` - Navigation bars
 - `site-footer.hbs` - Footer
@@ -105,7 +105,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
   - Gallery breakout (1200px max, center with transform)
   - Bookmark card thumbnail gap fix
   - Header card centering
-  - HR gradient divider (`linear-gradient(280deg, var(--verde), var(--amarillo))`)
+  - HR gradient divider (uses `var(--gradient-main)`)
   - Link styling (gradient text, no double underline from `<u>` tags)
   - Caption link gradient
   - Rich text: Lora serif font, line-height 1.5, figcaption 15px
@@ -115,10 +115,11 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
   - **Rutas/Canon page styles**: hero with gradient title, route sections (number, name, tesis, post count, card grid), canon list (numbered badges, cover thumbnails, tag, reason text), responsive breakpoints
   - **Revista styles**: magazine issue cards, cover images, collaborator grids
   - Post card grid normalization: `.post-cols .w-dyn-item` has `width: 100%` to ensure uniform card sizes
-- `globals.css` - CSS variables (`--verde`, `--amarillo`, etc.), font rendering (`antialiased`, `optimizeLegibility`)
+  - Mobile hiding for `.wm-root` and `.fb-window` at `<1024px` (moved from `window-manager.css` since it loads conditionally)
+- `globals.css` - CSS variables (`--verde`, `--amarillo`, `--gradient-main`, etc.), font rendering (`antialiased`, `optimizeLegibility`). `--gradient-main: linear-gradient(280deg, var(--verde), var(--amarillo))` is used across all CSS files.
 - `site-nav.css` - Navigation styles
 - `file-browser.css` - File browser styles
-- `window-manager.css` - Window manager styles
+- `window-manager.css` - Window manager styles. **Desktop only** — loaded conditionally via JS in `default.hbs` (`>=1024px`). Has its own `@media (max-width: 1023px)` hiding rules as fallback.
 - `progress-bar.css` - Reading progress bar
 - `suscribite.css` - Subscription page styles
 - `webflow.css` / `udesly-ghost.css` - Base framework styles (don't edit)
@@ -126,16 +127,18 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `404.css` - 404 page styles
 
 ### JavaScript (`assets/js/`)
-- **`related-posts.js`** - Client-side semantic related posts. Tries Render endpoint first (`/api/related-posts.json`, 3s timeout), falls back to theme `related-posts.json`. Fetches related posts from Content API, renders cards replacing the Handlebars fallback.
-- **`rutas.js`** - Client-side Rutas + Canon renderer. Loads `rutas.json`, fetches all posts by slug via Content API, renders card grids (for `/rutas/`) or numbered list with reasons (for `/canon/`). Detects language via URL prefix (`/en/`). Same `renderCard()` pattern as `related-posts.js`.
+- **`render-card.js`** - Shared post card rendering module. Loaded **sync** (no defer) in `<head>` of `default.hbs` because it defines `window.renderCard()`, `window.escHtml()`, and `window.formatPostDate()` used by all card-rendering scripts. Also includes: document-level event delegation for card hover (mouseover/mouseout with `.closest('.post-card')`), IntersectionObserver for lazy-loading `textura.webp` (rootMargin 200px), and MutationObserver to detect dynamically-added cards. **IMPORTANT**: Must load sync before `{{{body}}}` — deferred loading breaks rutas/canon/related-posts that depend on `window.renderCard`.
+- **`pagination.js`** - Unified pagination for all listing pages. Auto-detects page type from URL (home, tag, author) and configures API filter accordingly. Replaces the old `pagination-home.js`, `pagination-next.js`, `pagination-author.js`. Uses `window.renderCard()` from `render-card.js`. Prefetches next page for instant load-more.
+- **`related-posts.js`** - Client-side semantic related posts. Tries Render endpoint first (`/api/related-posts.json`, 3s timeout), falls back to theme `related-posts.json`. Fetches related posts from Content API, renders cards via `window.renderCard()` replacing the Handlebars fallback.
+- **`rutas.js`** - Client-side Rutas + Canon renderer. Loads `rutas.json`, fetches all posts by slug via Content API, renders card grids (for `/rutas/`) or numbered list with reasons (for `/canon/`). Detects language via URL prefix (`/en/`). Uses `window.renderCard()` from `render-card.js`.
 - **`revista.js`** - Magazine issue renderer. Fetches `revista.json`, renders cards with cover image, issue number badge, date/title, collaborator grid with links, PDF download + view cover buttons. No Content API needed (pure static JSON).
-- **`home-ruta.js`** - Weekly rotating reading route hero for homepage. Picks a different route each week (modulo 7), fetches up to 4 post cards via Content API. Bilingual via `data-lang` container attribute.
-- **`filter-posts.js`** - Archive page with filtering. 3 dropdowns (author, tag, order), load-more pagination (20 posts/page), auto language filtering via path detection. Cascading dropdown population from Content API.
+- **`home-ruta.js`** - Weekly rotating reading route hero for homepage. Picks a different route each week (modulo 7), fetches up to 4 post cards via Content API. Uses `window.renderCard()`. Bilingual via `data-lang` container attribute.
+- **`filter-posts.js`** - Archive page with filtering. 3 dropdowns (author, tag, order), load-more pagination (20 posts/page), auto language filtering via path detection. Tag/author dropdowns populated from native Ghost `/tags/` and `/authors/` API endpoints (not from fetching all posts). Uses `window.renderCard()`.
 - `file-browser.js` - File browser navigation logic
-- `window-manager.js` - Desktop-style window manager
+- `window-manager.js` - Desktop-style window manager. **Desktop only** — loaded conditionally via JS in `default.hbs` (`>=1024px`).
 - `reading-progress.js` - Reading progress bar
-- `hide-show-nav.js` - Scroll-based nav visibility
-- `pagination-home.js` / `pagination-next.js` / `pagination-author.js` - Pagination logic
+- `hide-show-nav.js` - Scroll-based nav visibility. Uses `matchMedia('(max-width: 768px)')` instead of `window.innerWidth` to avoid reflow on every scroll event.
+- `pagination-home.js` / `pagination-next.js` / `pagination-author.js` - **Deprecated**, replaced by unified `pagination.js`. Still in repo for reference.
 - `light-mode.js` - Centralized light/dark mode toggle. Handles sun/moon icon swap, localStorage persistence, and `.text-amarillo`↔`.text-verde` class swap for light mode. Loaded globally from `default.hbs`.
 - `audio-effect.js` - Audio effects
 - `seamless.js` - CSS-only page fade-in (no JS link interception). Animation defined in `index.css`.
@@ -196,7 +199,7 @@ Express.js microservice deployed on Render (https://webhook-hreflang.onrender.co
 - `routes.yaml` - Ghost routing configuration. Root `/` points to `landing` template. Spanish collection at `/es/` (permalink `/es/{slug}/`, filters `tag:-hash-en`). English collection at `/en/` (permalink `/en/{slug}/`, filters `tag:hash-en`). ~50 custom routes + 28 tag page routes. See Routes section below.
 - `redirects.yaml` - Ghost redirects configuration (111 rules: 103 permanent 301 + 8 temporary 302). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Handles `/es/` migration catch-all, slug merges, tag mappings, author slug completion, case insensitivity. See Redirects section below.
 - `redirects.json` - JSON backup of redirects
-- `package.json` - Theme metadata and version (currently **v3.8.8**)
+- `package.json` - Theme metadata and version (currently **v3.10.0**)
 - `layouts/default.hbs` - Express layout (dev server only)
 - `testeo/` - Mockup HTML files for previewing features before implementation (mockup-cta-conversion, mockup-pitcheale, mockup-revista, mockup-rutas-canon, mockup-suscripcion-dual)
 - `backups/` - API operation backups (lexical content, signup forms). Not committed.
@@ -331,7 +334,7 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 
 ## Signup Form Removal
 
-307 posts had manually-inserted HTML cards containing `<script src="signup-form.min.js">` (the "421 Broadcasting Network" subscribe widget). These were removed via Admin API. Backup at `backups/signup-form-backup-*.json`. Additionally, `default.hbs` has a MutationObserver that removes any `.gh-post-upgrade-cta` elements injected by Ghost Portal.
+307 posts had manually-inserted HTML cards containing `<script src="signup-form.min.js">` (the "421 Broadcasting Network" subscribe widget). These were removed via Admin API. Backup at `backups/signup-form-backup-*.json`. Additionally, `default.hbs` removes any `.gh-post-upgrade-cta` elements injected by Ghost Portal via `querySelectorAll` + 2 setTimeout calls (at 0ms and 3000ms).
 
 ## Key CSS Variables (from globals.css)
 
@@ -341,7 +344,7 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - `--verde: #17a583` - Green accent
 - `--radius: 8px` - Border radius
 - `--border-width: 2px` - Border width
-- Used in gradients: `linear-gradient(280deg, var(--verde), var(--amarillo))`
+- `--gradient-main: linear-gradient(280deg, var(--verde), var(--amarillo))` - Primary gradient (used in 22+ places across CSS files)
 
 ## Ghost-specific Notes
 
@@ -358,15 +361,33 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - Post content is stored as Lexical JSON. Node types: `paragraph`, `html`, `image`, `embed`, `heading`, `list`, etc. The `html` type contains raw HTML strings.
 - When updating posts via Admin API, `updated_at` must match the current value (optimistic locking).
 
-## Performance Optimizations (v2.10.2)
+## Performance Optimizations
 
-Applied in bulk cleanup pass:
+### v2.10.2 — Initial cleanup
 - **Textures**: Deleted 4 unused responsive variants (`textura-p-*.png`, 1.73MB). Converted `textura.png` to `textura.webp` (1.5MB → 779KB). All references updated.
 - **Script loading**: All `<script>` tags have `defer`. Replaced WebFont.js loader with native CSS `display=swap` Google Fonts link.
 - **Light mode consolidation**: Extracted 20 inline light-mode toggle blocks into single `assets/js/light-mode.js` loaded from `default.hbs`. Removed `querySelectorAll("div")` border-color hack (was iterating every div on page).
 - **Seamless.js**: Removed JS link interception (was adding 1s delay to all clicks). Page fade-in now handled by CSS `@keyframes pageFadeIn` in `index.css`.
 - **Dead code cleanup**: Removed console.logs from pagination/audio scripts, commented-out sections from footer/post/index templates, duplicate CSS rules, redundant WebFont.js loads from tag templates.
 - **Font rendering**: Added `-webkit-font-smoothing: antialiased`, `-moz-osx-font-smoothing: grayscale`, `text-rendering: optimizeLegibility` to `globals.css` body.
+
+### v3.9.0–v3.10.0 — 3-phase performance plan
+**Phase 1 — Quick wins:**
+- **Conditional window-manager.js**: Only loads on desktop (`>=1024px`). Saves 24KB on mobile (~80% of users).
+- **Inline script guards**: JSON-LD publisher logo patch has early return if no `ld+json` scripts on page. Saves ~20ms on non-post pages.
+- **Simplified CTA removal**: Replaced MutationObserver + 4 setTimeout with simple `querySelectorAll` + 2 setTimeout. Eliminates continuous DOM observation overhead.
+
+**Phase 2 — JS consolidation:**
+- **Shared `render-card.js`**: Extracted `renderCard()`, `formatPostDate()`, `escHtml()` from 5 duplicate files (~300 lines each) into single shared module. Loaded sync in `<head>`. Saves ~8-12KB.
+- **Unified `pagination.js`**: Replaced 3 near-identical pagination scripts (`pagination-home.js`, `pagination-next.js`, `pagination-author.js`) with one parametrized module. Auto-detects page type from URL. Saves ~10-12KB.
+- **Native API endpoints for filter-posts.js**: Tag/author dropdown population now uses `/tags/` and `/authors/` Ghost Content API endpoints instead of fetching all posts with `limit=all`. Saves 50-80% payload on archive pages.
+- **Event delegation**: Replaced per-card inline `onmouseover`/`onmouseout` handlers with 2 document-level listeners using `.closest('.post-card')`.
+
+**Phase 3 — Deep optimization:**
+- **Conditional `window-manager.css`**: Desktop only (`>=1024px`), loaded via JS. Mobile hiding rules (`.wm-root`, `.fb-window`) moved to `index.css` to prevent unstyled elements on mobile.
+- **Lazy-load `textura.webp` (779KB)**: Removed inline `background-image` from `post-card.hbs` and `renderCard()`. IntersectionObserver in `render-card.js` (rootMargin 200px) sets texture when overlays approach viewport. MutationObserver detects dynamically-added cards (pagination, rutas, etc.).
+- **`matchMedia` in `hide-show-nav.js`**: Replaced `window.innerWidth` (forces reflow on every scroll) with `matchMedia('(max-width: 768px)')` evaluated once + change listener.
+- **`--gradient-main` CSS variable**: Defined `linear-gradient(280deg, var(--verde), var(--amarillo))` in `:root`. Replaced 22 occurrences across `index.css`, `site-nav.css`, `suscribite.css`.
 
 ## SEO
 
