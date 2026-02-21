@@ -10,94 +10,135 @@
       <div class="sub-page">
         <div class="sub-container">
 
-          {{#if @member.paid}}
-          <!-- PAID MEMBER -->
-          <div class="sub-hero">
-            <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
-            <p class="sub-hero-subtitle">Gracias por ser parte de 421, {{@member.name}}. Tu apoyo hace posible este proyecto.</p>
+          <!-- Loading state (shown while fetching member data) -->
+          <div id="account-loading" style="text-align: center; padding: 4rem 0;">
+            <div style="font-size: 2rem; opacity: 0.5;">Cargando...</div>
           </div>
-          <hr class="sub-gradient-divider">
 
-          <div class="sub-card" style="max-width: 600px;">
-            <div class="sub-card-label">Wizard activo</div>
-            <p class="account-info">Email: <strong>{{@member.email}}</strong> &middot; <a href="#" class="account-edit-link" onclick="event.preventDefault(); window.location.hash='#/portal/account';">cambiar</a></p>
-
-            <div class="account-app-link">
-              <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
-                <span class="account-app-icon">&#x1F9D9;</span>
-                <span class="account-app-text">
-                  <strong>MTG Collection</strong>
-                  <small>Tu colecci&oacute;n de cartas Magic</small>
-                </span>
-                <span class="account-app-arrow">&rarr;</span>
-              </a>
+          <!-- PAID MEMBER (hidden until JS confirms) -->
+          <div id="account-paid" style="display: none;">
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
+              <p class="sub-hero-subtitle">Gracias por ser parte de 421, <span id="paid-name"></span>. Tu apoyo hace posible este proyecto.</p>
             </div>
+            <hr class="sub-gradient-divider">
 
-            <p class="account-section-title">Gestion&aacute; tu suscripci&oacute;n</p>
-            <p class="account-desc">Eleg&iacute; la opci&oacute;n seg&uacute;n c&oacute;mo te suscribiste:</p>
+            <div class="sub-card" style="max-width: 600px;">
+              <div class="sub-card-label">Wizard activo</div>
+              <p class="account-info">Email: <strong id="paid-email"></strong> &middot; <a href="#" class="account-edit-link" onclick="event.preventDefault(); window.location.hash='#/portal/account';">cambiar</a></p>
 
-            <div class="account-options">
-              <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
-                Stripe (tarjeta internacional)
-              </button>
-              <a href="https://www.mercadopago.com.ar/subscriptions" target="_blank" rel="noopener" class="btn-solid" style="text-align:center; text-decoration:none;">
-                MercadoPago (pesos argentinos)
-              </a>
-            </div>
+              <div class="account-app-link">
+                <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
+                  <span class="account-app-icon">&#x1F9D9;</span>
+                  <span class="account-app-text">
+                    <strong>MTG Collection</strong>
+                    <small>Tu colecci&oacute;n de cartas Magic</small>
+                  </span>
+                  <span class="account-app-arrow">&rarr;</span>
+                </a>
+              </div>
 
-            <p class="account-help">
-              &iquest;Necesit&aacute;s ayuda? Escrib&iacute;nos a <a href="mailto:contacto@421.news">contacto@421.news</a>
-            </p>
-          </div>
+              <p class="account-section-title">Gestion&aacute; tu suscripci&oacute;n</p>
+              <p class="account-desc">Eleg&iacute; la opci&oacute;n seg&uacute;n c&oacute;mo te suscribiste:</p>
 
-          {{else if @member}}
-          <!-- FREE MEMBER -->
-          <div class="sub-hero">
-            <h1 class="sub-hero-title">Mi cuenta</h1>
-            <p class="sub-hero-subtitle">Est&aacute;s registrado como miembro gratuito. Suscribite para acceder a todos los beneficios.</p>
-          </div>
-          <hr class="sub-gradient-divider">
+              <div class="account-options">
+                <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
+                  Stripe (tarjeta internacional)
+                </button>
+                <a href="https://www.mercadopago.com.ar/subscriptions" target="_blank" rel="noopener" class="btn-solid" style="text-align:center; text-decoration:none;">
+                  MercadoPago (pesos argentinos)
+                </a>
+              </div>
 
-          <div class="sub-card" style="max-width: 600px;">
-            <div class="sub-card-label">Goblin (gratuito)</div>
-            <p class="account-info">Email: <strong>{{@member.email}}</strong></p>
+              <p class="account-help">
+                &iquest;Necesit&aacute;s ayuda? Escrib&iacute;nos a <a href="mailto:contacto@421.news">contacto@421.news</a>
+              </p>
 
-            <a href="/es/suscribite/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
-              Upgrade a Wizard
-            </a>
-
-            <div style="margin-top: 1.5rem;">
-              <button class="btn-outline" onclick="window.location.hash='#/portal/account';">
-                Gestionar mi cuenta
+              <button class="btn-outline account-logout" onclick="fetch('/members/api/session', {method:'DELETE',credentials:'same-origin'}).then(function(){window.location.reload();});" style="margin-top: 1.5rem;">
+                Cerrar sesi&oacute;n
               </button>
             </div>
           </div>
 
-          {{else}}
-          <!-- NOT LOGGED IN -->
-          <div class="sub-hero">
-            <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
-            <p class="sub-hero-subtitle">Inici&aacute; sesi&oacute;n para gestionar tu suscripci&oacute;n.</p>
-          </div>
-          <hr class="sub-gradient-divider">
+          <!-- FREE MEMBER (hidden until JS confirms) -->
+          <div id="account-free" style="display: none;">
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Mi cuenta</h1>
+              <p class="sub-hero-subtitle">Est&aacute;s registrado como miembro gratuito. Suscribite para acceder a todos los beneficios.</p>
+            </div>
+            <hr class="sub-gradient-divider">
 
-          <div class="sub-card" style="max-width: 600px; text-align: center;">
-            <div style="font-size: 4rem; line-height: 1; margin-bottom: 0.5rem;">&#x1F9D9;</div>
-            <p style="font-size: 0.9rem; opacity: 0.5; margin-bottom: 1.5rem;">Portal de Wizards</p>
+            <div class="sub-card" style="max-width: 600px;">
+              <div class="sub-card-label">Goblin (gratuito)</div>
+              <p class="account-info">Email: <strong id="free-email"></strong></p>
 
-            <button class="btn-gradient" onclick="window.location.hash='#/portal/signin';">
-              Iniciar sesi&oacute;n
-            </button>
+              <a href="/es/suscribite/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
+                Upgrade a Wizard
+              </a>
 
-            <div class="free-tier-link">
-              <p>&iquest;No ten&eacute;s cuenta?</p>
-              <a href="/es/suscribite/" class="btn-outline" style="text-decoration:none;">Suscribite</a>
+              <div style="margin-top: 1.5rem;">
+                <button class="btn-outline" onclick="window.location.hash='#/portal/account';">
+                  Gestionar mi cuenta
+                </button>
+              </div>
+
+              <button class="btn-outline account-logout" onclick="fetch('/members/api/session', {method:'DELETE',credentials:'same-origin'}).then(function(){window.location.reload();});" style="margin-top: 1rem;">
+                Cerrar sesi&oacute;n
+              </button>
             </div>
           </div>
-          {{/if}}
+
+          <!-- NOT LOGGED IN (hidden until JS confirms) -->
+          <div id="account-anon" style="display: none;">
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
+              <p class="sub-hero-subtitle">Inici&aacute; sesi&oacute;n para gestionar tu suscripci&oacute;n.</p>
+            </div>
+            <hr class="sub-gradient-divider">
+
+            <div class="sub-card" style="max-width: 600px; text-align: center;">
+              <div style="font-size: 4rem; line-height: 1; margin-bottom: 0.5rem;">&#x1F9D9;</div>
+              <p style="font-size: 0.9rem; opacity: 0.5; margin-bottom: 1.5rem;">Portal de Wizards</p>
+
+              <button class="btn-gradient" onclick="window.location.hash='#/portal/signin';">
+                Iniciar sesi&oacute;n
+              </button>
+
+              <div class="free-tier-link">
+                <p>&iquest;No ten&eacute;s cuenta?</p>
+                <a href="/es/suscribite/" class="btn-outline" style="text-decoration:none;">Suscribite</a>
+              </div>
+            </div>
+          </div>
 
         </div>
       </div>
 
       {{> "site-footer"}}
     </div>
+
+<script defer>
+(function() {
+  fetch('/members/api/member/', { credentials: 'same-origin' })
+    .then(function(res) {
+      if (!res.ok) throw new Error('not signed in');
+      return res.json();
+    })
+    .then(function(member) {
+      document.getElementById('account-loading').style.display = 'none';
+      var hasPaid = member.paid || (member.subscriptions && member.subscriptions.length > 0);
+      if (hasPaid) {
+        document.getElementById('paid-name').textContent = member.name || '';
+        document.getElementById('paid-email').textContent = member.email || '';
+        document.getElementById('account-paid').style.display = '';
+      } else {
+        document.getElementById('free-email').textContent = member.email || '';
+        document.getElementById('account-free').style.display = '';
+      }
+    })
+    .catch(function() {
+      document.getElementById('account-loading').style.display = 'none';
+      document.getElementById('account-anon').style.display = '';
+    });
+})();
+</script>

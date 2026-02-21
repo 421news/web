@@ -222,6 +222,16 @@
   color: var(--amarillo);
 }
 
+.account-logout {
+  width: 100%;
+  opacity: 0.5;
+  font-size: 13px;
+  padding: 8px 20px;
+}
+.account-logout:hover {
+  opacity: 1;
+}
+
 .btn-back {
   display: block;
   margin: 1.5rem auto 0;

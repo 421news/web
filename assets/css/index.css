@@ -2364,9 +2364,19 @@ body.light-mode .revista-btn-cover:hover {
 }
 
 .pitch-category-icon {
-  font-size: 2.5rem;
+  width: 48px;
+  height: 48px;
   margin-bottom: 0.75rem;
   display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pitch-badge-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.1em;
+  filter: brightness(0);
 }
 
 .pitch-category-name {
@@ -2469,6 +2479,10 @@ body.light-mode .pitch-category-card.is-active {
   background: rgba(23, 165, 131, 0.08);
 }
 
+body.light-mode .pitch-category-icon {
+  filter: invert(1);
+}
+
 body.light-mode .pitch-category-desc {
   color: rgba(18, 18, 18, 0.45);
 }
@@ -2506,7 +2520,8 @@ body.light-mode .pitch-bottom strong {
   }
 
   .pitch-category-icon {
-    font-size: 2rem;
+    width: 36px;
+    height: 36px;
     margin-bottom: 0;
     flex-shrink: 0;
   }
