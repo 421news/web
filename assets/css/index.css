@@ -1158,6 +1158,14 @@ footer {
   }
 }
 
+@media screen and (max-width: 1023px) {
+  /* Hide window manager + file browser on non-desktop (was in window-manager.css) */
+  .wm-root,
+  .fb-window {
+    display: none !important;
+  }
+}
+
 @media screen and (max-width: 991px) {
   .hero-mobile-suscribite-button {
     display: block;
