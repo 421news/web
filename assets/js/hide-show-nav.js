@@ -19,18 +19,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // hide nav when scrolling down past threshold
         if (scrollingDown && currentScrollY > scrollThreshold) {
-            header.classList.add("nav-hidden");
-            mobileSubButton.classList.add("nav-hidden");
+            if (header) header.classList.add("nav-hidden");
+            if (mobileSubButton) mobileSubButton.classList.add("nav-hidden");
         }
 
         // show nav when scrolling up (desktop only) or at top of page
         var isMobile = window.innerWidth <= 768;
         if (currentScrollY <= scrollThreshold) {
-            header.classList.remove("nav-hidden");
-            mobileSubButton.classList.remove("nav-hidden");
+            if (header) header.classList.remove("nav-hidden");
+            if (mobileSubButton) mobileSubButton.classList.remove("nav-hidden");
         } else if (scrollingUp && !isMobile) {
-            header.classList.remove("nav-hidden");
-            mobileSubButton.classList.remove("nav-hidden");
+            if (header) header.classList.remove("nav-hidden");
+            if (mobileSubButton) mobileSubButton.classList.remove("nav-hidden");
         }
 
         lastScrollY = currentScrollY;

@@ -181,7 +181,6 @@
                 prefetchNext();
             }
         } catch (err) {
-            console.error("Load more failed:", err);
             prefetched = null;
             btn.disabled = false;
             btn.textContent = prev;

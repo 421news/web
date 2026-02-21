@@ -424,34 +424,6 @@ body.light-mode .nav-mobile-subscribe {
     gap: 1rem;
 }
 
-.site-nav-button {
-    display: flex;
-    border: 2px solid var(--crema);
-    background-color: var(--negro);
-    border-radius: 8px;
-    padding: 0.75rem 2rem;
-    font-style: italic;
-    font-weight: 700;
-    text-decoration: none;
-    color: var(--crema);
-    transition: transform 0.2s ease;
-}
-
-.site-nav-button.is-icon {
-    padding: 0 10px;
-}
-
-.site-nav-button:hover {
-    background-image: linear-gradient(90deg, var(--amarillo), var(--verde));
-    color: var(--negro);
-    transform: translateY(-2px);
-}
-
-.site-nav-button:active {
-    color: var(--crema);
-    background-image: none;
-}
-
 @media screen and (max-width: 768px) {
     .nav_buttons.is-footer {
         display: flex;

@@ -27,9 +27,7 @@
                 loadCanonProgressive(data[canonKey]);
             }
         })
-        .catch(function (err) {
-            console.error('Error loading rutas:', err);
-        });
+        .catch(function () {});
 
     function fetchPostsBySlugs(slugs) {
         var chunks = [];
