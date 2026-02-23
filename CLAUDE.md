@@ -364,6 +364,7 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - Ghost redirects (YAML format) use regex matching on `from` patterns. **Always use `^` anchors** to prevent substring matching (e.g., `/magic-the-gathering/` without anchor also matches `/tag/magic-the-gathering/`). Ghost lowercases URLs before matching, so patterns must be lowercase. Ghost does NOT match URLs with Unicode/accented characters (URL-encoded paths like `/tag/tecnolog%c3%ada` bypass the redirect engine).
 - Post content is stored as Lexical JSON. Node types: `paragraph`, `html`, `image`, `embed`, `heading`, `list`, etc. The `html` type contains raw HTML strings.
 - When updating posts via Admin API, `updated_at` must match the current value (optimistic locking).
+- **Handlebars triple-brace trap in JSON-LD**: Never let a JSON closing `}` sit immediately after a Handlebars `{{/if}}` or `{{/unless}}` — Ghost parses `{{/if}}}` as a triple-brace (`CLOSE_UNESCAPED`) and rejects the theme with a `GS005-TPL-ERR` validation error. Fix: add a space before the trailing `}` (e.g., `{{/if}} }`) so the parser sees `}}` + ` }` instead of `}}}`.
 
 ## Performance Optimizations
 
