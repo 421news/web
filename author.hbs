@@ -1,8 +1,16 @@
 {{!< default}}
 
 {{#author}}
+{{!-- SEO: noindex authors with fewer than 3 posts (thin pages) --}}
+{{#get "posts" limit="1" filter="authors:{{slug}}" page="3"}}
+{{else}}
+<script>var m=document.createElement('meta');m.name='robots';m.content='noindex, follow';document.head.appendChild(m);</script>
+{{/get}}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.421.news/es/"},{"@type":"ListItem","position":2,"name":"{{name}}"}]}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"{{name}}","url":"https://www.421.news/author/{{slug}}/"{{#if bio}},"description":"{{bio}}"{{/if}}{{#if profile_image}},"image":"{{profile_image}}"{{/if}}{{#if twitter}},"sameAs":["https://x.com/{{twitter}}"]{{/if}}}
 </script>
   <div class="page-wrapper">
     {{> "site-nav-es" }}

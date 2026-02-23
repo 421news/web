@@ -18,16 +18,7 @@
                 <div class='global-container'>
                   <div class='hero-home_cols'>
                     <div class='hero-home_meta'>
-                      <span
-                        id='cover-tags'
-                        class='plain-tags'
-                        style='background-color: #121212; padding: 5px'
-                      >
-                        {{#foreach tags}}
-                          <a href='/es/tag/{{slug}}'>{{name}}</a>
-                          {{#unless @last}}, {{/unless}}
-                        {{/foreach}}
-                      </span>
+                      {{!-- Tags hidden from home featured post (shown inside posts only) --}}
                       <a href='{{url}}' style='text-decoration: none'>
                         <div
                           id='w-node-_19e5bfb4-641d-9263-3e20-ad3f2c295cea-1cf55c9d'

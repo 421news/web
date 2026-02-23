@@ -346,6 +346,10 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - `--border-width: 2px` - Border width
 - `--gradient-main: linear-gradient(280deg, var(--verde), var(--amarillo))` - Primary gradient (used in 22+ places across CSS files)
 
+## Design Rules
+
+- **Body text color**: Always use `var(--crema)` for text on dark background (full white, not semi-transparent). Light mode override: `var(--negro)`. Never use `rgba()` with reduced opacity for body text — it makes it hard to read.
+
 ## Ghost-specific Notes
 
 - `{{#get}}` queries use NQL (Ghost Query Language) for filters

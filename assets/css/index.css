@@ -488,11 +488,14 @@ body.light-mode .form-field {
   font-weight: 700;
   display: inline-block;
   z-index: 8;
-  color: var(--verde);
+  color: var(--crema);
   text-decoration: none;
 }
 .plain-tags a:hover {
   text-decoration: underline;
+}
+body.light-mode .plain-tags a {
+  color: var(--negro);
 }
 /* AUTHOR BOX */
 .author-box {
@@ -2663,9 +2666,9 @@ body.light-mode .filter-empty {
 
 .post-cta-text {
   font-family: 'Lora', serif;
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   line-height: 1.7;
-  color: rgba(234, 230, 225, 0.85);
+  color: var(--crema);
   max-width: 560px;
   margin: 0 auto 1.5rem;
 }
@@ -2678,49 +2681,47 @@ body.light-mode .filter-empty {
   flex-wrap: wrap;
 }
 
-.post-cta-btn-primary {
-  display: inline-block;
-  padding: 0.75rem 2rem;
-  background: var(--gradient-main);
-  color: var(--negro);
-  font-weight: 800;
-  font-size: 0.95rem;
-  border-radius: var(--radius);
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.post-cta-btn-primary:hover { opacity: 0.9; }
-
+.post-cta-btn-primary,
 .post-cta-btn-secondary {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background: transparent;
-  color: var(--crema);
-  font-weight: 600;
-  font-size: 0.85rem;
-  border: 1px solid rgba(234, 230, 225, 0.25);
+  padding: 0.75rem 2rem;
+  background: linear-gradient(90deg, var(--amarillo), var(--verde));
+  color: var(--negro);
+  font-weight: 800;
+  font-size: 1rem;
   border-radius: var(--radius);
   text-decoration: none;
-  transition: border-color 0.2s;
+  border: none;
+  transition: opacity 0.2s;
 }
-.post-cta-btn-secondary:hover { border-color: var(--crema); }
+.post-cta-btn-primary:hover,
+.post-cta-btn-secondary:hover { opacity: 0.9; }
 
 /* Light mode */
 body.light-mode .post-cta {
   background: rgba(0, 0, 0, 0.03);
 }
 body.light-mode .post-cta-text {
-  color: rgba(0, 0, 0, 0.75);
-}
-body.light-mode .post-cta-btn-secondary {
-  color: #1a1a1a;
-  border-color: rgba(0, 0, 0, 0.2);
-}
-body.light-mode .post-cta-btn-secondary:hover {
-  border-color: #1a1a1a;
+  color: var(--negro);
 }
 
 @media screen and (max-width: 768px) {
   .post-cta { padding: 1.5rem; }
-  .post-cta-text { font-size: 0.95rem; }
+  .post-cta-text { font-size: 1.05rem; }
 }
+
+/* Mid-content CTA dismiss button (inside .post-cta) */
+.mid-cta-dismiss {
+  display: block;
+  margin: 0.75rem auto 0;
+  background: none;
+  border: none;
+  color: var(--crema);
+  opacity: 0.3;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.mid-cta-dismiss:hover { opacity: 0.6; }
+body.light-mode .mid-cta-dismiss { color: #1a1a1a; }

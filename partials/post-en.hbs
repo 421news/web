@@ -93,20 +93,6 @@
             </div>
         </div>
 
-        {{#unless @member.paid}}
-        <div class="global-container">
-          <div class="post-cta">
-            <p class="post-cta-text">
-              This article is free because we think it matters. But it's not free to make. 421 survives because a group of people choose to support it. If what you read is useful, join them.
-            </p>
-            <div class="post-cta-buttons">
-              <a href="/en/subscribe/" class="post-cta-btn-primary">Become a Wizard →</a>
-              <a href="/en/subscribe/" class="post-cta-btn-secondary">What's this?</a>
-            </div>
-          </div>
-        </div>
-        {{/unless}}
-
         <!-- RELATED POSTS -->
         <div class="preview-section" data-json="{{asset "data/related-posts.json"}}">
             <div class="global-container">
@@ -158,4 +144,20 @@
     {{> "site-footer" lang="en"}}
     {{> "subscribe-popup"}}
     <script src="{{asset "js/related-posts.js"}}" defer></script>
+    {{#unless @member.paid}}
+    <script>
+    (function() {
+      var KEY = 'mid_cta_dismissed';
+      var d = localStorage.getItem(KEY);
+      if (d && (Date.now() - parseInt(d, 10)) < 3 * 86400000) return;
+      var hh = document.querySelectorAll('.rich-text h2');
+      if (hh.length < 3) return;
+      var el = document.createElement('div');
+      el.className = 'post-cta';
+      el.innerHTML = '<p class="post-cta-text">We need your support. Everything you read on 421 is made possible by the Wizards, our paid subscribers. Join and support essays, guides, and analysis you won\u2019t find anywhere else.</p><div class="post-cta-buttons"><a href="/en/subscribe/" class="post-cta-btn-primary">Become a Wizard \u2192</a><a href="/en/subscribe/" class="post-cta-btn-secondary">What\u2019s this?</a></div><button class="mid-cta-dismiss">Not now</button>';
+      el.querySelector('.mid-cta-dismiss').onclick = function() { el.remove(); localStorage.setItem(KEY, Date.now()); };
+      hh[2].parentNode.insertBefore(el, hh[2]);
+    })();
+    </script>
+    {{/unless}}
 </div>

@@ -59,16 +59,11 @@
 <script>
   document.addEventListener("DOMContentLoaded", function() {
     const readDiv = document.getElementById("read-div");
-    const coverTags = document.getElementById("cover-tags");
-
     const urlPathname = window.location.pathname;
-
     if (urlPathname.includes("en")) {
       readDiv.textContent = "Read";
-      coverTags.style = "display: none;"
     } else {
       readDiv.textContent = "Leer";
-      coverTags.style = "display: block;"
     }
   })
 </script>

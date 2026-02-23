@@ -59,34 +59,39 @@
         }
       })();
     </script>
-    {{!-- Post cross-language hreflang: runs sync AFTER ghost_head injects meta tags --}}
+    {{!-- SEO: brand suffix in title tags (posts, pages, author — not homepage/tag which already have it) --}}
     <script>
-      (function() {
-        var enMeta = document.querySelector('meta[name="english-version"]');
-        var esMeta = document.querySelector('meta[name="spanish-version"]');
-        if (!enMeta && !esMeta) return;
-        function addHreflang(lang, href) {
-          var link = document.createElement('link');
-          link.rel = 'alternate'; link.hreflang = lang; link.href = href;
-          document.head.appendChild(link);
-        }
-        if (enMeta && enMeta.content) {
-          addHreflang('es', window.location.href);
-          addHreflang('en', 'https://www.421.news/en/' + enMeta.content + '/');
-        }
-        if (esMeta && esMeta.content) {
-          addHreflang('en', window.location.href);
-          addHreflang('es', 'https://www.421.news/es/' + esMeta.content + '/');
-        }
-      })();
+    (function() {
+      var t = document.title;
+      var p = window.location.pathname;
+      if (!t || t.indexOf('421.news') !== -1 || p === '/' || p === '/es/' || p === '/en/') return;
+      document.title = t + ' | 421.news';
+    })();
     </script>
+    {{!-- SEO: noindex landing page (JS redirect, no real content) --}}
+    <script>
+    if (window.location.pathname === '/') {
+      var m = document.createElement('meta');
+      m.name = 'robots'; m.content = 'noindex';
+      document.head.appendChild(m);
+    }
+    </script>
+    {{!-- Cross-language hreflang now server-side via codeinjection_head (rendered by ghost_head) --}}
     <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
     <link href='{{asset "css/globals.css"}}' rel='stylesheet' />
     <link href='{{asset "css/site-nav.css"}}' rel='stylesheet' />
     <link href='{{asset "css/index.css"}}' rel='stylesheet' />
     <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />
     <link href='{{asset "css/file-browser.css"}}' rel='stylesheet' />
-    <link href='{{asset "css/window-manager.css"}}' rel='stylesheet' />
+    {{!-- window-manager.css: desktop only (matches JS conditional in body) --}}
+    <script>
+    if (window.innerWidth >= 1024) {
+      var wmc = document.createElement('link');
+      wmc.rel = 'stylesheet';
+      wmc.href = '{{asset "css/window-manager.css"}}';
+      document.head.appendChild(wmc);
+    }
+    </script>
     <script src="{{asset "js/render-card.js"}}"></script>
     <script>
       (function() {
