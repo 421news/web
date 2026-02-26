@@ -289,8 +289,9 @@ body.light-mode .nav-icon-btn .nav-flag {
 
 /* Flag sizing */
 .nav-flag {
-    width: 1.2em !important;
-    height: 0.8em !important;
+    width: 20px !important;
+    height: 20px !important;
+    object-fit: contain;
 }
 
 /* --- Mobile nav bar --- */

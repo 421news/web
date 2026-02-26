@@ -22,9 +22,9 @@
           style="background-size: cover; background-position: center;"
         >
         </div>
-        <div class='tag-box'>
+        <div class='tag-box'{{#if primary_tag}} data-tag-url='{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/'{{/if}}>
           {{#if primary_tag}}
-            {{primary_tag.name}}
+            {{primary_tag.name}}{{#has tag="#ensayo"}}<span class="tag-box-type"> · ensayo</span>{{/has}}{{#has tag="#guia"}}<span class="tag-box-type"> · guía</span>{{/has}}{{#has tag="#resena"}}<span class="tag-box-type"> · reseña</span>{{/has}}{{#has tag="#cronica"}}<span class="tag-box-type"> · crónica</span>{{/has}}{{#has tag="#entrevista"}}<span class="tag-box-type"> · entrevista</span>{{/has}}{{#has tag="#novedades"}}<span class="tag-box-type"> · novedades</span>{{/has}}
           {{else}}
             Uncategorized
           {{/if}}

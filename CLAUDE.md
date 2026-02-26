@@ -1,5 +1,8 @@
 # 421.news - Ghost Theme Project
 
+## Startup Instructions
+**At the start of every conversation**, read this entire CLAUDE.md file before doing anything else. This is the project's source of truth — it contains credentials, architecture, deploy workflow, and all context you need.
+
 ## Overview
 Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming, tech, and real life. The site runs on Ghost Pro at `421bn.ghost.io` (public URL: `www.421.news`). Spanish content lives at `/es/`, English at `/en/`, and root `/` is a minimal landing page with browser language redirect.
 
