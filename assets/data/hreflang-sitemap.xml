@@ -708,6 +708,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/argentine-board-games/" />
   </url>
   <url>
+    <loc>https://www.421.news/es/videojuegos-malditos-mitos-leyendas/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/videojuegos-malditos-mitos-leyendas/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/cursed-video-games-myths-legends-en/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/cursed-video-games-myths-legends-en/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/videojuegos-malditos-mitos-leyendas/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/cursed-video-games-myths-legends-en/" />
+  </url>
+  <url>
     <loc>https://www.421.news/es/grant-morrison/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/grant-morrison/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/grant-morrison-batman/" />
@@ -716,6 +726,26 @@
     <loc>https://www.421.news/en/grant-morrison-batman/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/grant-morrison/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/grant-morrison-batman/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/poder-legislativo-como-funciona/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/poder-legislativo-como-funciona/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/who-makes-the-federal-laws/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/who-makes-the-federal-laws/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/poder-legislativo-como-funciona/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/who-makes-the-federal-laws/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/teletransportacion-cuantica/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/teletransportacion-cuantica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/quantum-teleportation-en/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/quantum-teleportation-en/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/teletransportacion-cuantica/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/quantum-teleportation-en/" />
   </url>
   <url>
     <loc>https://www.421.news/es/jujutsu-kaisen-frieren-anime-manga/</loc>
@@ -1492,8 +1522,8 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/421-quest-jornada-de-juegos/" />
   </url>
   <url>
-    <loc>https://www.421.news/es/pitcheale-a-421/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/pitcheale-a-421/" />
+    <loc>https://www.421.news/es/email-pitcheale-a-421/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/email-pitcheale-a-421/" />
   </url>
   <url>
     <loc>https://www.421.news/es/dungeons-and-dragons-caja-negra/</loc>
@@ -2092,6 +2122,10 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/que-es-una-memecoin-social-layer/" />
   </url>
   <url>
+    <loc>https://www.421.news/es/knotfest-parque-de-la-ciudad-deathcore-choris-veganos/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/knotfest-parque-de-la-ciudad-deathcore-choris-veganos/" />
+  </url>
+  <url>
     <loc>https://www.421.news/es/3-rayos-papelillos-celulosa/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/3-rayos-papelillos-celulosa/" />
   </url>
@@ -2288,8 +2322,8 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/gaturro-vs-pijurro/" />
   </url>
   <url>
-    <loc>https://www.421.news/es/do-language-models-dream-of-electric-sheep/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/do-language-models-dream-of-electric-sheep/" />
+    <loc>https://www.421.news/es/nacion-urbana-el-doctor-barderos-trap-drill-hip-hop/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/nacion-urbana-el-doctor-barderos-trap-drill-hip-hop/" />
   </url>
   <url>
     <loc>https://www.421.news/es/la-parabola-del-delfin/</loc>
@@ -2300,8 +2334,28 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/meme-vector-de-ideas-ecosistemas-digitales/" />
   </url>
   <url>
+    <loc>https://www.421.news/es/buenos-aires-death-match-thrasher-argentina-skate/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/buenos-aires-death-match-thrasher-argentina-skate/" />
+  </url>
+  <url>
     <loc>https://www.421.news/es/row-rouzed-4chan-argentino/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/row-rouzed-4chan-argentino/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/gundam-caballo-de-troya-subcultura-mecha/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/gundam-caballo-de-troya-subcultura-mecha/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/las-cosas-donde-ya-no-estaban-cine-independiente/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/las-cosas-donde-ya-no-estaban-cine-independiente/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/world-wide-weed-porro-legal-ciudades-europeas/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/world-wide-weed-porro-legal-ciudades-europeas/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/ampliacion-campo-desarrollo-gamer-argentina/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/ampliacion-campo-desarrollo-gamer-argentina/" />
   </url>
   <url>
     <loc>https://www.421.news/es/death-by-saturation/</loc>
@@ -2320,8 +2374,16 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/cenital-reddit-vs-wall-street/" />
   </url>
   <url>
+    <loc>https://www.421.news/es/ethereum-maquina-maravillosa-criptomonedas/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/ethereum-maquina-maravillosa-criptomonedas/" />
+  </url>
+  <url>
     <loc>https://www.421.news/es/qanon-una-conspiracion-todas-las-conspiraciones/</loc>
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/qanon-una-conspiracion-todas-las-conspiraciones/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/es/criptocomunismo-mark-alizart-bitcoin-dinero/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/criptocomunismo-mark-alizart-bitcoin-dinero/" />
   </url>
   <url>
     <loc>https://www.421.news/es/criptomonedas-para-dummies-bitcoin/</loc>
@@ -2332,8 +2394,8 @@
     <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/p12-por-que-fall-guys-es-el-juego-mas-adictivo-y-popular-del-momento/" />
   </url>
   <url>
-    <loc>https://www.421.news/es/p12-armas-3d-ni-patron-ni-estado-ni-numero-de-serie/</loc>
-    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/p12-armas-3d-ni-patron-ni-estado-ni-numero-de-serie/" />
+    <loc>https://www.421.news/es/impresion-armas-3-d/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://www.421.news/es/impresion-armas-3-d/" />
   </url>
   <url>
     <loc>https://www.421.news/es/p12-elon-musk-spacex-y-la-parabola-del-espacio-en-la-cultura-pop/</loc>
@@ -2528,6 +2590,10 @@
   <url>
     <loc>https://www.421.news/en/new-wave-progressive-death-metal/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/new-wave-progressive-death-metal/" />
+  </url>
+  <url>
+    <loc>https://www.421.news/en/do-language-models-dream-of-electric-sheep/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.421.news/en/do-language-models-dream-of-electric-sheep/" />
   </url>
   <url>
     <loc>https://www.421.news/en/row-rouzed-argentina-4chan/</loc>

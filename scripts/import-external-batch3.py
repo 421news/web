@@ -11,9 +11,10 @@ import time
 import urllib.request
 import urllib.error
 import ssl
+import os
 
 GHOST_URL = 'https://421bn.ghost.io'
-ADMIN_KEY = 'GHOST_ADMIN_API_KEY_REDACTED'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 
 
 def get_token():

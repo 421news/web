@@ -1,14 +1,29 @@
 {{!< default}}
 
-<meta property="og:title" content="Suscribite a 421 | 421">
-<meta property="og:description" content="421 es un medio de orientación intelectual. Suscribite para acceder a todo el contenido.">
-<meta property="og:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
-<meta property="og:url" content="https://www.421.news/es/suscribite/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Suscribite a 421 | 421">
-<meta name="twitter:description" content="421 es un medio de orientación intelectual. Suscribite para acceder a todo el contenido.">
-<meta name="twitter:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
+<script>
+  document.title = 'Suscribite a 421 | 421.news';
+  (function() {
+    var title = 'Suscribite a 421 | 421.news';
+    var desc = '421 es un medio de orientación intelectual. Suscribite para acceder a todo el contenido.';
+    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
+    var url = 'https://www.421.news/es/suscribite/';
+    function setMeta(attr, key, val) {
+      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
+      if (el) { el.content = val; }
+      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
+    }
+    setMeta('name', 'description', desc);
+    setMeta('property', 'og:title', title);
+    setMeta('property', 'og:description', desc);
+    setMeta('property', 'og:image', img);
+    setMeta('property', 'og:url', url);
+    setMeta('property', 'og:type', 'website');
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', title);
+    setMeta('name', 'twitter:description', desc);
+    setMeta('name', 'twitter:image', img);
+  })();
+</script>
 
     <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
     <div class="page-wrapper">

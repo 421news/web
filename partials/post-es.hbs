@@ -146,6 +146,26 @@
     {{> "site-footer"}}
     {{> "subscribe-popup"}}
     <script src="{{asset "js/related-posts.js"}}" defer></script>
+    {{#has tag="tutoriales"}}
+    <script>
+    (function() {
+      var scripts = document.querySelectorAll('script[type="application/ld+json"]');
+      for (var i = 0; i < scripts.length; i++) {
+        try {
+          var data = JSON.parse(scripts[i].textContent);
+          if (data['@type'] === 'Article') {
+            data['@type'] = ['Article', 'LearningResource'];
+            data.learningResourceType = 'guide';
+            data.educationalLevel = 'beginner';
+            if (data.headline) data.teaches = data.headline;
+            scripts[i].textContent = JSON.stringify(data);
+            break;
+          }
+        } catch(e) {}
+      }
+    })();
+    </script>
+    {{/has}}
     {{#unless @member.paid}}
     <script>
     (function() {

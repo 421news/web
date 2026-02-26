@@ -3,7 +3,7 @@
   ^/nick-land-aceleracionismo-parte-2/: /es/nick-land-aceleracionismo/
   ^/nick-land-aceleracionismo-parte-1/: /es/nick-land-aceleracionismo/
   ^/en/nick-land-the-apostle-of-chaos-part-2/: /en/nick-land-the-apostle-of-chaos/
-  ^/la-historia-de-ricardo-fort-parte-dos/: /es/la-historia-de-ricardo-fort-parte-uno/
+  ^/la-historia-de-ricardo-fort-parte-dos/: /es/la-historia-de-ricardo-fort/
   ^/la-historia-de-ricardo-fort-parte-uno/: /es/la-historia-de-ricardo-fort/
   ^/como-empezar-a-leer-ciencia-ficcion/: /es/mejores-libros-ciencia-ficcion/
   ^/en/ricardo-fort-the-real-super-chad-part-1/: /en/ricardo-fort-the-real-super-chad/
@@ -32,6 +32,8 @@
   ^/revista-421-edicion-11/: /es/revista-421/
   "^/es/nick-land-aceleracionismo-parte-1/?$": /es/nick-land-aceleracionismo/
   "^/es/nick-land-aceleracionismo-parte-2/?$": /es/nick-land-aceleracionismo/
+  "^/es/la-historia-de-ricardo-fort-parte-uno/?$": /es/la-historia-de-ricardo-fort/
+  "^/es/la-historia-de-ricardo-fort-parte-dos/?$": /es/la-historia-de-ricardo-fort/
   "^/en/write-journalism-chronicles/?$": /en/write-journalism-chronicles-victoria-de-masi/
   "^/go-slimey-go-argentine-mobile-games-en/?$": /en/tag/games/
 
@@ -103,8 +105,7 @@
   # Excluye paths de sistema. DEBE ir al final de las 301.
   "^/(?!es/|en/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/)([a-z0-9][-a-z0-9]*)/?$": /es/$1/
 
-302:
-  # === Tags/paths sin match real → homepage ES (temporary) ===
+  # === Tags sin contenido → homepage ES (permanente, no hay plan de crear estas páginas) ===
   "^/tag/[Gg]uerra/?$": /es/
   "^/tag/[Pp]ol": /es/
   "^/tag/[Ee]conom": /es/

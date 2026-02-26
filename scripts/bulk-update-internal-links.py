@@ -21,7 +21,7 @@ import os
 import copy
 
 # --- Config ---
-ADMIN_KEY = 'GHOST_ADMIN_API_KEY_REDACTED'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 GHOST_HOST = '421bn.ghost.io'
 SITE_URL = 'https://www.421.news'
 

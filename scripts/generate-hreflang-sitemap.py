@@ -22,7 +22,7 @@ from collections import defaultdict
 from datetime import datetime
 
 CONTENT_API_KEY = '420da6f85b5cc903b347de9e33'
-ADMIN_KEY = 'GHOST_ADMIN_API_KEY_REDACTED'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 GHOST_HOST = 'www.421.news'
 ADMIN_HOST = '421bn.ghost.io'
 SITE_URL = 'https://www.421.news'

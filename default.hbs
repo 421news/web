@@ -5,7 +5,7 @@
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <link href='https://fonts.googleapis.com' rel='preconnect' />
     <link href='https://fonts.gstatic.com' rel='preconnect' crossorigin='anonymous' />
-    <link href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,700;1,800&family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap' rel='stylesheet' />
+    <link href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' rel='stylesheet' />
     <script type='text/javascript'>
       !function(o,c) { var n = c.documentElement, t = " w-mod-"; n.className +=
       t + "js", ("ontouchstart" in o||o.DocumentTouch && c instanceof
@@ -41,40 +41,34 @@
       })();
     </script>
     {{ghost_head}}
-    {{!-- Fix publisher logo in Ghost's Article JSON-LD: add width/height (GSC structured data error) --}}
-    <script>
-      (function() {
-        if (!document.querySelector('script[type="application/ld+json"]')) return;
-        var scripts = document.querySelectorAll('script[type="application/ld+json"]');
-        for (var i = 0; i < scripts.length; i++) {
-          try {
-            var data = JSON.parse(scripts[i].textContent);
-            if (data['@type'] === 'Article' && data.publisher && data.publisher.logo) {
-              data.publisher.logo.url = 'https://www.421.news/content/images/2026/02/logo-421-publisher.png';
-              data.publisher.logo.width = 125;
-              data.publisher.logo.height = 60;
-              scripts[i].textContent = JSON.stringify(data);
-            }
-          } catch(e) {}
-        }
-      })();
-    </script>
-    {{!-- SEO: brand suffix in title tags (posts, pages, author — not homepage/tag which already have it) --}}
+    {{!-- SEO fixes: publisher logo, brand suffix, noindex landing --}}
     <script>
     (function() {
-      var t = document.title;
-      var p = window.location.pathname;
-      if (!t || t.indexOf('421.news') !== -1 || p === '/' || p === '/es/' || p === '/en/') return;
-      document.title = t + ' | 421.news';
+      // Fix publisher logo in Ghost's Article JSON-LD: add width/height (GSC structured data error)
+      var ldScripts = document.querySelectorAll('script[type="application/ld+json"]');
+      for (var i = 0; i < ldScripts.length; i++) {
+        try {
+          var data = JSON.parse(ldScripts[i].textContent);
+          if (data['@type'] === 'Article' && data.publisher && data.publisher.logo) {
+            data.publisher.logo.url = 'https://www.421.news/content/images/2026/02/logo-421-publisher.png';
+            data.publisher.logo.width = 125;
+            data.publisher.logo.height = 60;
+            ldScripts[i].textContent = JSON.stringify(data);
+          }
+        } catch(e) {}
+      }
+      // Brand suffix in title tags (posts, pages, author — not homepage/tag which already have it)
+      var t = document.title, p = window.location.pathname;
+      if (t && t.indexOf('421.news') === -1 && p !== '/' && p !== '/es/' && p !== '/en/') {
+        document.title = t + ' | 421.news';
+      }
+      // Noindex landing page (JS redirect, no real content)
+      if (p === '/') {
+        var m = document.createElement('meta');
+        m.name = 'robots'; m.content = 'noindex';
+        document.head.appendChild(m);
+      }
     })();
-    </script>
-    {{!-- SEO: noindex landing page (JS redirect, no real content) --}}
-    <script>
-    if (window.location.pathname === '/') {
-      var m = document.createElement('meta');
-      m.name = 'robots'; m.content = 'noindex';
-      document.head.appendChild(m);
-    }
     </script>
     {{!-- Cross-language hreflang now server-side via codeinjection_head (rendered by ghost_head) --}}
     <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
@@ -83,7 +77,7 @@
     <link href='{{asset "css/index.css"}}' rel='stylesheet' />
     <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />
     <link href='{{asset "css/file-browser.css"}}' rel='stylesheet' />
-    {{!-- window-manager.css: desktop only (matches JS conditional in body) --}}
+    {{!-- Conditional desktop CSS + landing page redirect --}}
     <script>
     if (window.innerWidth >= 1024) {
       var wmc = document.createElement('link');
@@ -91,16 +85,14 @@
       wmc.href = '{{asset "css/window-manager.css"}}';
       document.head.appendChild(wmc);
     }
-    </script>
-    <script src="{{asset "js/render-card.js"}}"></script>
-    <script>
-      (function() {
-        if (window.location.pathname !== '/') return;
-        if (navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent)) return;
+    if (window.location.pathname === '/') {
+      if (!(navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent))) {
         var lang = (navigator.language || navigator.userLanguage || '').toLowerCase().split('-')[0];
         window.location.replace(lang === 'en' ? '/en/' : '/es/');
-      })();
+      }
+    }
     </script>
+    <script src="{{asset "js/render-card.js"}}"></script>
   </head>
   <body class='{{body_class}}'>
     {{{body}}}

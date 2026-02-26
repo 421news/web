@@ -210,7 +210,7 @@ def upload_and_activate():
     const fs = require('fs');
     const FormData = require('form-data');
     const https = require('https');
-    const key = 'GHOST_ADMIN_API_KEY_REDACTED';
+    const key = process.env.GHOST_ADMIN_API_KEY;
     const [id, secret] = key.split(':');
     const token = jwt.sign({{}}, Buffer.from(secret, 'hex'), {{ keyid: id, algorithm: 'HS256', expiresIn: '5m', audience: '/admin/' }});
     const form = new FormData();

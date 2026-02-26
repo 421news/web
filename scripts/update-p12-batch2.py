@@ -8,9 +8,10 @@ import re
 import urllib.request
 import urllib.error
 import ssl
+import os
 
 GHOST_URL = 'https://421bn.ghost.io'
-ADMIN_KEY = 'GHOST_ADMIN_API_KEY_REDACTED'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 CONTENT_KEY = '420da6f85b5cc903b347de9e33'
 
 ctx = ssl.create_default_context()

@@ -20,7 +20,7 @@ import base64
 import os
 
 # --- Config ---
-ADMIN_KEY = '680be497f896280001455172:50f2d88ff42197eb96adf838b5c4b4baccc3ff6ff2e7772390b16ca4bcc6d967'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 GHOST_HOST = '421bn.ghost.io'
 OG_IMAGE = 'https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg'
 

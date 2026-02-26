@@ -128,38 +128,82 @@ function computeScore(postA, postB) {
   return slugScore + timeScore;
 }
 
-// --- Meta tag injection ---
+// --- Hreflang tag injection ---
 
-function hasHreflangMeta(codeinjection, metaName) {
-  if (!codeinjection) return false;
-  return codeinjection.includes(`name="${metaName}"`);
+/**
+ * Strip all existing hreflang-related tags from codeinjection_head.
+ * Removes:
+ *   - <meta name="english-version" ...>
+ *   - <meta name="spanish-version" ...>
+ *   - <link rel="alternate" hreflang="..." ...>
+ * Returns cleaned string (may have trailing whitespace stripped).
+ */
+function stripHreflangTags(html) {
+  if (!html) return '';
+  return html
+    .replace(/<meta\s+name="(?:english|spanish)-version"\s+content="[^"]*"\s*\/?>\s*/gi, '')
+    .replace(/<link\s+rel="alternate"\s+hreflang="[^"]*"\s+href="[^"]*"\s*\/?>\s*/gi, '')
+    .trim();
 }
 
-async function injectMeta(postId, metaName, metaValue) {
+/**
+ * Build the hreflang <link> tag for a given language and slug.
+ */
+function buildHreflangLink(lang, slug) {
+  const prefix = lang === 'en' ? '/en/' : '/es/';
+  return `<link rel="alternate" hreflang="${lang}" href="https://www.421.news${prefix}${slug}/" />`;
+}
+
+/**
+ * Inject hreflang tags (meta + link) into a post's codeinjection_head.
+ *
+ * @param {string} postId - Ghost post ID to update
+ * @param {string} postLang - Language of this post: 'es' or 'en'
+ * @param {string} postSlug - Slug of this post
+ * @param {string|null} pairSlug - Slug of the translation pair (null if no pair found)
+ */
+async function injectHreflangTags(postId, postLang, postSlug, pairSlug) {
   // Fetch current post state (need updated_at for optimistic locking)
   const current = await ghostRequest('GET', `/ghost/api/admin/posts/${postId}/`);
   const post = current.posts[0];
   const existing = post.codeinjection_head || '';
 
-  const metaTag = `<meta name="${metaName}" content="${metaValue}" />`;
+  // Build the tags to inject
+  const tags = [];
 
-  // Skip if already present
-  if (existing.includes(metaTag)) {
+  if (pairSlug) {
+    // Has a translation pair: inject meta tag + both hreflang links
+    if (postLang === 'es') {
+      tags.push(`<meta name="english-version" content="${pairSlug}" />`);
+      tags.push(buildHreflangLink('es', postSlug));
+      tags.push(buildHreflangLink('en', pairSlug));
+    } else {
+      tags.push(`<meta name="spanish-version" content="${pairSlug}" />`);
+      tags.push(buildHreflangLink('en', postSlug));
+      tags.push(buildHreflangLink('es', pairSlug));
+    }
+  } else {
+    // No translation pair: self-referential hreflang only
+    tags.push(buildHreflangLink(postLang, postSlug));
+  }
+
+  const tagsBlock = tags.join('\n');
+
+  // Strip old hreflang tags from existing content (idempotent)
+  const cleaned = stripHreflangTags(existing);
+
+  // Check if the cleaned content + new tags would be identical to what's already there
+  const newInjection = cleaned ? `${cleaned}\n${tagsBlock}` : tagsBlock;
+
+  if (newInjection === existing.trim()) {
     return { skipped: true, reason: 'already-tagged' };
   }
-
-  // Also skip if there's already a tag with this name (different value = stale pair, don't overwrite)
-  if (hasHreflangMeta(existing, metaName)) {
-    return { skipped: true, reason: 'has-existing-tag' };
-  }
-
-  const newInjection = existing ? `${existing}\n${metaTag}` : metaTag;
 
   await ghostRequest('PUT', `/ghost/api/admin/posts/${postId}/`, {
     posts: [{ codeinjection_head: newInjection, updated_at: post.updated_at }]
   });
 
-  return { skipped: false };
+  return { skipped: false, tags: tags.length };
 }
 
 // --- Webhook handler ---
@@ -175,6 +219,7 @@ async function handleWebhook(payload) {
   const tags = (post.tags || []).map(t => t.slug);
   const isEnglish = tags.includes('hash-en');
   const lang = isEnglish ? 'EN' : 'ES';
+  const postLang = isEnglish ? 'en' : 'es';
 
   console.log(`[hreflang] Post published: "${post.title}" (${lang}, slug: ${postSlug})`);
 
@@ -212,12 +257,21 @@ async function handleWebhook(payload) {
   const THRESHOLD = 0.3;
   if (!bestMatch || bestScore < THRESHOLD) {
     console.log(`[hreflang] No match found (best score: ${bestScore.toFixed(3)})`);
-    return { status: 'no-match', bestScore: bestScore.toFixed(3) };
+
+    // No pair found: inject self-referential hreflang only
+    try {
+      const result = await injectHreflangTags(postId, postLang, postSlug, null);
+      console.log(`[hreflang] Self-referential hreflang for ${postSlug}: ${result.skipped ? result.reason : 'injected'}`);
+    } catch (err) {
+      console.error(`[hreflang] Error injecting self-referential hreflang: ${err.message}`);
+    }
+
+    return { status: 'no-match', bestScore: bestScore.toFixed(3), selfHreflang: true };
   }
 
   console.log(`[hreflang] Match: "${bestMatch.title}" (slug: ${bestMatch.slug}, score: ${bestScore.toFixed(3)})`);
 
-  // Inject meta tags in both posts
+  // Inject hreflang tags in both posts
   const esPost = isEnglish ? bestMatch : post;
   const enPost = isEnglish ? post : bestMatch;
   const esId = isEnglish ? bestMatch.id : postId;
@@ -225,18 +279,18 @@ async function handleWebhook(payload) {
 
   const results = {};
 
-  // ES post gets english-version tag
+  // ES post gets: meta english-version + hreflang links for both ES and EN
   try {
-    results.es = await injectMeta(esId, 'english-version', enPost.slug);
+    results.es = await injectHreflangTags(esId, 'es', esPost.slug, enPost.slug);
     console.log(`[hreflang] ES post (${esPost.slug}): ${results.es.skipped ? results.es.reason : 'injected'}`);
   } catch (err) {
     console.error(`[hreflang] Error injecting ES post: ${err.message}`);
     results.es = { error: err.message };
   }
 
-  // EN post gets spanish-version tag
+  // EN post gets: meta spanish-version + hreflang links for both EN and ES
   try {
-    results.en = await injectMeta(enId, 'spanish-version', esPost.slug);
+    results.en = await injectHreflangTags(enId, 'en', enPost.slug, esPost.slug);
     console.log(`[hreflang] EN post (${enPost.slug}): ${results.en.skipped ? results.en.reason : 'injected'}`);
   } catch (err) {
     console.error(`[hreflang] Error injecting EN post: ${err.message}`);
@@ -580,7 +634,7 @@ async function bootstrapRelatedPosts() {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.1.0' });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.2.0' });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -650,10 +704,25 @@ async function hreflangCron() {
       const tags = (post.tags || []).map(t => t.slug);
       const isEnglish = tags.includes('hash-en');
       const metaName = isEnglish ? 'spanish-version' : 'english-version';
+      const head = post.codeinjection_head || '';
 
-      // Skip if already has hreflang meta
-      if (post.codeinjection_head && post.codeinjection_head.includes(`name="${metaName}"`)) {
+      // Check if post is missing hreflang <link> tags (the new requirement)
+      const hasHreflangLink = head.includes('rel="alternate"') && head.includes('hreflang=');
+      // Also check for the legacy meta tag
+      const hasMetaTag = head.includes(`name="${metaName}"`);
+
+      // Skip if already has both hreflang link tags
+      // (posts with meta but without link tags still need updating)
+      if (hasHreflangLink && hasMetaTag) {
         continue;
+      }
+
+      // Also skip if has self-referential hreflang and no pair is expected
+      // (we'll let handleWebhook figure out if there's a pair)
+      if (hasHreflangLink && !hasMetaTag) {
+        // Has a self-referential link but no meta = no pair was found before.
+        // Re-run to check if a pair has been published since.
+        // (handleWebhook will upgrade from self-referential to full pair if found)
       }
 
       // Run the pairing handler
@@ -663,11 +732,16 @@ async function hreflangCron() {
 
       if (result.status === 'matched') {
         processed++;
-        console.log(`[hreflang-cron] Paired: ${result.pair.es} ↔ ${result.pair.en}`);
+        console.log(`[hreflang-cron] Paired: ${result.pair.es} <-> ${result.pair.en}`);
+      } else if (result.status === 'no-match' && result.selfHreflang) {
+        if (!hasHreflangLink) {
+          processed++;
+          console.log(`[hreflang-cron] Self-hreflang injected for: ${post.slug}`);
+        }
       }
     }
 
-    console.log(`[hreflang-cron] Done: ${processed} new pairs injected`);
+    console.log(`[hreflang-cron] Done: ${processed} posts updated`);
   } catch (err) {
     console.error(`[hreflang-cron] Error: ${err.message}`);
   }
@@ -699,7 +773,7 @@ app.listen(PORT, () => {
     console.warn(`[hreflang] WARNING: Missing env vars: ${missing.join(', ')}`);
   }
   console.log(`[hreflang] Listening on port ${PORT}`);
-  console.log(`[keep-alive] Self-ping every 14min → ${SELF_URL}`);
+  console.log(`[keep-alive] Self-ping every 14min -> ${SELF_URL}`);
 
   // Bootstrap related posts on startup
   bootstrapRelatedPosts();

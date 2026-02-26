@@ -18,7 +18,7 @@ import base64
 import os
 
 # --- Config ---
-ADMIN_KEY = 'GHOST_ADMIN_API_KEY_REDACTED'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 GHOST_HOST = '421bn.ghost.io'
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

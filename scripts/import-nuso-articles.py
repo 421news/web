@@ -12,10 +12,11 @@ import re
 import sys
 from urllib.request import Request, urlopen
 from urllib.parse import urljoin
+import os
 
 # Ghost config
 GHOST_URL = 'https://421bn.ghost.io'
-ADMIN_KEY = 'GHOST_ADMIN_API_KEY_REDACTED'
+ADMIN_KEY = os.environ.get('GHOST_ADMIN_API_KEY', '')
 AUTHOR_ID = '66ce429421c1a70001f25110'  # Juan Ruocco
 
 ARTICLES = [
