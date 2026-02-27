@@ -634,7 +634,7 @@ async function bootstrapRelatedPosts() {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.4.0', ga4: ga4Data ? 'ready' : 'not loaded' });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.5.0', ga4: ga4Data ? 'ready' : 'not loaded' });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -754,25 +754,42 @@ setInterval(hreflangCron, 30 * 60 * 1000); // every 30 minutes
 // =============================================================================
 
 const GA4_PROPERTY_ID = '459246312';
-const GA4_SERVICE_ACCOUNT_JSON = process.env.GA4_SERVICE_ACCOUNT_JSON; // JSON string of service account key
+// Support both: individual env vars (preferred) or full JSON blob
+const GA4_CLIENT_ID = process.env.GA4_CLIENT_ID;
+const GA4_CLIENT_SECRET = process.env.GA4_CLIENT_SECRET;
+const GA4_REFRESH_TOKEN = process.env.GA4_REFRESH_TOKEN;
+const GA4_SERVICE_ACCOUNT_JSON = process.env.GA4_SERVICE_ACCOUNT_JSON;
+const GA4_ENABLED = !!(GA4_CLIENT_ID || GA4_SERVICE_ACCOUNT_JSON);
 
 let ga4Data = null;
 let ga4LastUpdate = null;
 let ga4LastError = null;
 
-// --- GA4 auth: service account JWT → access token ---
+// --- GA4 auth: OAuth refresh token → access token ---
 
 async function getGA4AccessToken() {
-  if (!GA4_SERVICE_ACCOUNT_JSON) throw new Error('GA4_SERVICE_ACCOUNT_JSON not set');
-  const { GoogleAuth } = require('google-auth-library');
-  const creds = JSON.parse(GA4_SERVICE_ACCOUNT_JSON);
-  const auth = new GoogleAuth({
-    credentials: creds,
-    scopes: ['https://www.googleapis.com/auth/analytics.readonly']
-  });
-  const client = await auth.getClient();
-  const token = await client.getAccessToken();
-  return token.token || token;
+  const { GoogleAuth, UserRefreshClient } = require('google-auth-library');
+
+  // Preferred: individual env vars (avoids JSON parsing issues)
+  if (GA4_CLIENT_ID && GA4_CLIENT_SECRET && GA4_REFRESH_TOKEN) {
+    const client = new UserRefreshClient(GA4_CLIENT_ID, GA4_CLIENT_SECRET, GA4_REFRESH_TOKEN);
+    const token = await client.getAccessToken();
+    return token.token || token;
+  }
+
+  // Fallback: full JSON blob
+  if (GA4_SERVICE_ACCOUNT_JSON) {
+    const creds = JSON.parse(GA4_SERVICE_ACCOUNT_JSON);
+    const auth = new GoogleAuth({
+      credentials: creds,
+      scopes: ['https://www.googleapis.com/auth/analytics.readonly']
+    });
+    const client = await auth.getClient();
+    const token = await client.getAccessToken();
+    return token.token || token;
+  }
+
+  throw new Error('GA4 credentials not configured (set GA4_CLIENT_ID + GA4_CLIENT_SECRET + GA4_REFRESH_TOKEN)');
 }
 
 // --- GA4 Data API query ---
@@ -1118,12 +1135,14 @@ app.options('/api/ga4-data.json', (req, res) => {
 app.get('/api/ga4-status', (req, res) => {
   try {
     let credType = 'not set';
-    try {
-      if (GA4_SERVICE_ACCOUNT_JSON) {
+    if (GA4_CLIENT_ID && GA4_CLIENT_SECRET && GA4_REFRESH_TOKEN) {
+      credType = 'individual_env_vars';
+    } else if (GA4_SERVICE_ACCOUNT_JSON) {
+      try {
         const c = JSON.parse(GA4_SERVICE_ACCOUNT_JSON);
-        credType = c.type || 'unknown';
-      }
-    } catch (e) { credType = 'parse error: ' + e.message; }
+        credType = 'json_blob:' + (c.type || 'unknown');
+      } catch (e) { credType = 'json_blob:parse_error'; }
+    }
 
     res.json({
       hasCredentials: !!GA4_SERVICE_ACCOUNT_JSON,
@@ -1210,7 +1229,7 @@ app.listen(PORT, () => {
   setTimeout(hreflangCron, 60 * 1000);
 
   // Bootstrap GA4 data: try theme asset first, then refresh
-  if (GA4_SERVICE_ACCOUNT_JSON) {
+  if (GA4_ENABLED) {
     (async () => {
       try {
         console.log('[ga4] Bootstrapping from theme asset...');
@@ -1237,6 +1256,6 @@ app.listen(PORT, () => {
     })();
     scheduleGA4Cron();
   } else {
-    console.log('[ga4] GA4_SERVICE_ACCOUNT_JSON not set, GA4 endpoint disabled');
+    console.log('[ga4] GA4 credentials not set, GA4 endpoint disabled');
   }
 });
