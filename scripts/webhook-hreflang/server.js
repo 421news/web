@@ -634,7 +634,7 @@ async function bootstrapRelatedPosts() {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.3.0', ga4: ga4Data ? 'ready' : 'not loaded' });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.4.0', ga4: ga4Data ? 'ready' : 'not loaded' });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -758,6 +758,7 @@ const GA4_SERVICE_ACCOUNT_JSON = process.env.GA4_SERVICE_ACCOUNT_JSON; // JSON s
 
 let ga4Data = null;
 let ga4LastUpdate = null;
+let ga4LastError = null;
 
 // --- GA4 auth: service account JWT → access token ---
 
@@ -1112,6 +1113,41 @@ app.options('/api/ga4-data.json', (req, res) => {
   res.status(204).end();
 });
 
+// --- GA4 status & manual refresh ---
+
+app.get('/api/ga4-status', (req, res) => {
+  let credType = 'not set';
+  try {
+    if (GA4_SERVICE_ACCOUNT_JSON) {
+      const c = JSON.parse(GA4_SERVICE_ACCOUNT_JSON);
+      credType = c.type || 'unknown';
+    }
+  } catch (e) { credType = 'parse error: ' + e.message; }
+
+  res.json({
+    hasCredentials: !!GA4_SERVICE_ACCOUNT_JSON,
+    credentialType: credType,
+    lastUpdate: ga4LastUpdate,
+    lastError: ga4LastError,
+    dataLoaded: !!ga4Data,
+    articles: ga4Data ? ga4Data.articles.length : 0,
+    pages: ga4Data ? ga4Data.pages.length : 0,
+    channels: ga4Data ? ga4Data.channels.length : 0,
+    generated: ga4Data ? ga4Data.generated : null
+  });
+});
+
+app.post('/api/ga4-refresh', async (req, res) => {
+  try {
+    await refreshGA4Data();
+    ga4LastError = null;
+    res.json({ ok: true, articles: ga4Data.articles.length, pages: ga4Data.pages.length, generated: ga4Data.generated });
+  } catch (err) {
+    ga4LastError = err.message;
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // --- GA4 cron: refresh twice daily at 12:00 and 00:00 ART (UTC-3) ---
 
 function scheduleGA4Cron() {
@@ -1129,7 +1165,8 @@ function scheduleGA4Cron() {
         const lastMs = new Date(ga4LastUpdate).getTime();
         if (Date.now() - lastMs < 3600000) return; // skip if refreshed < 1h ago
       }
-      refreshGA4Data().catch(err => {
+      refreshGA4Data().then(() => { ga4LastError = null; }).catch(err => {
+        ga4LastError = err.message;
         console.error('[ga4-cron] Refresh error:', err.message);
       });
     }
@@ -1191,7 +1228,7 @@ app.listen(PORT, () => {
       }
       // Refresh fresh data 30s after startup
       setTimeout(() => {
-        refreshGA4Data().catch(err => console.error('[ga4] Initial refresh error:', err.message));
+        refreshGA4Data().then(() => { ga4LastError = null; }).catch(err => { ga4LastError = err.message; console.error('[ga4] Initial refresh error:', err.message); });
       }, 30000);
     })();
     scheduleGA4Cron();
