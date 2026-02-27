@@ -106,7 +106,7 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `highlighted-post.hbs` - Large featured post card for tag pages (two-column layout with hover overlay)
 - `wiki-section-es.hbs` / `wiki-section-en.hbs` - "Lo ultimo en la Wiki" sections (fetches 4 latest wiki-tagged posts)
 - `tps_alt-es.hbs` / `tps_alt-en.hbs` - Alternate posts list for tag page sidebars (3 posts by tag slug)
-- `subscribe-popup.hbs` - Modal subscription CTA. Appears at 20% scroll depth for non-members. 7-day cooldown via localStorage. Bilingual (checks `#en` tag).
+- `subscribe-popup.hbs` - Modal subscription CTA with lead magnet (Revista 421 #11 cover + free PDF download). Triggers at 35% scroll depth for non-members. 3-day cooldown via localStorage. Two CTAs: download PDF (primary) + see plans (secondary). GA4 tracking (popup_shown, popup_dismissed, popup_cta_click with action label). Bilingual.
 - `sticky-subscribe-mobile-button.hbs` - Mobile-only full-width sticky subscribe button. Text/href updated by `default.hbs` for EN pages.
 - `banner.hbs` - Wiki ad banner (placeholder/unused)
 - `window-manager.hbs` - Desktop-style window manager UI component
@@ -174,6 +174,9 @@ const req = https.request({ hostname: '421bn.ghost.io', path: '/ghost/api/admin/
 - `bulk-update-internal-links.py` - Bulk internal link updates
 - `remove-episodio-links.py` - Remove episodio-specific links
 
+#### SEO optimization scripts
+- **`optimize-meta-titles.py`** - Rewrites meta_title, meta_description, og_title, og_description, twitter_title, twitter_description for high-impression low-CTR posts. Uses GSC query data to align with search intent. Run: `python3 scripts/optimize-meta-titles.py --dry-run` to preview, `python3 scripts/optimize-meta-titles.py --apply` to execute. Applied Feb 27, 2026: 14 posts updated. Backup in `backups/`.
+
 #### SEO bulk fix scripts
 - `fix-feature-image-alt.py` - Bulk sets `feature_image_alt` to post title for all posts
 - `fix-tag-descriptions.py` - Sets description + meta_title for 26 public tags (ES/EN)
@@ -210,7 +213,7 @@ Express.js microservice deployed on Render (https://webhook-hreflang.onrender.co
 - `routes.yaml` - Ghost routing configuration. Root `/` points to `landing` template. Spanish collection at `/es/` (permalink `/es/{slug}/`, filters `tag:-hash-en`). English collection at `/en/` (permalink `/en/{slug}/`, filters `tag:hash-en`). ~50 custom routes + 28 tag page routes. See Routes section below.
 - `redirects.yaml` - Ghost redirects configuration (111 rules: 103 permanent 301 + 8 temporary 302). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Handles `/es/` migration catch-all, slug merges, tag mappings, author slug completion, case insensitivity. See Redirects section below.
 - `redirects.json` - JSON backup of redirects
-- `package.json` - Theme metadata and version (currently **v3.15.0**)
+- `package.json` - Theme metadata and version (currently **v3.18.0**)
 - `layouts/default.hbs` - Express layout (dev server only)
 - `testeo/` - Mockup HTML files for previewing features before implementation (mockup-cta-conversion, mockup-pitcheale, mockup-revista, mockup-rutas-canon, mockup-suscripcion-dual)
 - `backups/` - API operation backups (lexical content, signup forms). Not committed.
@@ -319,7 +322,7 @@ Each issue card shows: cover image, issue number badge (gradient), date/title, c
 ## Subscription System
 
 Multi-layered conversion flow:
-- **Subscribe popup** (`partials/subscribe-popup.hbs`): Modal CTA at 20% scroll depth for non-members. 7-day dismiss cooldown via localStorage. Bilingual.
+- **Subscribe popup** (`partials/subscribe-popup.hbs`): Lead magnet popup with Revista 421 #11 cover + free PDF download CTA. Triggers at 35% scroll depth for non-members. 3-day cooldown. Social proof ("4,000+ lectores"). Two CTAs: download free PDF + see plans. GA4 tracking. Bilingual.
 - **Sticky mobile button** (`partials/sticky-subscribe-mobile-button.hbs`): Full-width mobile subscribe button. Text/href adapted for EN by `default.hbs`.
 - **Subscription pages**: `/es/suscribite/` (ES) and `/en/subscribe/` (EN)
 - **Management pages**: `/es/mi-suscripcion/` and `/en/my-subscription/` (noindex). Shows paid/free/guest states. Paid members get link to MTG Collection app (https://mtg.421.news). Fetches `/members/api/member/` to check status. Sign out button destroys session via `DELETE /members/api/session` and reloads page.
@@ -424,6 +427,11 @@ Merged v3.14.0 visual changes with SEO/CWV improvements:
 - **JS meta tags**: `suscribite.hbs` and `revista.hbs` use dynamic JS `setMeta()` for OG/Twitter meta tags + `document.title` with `.news` suffix.
 - **Redirects fix**: Converted select 302 temporary redirects to 301 permanent in `redirects.yaml`.
 
+### v3.18.0 — SEO growth sprint + popup redesign
+- **Subscribe popup redesign**: Lead magnet approach — Revista 421 #11 cover image, "DESCARGA GRATIS" badge, free PDF download as primary CTA, "Ver todos los planes" as secondary. Social proof ("4,000+ lectores"). Trigger at 35% scroll (was 20%), 3-day cooldown (was 7). GA4 tracking with `popup_cta_click` action label differentiating download vs subscribe clicks.
+- **Meta title/description optimization**: 14 high-impression posts rewritten via `scripts/optimize-meta-titles.py` using GSC top queries per page (90-day data). Key targets: hp-lovecraft (48K impr, 0.31% CTR), demon-slayer (58K, 0.14%), bootlegs (44K, 0.29%), trench-crusade (27K, 0.26%), space-king (27K, 0.45%).
+- **Social stars SEO rescue**: 7 posts with high social traffic (5K-19K GA4 PVs) but no Google presence — metas rewritten from editorial copy to keyword-focused search-optimized titles and descriptions.
+
 ## SEO
 
 - **Google Analytics 4**: `G-ZN49MRKKCQ`, configured via Ghost Code Injection (not in theme files)
@@ -487,7 +495,7 @@ Custom events tracked via Ghost Code Injection (gtag.js):
 | `toggle_theme` | 4 | Light/dark mode toggle |
 | `click_tag_box` | 2 | File browser tag click |
 
-**Critical insight**: Popup converts at 2% (4 clicks / 198 shown). Needs complete redesign — lead magnet, better copy, different trigger.
+**Critical insight**: Old popup converted at 2% (4 clicks / 198 shown). Redesigned in v3.18.0 with lead magnet (Revista PDF), social proof, 35% trigger. Monitor new `popup_cta_click` events with action label to compare download vs subscribe conversions.
 
 ### All-Time Top Posts (GSC + GA4 cross-reference, Jan 2024 – Feb 2026)
 
@@ -547,22 +555,26 @@ Custom events tracked via Ghost Code Injection (gtag.js):
 | ingenieria-inversa-mierdificacion | 6,965 | — | Not ranking at all |
 | deny-defend-depose-luigi-mangione | 6,767 | — | Not ranking at all |
 
-### Growth Action Plan (Feb 2026)
+### Growth Action Plan (Feb 2026) — EXECUTED
 
-**Lever 1 — CTR optimization (meta_title/description rewrite)**
-- Target: ~20 posts with >10K impressions and CTR <1%
+**Lever 1 — CTR optimization (meta_title/description rewrite)** ✅ Done Feb 27
+- 14 posts rewritten with `scripts/optimize-meta-titles.py` (based on GSC top queries per page, 90-day data)
+- Target posts: hp-lovecraft (48K impr), demon-slayer (58K), bootlegs (44K), trench-crusade (27K), space-king (27K), fanzines (14K), san-jorge (13K), pop-os (11K), android-sin-google (9.8K), godot (7.9K), vender-cartas-magic (11.8K), limpieza-pc (7.9K), rat-fink (22K), absolute-dc (41K)
+- Backup: `backups/meta-backup-20260227-135405.json`
 - Expected: doubling CTR from 0.3% to 0.6% on 500K monthly impressions = +1,500 clicks/month
-- Script: `scripts/optimize-meta-titles.py` (to be built)
 
-**Lever 2 — Social stars SEO rescue**
-- 7 posts with 5K-19K GA4 pageviews but no Google presence
-- Add proper schema markup, optimize meta, build internal links from ranked posts
-- Script: manual optimization per post
+**Lever 2 — Social stars SEO rescue** ✅ Done Feb 27
+- 7 posts with 5K-19K GA4 pageviews but invisible on Google — metas rewritten with searchable keywords
+- Posts: selfhosting, ya-pagas-internet, sloterdijk, psicopatas-vs-esquizos, cultura-joven, mierdificacion-internet, luigi-mangione
+- Backup: `backups/social-stars-meta-backup-2026-02-27T21-02-14.json`
 
-**Lever 3 — Popup redesign**
-- Current: 2% CTA click rate (4/198 shown)
-- Target: 10-15% with lead magnet (Revista PDF), better copy, delayed trigger
-- Implementation: rebuild `subscribe-popup.hbs`
+**Lever 3 — Popup redesign** ✅ Done Feb 27, deployed as v3.18.0
+- Lead magnet: Revista 421 #11 cover + "DESCARGA GRATIS" badge + free PDF download CTA
+- Social proof: "4,000+ lectores"
+- Trigger: 35% scroll (was 20%), cooldown 3 days (was 7)
+- Two CTAs: download PDF (primary gradient) + see plans (secondary outline)
+- GA4 tracking with action label (download vs subscribe)
+- Old conversion: 2% (4/198). Target: 10%+
 
 **Lever 4 — Newsletter as distribution channel**
 - 4,069 wizards + 4,011 new post subscribers = built-in amplification
@@ -657,11 +669,10 @@ claude mcp add google-analytics -- python3 -c "from analytics_mcp.coordinator im
 Features identified but not yet implemented:
 - **"Que es 421" page** - Institutional about page
 - **Author territories** - Each author gets a visible territory/beat
-- **Content type badges** - Visual indicators on cards (ensayo, guia, cronica, tutorial, wiki)
 
-## SEO Growth — Active Tasks (Feb 2026)
+## SEO Growth — Completed Tasks (Feb 27, 2026)
 
-1. **Meta title/description optimizer** — Script to rewrite meta_title + meta_description for ~20 high-impression low-CTR posts using GSC query data. Target: double organic CTR.
-2. **Social stars SEO rescue** — Manual optimization of 7 posts with high social traffic but no Google presence (schema, meta, internal links).
-3. **Subscribe popup redesign** — Replace current popup (2% conversion) with lead magnet approach (Revista PDF), better copy, smarter trigger.
-4. **Conversion funnel tracking** — GA4 custom events already active. Monitor popup_shown → popup_cta_click → form_start → begin_checkout flow.
+1. ✅ **Meta title/description optimizer** — `scripts/optimize-meta-titles.py` rewrote 14 high-impression low-CTR posts using GSC query data. Backup in `backups/`.
+2. ✅ **Social stars SEO rescue** — 7 posts with high social traffic but no Google presence: metas rewritten with searchable keywords. Backup in `backups/`.
+3. ✅ **Subscribe popup redesign** — Lead magnet approach (Revista PDF), social proof, 35% trigger, 3-day cooldown. Deployed v3.18.0.
+4. ✅ **Conversion funnel tracking** — GA4 custom events active: popup_shown → popup_cta_click (with action label: download/subscribe) → form_start → begin_checkout → select_payment.
