@@ -797,7 +797,7 @@ function getGA4AccessToken() {
           if (res.statusCode === 200 && body.access_token) {
             resolve(body.access_token);
           } else {
-            reject(new Error('Token refresh failed: ' + (body.error || res.statusCode) + ' ' + (body.error_description || data.slice(0, 200))));
+            reject(new Error('Token refresh failed: ' + JSON.stringify(body)));
           }
         } catch (e) {
           reject(new Error('Token response parse error: ' + data.slice(0, 200)));
