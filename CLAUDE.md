@@ -1,17 +1,21 @@
 # 421.news - Ghost Theme Project
 
 ## Startup Instructions
-**At the start of every conversation**, read this entire CLAUDE.md file before doing anything else. This is the project's source of truth — it contains credentials, architecture, deploy workflow, and all context you need.
+**At the start of every conversation**, read this entire CLAUDE.md file before doing anything else. This is the project's source of truth — it contains architecture, deploy workflow, and all context you need.
+
+**Daily report**: At the start of each session, automatically pull yesterday's data from GSC and GA4 and present a brief report (clicks, impressions, position, top pages, sessions, users, top traffic sources). Use the MCP tools documented in the Analytics section below.
 
 ## Overview
 Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming, tech, and real life. The site runs on Ghost Pro at `421bn.ghost.io` (public URL: `www.421.news`). Spanish content lives at `/es/`, English at `/en/`, and root `/` is a minimal landing page with browser language redirect.
 
 ## Credentials
 
-- **Ghost Admin API Key**: `680be497f896280001455172:50f2d88ff42197eb96adf838b5c4b4baccc3ff6ff2e7772390b16ca4bcc6d967`
-- **Ghost Content API Key**: `420da6f85b5cc903b347de9e33`
+- **Ghost Admin API Key**: Stored in `.env` as `GHOST_ADMIN_API_KEY` (format: `id:secret`)
+- **Ghost Content API Key**: Stored in `.env` as `GHOST_CONTENT_API_KEY`
 - **Ghost instance**: `421bn.ghost.io` (redirects to `www.421.news`)
 - **GitHub repo**: `https://github.com/421news/web.git` (branch: `main`)
+
+> `.env` is in `.gitignore` and never committed. On a new machine, copy `.env.example` and fill in the keys from Ghost Admin > Settings > Integrations.
 
 ## Deploy Workflow
 
@@ -24,16 +28,20 @@ Ghost CMS theme for **421.news**, a bilingual (ES/EN) blog about culture, gaming
 
 **IMPORTANT**: `routes.yaml` and `redirects.yaml` CANNOT be uploaded via API token (returns 403). They require cookie-based staff auth. The user must upload them manually via Ghost Admin > Settings > Labs > Routes / Redirects.
 
+**After zipping**: Always copy the zip to the desktop: `cp /tmp/421-theme.zip /home/realjuanruocco/Escritorio/421-theme.zip`
+
 Quick deploy (zip + upload + activate):
 ```bash
 cd /home/realjuanruocco/Escritorio/claude/421-web
 zip -r /tmp/421-theme.zip . -x ".git/*" "node_modules/*" ".github/*" "scripts/*" "testeo/*" "mockup-*.html" "backups/*" "*.zip"
+cp /tmp/421-theme.zip /home/realjuanruocco/Escritorio/421-theme.zip
 node -e "
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const FormData = require('form-data');
 const fs = require('fs');
 const https = require('https');
-const [id, secret] = '680be497f896280001455172:50f2d88ff42197eb96adf838b5c4b4baccc3ff6ff2e7772390b16ca4bcc6d967'.split(':');
+const [id, secret] = process.env.GHOST_ADMIN_API_KEY.split(':');
 const token = jwt.sign({}, Buffer.from(secret, 'hex'), { keyid: id, algorithm: 'HS256', expiresIn: '5m', audience: '/admin/' });
 const form = new FormData();
 form.append('file', fs.createReadStream('/tmp/421-theme.zip'));
@@ -202,7 +210,7 @@ Express.js microservice deployed on Render (https://webhook-hreflang.onrender.co
 - `routes.yaml` - Ghost routing configuration. Root `/` points to `landing` template. Spanish collection at `/es/` (permalink `/es/{slug}/`, filters `tag:-hash-en`). English collection at `/en/` (permalink `/en/{slug}/`, filters `tag:hash-en`). ~50 custom routes + 28 tag page routes. See Routes section below.
 - `redirects.yaml` - Ghost redirects configuration (111 rules: 103 permanent 301 + 8 temporary 302). Uploaded manually via Ghost Admin > Settings > Labs > Redirects. Handles `/es/` migration catch-all, slug merges, tag mappings, author slug completion, case insensitivity. See Redirects section below.
 - `redirects.json` - JSON backup of redirects
-- `package.json` - Theme metadata and version (currently **v3.10.0**)
+- `package.json` - Theme metadata and version (currently **v3.15.0**)
 - `layouts/default.hbs` - Express layout (dev server only)
 - `testeo/` - Mockup HTML files for previewing features before implementation (mockup-cta-conversion, mockup-pitcheale, mockup-revista, mockup-rutas-canon, mockup-suscripcion-dual)
 - `backups/` - API operation backups (lexical content, signup forms). Not committed.
@@ -397,11 +405,30 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
 - **`matchMedia` in `hide-show-nav.js`**: Replaced `window.innerWidth` (forces reflow on every scroll) with `matchMedia('(max-width: 768px)')` evaluated once + change listener.
 - **`--gradient-main` CSS variable**: Defined `linear-gradient(280deg, var(--verde), var(--amarillo))` in `:root`. Replaced 22 occurrences across `index.css`, `site-nav.css`, `suscribite.css`.
 
+### v3.14.0 — Content type badges + visual refinements
+- **Content type badges**: Posts tagged with internal tags (`#ensayo`, `#guia`, `#resena`, `#cronica`, `#entrevista`, `#novedades`) show a type label on the card (e.g., "ensayo", "guía"). Implemented in both `post-card.hbs` (server-side) and `render-card.js` (client-side via `window.getContentType()`). Badge styled with `.tag-box-type { opacity: 0.65 }`.
+- **Clickable tag boxes**: `.tag-box` now has `data-tag-url` attribute with correct `/es/` or `/en/` prefix. Click handler via event delegation in `render-card.js` navigates to tag page.
+- **Tag styling**: `text-transform: capitalize` on `.plain-tags` and tag links. Tag color `var(--negro)` on dark backgrounds. Featured post header tags use `color: var(--negro)`.
+- **Mobile hero**: `aspect-ratio: 3/2` instead of fixed `height: 400px` for feature images. Hero height `calc(100vh - 96px)` with `margin-top: 96px` to account for nav.
+- **Nav icon fix**: `site-nav.css` uses `20px` fixed size + `object-fit: contain` instead of relative `em` units.
+- **Featured post mobile**: `color: inherit` instead of `var(--amarillo)` for link color.
+
+### v3.15.0 — SEO CWV optimizations + merge
+Merged v3.14.0 visual changes with SEO/CWV improvements:
+- **LCP fix**: Post header feature image changed from `loading="lazy"` to `loading="eager"` + `fetchpriority="high"` in `post-header.hbs`.
+- **jQuery removal**: Removed jQuery 3.5.1 (87KB) from 19 HBS templates. Verified `udesly-ghost.min.js` does NOT depend on jQuery (only internal modules: lottie, ix2, lightbox, dropdown).
+- **Google Fonts trimmed**: Reduced from 9 to 7 variants (removed Nunito Sans italic 700 and Lora italic 700). Saves ~40KB font download.
+- **Script consolidation**: Merged 6 inline `<script>` blocks in `default.hbs` into 3 (publisher logo + brand suffix + noindex into one; window-manager CSS + landing redirect into another).
+- **LearningResource schema**: Added JSON-LD `LearningResource` markup on posts tagged `#tutoriales`/`#tutorials` in `post-es.hbs` and `post-en.hbs`.
+- **ItemList JSON-LD**: Expanded Canon pages (`canon.hbs`, `canon-en.hbs`) from metadata-only to full 25 `itemListElement` entries with URLs and names.
+- **JS meta tags**: `suscribite.hbs` and `revista.hbs` use dynamic JS `setMeta()` for OG/Twitter meta tags + `document.title` with `.news` suffix.
+- **Redirects fix**: Converted select 302 temporary redirects to 301 permanent in `redirects.yaml`.
+
 ## SEO
 
 - **Google Analytics 4**: `G-ZN49MRKKCQ`, configured via Ghost Code Injection (not in theme files)
 - **Google Search Console**: Verified via GA property. Hreflang sitemap submitted at `https://www.421.news/assets/data/hreflang-sitemap.xml`
-- **IndexNow**: Active on Ghost, key `3066583d158ea23df246f650cc680d48`
+- **IndexNow**: Active on Ghost (key configured in Ghost settings)
 - **Hreflang**: Server-side `<link rel="alternate" hreflang>` tags in `default.hbs` for homepage. Client-side JS reads `english-version`/`spanish-version` meta tags (auto-injected by Render webhook on publish, or manually by `generate-hreflang-sitemap.py`) for posts. Self-referential hreflang for all posts.
 - **BreadcrumbList JSON-LD**: Added to `post-es.hbs`, `post-en.hbs` (Home > Tag > Title), all 28 tag templates via `partials/breadcrumb-tag.hbs`, and `author.hbs` (Home > Author Name).
 - **Article JSON-LD fix**: Ghost's `{{ghost_head}}` generates Article schema with publisher logo but omits `width`/`height` (regardless of image format). Inline script in `default.hbs` patches the JSON-LD post-render to add the correct 125x60 PNG URL with dimensions. Google's renderer executes JS before reading structured data, so this works. Publisher logo PNG uploaded at `https://www.421.news/content/images/2026/02/logo-421-publisher.png`.
@@ -415,6 +442,22 @@ Already applied: 428 posts modified, 1544 links added. Backup at `backups/lexica
   - **Nameservers**: `evan.ns.cloudflare.com` / `stella.ns.cloudflare.com` (set in GoDaddy)
   - **Redirect chain**: `http://421.news/path` → 301 → `https://421.news/path` → 301 → `https://www.421.news/path` → 200
 
+### Traffic Snapshot (Feb 27, 2026 — datos de febrero)
+
+**GSC (feb 1–25):**
+- **3,950 clicks** / **492,848 impresiones** / **CTR 0.80%** / **Posición promedio 8.3**
+- Posición mejoró de ~13 (semana 1) a ~6 (desde el 14) — tendencia positiva fuerte
+- **Dispositivos**: Mobile 51% (1,999), Desktop 48% (1,898), Tablet 1%
+- **Top queries**: "421" (865), "421 revista" (245), "421 news" (171), "ricardo fort" (47), "low tech high life" (44)
+- **Top pages**: / (1,454), /en/psychos-versus-schizos/ (231), /revista-421/ (160), /es/revista-421/ (69)
+
+**GA4 (feb 1–26):**
+- **~24,200 usuarios** / **41,082 sesiones** / **134,590 pageviews**
+- **Bounce rate 6.7%** / **Duración promedio 6:40 min** (engagement excepcional)
+- **Fuentes**: X/Twitter 35% (14,248), Directo 33% (13,480), Google organic 20% (8,189), Instagram 8% (3,318)
+- **Top pages**: / (13,899), /es/ (9,543), /selfhosting (6,127), /ya-pagas-internet (3,588), /en/ (2,988)
+- Pico el 11/feb: 2,033 users, 10,227 PVs
+
 ## Webhook Automation (Render)
 
 Express.js microservice at https://webhook-hreflang.onrender.com handles two Ghost webhooks:
@@ -425,9 +468,82 @@ Express.js microservice at https://webhook-hreflang.onrender.com handles two Gho
 
 Self-pings every 14 min to prevent Render free tier spindown.
 
+## Analytics — MCP Setup
+
+Two MCP servers provide direct access to GSC and GA4 data from Claude Code.
+
+### Google Search Console (`google-search-console`)
+- **Package**: `mcp-gsc` by AminForou ([GitHub](https://github.com/AminForou/mcp-gsc))
+- **Auth**: OAuth2 via `client_secrets.json` (Google Cloud project `claude-488523`)
+- **Property**: `sc-domain:421.news`
+- **19 tools**: search analytics, URL inspection, sitemaps, performance overview, period comparison, etc.
+
+**Setup on new machine:**
+1. Clone/copy `mcp-gsc/` folder with `client_secrets.json` and `token.json`
+2. Add MCP server to Claude Code:
+```bash
+claude mcp add google-search-console -- python3 /path/to/mcp-gsc/gsc_server.py
+```
+3. If `token.json` is missing/expired, run `python3 gsc_server.py` once — it opens a browser for OAuth consent with `admin@421.news`
+
+### Google Analytics 4 (`google-analytics`)
+- **Package**: `analytics-mcp` (official Google, [GitHub](https://github.com/googleanalytics/google-analytics-mcp))
+- **Auth**: Application Default Credentials (ADC) at `~/.config/gcloud/application_default_credentials.json`
+- **GA4 Property ID**: `459246312` (Measurement ID: `G-ZN49MRKKCQ`)
+- **Google Cloud Project**: `claude-488523` (same as GSC)
+- **Account**: `admin@421.news`
+- **Scope**: `analytics.readonly` (enough for `run_report` and `run_realtime_report`; admin endpoints like `get_account_summaries` require additional scopes)
+
+**Setup on new machine:**
+1. Install: `pip install analytics-mcp`
+2. Get `client_secrets.json` from GSC folder (same OAuth project)
+3. Run the OAuth flow to generate ADC credentials:
+```bash
+python3 -c "
+import json, http.server, urllib.parse, webbrowser, urllib.request, os
+creds = json.load(open('/path/to/mcp-gsc/client_secrets.json'))
+client_id = creds['installed']['client_id']
+client_secret = creds['installed']['client_secret']
+redirect_uri = 'http://localhost:8085'
+auth_url = f'https://accounts.google.com/o/oauth2/auth?client_id={client_id}&redirect_uri={redirect_uri}&response_type=code&scope=https://www.googleapis.com/auth/analytics.readonly&access_type=offline&prompt=select_account&login_hint=admin@421.news'
+webbrowser.open(auth_url)
+code = None
+class H(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        global code; code = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query).get('code',[None])[0]
+        self.send_response(200); self.send_header('Content-type','text/html'); self.end_headers()
+        self.wfile.write(b'<h1>Done</h1>')
+    def log_message(self,*a): pass
+http.server.HTTPServer(('localhost',8085),H).handle_request()
+data = urllib.parse.urlencode({'code':code,'client_id':client_id,'client_secret':client_secret,'redirect_uri':redirect_uri,'grant_type':'authorization_code'}).encode()
+resp = json.loads(urllib.request.urlopen(urllib.request.Request('https://oauth2.googleapis.com/token',data)).read())
+adc = {'client_id':client_id,'client_secret':client_secret,'refresh_token':resp['refresh_token'],'type':'authorized_user'}
+os.makedirs(os.path.expanduser('~/.config/gcloud'),exist_ok=True)
+json.dump(adc,open(os.path.expanduser('~/.config/gcloud/application_default_credentials.json'),'w'))
+print('OK - credentials saved')
+"
+```
+4. Add MCP server to Claude Code:
+```bash
+claude mcp add google-analytics -- python3 -c "from analytics_mcp.coordinator import mcp; mcp.run()"
+```
+5. Restart Claude Code.
+
+**If GA4 stops working** (403 scope errors): re-run step 3 to refresh the ADC token.
+
+### Daily Report Queries
+
+**GSC — yesterday's data:**
+- `get_advanced_search_analytics` with `start_date`/`end_date` = yesterday, dimensions `query`, `page`, `device`
+- `get_performance_overview` for totals
+
+**GA4 — yesterday's data (property `459246312`):**
+- `run_report` with `date_ranges: [{"start_date": "yesterday", "end_date": "yesterday"}]`
+- Dimensions: `pagePath` (top pages), `sessionSource`+`sessionMedium` (traffic sources)
+- Metrics: `activeUsers`, `sessions`, `screenPageViews`, `engagedSessions`, `averageSessionDuration`, `bounceRate`
+
 ## Pending / Future Features (from "Filosofia 421" roadmap)
 
 Features identified but not yet implemented:
-- **Content type badges** - Visual indicators on cards (ensayo, guia, cronica, tutorial, wiki)
 - **"Que es 421" page** - Institutional about page
 - **Author territories** - Each author gets a visible territory/beat
