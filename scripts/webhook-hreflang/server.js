@@ -634,7 +634,7 @@ async function bootstrapRelatedPosts() {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.5.0', ga4: ga4Data ? 'ready' : 'not loaded' });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.6.0', ga4: ga4Data ? 'ready' : 'not loaded' });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -765,31 +765,49 @@ let ga4Data = null;
 let ga4LastUpdate = null;
 let ga4LastError = null;
 
-// --- GA4 auth: OAuth refresh token → access token ---
+// --- GA4 auth: OAuth refresh token → access token (raw HTTP, no library dependency) ---
 
-async function getGA4AccessToken() {
-  const { GoogleAuth, UserRefreshClient } = require('google-auth-library');
+function getGA4AccessToken() {
+  return new Promise((resolve, reject) => {
+    if (!GA4_CLIENT_ID || !GA4_CLIENT_SECRET || !GA4_REFRESH_TOKEN) {
+      return reject(new Error('GA4 credentials not configured (set GA4_CLIENT_ID + GA4_CLIENT_SECRET + GA4_REFRESH_TOKEN)'));
+    }
 
-  // Preferred: individual env vars (avoids JSON parsing issues)
-  if (GA4_CLIENT_ID && GA4_CLIENT_SECRET && GA4_REFRESH_TOKEN) {
-    const client = new UserRefreshClient(GA4_CLIENT_ID, GA4_CLIENT_SECRET, GA4_REFRESH_TOKEN);
-    const token = await client.getAccessToken();
-    return token.token || token;
-  }
+    const postData = [
+      'grant_type=refresh_token',
+      'client_id=' + encodeURIComponent(GA4_CLIENT_ID),
+      'client_secret=' + encodeURIComponent(GA4_CLIENT_SECRET),
+      'refresh_token=' + encodeURIComponent(GA4_REFRESH_TOKEN)
+    ].join('&');
 
-  // Fallback: full JSON blob
-  if (GA4_SERVICE_ACCOUNT_JSON) {
-    const creds = JSON.parse(GA4_SERVICE_ACCOUNT_JSON);
-    const auth = new GoogleAuth({
-      credentials: creds,
-      scopes: ['https://www.googleapis.com/auth/analytics.readonly']
+    const req = https.request({
+      hostname: 'oauth2.googleapis.com',
+      path: '/token',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Length': Buffer.byteLength(postData)
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', (c) => { data += c; });
+      res.on('end', () => {
+        try {
+          const body = JSON.parse(data);
+          if (res.statusCode === 200 && body.access_token) {
+            resolve(body.access_token);
+          } else {
+            reject(new Error('Token refresh failed: ' + (body.error || res.statusCode) + ' ' + (body.error_description || data.slice(0, 200))));
+          }
+        } catch (e) {
+          reject(new Error('Token response parse error: ' + data.slice(0, 200)));
+        }
+      });
     });
-    const client = await auth.getClient();
-    const token = await client.getAccessToken();
-    return token.token || token;
-  }
-
-  throw new Error('GA4 credentials not configured (set GA4_CLIENT_ID + GA4_CLIENT_SECRET + GA4_REFRESH_TOKEN)');
+    req.on('error', reject);
+    req.write(postData);
+    req.end();
+  });
 }
 
 // --- GA4 Data API query ---
