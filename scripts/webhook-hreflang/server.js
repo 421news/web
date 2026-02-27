@@ -634,7 +634,7 @@ async function bootstrapRelatedPosts() {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.2.0' });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.3.0', ga4: ga4Data ? 'ready' : 'not loaded' });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -749,6 +749,393 @@ async function hreflangCron() {
 
 setInterval(hreflangCron, 30 * 60 * 1000); // every 30 minutes
 
+// =============================================================================
+// GA4 ANALYTICS DATA (queries GA4 Data API, serves /api/ga4-data.json)
+// =============================================================================
+
+const GA4_PROPERTY_ID = '459246312';
+const GA4_SERVICE_ACCOUNT_JSON = process.env.GA4_SERVICE_ACCOUNT_JSON; // JSON string of service account key
+
+let ga4Data = null;
+let ga4LastUpdate = null;
+
+// --- GA4 auth: service account JWT → access token ---
+
+async function getGA4AccessToken() {
+  if (!GA4_SERVICE_ACCOUNT_JSON) throw new Error('GA4_SERVICE_ACCOUNT_JSON not set');
+  const { GoogleAuth } = require('google-auth-library');
+  const creds = JSON.parse(GA4_SERVICE_ACCOUNT_JSON);
+  const auth = new GoogleAuth({
+    credentials: creds,
+    scopes: ['https://www.googleapis.com/auth/analytics.readonly']
+  });
+  const client = await auth.getClient();
+  const token = await client.getAccessToken();
+  return token.token || token;
+}
+
+// --- GA4 Data API query ---
+
+function ga4RunReport(accessToken, body) {
+  return new Promise((resolve, reject) => {
+    const postData = JSON.stringify(body);
+    const req = https.request({
+      hostname: 'analyticsdata.googleapis.com',
+      path: `/v1beta/properties/${GA4_PROPERTY_ID}:runReport`,
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData)
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', (c) => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          resolve(JSON.parse(data));
+        } else {
+          reject(new Error(`GA4 API ${res.statusCode}: ${data.slice(0, 500)}`));
+        }
+      });
+    });
+    req.on('error', reject);
+    req.write(postData);
+    req.end();
+  });
+}
+
+// --- GA4 data processing ---
+
+const GA4_EDITORIAL_SLUGS = new Set([
+  'suscribite', 'subscribe', 'rutas', 'routes', 'canon', 'revista-421',
+  'pitcheale-a-421', 'mi-suscripcion', 'my-subscription', 'ultimos-posts',
+  'last-posts', 'analytics', 'gracias', 'oh-yes'
+]);
+
+const GA4_HARD_MERGES = {};
+function addGA4Merge(paths, targetSlug, title, en) {
+  for (const p of paths) GA4_HARD_MERGES[p] = { targetSlug, title, en };
+}
+addGA4Merge([
+  '/es/nick-land-aceleracionismo-parte-1/', '/es/nick-land-aceleracionismo/',
+  '/nick-land-aceleracionismo-parte-1/', '/nick-land-aceleracionismo-parte-2/',
+  '/nick-land-aceleracionismo/', '/nick-land-aceleracionismo-parte-1/3/',
+  '/nick-land-aceleracionismo-parte-1/null/'
+], 'nick-land-aceleracionismo', 'Nick Land y el aceleracionismo (completo)', false);
+addGA4Merge([
+  '/en/nick-land-the-apostle-of-chaos/', '/en/nick-land-the-apostle-of-chaos-part-2/'
+], 'nick-land-the-apostle-of-chaos', 'Nick Land: The Apostle of Chaos (complete)', true);
+addGA4Merge([
+  '/es/la-historia-de-ricardo-fort/', '/es/la-historia-de-ricardo-fort-parte-uno/',
+  '/la-historia-de-ricardo-fort/', '/la-historia-de-ricardo-fort-parte-dos/',
+  '/la-historia-de-ricardo-fort-parte-uno/', '/la-historia-de-ricardo-fort-parte-uno/3/'
+], 'la-historia-de-ricardo-fort', 'La historia de Ricardo Fort (completo)', false);
+addGA4Merge([
+  '/en/ricardo-fort-the-real-super-chad/', '/en/ricardo-fort-the-real-super-chad-part-1/',
+  '/en/ricardo-fort-the-real-super-chad-part-2/', '/en/ricardo-fort-the-real-super-chad-part-2'
+], 'ricardo-fort-the-real-super-chad', 'Ricardo Fort: The Real Super Chad (complete)', true);
+
+const GA4_CHANNEL_COLORS = {
+  'Organic Social': '#fcd221', 'Direct': '#17a583', 'Organic Search': '#e07c24',
+  'Referral': '#c0392b', 'Organic Video': '#6c5ce7', 'Unassigned': '#636e72',
+  'Email': '#00b894', 'Organic Shopping': '#fdcb6e'
+};
+
+const GA4_MONTH_LABELS = {
+  '202409': 'Sep 2024', '202410': 'Oct 2024', '202411': 'Nov 2024', '202412': 'Dic 2024',
+  '202501': 'Ene 2025', '202502': 'Feb 2025', '202503': 'Mar 2025', '202504': 'Abr 2025',
+  '202505': 'May 2025', '202506': 'Jun 2025', '202507': 'Jul 2025', '202508': 'Ago 2025',
+  '202509': 'Sep 2025', '202510': 'Oct 2025', '202511': 'Nov 2025', '202512': 'Dic 2025',
+  '202601': 'Ene 2026', '202602': 'Feb 2026', '202603': 'Mar 2026', '202604': 'Abr 2026',
+  '202605': 'May 2026', '202606': 'Jun 2026', '202607': 'Jul 2026', '202608': 'Ago 2026',
+  '202609': 'Sep 2026', '202610': 'Oct 2026', '202611': 'Nov 2026', '202612': 'Dic 2026'
+};
+
+function isGA4Article(path) { return /^\/(?:es|en)\/[^\/]+\/$/.test(path); }
+function isGA4OldRoot(path) {
+  if (/^\/(es|en|ghost|assets|content|members|public|rss|sitemap|robots|favicon|author|tag)\//i.test(path)) return false;
+  if (path === '/') return false;
+  if (!/^\/[^\/]+\/$/.test(path)) return false;
+  const slug = path.replace(/^\//, '').replace(/\/$/, '');
+  return !GA4_EDITORIAL_SLUGS.has(slug);
+}
+function ga4Slug(path) { const m = path.match(/^\/(?:es|en)\/([^\/]+)\/$/); return m ? m[1] : null; }
+function ga4OldSlug(path) { const m = path.match(/^\/([^\/]+)\/$/); return m ? m[1] : null; }
+
+function classifyGA4Page(path) {
+  if (path === '/' || path === '/es/' || path === '/en/') return { type: 'home', title: path === '/en/' ? 'Home (EN)' : path === '/es/' ? 'Home (ES)' : 'Landing' };
+  if (/^\/(?:es|en)\/tag\//.test(path)) return { type: 'tag', title: path.replace(/^\/(?:es|en)\/tag\//, '').replace(/\/$/, '') };
+  if (/^\/author\//.test(path)) return { type: 'author', title: path.replace(/^\/author\//, '').replace(/\/$/, '') };
+  if (/^\/tag\//.test(path)) return { type: 'tag', title: path.replace(/^\/tag\//, '').replace(/\/$/, '') };
+  return { type: 'other', title: path };
+}
+
+function processGA4Results(pageRows, channelRows, monthlyRows) {
+  // 1. Build path data
+  const pathData = {};
+  for (const row of pageRows) {
+    const path = row.dimensionValues[0].value;
+    const ym = row.dimensionValues[1].value;
+    const pv = parseInt(row.metricValues[0].value);
+    const u = parseInt(row.metricValues[1].value);
+    const d = Math.round(parseFloat(row.metricValues[2].value));
+    if (!pathData[path]) pathData[path] = {};
+    pathData[path][ym] = { pv, u, d };
+  }
+
+  const articleMap = {};
+  const pageMap = {};
+
+  for (const [path, months] of Object.entries(pathData)) {
+    // Hard merges
+    if (GA4_HARD_MERGES[path]) {
+      const hm = GA4_HARD_MERGES[path];
+      const ts = hm.targetSlug;
+      if (!articleMap[ts]) articleMap[ts] = { slug: ts, title: hm.title, en: hm.en, mergeNotes: [], m: {} };
+      for (const [ym, data] of Object.entries(months)) {
+        if (!articleMap[ts].m[ym]) articleMap[ts].m[ym] = { pv: 0, u: 0, d: 0 };
+        articleMap[ts].m[ym].pv += data.pv;
+        articleMap[ts].m[ym].u += data.u;
+        if (data.d > articleMap[ts].m[ym].d) articleMap[ts].m[ym].d = data.d;
+      }
+      articleMap[ts].mergeNotes.push(path);
+      continue;
+    }
+
+    // Article: /es/{slug}/ or /en/{slug}/
+    if (isGA4Article(path)) {
+      const slug = ga4Slug(path);
+      if (GA4_EDITORIAL_SLUGS.has(slug)) {
+        // Treat as page
+        const totalPV = Object.values(months).reduce((s, m) => s + m.pv, 0);
+        if (totalPV >= 50 && !pageMap[path]) pageMap[path] = { path, title: slug, type: 'editorial', en: path.startsWith('/en/'), m: months };
+        continue;
+      }
+      const en = path.startsWith('/en/');
+      if (!articleMap[slug]) articleMap[slug] = { slug, title: '', en, mergeNotes: [], m: {} };
+      for (const [ym, data] of Object.entries(months)) {
+        if (!articleMap[slug].m[ym]) articleMap[slug].m[ym] = { pv: 0, u: 0, d: 0 };
+        articleMap[slug].m[ym].pv += data.pv;
+        articleMap[slug].m[ym].u += data.u;
+        articleMap[slug].m[ym].d = data.d;
+      }
+      continue;
+    }
+
+    // Old root article: /{slug}/ → merge with /es/{slug}/
+    if (isGA4OldRoot(path)) {
+      const slug = ga4OldSlug(path);
+      if (!articleMap[slug]) articleMap[slug] = { slug, title: '', en: false, mergeNotes: [], m: {} };
+      for (const [ym, data] of Object.entries(months)) {
+        if (!articleMap[slug].m[ym]) articleMap[slug].m[ym] = { pv: 0, u: 0, d: 0 };
+        articleMap[slug].m[ym].pv += data.pv;
+        articleMap[slug].m[ym].u += data.u;
+        if (data.d > articleMap[slug].m[ym].d) articleMap[slug].m[ym].d = data.d;
+      }
+      articleMap[slug].mergeNotes.push(path);
+      continue;
+    }
+
+    // Page
+    const totalPV = Object.values(months).reduce((s, m) => s + m.pv, 0);
+    if (totalPV < 50) continue;
+    if (/^\/(ghost|assets|content|members|public|rss|sitemap|robots|favicon|posts)/.test(path)) continue;
+
+    let effectivePath = path;
+    const tagMatch = path.match(/^\/tag\/(.+)$/);
+    if (tagMatch) effectivePath = '/es/tag/' + tagMatch[1];
+
+    const cls = classifyGA4Page(effectivePath);
+    const en = effectivePath.startsWith('/en/');
+    if (!pageMap[effectivePath]) pageMap[effectivePath] = { path: effectivePath, title: cls.title, type: cls.type, en, m: {} };
+    for (const [ym, data] of Object.entries(months)) {
+      if (!pageMap[effectivePath].m[ym]) pageMap[effectivePath].m[ym] = { pv: 0, u: 0, d: 0 };
+      pageMap[effectivePath].m[ym].pv += data.pv;
+      pageMap[effectivePath].m[ym].u += data.u;
+      if (data.d > pageMap[effectivePath].m[ym].d) pageMap[effectivePath].m[ym].d = data.d;
+    }
+  }
+
+  // Sort articles by total PV, take top 100
+  const articles = Object.values(articleMap).map(a => {
+    let totalPV = 0;
+    for (const m of Object.values(a.m)) totalPV += m.pv;
+    return { ...a, totalPV };
+  }).sort((a, b) => b.totalPV - a.totalPV).slice(0, 100).map(a => {
+    const obj = { slug: a.slug, title: a.title || a.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), en: a.en };
+    if (a.mergeNotes.length > 0) obj.merge = a.mergeNotes.join(' + ');
+    obj.m = a.m;
+    return obj;
+  });
+
+  // Sort pages by total PV, take top 100
+  const pages = Object.values(pageMap).map(p => {
+    let totalPV = 0;
+    for (const m of Object.values(p.m)) totalPV += m.pv;
+    return { ...p, totalPV };
+  }).sort((a, b) => b.totalPV - a.totalPV).slice(0, 100).map(p => ({
+    path: p.path, title: p.title, type: p.type, en: p.en, m: p.m
+  }));
+
+  // Channels with monthly data
+  const channelMap = {};
+  for (const row of channelRows) {
+    const ch = row.dimensionValues[0].value;
+    const ym = row.dimensionValues[1].value;
+    const s = parseInt(row.metricValues[0].value);
+    const u = parseInt(row.metricValues[1].value);
+    if (!channelMap[ch]) channelMap[ch] = { name: ch, color: GA4_CHANNEL_COLORS[ch] || '#999', m: {} };
+    channelMap[ch].m[ym] = { s, u };
+  }
+  const channels = Object.values(channelMap).sort((a, b) => {
+    const aT = Object.values(a.m).reduce((s, m) => s + m.s, 0);
+    const bT = Object.values(b.m).reduce((s, m) => s + m.s, 0);
+    return bT - aT;
+  });
+
+  // Monthly
+  const monthly = monthlyRows.map(row => {
+    const ym = row.dimensionValues[0].value;
+    return {
+      month: ym,
+      label: GA4_MONTH_LABELS[ym] || ym,
+      pv: parseInt(row.metricValues[0].value),
+      s: parseInt(row.metricValues[1].value),
+      u: parseInt(row.metricValues[2].value),
+      d: Math.round(parseFloat(row.metricValues[3].value)),
+      b: parseFloat(parseFloat(row.metricValues[4].value).toFixed(3))
+    };
+  }).sort((a, b) => a.month.localeCompare(b.month));
+
+  const today = new Date();
+  const generated = today.toISOString().split('T')[0];
+
+  return {
+    team: ['00285f8378c256764d05b03690b04ab876110c230a199a060064c33bfc734d24', '708e778156d49e0e207733e8f57251fbff7189c94bccbd175afafd04608c06e7'],
+    generated,
+    range: { start: '2024-09-18', end: generated },
+    monthly, articles, pages, channels
+  };
+}
+
+// --- Titles enrichment from existing data ---
+
+async function enrichArticleTitles(data) {
+  // Try to load existing titles from theme asset
+  try {
+    const existing = await new Promise((resolve, reject) => {
+      https.get('https://www.421.news/assets/data/ga4-data.json', (res) => {
+        let body = '';
+        res.on('data', (c) => { body += c; });
+        res.on('end', () => {
+          if (res.statusCode === 200) resolve(JSON.parse(body));
+          else reject(new Error(`HTTP ${res.statusCode}`));
+        });
+      }).on('error', reject);
+    });
+    const titleMap = {};
+    for (const a of (existing.articles || [])) titleMap[a.slug] = a.title;
+    for (const a of data.articles) {
+      if ((!a.title || a.title === a.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())) && titleMap[a.slug]) {
+        a.title = titleMap[a.slug];
+      }
+    }
+  } catch (e) {
+    console.log('[ga4] Could not load existing titles: ' + e.message);
+  }
+}
+
+// --- Full GA4 refresh ---
+
+async function refreshGA4Data() {
+  console.log('[ga4] Starting data refresh...');
+  const start = Date.now();
+
+  const accessToken = await getGA4AccessToken();
+  const endDate = new Date().toISOString().split('T')[0];
+
+  // Run 3 queries in parallel
+  const [pageResult, channelResult, monthlyResult] = await Promise.all([
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'pagePath' }, { name: 'yearMonth' }],
+      metrics: [{ name: 'screenPageViews' }, { name: 'totalUsers' }, { name: 'averageSessionDuration' }],
+      limit: 25000,
+      orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }]
+    }),
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'sessionDefaultChannelGroup' }, { name: 'yearMonth' }],
+      metrics: [{ name: 'sessions' }, { name: 'totalUsers' }],
+      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }]
+    }),
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'yearMonth' }],
+      metrics: [{ name: 'screenPageViews' }, { name: 'sessions' }, { name: 'totalUsers' }, { name: 'averageSessionDuration' }, { name: 'bounceRate' }],
+      orderBys: [{ dimension: { dimensionName: 'yearMonth', orderType: 'ALPHANUMERIC' }, desc: false }]
+    })
+  ]);
+
+  console.log(`[ga4] Queries done: pages=${pageResult.rowCount}, channels=${channelResult.rowCount}, monthly=${monthlyResult.rowCount}`);
+
+  ga4Data = processGA4Results(
+    pageResult.rows || [],
+    channelResult.rows || [],
+    monthlyResult.rows || []
+  );
+
+  await enrichArticleTitles(ga4Data);
+
+  ga4LastUpdate = new Date().toISOString();
+  const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+  console.log(`[ga4] Refresh complete in ${elapsed}s: ${ga4Data.articles.length} articles, ${ga4Data.pages.length} pages`);
+}
+
+// --- GA4 endpoint ---
+
+app.get('/api/ga4-data.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Cache-Control', 'public, max-age=300');
+  if (!ga4Data) {
+    res.status(503).json({ error: 'GA4 data not ready yet' });
+    return;
+  }
+  res.json(ga4Data);
+});
+
+app.options('/api/ga4-data.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Methods', 'GET');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(204).end();
+});
+
+// --- GA4 cron: refresh twice daily at 12:00 and 00:00 ART (UTC-3) ---
+
+function scheduleGA4Cron() {
+  // Check every 15 min if it's time to refresh
+  setInterval(() => {
+    const now = new Date();
+    // ART = UTC-3
+    const artHour = (now.getUTCHours() - 3 + 24) % 24;
+    const artMin = now.getUTCMinutes();
+
+    // Run at :00-:14 of hours 0 and 12
+    if ((artHour === 0 || artHour === 12) && artMin < 15) {
+      // Check we haven't already refreshed in the last hour
+      if (ga4LastUpdate) {
+        const lastMs = new Date(ga4LastUpdate).getTime();
+        if (Date.now() - lastMs < 3600000) return; // skip if refreshed < 1h ago
+      }
+      refreshGA4Data().catch(err => {
+        console.error('[ga4-cron] Refresh error:', err.message);
+      });
+    }
+  }, 15 * 60 * 1000);
+}
+
 // --- Keep-alive ping (prevents Render free tier spindown after 15 min) ---
 
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
@@ -780,4 +1167,35 @@ app.listen(PORT, () => {
 
   // Run first hreflang cron check 60s after startup
   setTimeout(hreflangCron, 60 * 1000);
+
+  // Bootstrap GA4 data: try theme asset first, then refresh
+  if (GA4_SERVICE_ACCOUNT_JSON) {
+    (async () => {
+      try {
+        console.log('[ga4] Bootstrapping from theme asset...');
+        const existing = await new Promise((resolve, reject) => {
+          https.get('https://www.421.news/assets/data/ga4-data.json', (res) => {
+            let body = '';
+            res.on('data', (c) => { body += c; });
+            res.on('end', () => {
+              if (res.statusCode === 200) resolve(JSON.parse(body));
+              else reject(new Error(`HTTP ${res.statusCode}`));
+            });
+          }).on('error', reject);
+        });
+        ga4Data = existing;
+        ga4LastUpdate = existing.generated + 'T00:00:00Z';
+        console.log(`[ga4] Bootstrap loaded from theme (generated: ${existing.generated})`);
+      } catch (e) {
+        console.log(`[ga4] Bootstrap from theme failed: ${e.message}`);
+      }
+      // Refresh fresh data 30s after startup
+      setTimeout(() => {
+        refreshGA4Data().catch(err => console.error('[ga4] Initial refresh error:', err.message));
+      }, 30000);
+    })();
+    scheduleGA4Cron();
+  } else {
+    console.log('[ga4] GA4_SERVICE_ACCOUNT_JSON not set, GA4 endpoint disabled');
+  }
 });
