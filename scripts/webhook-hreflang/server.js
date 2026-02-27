@@ -755,9 +755,9 @@ setInterval(hreflangCron, 30 * 60 * 1000); // every 30 minutes
 
 const GA4_PROPERTY_ID = '459246312';
 // Support both: individual env vars (preferred) or full JSON blob
-const GA4_CLIENT_ID = process.env.GA4_CLIENT_ID;
-const GA4_CLIENT_SECRET = process.env.GA4_CLIENT_SECRET;
-const GA4_REFRESH_TOKEN = process.env.GA4_REFRESH_TOKEN;
+const GA4_CLIENT_ID = (process.env.GA4_CLIENT_ID || '').trim();
+const GA4_CLIENT_SECRET = (process.env.GA4_CLIENT_SECRET || '').trim();
+const GA4_REFRESH_TOKEN = (process.env.GA4_REFRESH_TOKEN || '').trim();
 const GA4_SERVICE_ACCOUNT_JSON = process.env.GA4_SERVICE_ACCOUNT_JSON;
 const GA4_ENABLED = !!(GA4_CLIENT_ID || GA4_SERVICE_ACCOUNT_JSON);
 
@@ -1145,8 +1145,9 @@ app.get('/api/ga4-status', (req, res) => {
     }
 
     res.json({
-      hasCredentials: !!GA4_SERVICE_ACCOUNT_JSON,
+      hasCredentials: GA4_ENABLED,
       credentialType: credType,
+      envLengths: { clientId: GA4_CLIENT_ID.length, clientSecret: GA4_CLIENT_SECRET.length, refreshToken: GA4_REFRESH_TOKEN.length },
       lastUpdate: ga4LastUpdate,
       lastError: ga4LastError,
       dataLoaded: !!ga4Data,
