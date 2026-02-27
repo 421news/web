@@ -458,6 +458,116 @@ Merged v3.14.0 visual changes with SEO/CWV improvements:
 - **Top pages**: / (13,899), /es/ (9,543), /selfhosting (6,127), /ya-pagas-internet (3,588), /en/ (2,988)
 - Pico el 11/feb: 2,033 users, 10,227 PVs
 
+### Ghost Members & Newsletters (Feb 2026)
+
+- **4,923 members total**: 4,669 free (94.8%) / 252 comped (5.1%) / 2 paid Stripe (0.04%)
+- **Active newsletters**: "Nueva nota publicada" (~4,011 subs), "Wizards" (~4,069 subs), "Envíos de marketing", "Canon"
+- **Archived newsletters**: "Hola 421", "prueba", "Ediciones especiales", "Colección", "Newsletter English", "Test"
+- Ghost Admin API does NOT expose email open/delivery stats — only visible in Ghost Admin UI.
+
+### GA4 Conversion Funnel (all-time, Jan 2024 – Feb 2026)
+
+Custom events tracked via Ghost Code Injection (gtag.js):
+
+| Event | Count | Notes |
+|---|---|---|
+| `form_start` | 1,090 | User begins any signup form |
+| `file_download` | 640 | Revista PDF downloads |
+| `scroll_25` | 350 | 25% scroll depth |
+| `scroll_50` | 290 | 50% scroll depth |
+| `scroll_75` | 236 | 75% scroll depth |
+| `scroll_100` | 200 | 100% scroll depth |
+| `popup_shown` | 198 | Subscribe popup triggered |
+| `popup_dismissed` | 178 | Popup closed (89.9% dismiss rate) |
+| `plan_toggle` | 26 | Toggled pricing plan on subscribe page |
+| `click_related_post` | 12 | Clicked a related post card |
+| `begin_checkout` | 6 | Started payment flow |
+| `select_payment` | 6 | Selected payment method |
+| `popup_cta_click` | 4 | Clicked popup CTA (2.0% conversion) |
+| `toggle_theme` | 4 | Light/dark mode toggle |
+| `click_tag_box` | 2 | File browser tag click |
+
+**Critical insight**: Popup converts at 2% (4 clicks / 198 shown). Needs complete redesign — lead magnet, better copy, different trigger.
+
+### All-Time Top Posts (GSC + GA4 cross-reference, Jan 2024 – Feb 2026)
+
+**Core content — posts that drive both organic and social traffic:**
+
+| Post | GA4 PVs | GSC Impr | GSC Clicks | GSC CTR | GSC Pos |
+|---|---|---|---|---|---|
+| low-tech-high-life-cottagecore-cyberpunk | 24,831 | 9,781 | 1,267 | 12.95% | 6.1 |
+| soberania-cognitiva-autonomia-psiquica | 39,331 | 5,636 | 825 | 14.64% | 6.9 |
+| ya-pagas-internet-no-pagues-por-lo-demas | 19,229 | 3,158 | 132 | 4.18% | 27.9 |
+| nick-land-aceleracionismo-parte-1 | 13,466 | 6,801 | 145 | 2.13% | 9.4 |
+| como-empezar-a-leer-ciencia-ficcion | 15,564 | 13,053 | 152 | 1.16% | 24.7 |
+| blade-runner-1982-ridley-scott | 12,319 | — | — | — | — |
+| volverse-ingobernable-peter-sloterdijk | 10,974 | — | — | — | — |
+| la-ley-secreta-de-las-coincidencias | 11,696 | — | — | — | — |
+| ropa-vintage-la-inca | 8,400 | — | — | — | — |
+| milei-libra-y-el-criptobardo | 10,656 | — | — | — | — |
+| guia-cyberciruja-autodeterminacion-digital | 8,122 | — | — | — | — |
+| psicopatas-vs-esquizos | 5,463 | — | — | — | — |
+| pop-os-linux | 6,253 | 11,058 | 142 | 1.28% | 12.6 |
+| telefonos-android-sin-google | 5,212 | 9,797 | 75 | 0.77% | 7.8 |
+| selfhosting-alojar-nube-hogarena | 6,127 | — | — | — | — |
+
+**High-impression low-CTR posts — biggest SEO opportunity (meta_title/desc rewrite targets):**
+
+| Post | GSC Impr | GSC CTR | GSC Pos | Action |
+|---|---|---|---|---|
+| john-cena-luchador-wwe | 251,676 | 0.06% | 4.7 | Low relevance — skip |
+| como-ver-one-piece | 58,921 | 0.40% | 8.7 | Rewrite meta, optimize H1 |
+| demon-slayer-kimetsu-no-yaiba | 57,995 | 0.14% | 5.1 | Rewrite meta |
+| hp-lovecraft-horror-cosmico | 48,613 | 0.31% | 6.0 | Rewrite meta — massive potential |
+| juguetes-bootlegs-knock-offs | 44,142 | 0.29% | 4.7 | Rewrite meta |
+| en/absolute-dc-ultimate-marvel | 41,770 | 0.16% | 29.7 | Rewrite meta + improve position |
+| masacre-de-texas-leatherface | 32,192 | 0.18% | 9.8 | Rewrite meta |
+| rat-fink-big-daddy-roth | 22,543 | 0.77% | 4.8 | Rewrite meta — good position |
+| pistas-skateparks-buenos-aires | 21,250 | 1.24% | 6.7 | Rewrite meta |
+| grand-theft-auto-iv | 19,852 | 0.39% | 9.7 | Rewrite meta |
+| trench-crusade-wargame | 27,680 | 0.26% | 5.2 | Rewrite meta |
+| space-king-warhammer-40k | 27,898 | 0.45% | 6.1 | Rewrite meta |
+| musica-argentina-discos-2025 | 16,645 | 1.24% | 9.0 | Rewrite meta |
+| starcraft-blizzard-rts | 14,369 | 3.79% | 14.6 | Already decent CTR, improve position |
+| r36s-consola-retro-2025 | 14,769 | 0.57% | 17.3 | Rewrite meta |
+| como-hacer-fanzines | 14,111 | 0.55% | 9.2 | Rewrite meta |
+| en/mtg-arena-farm-gold-gems | 13,727 | 0.68% | 6.1 | Rewrite meta |
+| san-jorge-santo-matadragones | 13,221 | 1.07% | 17.2 | Rewrite meta |
+| vender-cartas-magic-precios | 11,816 | 1.76% | 8.1 | Rewrite meta |
+
+**Social stars — huge GA4 traffic, poor/no Google position (need SEO bootstrapping):**
+
+| Post | GA4 PVs | GSC Pos | Issue |
+|---|---|---|---|
+| selfhosting-alojar-nube-hogarena | 6,127 | 46.9 | Barely indexed despite 6K visits |
+| ya-pagas-internet-no-pagues | 19,229 | 27.9 | Viral on social, Google ignoring |
+| volverse-ingobernable-sloterdijk | 10,974 | 38.7 | Philosophy content, needs schema |
+| psicopatas-vs-esquizos | 5,463 | 42.2 | Very engaging (7:35 avg), invisible |
+| la-trampa-de-la-cultura-joven | 6,084 | — | Not ranking at all |
+| ingenieria-inversa-mierdificacion | 6,965 | — | Not ranking at all |
+| deny-defend-depose-luigi-mangione | 6,767 | — | Not ranking at all |
+
+### Growth Action Plan (Feb 2026)
+
+**Lever 1 — CTR optimization (meta_title/description rewrite)**
+- Target: ~20 posts with >10K impressions and CTR <1%
+- Expected: doubling CTR from 0.3% to 0.6% on 500K monthly impressions = +1,500 clicks/month
+- Script: `scripts/optimize-meta-titles.py` (to be built)
+
+**Lever 2 — Social stars SEO rescue**
+- 7 posts with 5K-19K GA4 pageviews but no Google presence
+- Add proper schema markup, optimize meta, build internal links from ranked posts
+- Script: manual optimization per post
+
+**Lever 3 — Popup redesign**
+- Current: 2% CTA click rate (4/198 shown)
+- Target: 10-15% with lead magnet (Revista PDF), better copy, delayed trigger
+- Implementation: rebuild `subscribe-popup.hbs`
+
+**Lever 4 — Newsletter as distribution channel**
+- 4,069 wizards + 4,011 new post subscribers = built-in amplification
+- Every new post gets 4K+ email opens → social shares → backlink potential
+
 ## Webhook Automation (Render)
 
 Express.js microservice at https://webhook-hreflang.onrender.com handles two Ghost webhooks:
@@ -547,3 +657,11 @@ claude mcp add google-analytics -- python3 -c "from analytics_mcp.coordinator im
 Features identified but not yet implemented:
 - **"Que es 421" page** - Institutional about page
 - **Author territories** - Each author gets a visible territory/beat
+- **Content type badges** - Visual indicators on cards (ensayo, guia, cronica, tutorial, wiki)
+
+## SEO Growth — Active Tasks (Feb 2026)
+
+1. **Meta title/description optimizer** — Script to rewrite meta_title + meta_description for ~20 high-impression low-CTR posts using GSC query data. Target: double organic CTR.
+2. **Social stars SEO rescue** — Manual optimization of 7 posts with high social traffic but no Google presence (schema, meta, internal links).
+3. **Subscribe popup redesign** — Replace current popup (2% conversion) with lead magnet approach (Revista PDF), better copy, smarter trigger.
+4. **Conversion funnel tracking** — GA4 custom events already active. Monitor popup_shown → popup_cta_click → form_start → begin_checkout flow.
