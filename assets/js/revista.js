@@ -4,9 +4,11 @@
 
   var CONTENT_KEY = '420da6f85b5cc903b347de9e33';
   var PAGE_SLUG = 'revista-421';
+  var isMember = false;
 
   var svgDownload = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
   var svgExpand = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
+  var svgLock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
   function parseIssues(html) {
     var doc = new DOMParser().parseFromString(html, 'text/html');
@@ -15,7 +17,6 @@
 
     headings.forEach(function (h2) {
       var text = h2.textContent.trim();
-      // Parse: #12 - Febrero 2026 - Especial Manga/Animé
       var match = text.match(/#(\d+)\s*-\s*([^-]+?)(?:\s*-\s*(.+))?$/);
       if (!match) return;
 
@@ -23,7 +24,6 @@
       var fecha = match[2].trim();
       var titulo = match[3] ? match[3].trim() : 'Revista 421 #' + numero;
 
-      // Find next figure (cover image + credits)
       var cover = '';
       var creditos = [];
       var figure = h2.nextElementSibling;
@@ -36,42 +36,29 @@
 
         var caption = figure.querySelector('figcaption');
         if (caption) {
-          // Parse credits from figcaption: bold text = rol, next link = nombre
           var nodes = caption.childNodes;
           var currentRol = '';
           for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            if (node.nodeType === 1) { // element
+            if (node.nodeType === 1) {
               var tag = node.tagName.toLowerCase();
-              // Bold/strong = role name
               if ((tag === 'b' || tag === 'strong') && !node.querySelector('a')) {
                 var rolText = node.textContent.trim().replace(/:$/, '');
                 if (rolText) currentRol = rolText;
               }
-              // Link = person name
               if (tag === 'a') {
-                creditos.push({
-                  rol: currentRol || 'Crédito',
-                  nombre: node.textContent.trim(),
-                  url: node.href
-                });
+                creditos.push({ rol: currentRol || 'Crédito', nombre: node.textContent.trim(), url: node.href });
                 currentRol = '';
               }
-              // Bold with link inside
               if ((tag === 'b' || tag === 'strong') && node.querySelector('a')) {
                 var innerLink = node.querySelector('a');
                 if (innerLink) {
-                  // Check if this bold also has non-link text (the role)
                   var allText = node.textContent.trim();
                   var linkText = innerLink.textContent.trim();
                   if (allText !== linkText) {
                     currentRol = allText.replace(linkText, '').replace(/:$/, '').trim();
                   }
-                  creditos.push({
-                    rol: currentRol || 'Crédito',
-                    nombre: linkText,
-                    url: innerLink.href
-                  });
+                  creditos.push({ rol: currentRol || 'Crédito', nombre: linkText, url: innerLink.href });
                   currentRol = '';
                 }
               }
@@ -80,7 +67,6 @@
         }
       }
 
-      // Find file card (PDF link + size)
       var pdf = '';
       var size = '';
       var fileCard = figure ? figure.nextElementSibling : h2.nextElementSibling;
@@ -95,15 +81,7 @@
       }
 
       if (cover) {
-        issues.push({
-          numero: numero,
-          titulo: titulo,
-          fecha: fecha,
-          cover: cover,
-          pdf: pdf,
-          size: size,
-          creditos: creditos
-        });
+        issues.push({ numero: numero, titulo: titulo, fecha: fecha, cover: cover, pdf: pdf, size: size, creditos: creditos });
       }
     });
 
@@ -117,6 +95,19 @@
         : c.nombre;
       return '<span><span class="revista-credit-rol">' + c.rol + ':</span> ' + nameHtml + '</span>';
     }).join('');
+
+    var downloadBtn = '';
+    if (issue.pdf) {
+      if (isMember) {
+        downloadBtn = '<a href="' + issue.pdf + '" class="revista-btn-download" download>' +
+          svgDownload + ' Descargar PDF' + (issue.size ? ' (' + issue.size + ')' : '') +
+          '</a>';
+      } else {
+        downloadBtn = '<a href="#" class="revista-btn-download revista-btn-locked" data-pdf="' + issue.pdf + '">' +
+          svgLock + ' Registrate para descargar' +
+          '</a>';
+      }
+    }
 
     return '<div class="revista-card">' +
       '<div class="revista-card-cover">' +
@@ -132,10 +123,7 @@
         '<div class="revista-card-title">' + issue.titulo + '</div>' +
         '<div class="revista-card-credits">' + creditsHtml + '</div>' +
         '<div class="revista-card-actions">' +
-          (issue.pdf ?
-            '<a href="' + issue.pdf + '" class="revista-btn-download" download>' +
-              svgDownload + ' Descargar PDF' + (issue.size ? ' (' + issue.size + ')' : '') +
-            '</a>' : '') +
+          downloadBtn +
           '<a href="' + issue.cover + '" target="_blank" class="revista-btn-cover">' +
             svgExpand + ' Ver tapa' +
           '</a>' +
@@ -144,7 +132,28 @@
     '</div>';
   }
 
-  fetch('/ghost/api/content/pages/slug/' + PAGE_SLUG + '/?key=' + CONTENT_KEY + '&formats=html')
+  // Intercept clicks on locked download buttons
+  container.addEventListener('click', function (e) {
+    var btn = e.target.closest('.revista-btn-locked');
+    if (btn) {
+      e.preventDefault();
+      window.location.hash = '#/portal/signup/free';
+    }
+  });
+
+  // Check member status, then load issues
+  fetch('/members/api/member/', { credentials: 'same-origin' })
+    .then(function (res) {
+      if (!res.ok || res.status === 204) return null;
+      return res.json();
+    })
+    .then(function (member) {
+      if (member && member.email) isMember = true;
+    })
+    .catch(function () {})
+    .then(function () {
+      return fetch('/ghost/api/content/pages/slug/' + PAGE_SLUG + '/?key=' + CONTENT_KEY + '&formats=html');
+    })
     .then(function (res) { return res.json(); })
     .then(function (data) {
       var page = data.pages && data.pages[0];
