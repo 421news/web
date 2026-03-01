@@ -12,7 +12,7 @@
     if (!grid || !authorSelect) return;
 
     var isEN = window.location.pathname.indexOf('/en/') === 0;
-    var langFilter = isEN ? 'tag:hash-en' : 'tag:-hash-en';
+    var langFilter = isEN ? 'tag:hash-en+tag:-hash-satelite' : 'tag:-hash-en+tag:-hash-satelite';
     var nextPage = 2;
     var hasMore = true;
     var loading = false;

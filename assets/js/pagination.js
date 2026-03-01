@@ -15,14 +15,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (authorMatch) {
         limit = 24;
-        filter = 'tag:-hash-en+primary_author:' + authorMatch[1];
+        filter = 'tag:-hash-en+tag:-hash-satelite+primary_author:' + authorMatch[1];
     } else if (tagMatch) {
         limit = 15;
         var langTag = tagMatch[1] === 'en' ? 'tag:hash-en' : 'tag:-hash-en';
-        filter = 'tag:' + tagMatch[2] + '+' + langTag;
+        filter = 'tag:' + tagMatch[2] + '+' + langTag + '+tag:-hash-satelite';
     } else {
         limit = 20;
-        filter = isEnglish ? 'tag:hash-en' : 'tag:-hash-en';
+        filter = isEnglish ? 'tag:hash-en+tag:-hash-satelite' : 'tag:-hash-en+tag:-hash-satelite';
     }
 
     var nextPage = 2;

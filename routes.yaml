@@ -42,6 +42,15 @@ routes:
   /en/subscribe/:
     template: subscribe
     data: page.subscribe
+  /es/que-es-421/:
+    template: page
+    data: page.que-es-421
+  /en/what-is-421/:
+    template: page
+    data: page.what-is-421
+  /es/analytics/:
+    template: analytics
+    data: page.analytics
 
   /es/tag/cultura/:
     template: tag-cultura
