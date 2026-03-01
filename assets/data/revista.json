@@ -1,5 +1,17 @@
 [
   {
+    "numero": 12,
+    "titulo": "Especial Manga/Animé",
+    "fecha": "Febrero 2026",
+    "cover": "https://www.421.news/content/images/2026/03/Revista-421--12.jpg",
+    "pdf": "https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/03/Revista-421--12--febrero-20206-.pdf",
+    "size": "6 MB",
+    "creditos": [
+      { "rol": "Portada", "nombre": "Komainu", "url": "https://www.instagram.com/komainu.dg/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
     "numero": 11,
     "titulo": "Especial Autonomía",
     "fecha": "Enero 2026",
