@@ -8,7 +8,7 @@
       </a>
 
       <div class="nav-links">
-        <a href="#" class="nav-link" id="nav-explore-btn">Explorar</a>
+        <a href="/en/what-is-421/" class="nav-link">What is 421</a>
         <a href="/en/tag/culture" class="nav-link">Culture</a>
         <a href="/en/tag/tech" class="nav-link">Tech</a>
         <a href="/en/tag/games" class="nav-link">Games</a>
@@ -17,6 +17,7 @@
         <div class="nav-dropdown">
           <span class="nav-link" role="button" tabindex="0">More+</span>
           <div class="nav-dropdown-menu">
+            <a href="#" id="nav-explore-btn">Explorar</a>
             <a href="/en/canon">Canon</a>
             <a href="/es/revista-421">Magazine</a>
             <a href="https://open.spotify.com/show/0mDtmWPN5NtlUQDDXcBK3F" target="_blank" rel="noopener">Podcast</a>
@@ -76,6 +77,7 @@
 
   {{!-- Mobile expanded menu --}}
   <nav id="nav-mobile" class="nav-mobile">
+    <a href="/en/what-is-421/">What is 421</a>
     <a href="/en/tag/culture">Culture</a>
     <a href="/en/tag/tech">Tech</a>
     <a href="/en/tag/games">Games</a>
@@ -139,7 +141,8 @@
         '/en/routes/': '/es/rutas/',
         '/en/canon/': '/es/canon/',
         '/en/subscribe/': '/es/suscribite/',
-        '/en/my-subscription/': '/es/mi-suscripcion/'
+        '/en/my-subscription/': '/es/mi-suscripcion/',
+        '/en/what-is-421/': '/es/que-es-421/'
       };
       var path = currentPath.replace(/\/?$/, '/');
       if (langMap[path]) esUrl = langMap[path];

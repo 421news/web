@@ -1,19 +1,22 @@
 {
   "rutas": [
     {
-      "id": "autonomia-digital",
-      "nombre": "Autonomía digital",
-      "tesis": "Las herramientas que usás definen los límites de tu autonomía.",
+      "id": "autonomia-en-accion",
+      "nombre": "Autonomía en acción",
+      "tesis": "De la filosofía a la acción: pensar por vos mismo, elegir tu tecnología, construir tu infraestructura.",
       "slugs": [
-        "guia-cyberciruja-para-la-autodeterminacion-digital",
         "soberania-cognitiva-introduccion-autonomia-psiquica",
-        "tecnomagia-para-la-vida-real",
-        "ingenieria-inversa-a-la-mierdificacion-de-internet",
-        "anonimato-en-internet",
         "low-tech-high-life-cottagecore-cyberpunk",
-        "pop-os-linux",
+        "ingenieria-inversa-a-la-mierdificacion-de-internet",
+        "ya-pagas-internet-no-pagues-por-lo-demas",
+        "anonimato-en-internet",
+        "telefonos-android-sin-google",
         "selfhosting-alojar-nube-hogarena",
-        "elogio-computadoras-escritorio"
+        "que-es-small-web-como-funciona",
+        "pop-os-linux",
+        "elogio-computadoras-escritorio",
+        "guia-cyberciruja-para-la-autodeterminacion-digital",
+        "gael-duval-nuevo-ecosistema-mobile"
       ]
     },
     {
@@ -56,7 +59,6 @@
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
-        "tecnomagia-para-la-vida-real",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
         "mcluhan-ia-llm"
@@ -95,7 +97,7 @@
     },
     {
       "id": "hazlo-tu-mismo",
-      "nombre": "Hazlo tú mismo",
+      "nombre": "Hacelo vos mismo",
       "tesis": "Pan, milanesas, fanzines, videojuegos, wargames: todo lo que podés hacer con tus propias manos.",
       "slugs": [
         "como-hacer-milanesas-caseras",
@@ -103,9 +105,23 @@
         "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
         "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
-        "telefonos-android-sin-google",
+        "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
         "introduccion-al-mundo-de-los-drones-fpv"
+      ]
+    },
+    {
+      "id": "inteligencia-artificial",
+      "nombre": "Inteligencia artificial",
+      "tesis": "No es magia, no es el apocalipsis. Es una herramienta que conviene entender antes de que te entienda a vos.",
+      "slugs": [
+        "claude-code-el-fin-del-software-como-lo-conocemos",
+        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
+        "poesia-ia-modelos-de-lenguaje",
+        "mcluhan-ia-llm",
+        "ia-crisis-memoria-ram",
+        "zerebro-ai-agents-memecoins",
+        "bio-ia-deep-learning-investigacion-proteinas"
       ]
     }
   ],
@@ -119,8 +135,32 @@
       "razon": "El reverso del cyberpunk: evaluar costos y beneficios de cada tecnología como acto de soberanía."
     },
     {
+      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
+      "razon": "El texto más práctico y más punk de 421. Soberanía digital para todos los días."
+    },
+    {
+      "slug": "anonimato-en-internet",
+      "razon": "Navegar sin ser rastreado. La privacidad como derecho fundamental y primer paso hacia la autonomía digital."
+    },
+    {
+      "slug": "selfhosting-alojar-nube-hogarena",
+      "razon": "Tu propia nube, tus propias reglas. La infraestructura personal como acto de independencia."
+    },
+    {
+      "slug": "telefonos-android-sin-google",
+      "razon": "Liberar el dispositivo que más usás. El celular como territorio de soberanía."
+    },
+    {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
       "razon": "Manifiesto práctico de soberanía digital. Filosofía convertida en tutorial."
+    },
+    {
+      "slug": "ingenieria-inversa-a-la-mierdificacion-de-internet",
+      "razon": "Reversear como modo de resistencia. Doctorow, Hypponen y el combate contra la degradación tecnológica."
+    },
+    {
+      "slug": "elogio-computadoras-escritorio",
+      "razon": "Modular, personalizable, actualizable. Un elogio a la PC como artefacto de libertad."
     },
     {
       "slug": "nick-land-aceleracionismo",
@@ -139,18 +179,6 @@
       "razon": "La voluntad como juego probabilístico. Cuanto más accionás, más nodos posibilitás a futuro."
     },
     {
-      "slug": "ingenieria-inversa-a-la-mierdificacion-de-internet",
-      "razon": "Reversear como modo de resistencia. Doctorow, Hypponen y el combate contra la degradación tecnológica."
-    },
-    {
-      "slug": "elogio-computadoras-escritorio",
-      "razon": "Modular, personalizable, actualizable. Un elogio a la PC como artefacto de libertad."
-    },
-    {
-      "slug": "ya-pagas-internet-no-pagues-por-lo-demas",
-      "razon": "El texto más práctico y más punk de 421. Soberanía digital para todos los días."
-    },
-    {
       "slug": "psicopatas-vs-esquizos-guerra-silenciosa",
       "razon": "Un mapa simbólico de dos formas de ser anidadas en los sistemas de sentido. Diagnóstico cultural en clave filosófica."
     },
@@ -163,16 +191,12 @@
       "razon": "Las huellas que nunca se borran del todo. Arqueología de los rincones fantasmas de la red."
     },
     {
-      "slug": "lecturas-politicas-sobre-lovecraft",
-      "razon": "Yarvin, Houellebecq, Land, Fisher: cuatro lecturas políticas cruzadas sobre un autor de horror cósmico."
+      "slug": "san-jorge-santo-matadragones",
+      "razon": "Quién fue San Jorge y qué significa la leyenda del dragón. De la Edad Media hasta hoy."
     },
     {
       "slug": "alan-moore-comic-magia-anarquia",
       "razon": "El Magus de Northampton: cómics, ocultismo y anarquismo. Un repaso profundo por la carrera del autor más influyente del medio."
-    },
-    {
-      "slug": "san-jorge-santo-matadragones",
-      "razon": "Quién fue San Jorge y qué significa la leyenda del dragón. De la Edad Media hasta hoy."
     },
     {
       "slug": "argentum-online",
@@ -183,8 +207,8 @@
       "razon": "El héroe de metal argentino. Cómo un tipo de Villa Recondo cambió la historia del coleccionismo y la nerdencia nacional."
     },
     {
-      "slug": "en-el-principio-fue-el-canon",
-      "razon": "Meta-texto sobre por qué importan los cánones. El texto que justifica esta misma página."
+      "slug": "dungeons-dragons-historia-y-legado-lis",
+      "razon": "Cómo se creó el juego de rol más trascendente de todos. Historia esencial desde la Caja Blanca hasta hoy."
     },
     {
       "slug": "akira-1988",
@@ -201,30 +225,23 @@
     {
       "slug": "warhammer-40k-introduccion-wargames",
       "razon": "Juego, lore y hobby en el wargame por excelencia. La puerta de entrada a un universo inagotable."
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "Cómo se creó el juego de rol más trascendente de todos. Historia esencial desde la Caja Blanca hasta hoy."
-    },
-    {
-      "slug": "entrevista-luciano-lamberti-cuentos",
-      "razon": "Una charla sobre las motivaciones y condiciones de la escritura. Spoiler: vas a necesitar mucho tiempo a solas."
     }
   ],
   "rutas_en": [
     {
-      "id": "autonomia-digital",
-      "nombre": "Digital Autonomy",
-      "tesis": "The tools you use define the limits of your autonomy.",
+      "id": "autonomia-en-accion",
+      "nombre": "Autonomy in Action",
+      "tesis": "From philosophy to action: think for yourself, choose your technology, build your infrastructure.",
       "slugs": [
-        "cyberciruja-guide-digital-self-determination",
         "cognitive-sovereignty-an-introduction-to-psychic-autonomy",
-        "reverse-engineering-the-enshittification-of-the-internet",
-        "defense-internet-anonymity",
         "low-tech-high-life-a-response-to-cyberpunk",
-        "pop-os-guide-to-installing-linux-pc",
+        "reverse-engineering-the-enshittification-of-the-internet",
+        "you-already-pay-for-internet-dont-pay-for-the-rest",
+        "defense-internet-anonymity",
         "self-hosting-home-cloud",
-        "in-praise-of-desktop-computers"
+        "pop-os-guide-to-installing-linux-pc",
+        "in-praise-of-desktop-computers",
+        "cyberciruja-guide-digital-self-determination"
       ]
     },
     {
@@ -316,6 +333,16 @@
         "making-and-playtesting-a-board-game",
         "introduction-to-fpv-drones"
       ]
+    },
+    {
+      "id": "inteligencia-artificial",
+      "nombre": "Artificial Intelligence",
+      "tesis": "It's not magic, it's not the apocalypse. It's a tool worth understanding before it understands you.",
+      "slugs": [
+        "do-language-models-dream-of-electric-sheep",
+        "do-language-models-dream-of-electric-sheep-2",
+        "mcluhan-grammar-ai"
+      ]
     }
   ],
   "canon_en": [
@@ -328,8 +355,28 @@
       "razon": "The reverse side of cyberpunk: evaluating the costs and benefits of each technology as an act of sovereignty."
     },
     {
+      "slug": "you-already-pay-for-internet-dont-pay-for-the-rest",
+      "razon": "421's most practical and most punk text. Digital sovereignty for every day."
+    },
+    {
+      "slug": "defense-internet-anonymity",
+      "razon": "Browse without being tracked. Privacy as a fundamental right and the first step toward digital autonomy."
+    },
+    {
+      "slug": "self-hosting-home-cloud",
+      "razon": "Your own cloud, your own rules. Personal infrastructure as an act of independence."
+    },
+    {
       "slug": "cyberciruja-guide-digital-self-determination",
       "razon": "A practical manifesto for digital sovereignty. Philosophy turned into a tutorial."
+    },
+    {
+      "slug": "reverse-engineering-the-enshittification-of-the-internet",
+      "razon": "Reverse engineering as a mode of resistance. Doctorow, Hypponen, and the fight against technological decay."
+    },
+    {
+      "slug": "in-praise-of-desktop-computers",
+      "razon": "Modular, customizable, upgradeable. A love letter to the desktop PC as an artifact of freedom."
     },
     {
       "slug": "nick-land-the-apostle-of-chaos",
@@ -348,18 +395,6 @@
       "razon": "Willpower as a probabilistic game. The more you act, the more nodes you enable for the future."
     },
     {
-      "slug": "reverse-engineering-the-enshittification-of-the-internet",
-      "razon": "Reverse engineering as a mode of resistance. Doctorow, Hypponen, and the fight against technological decay."
-    },
-    {
-      "slug": "in-praise-of-desktop-computers",
-      "razon": "Modular, customizable, upgradeable. A love letter to the desktop PC as an artifact of freedom."
-    },
-    {
-      "slug": "you-already-pay-for-internet-dont-pay-for-the-rest",
-      "razon": "421's most practical and most punk text. Digital sovereignty for every day."
-    },
-    {
       "slug": "psychos-versus-schizos",
       "razon": "A symbolic map of two ways of being nested within systems of meaning. Cultural diagnosis in a philosophical key."
     },
@@ -372,16 +407,12 @@
       "razon": "The traces that never fully disappear. Archaeology of the internet's ghost corners."
     },
     {
-      "slug": "yarvin-houellebecq-land-fisher-political-readings-of-lovecraft",
-      "razon": "Yarvin, Houellebecq, Land, Fisher: four intersecting political readings of a cosmic horror author."
+      "slug": "saint-george-dragon-slayer",
+      "razon": "Who was Saint George and what does the dragon legend mean. From the Middle Ages to the present."
     },
     {
       "slug": "alan-moore-comic-magic-anarchy",
       "razon": "The Magus of Northampton: comics, occultism, and anarchism. A deep dive into the most influential author in the medium."
-    },
-    {
-      "slug": "saint-george-dragon-slayer",
-      "razon": "Who was Saint George and what does the dragon legend mean. From the Middle Ages to the present."
     },
     {
       "slug": "argentum-online-en",
@@ -392,8 +423,8 @@
       "razon": "Argentina's metal hero. How a man from Villa Recondo changed the history of collecting and national nerd culture."
     },
     {
-      "slug": "in-the-beginning-was-the-canon",
-      "razon": "A meta-text on why canons matter. The text that justifies this very page."
+      "slug": "dungeons-and-dragons-history-and-legacy",
+      "razon": "How the most transcendent role-playing game was created. Essential history from the White Box to the present."
     },
     {
       "slug": "akira-1988-en",
@@ -410,14 +441,6 @@
     {
       "slug": "warhammer-40k-introduction-to-wargames",
       "razon": "Game, lore, and hobby in the quintessential wargame. The gateway to an inexhaustible universe."
-    },
-    {
-      "slug": "dungeons-and-dragons-history-and-legacy",
-      "razon": "How the most transcendent role-playing game was created. Essential history from the White Box to the present."
-    },
-    {
-      "slug": "interviews-with-writers-luciano-lamberti",
-      "razon": "A conversation about the motivations and conditions of writing. Spoiler: you'll need a lot of time alone."
     }
   ]
 }
