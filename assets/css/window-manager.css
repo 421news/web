@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: var(--fs-xl);
   box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.3);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   animation: wm-pulse 3s ease-in-out infinite;
@@ -147,7 +147,7 @@
   border: 1px solid rgba(234, 230, 225, 0.2);
   border-radius: 4px;
   color: var(--crema);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   font-family: 'Nunito Sans', sans-serif;
   cursor: pointer;
@@ -200,20 +200,20 @@
   padding: 20px;
 }
 .wm-post-details h2 {
-  font-size: 20px;
+  font-size: var(--fs-xl);
   font-weight: 800;
   margin: 0 0 8px;
   line-height: 1.3;
   color: var(--negro);
 }
 .wm-post-meta {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   color: rgba(18, 18, 18, 0.5);
   margin-bottom: 16px;
   font-weight: 600;
 }
 .wm-post-excerpt {
-  font-size: 14px;
+  font-size: var(--fs-base);
   line-height: 1.6;
   color: var(--negro);
   margin-bottom: 20px;
@@ -225,7 +225,7 @@
   color: var(--crema);
   text-decoration: none;
   border-radius: var(--radius);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 700;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
   border: var(--border-width) solid var(--negro);
@@ -265,7 +265,7 @@
   user-select: none;
 }
 .wm-folder-item-name {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   text-align: center;
   word-break: break-word;
@@ -279,7 +279,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  font-size: 14px;
+  font-size: var(--fs-base);
   color: rgba(18, 18, 18, 0.5);
   font-weight: 600;
 }
@@ -288,7 +288,7 @@
   align-items: center;
   justify-content: center;
   padding: 40px;
-  font-size: 14px;
+  font-size: var(--fs-base);
   color: #ff5f57;
   font-weight: 600;
 }

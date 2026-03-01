@@ -16,7 +16,7 @@
   text-align: center;
 }
 .sub-hero-title {
-  font-size: 3rem;
+  font-size: var(--fs-4xl);
   font-style: italic;
   font-weight: 800;
   color: var(--amarillo);
@@ -25,7 +25,7 @@
 .sub-hero-subtitle {
   font-family: 'Lora', serif;
   font-style: italic;
-  font-size: 1.15rem;
+  font-size: var(--fs-lg);
   color: var(--crema);
   opacity: 0.8;
   max-width: 600px;
@@ -35,7 +35,7 @@
 .sub-hero-callout {
   margin-top: 1rem;
   font-weight: 600;
-  font-size: 1.05rem;
+  font-size: var(--fs-body);
   text-align: center;
 }
 .sub-gradient-divider {
@@ -60,7 +60,7 @@
 }
 .sub-card-label {
   color: var(--amarillo);
-  font-size: 1.05rem;
+  font-size: var(--fs-body);
   font-weight: 600;
   margin-bottom: 2rem;
 }
@@ -81,7 +81,7 @@
   background: transparent;
   color: var(--crema);
   font-family: inherit;
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -97,7 +97,7 @@
   right: -4px;
   background: var(--amarillo);
   color: var(--negro);
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   font-weight: 800;
   padding: 2px 6px;
   border-radius: 10px;
@@ -111,16 +111,16 @@
   margin-bottom: 0.5rem;
 }
 .plan-price-big {
-  font-size: 3rem;
+  font-size: var(--fs-4xl);
   font-weight: 800;
   color: var(--amarillo);
 }
 .plan-price-period {
-  font-size: 1rem;
+  font-size: var(--fs-body);
   opacity: 0.6;
 }
 .plan-price-detail {
-  font-size: 0.9rem;
+  font-size: var(--fs-base);
   opacity: 0.5;
   margin-bottom: 1.5rem;
 }
@@ -135,7 +135,7 @@
   background: rgba(23, 165, 131, 0.12);
   border: 1px solid rgba(23, 165, 131, 0.3);
   border-radius: 20px;
-  font-size: 0.9rem;
+  font-size: var(--fs-base);
   color: var(--verde);
   font-weight: 600;
 }
@@ -150,7 +150,7 @@
   padding: 10px 0;
   padding-left: 28px;
   position: relative;
-  font-size: 15px;
+  font-size: var(--fs-md);
   border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 .plan-benefits li:last-child {
@@ -173,7 +173,7 @@
   background: var(--gradient-main);
   color: var(--negro);
   font-weight: 700;
-  font-size: 16px;
+  font-size: var(--fs-body);
   cursor: pointer;
   font-family: inherit;
   transition: opacity 0.2s ease;
@@ -190,7 +190,7 @@
   background: var(--amarillo);
   color: var(--negro);
   font-weight: 600;
-  font-size: 16px;
+  font-size: var(--fs-body);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -212,7 +212,7 @@
   background: transparent;
   color: var(--crema);
   font-family: inherit;
-  font-size: 14px;
+  font-size: var(--fs-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -225,7 +225,7 @@
 .account-logout {
   width: 100%;
   opacity: 0.5;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   padding: 8px 20px;
 }
 .account-logout:hover {
@@ -240,7 +240,7 @@
   color: #ffffff;
   opacity: 0.8;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: var(--fs-body);
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 600;
   transition: all 0.2s ease;
@@ -257,7 +257,7 @@
 }
 .free-tier-link p {
   opacity: 0.5;
-  font-size: 14px;
+  font-size: var(--fs-base);
   margin-bottom: 0.8rem;
 }
 
@@ -292,18 +292,18 @@
   display: block;
 }
 .payment-method-name {
-  font-size: 18px;
+  font-size: var(--fs-lg);
   font-weight: 700;
   margin-bottom: 6px;
   display: block;
 }
 .payment-method-desc {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   opacity: 0.7;
   display: block;
 }
 .payment-method-note {
-  font-size: 13px;
+  font-size: var(--fs-sm);
   opacity: 0.5;
   margin-top: 15px;
   text-align: center;
@@ -325,7 +325,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.04);
   color: var(--crema);
-  font-size: 16px;
+  font-size: var(--fs-body);
   font-family: inherit;
 }
 .form-group input:focus {
@@ -333,7 +333,7 @@
   border-color: var(--amarillo);
 }
 .form-note {
-  font-size: 14px;
+  font-size: var(--fs-base);
   opacity: 0.5;
   margin-bottom: 20px;
 }
@@ -342,7 +342,7 @@
   padding: 10px;
   border-radius: 6px;
   text-align: center;
-  font-size: 14px;
+  font-size: var(--fs-base);
 }
 .form-message.error {
   background: rgba(231, 76, 60, 0.15);
@@ -439,17 +439,17 @@
 
 /* ===== ACCOUNT PAGE ===== */
 .account-info {
-  font-size: 15px;
+  font-size: var(--fs-md);
   opacity: 0.7;
   margin-bottom: 2rem;
 }
 .account-section-title {
-  font-size: 1.1rem;
+  font-size: var(--fs-lg);
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 .account-desc {
-  font-size: 14px;
+  font-size: var(--fs-base);
   opacity: 0.6;
   margin-bottom: 1.5rem;
 }
@@ -460,7 +460,7 @@
   margin-bottom: 2rem;
 }
 .account-help {
-  font-size: 14px;
+  font-size: var(--fs-base);
   opacity: 0.5;
   text-align: center;
 }
@@ -488,7 +488,7 @@
 /* ===== EDIT EMAIL LINK ===== */
 .account-edit-link {
   color: var(--amarillo);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   text-decoration: none;
   opacity: 0.7;
@@ -533,15 +533,15 @@
   gap: 2px;
 }
 .account-app-text strong {
-  font-size: 15px;
+  font-size: var(--fs-md);
   font-weight: 700;
 }
 .account-app-text small {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   opacity: 0.5;
 }
 .account-app-arrow {
-  font-size: 1.2rem;
+  font-size: var(--fs-xl);
   opacity: 0.4;
   transition: opacity 0.2s;
 }
@@ -563,10 +563,10 @@
     padding: 3.5rem 0 1.5rem;
   }
   .sub-hero-title {
-    font-size: 2rem;
+    font-size: var(--fs-3xl);
   }
   .sub-hero-subtitle {
-    font-size: 1rem;
+    font-size: var(--fs-body);
   }
   .sub-card {
     padding: 1.5rem;

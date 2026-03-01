@@ -69,7 +69,7 @@ body.light-mode .site-header {
     color: var(--crema);
     text-decoration: none;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 17px;
+    font-size: var(--fs-body);
     font-weight: 600;
     transition: background-color 0.15s ease, color 0.15s ease;
     white-space: nowrap;
@@ -147,7 +147,7 @@ body.light-mode .nav-link.is-active {
     color: var(--crema);
     text-decoration: none;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 15px;
+    font-size: var(--fs-md);
     font-weight: 600;
     opacity: 0.8;
     transition: opacity 0.15s ease, background-color 0.15s ease, color 0.15s ease;
@@ -177,7 +177,7 @@ body.light-mode .nav-dropdown-menu a:hover {
 /* --- Mobile sub-items (indented under Canon) --- */
 .nav-mobile-sub {
     padding-left: 40px !important;
-    font-size: 14px !important;
+    font-size: var(--fs-base) !important;
     opacity: 0.7;
 }
 
@@ -204,7 +204,7 @@ body.light-mode .nav-mobile-sub {
     border-radius: var(--radius);
     padding: 9px 20px;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 17px;
+    font-size: var(--fs-body);
     font-weight: 800;
     font-style: italic;
     text-decoration: none;
@@ -234,7 +234,7 @@ body.light-mode .nav-mobile-sub {
     cursor: pointer;
     text-decoration: none;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
+    font-size: var(--fs-base);
     font-weight: 700;
     transition: border-color 0.15s ease, background-color 0.15s ease;
     white-space: nowrap;
@@ -324,7 +324,7 @@ body.light-mode .nav-icon-btn .nav-flag {
     color: var(--crema);
     text-decoration: none;
     font-family: 'Nunito Sans', sans-serif;
-    font-size: 16px;
+    font-size: var(--fs-body);
     font-weight: 600;
     border-bottom: 1px solid rgba(234, 230, 225, 0.06);
     transition: background 0.15s ease, color 0.15s ease;
@@ -408,7 +408,7 @@ body.light-mode .nav-mobile-subscribe {
 @media screen and (max-width: 600px) {
     .nav-mobile a {
         padding: 12px 16px;
-        font-size: 15px;
+        font-size: var(--fs-md);
     }
 }
 

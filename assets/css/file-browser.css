@@ -61,7 +61,7 @@
 .fb-titlebar-title {
   font-weight: 700;
   font-style: italic;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   letter-spacing: 0.5px;
 }
 
@@ -85,7 +85,7 @@
   color: var(--negro);
   border-radius: 4px;
   padding: 4px 10px;
-  font-size: 14px;
+  font-size: var(--fs-base);
   cursor: pointer;
   font-family: inherit;
   transition: background 0.15s ease, transform 0.1s ease;
@@ -120,7 +120,7 @@
   padding: 6px 12px;
   background-color: var(--crema);
   border-bottom: var(--border-width) solid var(--negro);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   gap: 2px;
   overflow-x: auto;
 }
@@ -147,7 +147,7 @@
 
 .fb-pathbar-separator {
   color: rgba(18, 18, 18, 0.4);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   user-select: none;
 }
 
@@ -168,7 +168,7 @@
 }
 
 .fb-sidebar-heading {
-  font-size: 10px;
+  font-size: var(--fs-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1.2px;
@@ -184,7 +184,7 @@
   padding: 6px 14px;
   color: var(--negro);
   text-decoration: none;
-  font-size: 13px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   transition: background 0.12s ease;
   cursor: pointer;
@@ -213,7 +213,7 @@
 
 /* ---- Icons (emoji-based for simplicity) ---- */
 .fb-icon {
-  font-size: 16px;
+  font-size: var(--fs-body);
   width: 20px;
   text-align: center;
   flex-shrink: 0;
@@ -265,7 +265,7 @@
 }
 
 .fb-item-name {
-  font-size: 12px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   text-align: center;
   word-break: break-word;
@@ -297,7 +297,7 @@
   padding: 5px 12px;
   background-color: var(--crema);
   color: rgba(18, 18, 18, 0.6);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   font-weight: 600;
   border-top: var(--border-width) solid rgba(18, 18, 18, 0.15);
 }
@@ -320,7 +320,7 @@
   color: rgba(18, 18, 18, 0.5);
   border-radius: 3px;
   padding: 2px 6px;
-  font-size: 12px;
+  font-size: var(--fs-xs);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.12s ease;
@@ -352,7 +352,7 @@
   grid-template-columns: 1fr 120px 140px;
   padding: 4px 8px;
   border-bottom: 1.5px solid var(--negro);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -367,7 +367,7 @@
   border-bottom: 1px solid rgba(18, 18, 18, 0.06);
   text-decoration: none;
   color: var(--negro);
-  font-size: 13px;
+  font-size: var(--fs-sm);
   align-items: center;
   transition: background 0.1s ease;
 }
@@ -388,12 +388,12 @@
 
 .fb-list-type {
   color: rgba(18, 18, 18, 0.5);
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 
 .fb-list-modified {
   color: rgba(18, 18, 18, 0.5);
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 
 /* ---- Minimized state ---- */
@@ -420,7 +420,7 @@
   }
 
   .fb-item-name {
-    font-size: 11px;
+    font-size: var(--fs-2xs);
   }
 
   .fb-body {
@@ -451,10 +451,10 @@
   }
 
   .fb-titlebar-title {
-    font-size: 11px;
+    font-size: var(--fs-2xs);
   }
 
   .fb-pathbar {
-    font-size: 12px;
+    font-size: var(--fs-xs);
   }
 }
