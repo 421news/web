@@ -1,0 +1,98 @@
+name: Deploy Theme to Ghost
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '*.hbs'
+      - 'partials/**'
+      - 'assets/**'
+      - 'package.json'
+      - 'routes.yaml'
+      - 'redirects.yaml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-theme
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Zip theme
+        run: |
+          zip -r /tmp/421-theme.zip . \
+            -x ".git/*" "node_modules/*" ".github/*" "scripts/*" \
+            "testeo/*" "backups/*" "mockup-*.html" "*.zip"
+
+      - name: Deploy to Ghost
+        env:
+          GHOST_ADMIN_API_KEY: ${{ secrets.GHOST_ADMIN_API_KEY }}
+        run: |
+          node -e "
+          const jwt = require('jsonwebtoken');
+          const FormData = require('form-data');
+          const fs = require('fs');
+          const https = require('https');
+
+          const [id, secret] = process.env.GHOST_ADMIN_API_KEY.split(':');
+          const token = jwt.sign({}, Buffer.from(secret, 'hex'), {
+            keyid: id,
+            algorithm: 'HS256',
+            expiresIn: '5m',
+            audience: '/admin/'
+          });
+
+          function request(options, body) {
+            return new Promise((resolve, reject) => {
+              const req = https.request(options, (res) => {
+                let data = '';
+                res.on('data', (c) => data += c);
+                res.on('end', () => {
+                  if (res.statusCode >= 200 && res.statusCode < 300) {
+                    resolve({ status: res.statusCode, data });
+                  } else {
+                    reject(new Error('HTTP ' + res.statusCode + ': ' + data));
+                  }
+                });
+              });
+              req.on('error', reject);
+              if (body) { body.pipe(req); } else { req.end(); }
+            });
+          }
+
+          async function deploy() {
+            // Upload theme
+            const form = new FormData();
+            form.append('file', fs.createReadStream('/tmp/421-theme.zip'));
+            const upload = await request({
+              hostname: '421bn.ghost.io',
+              path: '/ghost/api/admin/themes/upload/',
+              method: 'POST',
+              headers: { ...form.getHeaders(), 'Authorization': 'Ghost ' + token }
+            }, form);
+            console.log('Upload:', upload.status);
+
+            // Activate theme
+            const activate = await request({
+              hostname: '421bn.ghost.io',
+              path: '/ghost/api/admin/themes/421-theme/activate/',
+              method: 'PUT',
+              headers: { 'Authorization': 'Ghost ' + token, 'Content-Length': 0 }
+            });
+            console.log('Activate:', activate.status);
+            console.log('Theme deployed successfully');
+          }
+
+          deploy().catch((err) => { console.error(err.message); process.exit(1); });
+          "
