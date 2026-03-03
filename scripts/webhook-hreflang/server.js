@@ -993,12 +993,12 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
     }
   }
 
-  // Sort articles by total PV, take top 100
+  // Sort articles by total PV, keep all with >= 1000 PV
   const articles = Object.values(articleMap).map(a => {
     let totalPV = 0;
     for (const m of Object.values(a.m)) totalPV += m.pv;
     return { ...a, totalPV };
-  }).sort((a, b) => b.totalPV - a.totalPV).slice(0, 100).map(a => {
+  }).filter(a => a.totalPV >= 1000).sort((a, b) => b.totalPV - a.totalPV).map(a => {
     const obj = { slug: a.slug, title: a.title || a.slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), en: a.en };
     if (a.mergeNotes.length > 0) obj.merge = a.mergeNotes.join(' + ');
     obj.m = a.m;
