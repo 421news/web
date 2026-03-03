@@ -1,0 +1,146 @@
+{{!< default}}
+
+<meta name="robots" content="noindex, nofollow">
+<link href="{{asset "css/analytics.css"}}" rel="stylesheet" type="text/css">
+
+<script>
+document.title = 'Analytics | 421.news';
+document.documentElement.classList.add('is-analytics');
+</script>
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+
+  <div class="analytics-page">
+    <div class="global-container">
+
+      <!-- Auth: Loading -->
+      <div id="auth-loading" class="analytics-auth-state">
+        <div class="analytics-auth-icon">&#x23F3;</div>
+        <p>Verificando acceso...</p>
+      </div>
+
+      <!-- Auth: Denied -->
+      <div id="auth-denied" class="analytics-auth-state" style="display:none;">
+        <div class="analytics-auth-icon">&#x1F512;</div>
+        <h2>Acceso restringido</h2>
+        <p>Esta p&aacute;gina es solo para el equipo de 421.</p>
+        <a href="/es/" class="analytics-back-link">&larr; Volver al inicio</a>
+      </div>
+
+      <!-- Dashboard -->
+      <div id="dashboard" style="display:none;">
+        <div class="analytics-hero">
+          <h1 class="analytics-title">Analytics</h1>
+          <p class="analytics-subtitle">Datos del <span id="analytics-range"></span> &middot; Actualizado <span id="analytics-generated"></span></p>
+        </div>
+        <hr class="analytics-gradient-divider">
+
+        <!-- Global month filters -->
+        <div class="analytics-global-filters">
+          <div class="analytics-filters" id="month-filters"></div>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="analytics-cards" id="analytics-cards"></div>
+
+        <!-- Monthly traffic -->
+        <div class="analytics-section">
+          <div class="analytics-section-header">
+            <h2>Tr&aacute;fico mensual</h2>
+          </div>
+          <div class="analytics-chart-container">
+            <canvas id="monthly-chart"></canvas>
+          </div>
+          <div id="monthly-table-wrap"></div>
+        </div>
+
+        <!-- Channels -->
+        <div class="analytics-section">
+          <h2>Canales de adquisici&oacute;n</h2>
+          <div class="analytics-channels-grid">
+            <div class="analytics-donut-container">
+              <canvas id="channel-chart"></canvas>
+            </div>
+            <div id="channel-legend" class="analytics-channel-legend"></div>
+          </div>
+        </div>
+
+        <!-- Content: tabs + lang + search -->
+        <div class="analytics-section">
+          <div class="analytics-section-header">
+            <div class="analytics-toolbar">
+              <div class="analytics-tabs">
+                <button class="analytics-tab active" data-tab="articles">Art&iacute;culos</button>
+                <button class="analytics-tab" data-tab="pages">P&aacute;ginas</button>
+              </div>
+              <div class="analytics-lang-selector">
+                <button class="analytics-lang active" data-lang="all">Todos</button>
+                <button class="analytics-lang" data-lang="es">ES</button>
+                <button class="analytics-lang" data-lang="en">EN</button>
+              </div>
+            </div>
+            <input type="text" id="content-search" placeholder="Buscar..." class="analytics-search-input">
+          </div>
+          <div class="analytics-table-scroll">
+            <table class="analytics-table" id="content-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th id="col-title">Art&iacute;culo</th>
+                  <th class="analytics-num analytics-sortable" data-sort="pv">Pageviews <span class="analytics-sort-arrow">&#x25BC;</span></th>
+                  <th class="analytics-num analytics-sortable" data-sort="u">Usuarios</th>
+                  <th class="analytics-num analytics-sortable" data-sort="d">Duraci&oacute;n</th>
+                </tr>
+              </thead>
+              <tbody id="content-tbody"></tbody>
+            </table>
+          </div>
+          <div id="content-pagination" class="analytics-pagination"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+window.__ga4Data = (function() {
+  var themeUrl = '{{asset "data/ga4-data.json"}}';
+  var renderUrl = 'https://webhook-hreflang.onrender.com/api/ga4-data.json';
+  // Try Render first (5s timeout), fallback to theme asset
+  var controller = new AbortController();
+  var timer = setTimeout(function() { controller.abort(); }, 5000);
+  return fetch(renderUrl, { signal: controller.signal })
+    .then(function(r) { clearTimeout(timer); if (!r.ok) throw new Error(r.status); return r.json(); })
+    .catch(function() { clearTimeout(timer); return fetch(themeUrl).then(function(r) { return r.json(); }); });
+})();
+(function() {
+  function sha256(str) {
+    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.toLowerCase().trim()))
+      .then(function(buf) { return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join(''); });
+  }
+  Promise.all([
+    fetch('/members/api/member/', { credentials: 'same-origin' }).then(function(r) { if (!r.ok) throw new Error('no'); return r.json(); }),
+    window.__ga4Data
+  ]).then(function(res) {
+    var member = res[0];
+    var data = res[1];
+    var team = data && data.team ? data.team : [];
+    return sha256(member.email).then(function(hash) {
+      document.getElementById('auth-loading').style.display = 'none';
+      if (team.indexOf(hash) !== -1) {
+        document.getElementById('dashboard').style.display = '';
+      } else {
+        document.getElementById('auth-denied').style.display = '';
+      }
+    });
+  }).catch(function() {
+    document.getElementById('auth-loading').style.display = 'none';
+    document.getElementById('auth-denied').style.display = '';
+  });
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
+<script src="{{asset "js/analytics-dashboard.js"}}" defer></script>
