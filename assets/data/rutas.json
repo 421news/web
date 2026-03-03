@@ -238,10 +238,13 @@
         "reverse-engineering-the-enshittification-of-the-internet",
         "you-already-pay-for-internet-dont-pay-for-the-rest",
         "defense-internet-anonymity",
+        "android-phones-without-google",
         "self-hosting-home-cloud",
+        "small-web-what-it-is-how-it-works",
         "pop-os-guide-to-installing-linux-pc",
         "in-praise-of-desktop-computers",
-        "cyberciruja-guide-digital-self-determination"
+        "cyberciruja-guide-digital-self-determination",
+        "gael-duval-new-mobile-world"
       ]
     },
     {
@@ -285,7 +288,9 @@
         "teleoplexia-nick-land-en",
         "glossary-philosophy-of-technology",
         "do-language-models-dream-of-electric-sheep-2",
-        "psychos-versus-schizos"
+        "on-the-fifth-aeon-peter-carroll",
+        "psychos-versus-schizos",
+        "mcluhan-grammar-ai"
       ]
     },
     {
@@ -339,9 +344,14 @@
       "nombre": "Artificial Intelligence",
       "tesis": "It's not magic, it's not the apocalypse. It's a tool worth understanding before it understands you.",
       "slugs": [
+        "claude-code-software-moats-2026",
         "do-language-models-dream-of-electric-sheep",
+        "ai-and-poetry-human-poiesis-against-llm",
         "do-language-models-dream-of-electric-sheep-2",
-        "mcluhan-grammar-ai"
+        "mcluhan-grammar-ai",
+        "ai-broke-the-ram-economy",
+        "zerebro-ai-agents-memecoins-crypto-art",
+        "bio-ai-deep-learning-protein-research"
       ]
     }
   ],
@@ -365,6 +375,10 @@
     {
       "slug": "self-hosting-home-cloud",
       "razon": "Your own cloud, your own rules. Personal infrastructure as an act of independence."
+    },
+    {
+      "slug": "android-phones-without-google",
+      "razon": "Free the device you use the most. The phone as a territory of sovereignty."
     },
     {
       "slug": "cyberciruja-guide-digital-self-determination",
