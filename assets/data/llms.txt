@@ -1,0 +1,63 @@
+# 421 Broadcasting Network
+
+> 421.news is an independent digital media outlet covering culture, technology, games, and real life — in 8 languages.
+
+## About
+
+421 Broadcasting Network (421.news) is a bilingual (Spanish/English) digital publication with translations in 6 additional languages (Portuguese, French, Chinese, Japanese, Korean, Turkish). Founded in Argentina, 421 covers technology culture, video games, anime, music, cinema, internet phenomena, and real-life stories through long-form journalism, essays, and cultural criticism.
+
+The publication operates on a membership model with free and paid tiers. All content is freely accessible.
+
+## Content
+
+- Long-form articles and essays on technology, culture, games, and real life
+- 48 core articles translated into 8 languages (384+ posts total)
+- Curated reading routes ("rutas") organizing content by thematic paths
+- "Canon 421": 25 essential articles representing the publication's identity
+- Revista 421: periodic digital magazine (11 issues)
+
+## Languages
+
+- Spanish (primary): /es/
+- English: /en/
+- Portuguese: /pt/
+- French: /fr/
+- Chinese: /zh/
+- Japanese: /ja/
+- Korean: /ko/
+- Turkish: /tr/
+
+## Feeds
+
+- Spanish RSS: https://www.421.news/es/rss/
+- English RSS: https://www.421.news/en/rss/
+
+## Sitemap
+
+- https://www.421.news/sitemap.xml
+
+## Key Pages
+
+- Homepage (ES): https://www.421.news/es/
+- Homepage (EN): https://www.421.news/en/
+- Reading Routes (ES): https://www.421.news/es/rutas/
+- Reading Routes (EN): https://www.421.news/en/routes/
+- Canon 421 (ES): https://www.421.news/es/canon/
+- Canon 421 (EN): https://www.421.news/en/canon/
+- Magazine Archive: https://www.421.news/es/revista-421/
+- What is 421? (EN): https://www.421.news/en/what-is-421/
+
+## Content API
+
+Public Ghost Content API available for programmatic access:
+
+- Base URL: https://421bn.ghost.io/ghost/api/content/
+- Content Key: 420da6f85b5cc903b347de9e33
+- Documentation: https://ghost.org/docs/content-api/
+
+Example: https://421bn.ghost.io/ghost/api/content/posts/?key=420da6f85b5cc903b347de9e33&limit=10&fields=title,slug,excerpt,url,published_at&include=tags
+
+## Contact
+
+- Website: https://www.421.news
+- Email: hola@421.news

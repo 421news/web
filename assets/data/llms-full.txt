@@ -1,0 +1,133 @@
+# 421 Broadcasting Network — Full Context
+
+> 421.news is an independent digital media outlet covering culture, technology, games, and real life — in 8 languages.
+
+## Mission
+
+421 Broadcasting Network explores the intersection of technology, culture, and everyday life. The publication provides long-form journalism, essays, and cultural criticism that examines how digital culture shapes identity, community, and society. All content is free to read — the membership model supports the editorial operation without paywalling content.
+
+## Content Categories
+
+### Culture (Cultura)
+Coverage of anime, manga, cinema, music, literature, art, and pop culture phenomena. Includes analysis of fandoms, cosplay communities, cultural movements, and the intersection of traditional and digital culture.
+
+### Technology (Tecnología)
+Articles about internet culture, digital infrastructure, cybersecurity, artificial intelligence, open source, digital sovereignty, and the social impact of technology. Focus on Latin American and global perspectives.
+
+### Games (Juegos)
+Coverage of video games as cultural artifacts — esports history, game design analysis, gaming communities, retro gaming, and the social dynamics of competitive and casual gaming.
+
+### Real Life (Vida Real)
+Stories about real people and communities navigating the digital age. Profiles, interviews, and narrative journalism exploring how technology shapes daily life, work, and relationships.
+
+## Editorial Structure
+
+### Reading Routes (Rutas)
+Curated thematic paths through the archive. Each route groups 5-8 articles around a central theme, providing guided reading experiences. Seven routes cover topics from digital identity to gaming culture.
+
+### Canon 421
+The 25 essential articles that define the publication's identity and editorial vision. A curated selection spanning all four content categories.
+
+### Revista 421
+A periodic digital magazine compiling selected articles with original design, covers, and editorial curation. 11 issues published.
+
+## Languages and Localization
+
+Primary content is written in Spanish with professional English translations. Six additional languages (PT, FR, ZH, JA, KO, TR) are AI-translated from Spanish with editorial review. Each language version maintains its own:
+- Homepage with featured content
+- Tag-based navigation (4 primary categories)
+- Reading routes and canon sections
+- Subscription page
+
+### Language URLs
+| Language | Homepage | RSS |
+|----------|----------|-----|
+| Español | https://www.421.news/es/ | https://www.421.news/es/rss/ |
+| English | https://www.421.news/en/ | https://www.421.news/en/rss/ |
+| Português | https://www.421.news/pt/ | — |
+| Français | https://www.421.news/fr/ | — |
+| 中文 | https://www.421.news/zh/ | — |
+| 日本語 | https://www.421.news/ja/ | — |
+| 한국어 | https://www.421.news/ko/ | — |
+| Türkçe | https://www.421.news/tr/ | — |
+
+## Content Access
+
+### RSS Feeds
+Full-content RSS feeds available for Spanish and English editions.
+
+### Ghost Content API
+All published content is accessible via Ghost's Content API:
+
+**Base URL:** `https://421bn.ghost.io/ghost/api/content/`
+**Content Key:** `420da6f85b5cc903b347de9e33`
+
+#### Useful Endpoints
+
+**List all posts (paginated):**
+```
+GET /posts/?key=420da6f85b5cc903b347de9e33&limit=15&page=1&include=tags,authors&fields=title,slug,excerpt,url,published_at,feature_image
+```
+
+**Get a specific post by slug:**
+```
+GET /posts/slug/{slug}/?key=420da6f85b5cc903b347de9e33&include=tags,authors
+```
+
+**Filter by language (e.g., English posts):**
+```
+GET /posts/?key=420da6f85b5cc903b347de9e33&filter=tag:hash-en&limit=all&fields=title,slug,excerpt,url,published_at
+```
+
+**Filter by category (e.g., Technology in Spanish):**
+```
+GET /posts/?key=420da6f85b5cc903b347de9e33&filter=tag:tecnologia&limit=all&fields=title,slug,excerpt,url,published_at
+```
+
+**Language tag filters:**
+- Spanish (default, no tag filter needed — exclude intl): `tag:-hash-en+tag:-hash-zh+tag:-hash-ja+tag:-hash-ko+tag:-hash-tr+tag:-hash-pt+tag:-hash-fr`
+- English: `tag:hash-en`
+- Portuguese: `tag:hash-pt`
+- French: `tag:hash-fr`
+- Chinese: `tag:hash-zh`
+- Japanese: `tag:hash-ja`
+- Korean: `tag:hash-ko`
+- Turkish: `tag:hash-tr`
+
+**Category tags (Spanish / English):**
+- Culture: `cultura` / `culture`
+- Technology: `tecnologia` / `technology`
+- Games: `juegos` / `games`
+- Real Life: `vida-real` / `real-life`
+
+### Sitemap
+Full sitemap index at: https://www.421.news/sitemap.xml
+
+Sub-sitemaps include posts, pages, tags, and authors.
+
+## Sample Articles
+
+### Spanish
+1. "Akira (1988): La película que predijo el futuro" — Analysis of the iconic anime film's cultural impact
+2. "De los cyber de barrio a la consagración mundial: la historia del Counter-Strike en Argentina" — History of competitive gaming in Argentina
+3. "Hipersticiones y cognitopeligros" — Essay on hyperstitions and cognitive hazards in digital culture
+4. "Cosplay en Argentina: arte, comunidad e identidad" — Documentary journalism on cosplay communities
+
+### English
+1. "Akira (1988): The Film That Predicted the Future"
+2. "From Neighborhood Cybercafés to World Champions: The History of Counter-Strike in Argentina"
+3. "Hyperstitions and Cognitohazards"
+4. "Cosplay in Argentina: Art, Community, and Identity"
+
+## Technical Details
+
+- **Platform:** Ghost CMS (Ghost Pro)
+- **Domain:** www.421.news (Cloudflare DNS)
+- **Content format:** HTML (Ghost Lexical editor)
+- **Structured data:** JSON-LD (Article, LearningResource, BreadcrumbList, ItemList schemas)
+- **Hreflang:** Implemented for ES↔EN pairs and all language versions
+
+## Contact
+
+- **Website:** https://www.421.news
+- **Email:** hola@421.news

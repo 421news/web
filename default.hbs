@@ -1,12 +1,13 @@
-{{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}<html lang="es">{{/has}}{{/post}}{{else}}<html lang="es">{{/is}}
+{{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}{{#has tag="#zh"}}<html lang="zh">{{else}}{{#has tag="#ja"}}<html lang="ja">{{else}}{{#has tag="#ko"}}<html lang="ko">{{else}}{{#has tag="#tr"}}<html lang="tr">{{else}}{{#has tag="#pt"}}<html lang="pt">{{else}}{{#has tag="#fr"}}<html lang="fr">{{else}}<html lang="es">{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{else}}<html lang="es">{{/is}}
   <head>
-    <title>{{meta_title}}</title>
+    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}<title>{{meta_title}}</title>{{/is}}
     <meta charset='utf-8' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <meta name="robots" content="max-image-preview:large">
     <link href='https://fonts.googleapis.com' rel='preconnect' />
     <link href='https://fonts.gstatic.com' rel='preconnect' crossorigin='anonymous' />
-    <link href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' rel='stylesheet' />
+    <link rel='preload' as='style' href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' rel='stylesheet' /></noscript>
     <script type='text/javascript'>
       !function(o,c) { var n = c.documentElement, t = " w-mod-"; n.className +=
       t + "js", ("ontouchstart" in o||o.DocumentTouch && c instanceof
@@ -25,27 +26,105 @@
     {{#is "home"}}
     <link rel="alternate" hreflang="es" href="https://www.421.news/es/" />
     <link rel="alternate" hreflang="en" href="https://www.421.news/en/" />
+    <link rel="alternate" hreflang="zh" href="https://www.421.news/zh/" />
+    <link rel="alternate" hreflang="ja" href="https://www.421.news/ja/" />
+    <link rel="alternate" hreflang="ko" href="https://www.421.news/ko/" />
+    <link rel="alternate" hreflang="tr" href="https://www.421.news/tr/" />
+    <link rel="alternate" hreflang="pt" href="https://www.421.news/pt/" />
+    <link rel="alternate" hreflang="fr" href="https://www.421.news/fr/" />
     <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
     {{/is}}
     {{!-- Server-side hreflang: post self-referential --}}
     {{#is "post"}}{{#post}}{{#has tag="#en"}}
     <link rel="alternate" hreflang="en" href="{{url absolute=true}}" />
+    {{else}}{{#has tag="#zh"}}
+    <link rel="alternate" hreflang="zh" href="{{url absolute=true}}" />
+    {{else}}{{#has tag="#ja"}}
+    <link rel="alternate" hreflang="ja" href="{{url absolute=true}}" />
+    {{else}}{{#has tag="#ko"}}
+    <link rel="alternate" hreflang="ko" href="{{url absolute=true}}" />
+    {{else}}{{#has tag="#tr"}}
+    <link rel="alternate" hreflang="tr" href="{{url absolute=true}}" />
+    {{else}}{{#has tag="#pt"}}
+    <link rel="alternate" hreflang="pt" href="{{url absolute=true}}" />
+    {{else}}{{#has tag="#fr"}}
+    <link rel="alternate" hreflang="fr" href="{{url absolute=true}}" />
     {{else}}
     <link rel="alternate" hreflang="es" href="{{url absolute=true}}" />
-    {{/has}}{{/post}}{{/is}}
+    {{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{/is}}
     <script>
       (function() {
-        // Set lang for collection pages (posts handled server-side)
-        if (window.location.pathname.startsWith('/en/')) {
-          document.documentElement.lang = 'en';
+        var p = window.location.pathname;
+        var langs = ['en','zh','ja','ko','tr','pt','fr'];
+        for (var i = 0; i < langs.length; i++) {
+          if (p.startsWith('/' + langs[i] + '/')) {
+            document.documentElement.lang = langs[i];
+            break;
+          }
         }
       })();
     </script>
+    <link rel="alternate" type="application/rss+xml" title="421 — Español" href="https://www.421.news/es/rss/" />
+    <link rel="alternate" type="application/rss+xml" title="421 — English" href="https://www.421.news/en/rss/" />
     {{ghost_head}}
-    {{!-- SEO fixes: publisher logo, brand suffix, noindex landing --}}
+    {{!-- Preload feature image on post pages (LCP element) --}}
+    {{#is "post"}}{{#post}}{{#if feature_image}}
+    <link rel="preload" as="image" href="{{feature_image}}" fetchpriority="high" />
+    {{/if}}{{/post}}{{/is}}
+    {{!-- Critical CSS (render-blocking) --}}
+    <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/globals.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/site-nav.css"}}' rel='stylesheet' />
+    <link href='{{asset "css/index.css"}}' rel='stylesheet' />
+    {{!-- Non-critical CSS (async) --}}
+    <link rel='preload' as='style' href='{{asset "css/progress-bar.css"}}' onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel='preload' as='style' href='{{asset "css/file-browser.css"}}' onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />
+      <link href='{{asset "css/file-browser.css"}}' rel='stylesheet' />
+    </noscript>
+    {{!-- Conditional desktop CSS + landing page redirect --}}
+    <script>
+    if (window.innerWidth >= 1024) {
+      var wmc = document.createElement('link');
+      wmc.rel = 'stylesheet';
+      wmc.href = '{{asset "css/window-manager.css"}}';
+      document.head.appendChild(wmc);
+    }
+    if (window.location.pathname === '/') {
+      if (!(navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent))) {
+        var bl = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        var bc = bl.split('-')[0];
+        var langMap = { en:'/en/', zh:'/zh/', ja:'/ja/', ko:'/ko/', tr:'/tr/', pt:'/pt/', fr:'/fr/' };
+        window.location.replace(langMap[bc] || '/es/');
+      }
+    }
+    </script>
+    <script src="{{asset "js/render-card.js"}}"></script>
+  </head>
+  <body class='{{body_class}}'>
+    {{{body}}}
+
+    {{> "sticky-subscribe-mobile-button"}}
+    <script>
+      (function() {
+        var p = window.location.pathname;
+        var btn = document.getElementById('hero-mobile-subscribe-button');
+        if (!btn) return;
+        if (p.startsWith('/en/')) {
+          btn.textContent = "Subscribe";
+          btn.href = "/en/subscribe/";
+        } else if (/^\/(zh|ja|ko|tr|pt|fr)\//.test(p)) {
+          btn.textContent = "Subscribe";
+          btn.href = p.match(/^\/([a-z]{2})\//)[0] + 'subscribe/';
+        }
+      })();
+    </script>
+    {{> "window-manager"}}
+    {{ghost_foot}}
+    {{!-- SEO fix: publisher logo in Ghost's Article JSON-LD (deferred — non-render-blocking) --}}
     <script>
     (function() {
-      // Fix publisher logo in Ghost's Article JSON-LD: add width/height (GSC structured data error)
       var ldScripts = document.querySelectorAll('script[type="application/ld+json"]');
       for (var i = 0; i < ldScripts.length; i++) {
         try {
@@ -58,61 +137,8 @@
           }
         } catch(e) {}
       }
-      // Brand suffix in title tags (posts, pages, author — not homepage/tag which already have it)
-      var t = document.title, p = window.location.pathname;
-      if (t && t.indexOf('421.news') === -1 && p !== '/' && p !== '/es/' && p !== '/en/') {
-        document.title = t + ' | 421.news';
-      }
-      // Noindex landing page (JS redirect, no real content)
-      if (p === '/') {
-        var m = document.createElement('meta');
-        m.name = 'robots'; m.content = 'noindex';
-        document.head.appendChild(m);
-      }
     })();
     </script>
-    {{!-- Cross-language hreflang now server-side via codeinjection_head (rendered by ghost_head) --}}
-    <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
-    <link href='{{asset "css/globals.css"}}' rel='stylesheet' />
-    <link href='{{asset "css/site-nav.css"}}' rel='stylesheet' />
-    <link href='{{asset "css/index.css"}}' rel='stylesheet' />
-    <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />
-    <link href='{{asset "css/file-browser.css"}}' rel='stylesheet' />
-    {{!-- Conditional desktop CSS + landing page redirect --}}
-    <script>
-    if (window.innerWidth >= 1024) {
-      var wmc = document.createElement('link');
-      wmc.rel = 'stylesheet';
-      wmc.href = '{{asset "css/window-manager.css"}}';
-      document.head.appendChild(wmc);
-    }
-    if (window.location.pathname === '/') {
-      if (!(navigator.webdriver || /bot|crawl|spider|slurp|googlebot|bingbot|yandex/i.test(navigator.userAgent))) {
-        var lang = (navigator.language || navigator.userLanguage || '').toLowerCase().split('-')[0];
-        window.location.replace(lang === 'en' ? '/en/' : '/es/');
-      }
-    }
-    </script>
-    <script src="{{asset "js/render-card.js"}}"></script>
-  </head>
-  <body class='{{body_class}}'>
-    {{{body}}}
-
-    {{> "sticky-subscribe-mobile-button"}}
-    <script>
-      (function() {
-        // Update sticky subscribe button text for English pages
-        if (window.location.pathname.startsWith('/en/')) {
-          const subscribeButton = document.getElementById('hero-mobile-subscribe-button');
-          if (subscribeButton) {
-            subscribeButton.textContent = "Subscribe";
-            subscribeButton.href = "/en/subscribe/";
-          }
-        }
-      })();
-    </script>
-    {{> "window-manager"}}
-    {{ghost_foot}}
     <script src='{{asset "js/udesly-ghost.min.js"}}' defer></script>
     <script>
       // Remove Ghost Portal subscribe CTA from bottom of posts
@@ -126,6 +152,7 @@
       })();
     </script>
     <script src="{{asset "js/light-mode.js"}}" defer></script>
+    <script src="{{asset "js/lang-selector.js"}}" defer></script>
     <script src="{{asset "js/hide-show-nav.js"}}" defer></script>
     <script src="{{asset "js/file-browser.js"}}" defer></script>
     <script>
