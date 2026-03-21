@@ -1881,6 +1881,9 @@ footer {
 body.light-mode .home-ruta-tesis {
   color: rgba(0, 0, 0, 0.85);
 }
+.bg-gradient .home-ruta-tesis {
+  color: rgba(0, 0, 0, 0.85);
+}
 
 .home-ruta-cta {
   text-align: center;
