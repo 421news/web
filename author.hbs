@@ -1,10 +1,14 @@
 {{!< default}}
 
 {{#author}}
-{{!-- SEO: noindex authors with fewer than 3 posts (thin pages) --}}
-{{#get "posts" limit="1" filter="authors:{{slug}}" page="3"}}
+{{!-- SEO: noindex thin authors (<3 posts). Uses {{#author}} which is valid inside author.hbs.
+     Meta tag in body is processed by Google (confirmed by John Mueller). --}}
+{{#get "posts" limit="2" filter="authors:{{slug}}" as |authorPosts authorPagination|}}
+  {{#unless authorPagination.next}}
+<meta name="robots" content="noindex, follow">
+  {{/unless}}
 {{else}}
-<script>var m=document.createElement('meta');m.name='robots';m.content='noindex, follow';document.head.appendChild(m);</script>
+<meta name="robots" content="noindex, follow">
 {{/get}}
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.421.news/es/"},{"@type":"ListItem","position":2,"name":"{{name}}"}]}
@@ -57,40 +61,145 @@
               <div class="pv-huge">
                 <div class="filters_wrapper">
                   <div class="w-embed">
-                    <h2>Escrito por {{name}}</h2>
+                    <h2 id="author-posts-title">Escrito por {{name}}</h2>
+                  </div>
+                  <div class="author-lang-filter" id="author-lang-filter">
+                    <button class="lang-filter-btn is-active" data-lang="es">&#x1F1E6;&#x1F1F7; ES</button>
+                    <button class="lang-filter-btn" data-lang="en">&#x1F1FA;&#x1F1F8; EN</button>
+                    <button class="lang-filter-btn" data-lang="pt">&#x1F1E7;&#x1F1F7; PT</button>
+                    <button class="lang-filter-btn" data-lang="fr">&#x1F1EB;&#x1F1F7; FR</button>
+                    <button class="lang-filter-btn" data-lang="zh">&#x1F1E8;&#x1F1F3; ZH</button>
+                    <button class="lang-filter-btn" data-lang="ja">&#x1F1EF;&#x1F1F5; JA</button>
+                    <button class="lang-filter-btn" data-lang="ko">&#x1F1F0;&#x1F1F7; KO</button>
+                    <button class="lang-filter-btn" data-lang="tr">&#x1F1F9;&#x1F1F7; TR</button>
                   </div>
                 </div>
-                {{#get "posts"
-                  include="tags,authors"
-                  limit="24"
-                  filter="tag:-'hash-en'+primary_author:{{slug}}"
-                  order="published_at desc"
-                  as |posts pagination|
-                }}
-                  <div class="post-grid w-dyn-list">
-                    {{#if posts}}
-                      <div role="list" class="post-cols w-dyn-items last-posts-section">
-                        {{#foreach posts}}
-                          {{> "post-card"}}
-                        {{/foreach}}
-                      </div>
-                    {{/if}}
+                <div class="post-grid w-dyn-list">
+                  <div role="list" class="post-cols w-dyn-items last-posts-section" id="author-posts-grid">
                   </div>
-                  {{#if pagination.next}}
-                    <button class="button" id="load-more-author" style="display: block; margin: auto; margin-top: 50px;">Cargar m&aacute;s</button>
-                  {{/if}}
-                {{/get}}
+                </div>
+                <button class="button" id="load-more-author" style="display: none; margin: auto; margin-top: 50px;">Cargar m&aacute;s</button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-{{/author}}
     <!-- FILE BROWSER NAVIGATION -->
     <div class="global-container pt-small pb-small">
       {{> "file-browser"}}
     </div>
+  </div>
+{{/author}}
 {{> "site-footer"}}
-<script src="{{asset "js/pagination.js"}}" defer></script>
+<script>
+(function() {
+  var API_KEY = '420da6f85b5cc903b347de9e33';
+  var authorSlug = location.pathname.match(/\/author\/([^/]+)/);
+  if (!authorSlug) return;
+  authorSlug = authorSlug[1];
+
+  var LANG_FILTERS = {
+    es: { tag: '-hash-en+-hash-zh+-hash-ja+-hash-ko+-hash-tr+-hash-pt+-hash-fr', title: 'Escrito por ' },
+    en: { tag: 'hash-en', title: 'Written by ' },
+    pt: { tag: 'hash-pt', title: 'Escrito por ' },
+    fr: { tag: 'hash-fr', title: '\u00c9crit par ' },
+    zh: { tag: 'hash-zh', title: '\u4f5c\u8005\uff1a' },
+    ja: { tag: 'hash-ja', title: '\u8457\u8005\uff1a' },
+    ko: { tag: 'hash-ko', title: '\uc800\uc790: ' },
+    tr: { tag: 'hash-tr', title: 'Yazan: ' }
+  };
+
+  var grid = document.getElementById('author-posts-grid');
+  var btn = document.getElementById('load-more-author');
+  var titleEl = document.getElementById('author-posts-title');
+  var authorName = titleEl ? titleEl.textContent.replace('Escrito por ', '') : '';
+  var currentLang = 'es';
+  var nextPage = null;
+  var loading = false;
+
+  function buildFilter(lang) {
+    var f = 'primary_author:' + authorSlug + '+tag:-hash-satelite';
+    var parts = LANG_FILTERS[lang].tag.split('+');
+    parts.forEach(function(p) { f += '+tag:' + p; });
+    return f;
+  }
+
+  function buildURL(lang, page) {
+    return '/ghost/api/content/posts/?key=' + API_KEY +
+      '&page=' + page +
+      '&limit=24&include=authors,tags&order=published_at%20desc' +
+      '&filter=' + encodeURIComponent(buildFilter(lang));
+  }
+
+  function fetchAndRender(lang, page, append) {
+    if (loading) return;
+    loading = true;
+    btn.disabled = true;
+    btn.textContent = lang === 'es' ? 'Cargando...' : 'Loading...';
+
+    fetch(buildURL(lang, page), { headers: { 'Accept-Version': 'v5.0' } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var posts = data.posts || [];
+        var html = posts.map(window.renderCard).join('');
+        if (append) {
+          grid.insertAdjacentHTML('beforeend', html);
+        } else {
+          grid.innerHTML = html;
+        }
+        var pag = data.meta && data.meta.pagination;
+        nextPage = pag ? pag.next : null;
+        if (nextPage) {
+          btn.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = (lang === 'es') ? 'Cargar m\u00e1s' : 'Load more';
+        } else {
+          btn.style.display = 'none';
+        }
+        if (!append && posts.length === 0) {
+          grid.innerHTML = '<p style="opacity:0.5;padding:2rem 0;">No posts in this language.</p>';
+        }
+      })
+      .catch(function() { btn.disabled = false; })
+      .then(function() { loading = false; });
+  }
+
+  // Language filter buttons
+  var buttons = document.querySelectorAll('.lang-filter-btn');
+  buttons.forEach(function(b) {
+    b.addEventListener('click', function() {
+      var lang = b.getAttribute('data-lang');
+      if (lang === currentLang) return;
+      currentLang = lang;
+      buttons.forEach(function(x) { x.classList.remove('is-active'); });
+      b.classList.add('is-active');
+      if (titleEl) titleEl.textContent = LANG_FILTERS[lang].title + authorName;
+      fetchAndRender(lang, 1, false);
+    });
+  });
+
+  // Load more
+  btn.addEventListener('click', function() {
+    if (nextPage) fetchAndRender(currentLang, nextPage, true);
+  });
+
+  // Detect referrer language
+  var ref = document.referrer;
+  var refMatch = ref && ref.match(/\/([a-z]{2})\//);
+  var initLang = (refMatch && LANG_FILTERS[refMatch[1]]) ? refMatch[1] : 'es';
+
+  // Activate correct button
+  if (initLang !== 'es') {
+    buttons.forEach(function(b) {
+      b.classList.remove('is-active');
+      if (b.getAttribute('data-lang') === initLang) b.classList.add('is-active');
+    });
+    currentLang = initLang;
+    if (titleEl) titleEl.textContent = LANG_FILTERS[initLang].title + authorName;
+  }
+
+  // Initial load
+  fetchAndRender(currentLang, 1, false);
+})();
+</script>

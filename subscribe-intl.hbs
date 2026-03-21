@@ -1,0 +1,156 @@
+{{!< default}}
+
+    <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
+    <div class="page-wrapper">
+      {{> "general-styling"}}
+      {{> "site-nav-intl"}}
+
+      <div class="sub-page">
+        <div class="sub-container">
+
+          <div id="sub-section-plan">
+
+            <div class="sub-hero">
+              <h1 class="sub-hero-title">Join us!</h1>
+              <p class="sub-hero-subtitle">421 is an intellectual orientation outlet for navigating a world saturated with technology, images, and discourse.</p>
+              <p class="sub-hero-callout">Your financial support is essential for the project's survival.</p>
+            </div>
+            <hr class="sub-gradient-divider">
+
+            <div class="sub-card" id="sub-plan-card">
+              <div class="plan-toggle">
+                <button class="plan-toggle-btn" id="toggle-monthly">Monthly</button>
+                <button class="plan-toggle-btn active" id="toggle-yearly">
+                  Annual
+                  <span class="toggle-badge">-17%</span>
+                </button>
+              </div>
+
+              <div id="plan-price">
+                <div class="plan-price-row">
+                  <span class="plan-price-big" id="price-amount">...</span>
+                  <span class="plan-price-period" id="price-period">USD / year</span>
+                </div>
+                <div class="plan-price-detail" id="price-detail"></div>
+              </div>
+
+              <ul class="plan-benefits">
+                <li>Monthly premium newsletter</li>
+                <li>Digital edition of Revista 421</li>
+                <li>Early access to articles</li>
+                <li>AFK event invitations</li>
+                <li>Wizards community access</li>
+              </ul>
+
+              <button class="btn-gradient" id="btn-suscribirme">Subscribe</button>
+            </div>
+
+            <div class="free-tier-link">
+              <p>Just want to receive articles by email?</p>
+              <button class="btn-outline" id="btn-free">Sign up for free</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {{> "site-footer"}}
+    </div>
+
+    <script defer>
+      document.addEventListener('DOMContentLoaded', function() {
+        var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+        var lang = m ? m[1] : 'en';
+
+        var i18n = {
+          en: { title:'Join us!', sub:'421 is an intellectual orientation outlet for navigating a world saturated with technology, images, and discourse.', callout:'Your financial support is essential for the project\u2019s survival.', monthly:'Monthly', annual:'Annual', year:'USD / year', month:'USD / month', save:'save 2 months', nocommit:'No commitment, cancel anytime', benefits:['Monthly premium newsletter','Digital edition of Revista 421','Early access to articles','AFK event invitations','Wizards community access'], btn:'Subscribe', free_q:'Just want to receive articles by email?', free_btn:'Sign up for free' },
+          pt: { title:'Junte-se a n\u00f3s!', sub:'421 \u00e9 um meio de orienta\u00e7\u00e3o intelectual para navegar um mundo saturado de tecnologia, imagens e discurso.', callout:'Seu apoio financeiro \u00e9 essencial para a sobreviv\u00eancia do projeto.', monthly:'Mensal', annual:'Anual', year:'USD / ano', month:'USD / m\u00eas', save:'economize 2 meses', nocommit:'Sem compromisso, cancele quando quiser', benefits:['Newsletter premium mensal','Edi\u00e7\u00e3o digital da Revista 421','Acesso antecipado a artigos','Convites para eventos AFK','Acesso \u00e0 comunidade Wizards'], btn:'Assinar', free_q:'Quer apenas receber artigos por email?', free_btn:'Cadastre-se gr\u00e1tis' },
+          fr: { title:'Rejoignez-nous\u00a0!', sub:'421 est un m\u00e9dia d\u2019orientation intellectuelle pour naviguer un monde satur\u00e9 de technologie, d\u2019images et de discours.', callout:'Votre soutien financier est essentiel \u00e0 la survie du projet.', monthly:'Mensuel', annual:'Annuel', year:'USD / an', month:'USD / mois', save:'\u00e9conomisez 2 mois', nocommit:'Sans engagement, annulez quand vous voulez', benefits:['Newsletter premium mensuelle','\u00c9dition num\u00e9rique de Revista 421','Acc\u00e8s anticip\u00e9 aux articles','Invitations aux \u00e9v\u00e9nements AFK','Acc\u00e8s \u00e0 la communaut\u00e9 Wizards'], btn:'S\u2019abonner', free_q:'Vous voulez juste recevoir les articles par email\u00a0?', free_btn:'Inscription gratuite' },
+          zh: { title:'\u52a0\u5165\u6211\u4eec\uff01', sub:'421\u662f\u4e00\u4e2a\u667a\u8bc6\u5bfc\u822a\u5a92\u4f53\uff0c\u5e2e\u52a9\u4f60\u5728\u5145\u65a5\u79d1\u6280\u3001\u56fe\u50cf\u548c\u8bdd\u8bed\u7684\u4e16\u754c\u4e2d\u5bfb\u627e\u65b9\u5411\u3002', callout:'\u60a8\u7684\u8d22\u52a1\u652f\u6301\u5bf9\u9879\u76ee\u7684\u751f\u5b58\u81f3\u5173\u91cd\u8981\u3002', monthly:'\u6708\u4ed8', annual:'\u5e74\u4ed8', year:'USD / \u5e74', month:'USD / \u6708', save:'\u8282\u77012\u4e2a\u6708', nocommit:'\u65e0\u627f\u8bfa\uff0c\u968f\u65f6\u53d6\u6d88', benefits:['\u6bcf\u6708\u4f18\u8d28\u901a\u8baf','Revista 421\u6570\u5b57\u7248','\u6587\u7ae0\u62a2\u5148\u8bfb','AFK\u6d3b\u52a8\u9080\u8bf7','Wizards\u793e\u533a\u8bbf\u95ee\u6743'], btn:'\u8ba2\u9605', free_q:'\u53ea\u60f3\u901a\u8fc7\u90ae\u4ef6\u63a5\u6536\u6587\u7ae0\uff1f', free_btn:'\u514d\u8d39\u6ce8\u518c' },
+          ja: { title:'\u53c2\u52a0\u3057\u3088\u3046\uff01', sub:'421\u306f\u30c6\u30af\u30ce\u30ed\u30b8\u30fc\u3001\u30a4\u30e1\u30fc\u30b8\u3001\u8a00\u8aac\u306b\u6e80\u3061\u305f\u4e16\u754c\u3092\u30ca\u30d3\u30b2\u30fc\u30c8\u3059\u308b\u305f\u3081\u306e\u77e5\u7684\u30ac\u30a4\u30c9\u30e1\u30c7\u30a3\u30a2\u3067\u3059\u3002', callout:'\u7686\u69d8\u306e\u8ca1\u653f\u7684\u652f\u63f4\u304c\u30d7\u30ed\u30b8\u30a7\u30af\u30c8\u306e\u5b58\u7d9a\u306b\u4e0d\u53ef\u6b20\u3067\u3059\u3002', monthly:'\u6708\u984d', annual:'\u5e74\u984d', year:'USD / \u5e74', month:'USD / \u6708', save:'2\u30f6\u6708\u5206\u304a\u5f97', nocommit:'\u7e1b\u308a\u306a\u3057\u3001\u3044\u3064\u3067\u3082\u89e3\u7d04\u53ef\u80fd', benefits:['\u6708\u520a\u30d7\u30ec\u30df\u30a2\u30e0\u30cb\u30e5\u30fc\u30b9\u30ec\u30bf\u30fc','Revista 421\u30c7\u30b8\u30bf\u30eb\u7248','\u8a18\u4e8b\u3078\u306e\u65e9\u671f\u30a2\u30af\u30bb\u30b9','AFK\u30a4\u30d9\u30f3\u30c8\u62db\u5f85','Wizards\u30b3\u30df\u30e5\u30cb\u30c6\u30a3\u30a2\u30af\u30bb\u30b9'], btn:'\u8cfc\u8aad', free_q:'\u30e1\u30fc\u30eb\u3067\u8a18\u4e8b\u3092\u53d7\u3051\u53d6\u308b\u3060\u3051\uff1f', free_btn:'\u7121\u6599\u767b\u9332' },
+          ko: { title:'\ud568\uaed8\ud558\uc138\uc694!', sub:'421\uc740 \uae30\uc220, \uc774\ubbf8\uc9c0, \ub2f4\ub860\uc73c\ub85c \uac00\ub4dd \ucc2c \uc138\uc0c1\uc744 \ud0d0\uc0c9\ud558\uae30 \uc704\ud55c \uc9c0\uc801 \uac00\uc774\ub4dc \ubbf8\ub514\uc5b4\uc785\ub2c8\ub2e4.', callout:'\uc5ec\ub7ec\ubd84\uc758 \uc7ac\uc815\uc801 \uc9c0\uc6d0\uc774 \ud504\ub85c\uc81d\ud2b8 \uc0dd\uc874\uc5d0 \ud544\uc218\uc801\uc785\ub2c8\ub2e4.', monthly:'\uc6d4\uac04', annual:'\uc5f0\uac04', year:'USD / \ub144', month:'USD / \uc6d4', save:'2\uac1c\uc6d4 \uc808\uc57d', nocommit:'\uc57d\uc815 \uc5c6\uc74c, \uc5b8\uc81c\ub4e0 \ucde8\uc18c \uac00\ub2a5', benefits:['\uc6d4\uac04 \ud504\ub9ac\ubbf8\uc5c4 \ub274\uc2a4\ub808\ud130','Revista 421 \ub514\uc9c0\ud138 \ud310','\uae00 \uc870\uae30 \uc811\uadfc','AFK \uc774\ubca4\ud2b8 \ucd08\ub300','Wizards \ucee4\ubba4\ub2c8\ud2f0 \uc811\uadfc'], btn:'\uad6c\ub3c5', free_q:'\uc774\uba54\uc77c\ub85c \uae00\ub9cc \ubc1b\uace0 \uc2f6\uc73c\uc138\uc694?', free_btn:'\ubb34\ub8cc \uac00\uc785' },
+          tr: { title:'Bize kat\u0131l\u0131n!', sub:'421, teknoloji, g\u00f6r\u00fcnt\u00fc ve s\u00f6ylemle doymu\u015f bir d\u00fcnyada yol bulmak i\u00e7in entelekt\u00fcel bir y\u00f6nelim medyas\u0131d\u0131r.', callout:'Mali deste\u011finiz projenin hayatta kalmas\u0131 i\u00e7in \u00e7ok \u00f6nemlidir.', monthly:'Ayl\u0131k', annual:'Y\u0131ll\u0131k', year:'USD / y\u0131l', month:'USD / ay', save:'2 ay tasarruf', nocommit:'Taahh\u00fct yok, istedi\u011finiz zaman iptal edin', benefits:['Ayl\u0131k premium b\u00fclten','Revista 421 dijital bask\u0131','Makalelere erken eri\u015fim','AFK etkinlik davetleri','Wizards toplulu\u011fu eri\u015fimi'], btn:'Abone ol', free_q:'Sadece makaleleri e-posta ile almak m\u0131 istiyorsunuz?', free_btn:'\u00dccretsiz kay\u0131t' }
+        };
+
+        var t = i18n[lang] || i18n.en;
+
+        // Apply translations
+        document.querySelector('.sub-hero-title').textContent = t.title;
+        document.querySelector('.sub-hero-subtitle').textContent = t.sub;
+        document.querySelector('.sub-hero-callout').textContent = t.callout;
+        document.getElementById('toggle-monthly').childNodes[0].textContent = t.monthly;
+        document.getElementById('toggle-yearly').childNodes[0].textContent = t.annual + ' ';
+        document.getElementById('btn-suscribirme').textContent = t.btn;
+        document.querySelector('.free-tier-link p').textContent = t.free_q;
+        document.getElementById('btn-free').textContent = t.free_btn;
+        var benefitItems = document.querySelectorAll('.plan-benefits li');
+        for (var i = 0; i < benefitItems.length && i < t.benefits.length; i++) {
+          benefitItems[i].textContent = t.benefits[i];
+        }
+
+        var currentCadence = 'yearly';
+        var tierData = null;
+
+        fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33', { headers: { 'Accept-Version': 'v5.0' } })
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            var tiers = data.tiers || [];
+            for (var i = 0; i < tiers.length; i++) {
+              if (tiers[i].type === 'paid' && tiers[i].active) {
+                tierData = tiers[i];
+                break;
+              }
+            }
+            if (tierData) updatePriceDisplay();
+          });
+
+        function formatPrice(cents) {
+          var dollars = cents / 100;
+          return '$' + (dollars % 1 === 0 ? dollars : dollars.toFixed(2));
+        }
+
+        function updatePriceDisplay() {
+          if (!tierData) return;
+          var amountEl = document.getElementById('price-amount');
+          var periodEl = document.getElementById('price-period');
+          var detailEl = document.getElementById('price-detail');
+
+          if (currentCadence === 'yearly') {
+            amountEl.textContent = formatPrice(tierData.yearly_price);
+            periodEl.textContent = t.year;
+            var monthlyTotal = tierData.monthly_price * 12;
+            detailEl.innerHTML = '<span class="striked">' + formatPrice(monthlyTotal) + '</span> \u2014 ' + t.save;
+          } else {
+            amountEl.textContent = formatPrice(tierData.monthly_price);
+            periodEl.textContent = t.month;
+            detailEl.textContent = t.nocommit;
+          }
+        }
+
+        var toggleM = document.getElementById('toggle-monthly');
+        var toggleY = document.getElementById('toggle-yearly');
+
+        toggleM.addEventListener('click', function() {
+          currentCadence = 'monthly';
+          toggleM.classList.add('active');
+          toggleY.classList.remove('active');
+          updatePriceDisplay();
+        });
+
+        toggleY.addEventListener('click', function() {
+          currentCadence = 'yearly';
+          toggleY.classList.add('active');
+          toggleM.classList.remove('active');
+          updatePriceDisplay();
+        });
+
+        document.getElementById('btn-suscribirme').addEventListener('click', function() {
+          if (!tierData) return;
+          window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
+        });
+
+        document.getElementById('btn-free').addEventListener('click', function() {
+          window.location.hash = '#/portal/signup/free';
+        });
+      });
+    </script>

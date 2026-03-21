@@ -13,16 +13,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var authorMatch = path.match(/\/author\/([^/]+)$/);
     var limit, filter;
 
+    var langMatch = path.match(/^\/(zh|ja|ko|tr|pt|fr)/);
+
     if (authorMatch) {
         limit = 24;
-        filter = 'tag:-hash-en+tag:-hash-satelite+primary_author:' + authorMatch[1];
+        var esExclude = 'tag:-hash-en+tag:-hash-zh+tag:-hash-ja+tag:-hash-ko+tag:-hash-tr+tag:-hash-pt+tag:-hash-fr';
+        filter = esExclude + '+tag:-hash-satelite+primary_author:' + authorMatch[1];
+    } else if (langMatch) {
+        // Intl home pages use their own pagination in last-posts-intl.hbs
+        return;
     } else if (tagMatch) {
         limit = 15;
-        var langTag = tagMatch[1] === 'en' ? 'tag:hash-en' : 'tag:-hash-en';
+        var langTag = tagMatch[1] === 'en' ? 'tag:hash-en' : 'tag:-hash-en+tag:-hash-zh+tag:-hash-ja+tag:-hash-ko+tag:-hash-tr+tag:-hash-pt+tag:-hash-fr';
         filter = 'tag:' + tagMatch[2] + '+' + langTag + '+tag:-hash-satelite';
     } else {
         limit = 20;
-        filter = isEnglish ? 'tag:hash-en+tag:-hash-satelite' : 'tag:-hash-en+tag:-hash-satelite';
+        var esExcludeAll = 'tag:-hash-en+tag:-hash-zh+tag:-hash-ja+tag:-hash-ko+tag:-hash-tr+tag:-hash-pt+tag:-hash-fr';
+        filter = isEnglish ? 'tag:hash-en+tag:-hash-satelite' : esExcludeAll + '+tag:-hash-satelite';
     }
 
     var nextPage = 2;

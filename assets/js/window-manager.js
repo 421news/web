@@ -280,7 +280,7 @@
         '&limit=all&include=tags,authors' +
         '&fields=title,slug,feature_image,published_at';
 
-      fetch(url)
+      fetch(url, { headers: { 'Accept-Version': 'v5.0' } })
         .then(function(res) { return res.json(); })
         .then(function(data) {
           var posts = data.posts || [];
@@ -433,6 +433,10 @@
 
   // ---- Close Window ----
   WM.closeWindow = function(win) {
+    // Cleanup document-level event listeners
+    if (win._wmCleanupDrag) win._wmCleanupDrag();
+    if (win._wmCleanupResize) win._wmCleanupResize();
+
     var winData = getWinData(win);
     if (winData) {
       var item = document.querySelector('.wm-taskbar-item[data-win-id="' + winData.id + '"]');
@@ -486,7 +490,7 @@
     var url = API_URL + '/posts/slug/' + encodeURIComponent(postSlug) +
       '/?key=' + API_KEY + '&include=authors';
 
-    fetch(url)
+    fetch(url, { headers: { 'Accept-Version': 'v5.0' } })
       .then(function(res) { return res.json(); })
       .then(function(data) {
         var post = data.posts && data.posts[0];
@@ -597,6 +601,14 @@
     handle.addEventListener('touchstart', onStart, { passive: false });
     document.addEventListener('touchmove', onMove, { passive: false });
     document.addEventListener('touchend', onEnd);
+
+    // Store cleanup function on the window element
+    win._wmCleanupDrag = function() {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onEnd);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+    };
   }
 
   // ---- Resize Logic ----
@@ -627,6 +639,14 @@
     handle.addEventListener('touchstart', onStart, { passive: false });
     document.addEventListener('touchmove', onMove, { passive: false });
     document.addEventListener('touchend', onEnd);
+
+    // Store cleanup function on the window element
+    win._wmCleanupResize = function() {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onEnd);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onEnd);
+    };
   }
 
   // ---- Helpers ----

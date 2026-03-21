@@ -34,7 +34,7 @@
 
             // Fetch all related posts in parallel
             return Promise.all(related.map(function (s) {
-                return fetch(API_BASE + '/posts/slug/' + s + '/?key=' + CONTENT_KEY + '&include=tags,authors')
+                return fetch(API_BASE + '/posts/slug/' + s + '/?key=' + CONTENT_KEY + '&include=tags,authors', { headers: { 'Accept-Version': 'v5.0' } })
                     .then(function (r) { return r.json(); })
                     .then(function (d) { return d.posts && d.posts[0]; })
                     .catch(function () { return null; });

@@ -1,0 +1,48 @@
+{{!< default}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-intl"}}
+
+  <div class="rutas-page">
+    <div class="global-container">
+
+      <!-- Hero -->
+      <div class="rutas-hero">
+        <h1 class="rutas-hero-title" id="rutas-intl-title">Reading Paths</h1>
+        <p class="rutas-hero-subtitle" id="rutas-intl-subtitle">350 texts is an archive. 7 curated paths are a map. Each route is a sequence of texts that build an idea. Pick the one that calls you.</p>
+      </div>
+      <hr class="rutas-gradient-divider">
+
+      <!-- Rutas container: JS will populate this -->
+      <div id="rutas-container" data-json="{{asset "data/rutas.json"}}"></div>
+
+    </div>
+  </div>
+
+  {{> "site-footer"}}
+</div>
+
+<script>
+(function() {
+  var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+  var lang = m ? m[1] : 'en';
+  var i18n = {
+    pt: { title: 'Rotas de leitura', sub: '350 textos s\u00e3o um arquivo. 7 caminhos curados s\u00e3o um mapa. Cada rota \u00e9 uma sequ\u00eancia de textos que constr\u00f3i uma ideia. Escolha a que te chamar.' },
+    fr: { title: 'Parcours de lecture', sub: '350 textes forment une archive. 7 parcours cur\u00e9s forment une carte. Chaque parcours est une s\u00e9quence de textes qui construit une id\u00e9e. Choisissez celui qui vous appelle.' },
+    zh: { title: '\u9605\u8bfb\u8def\u7ebf', sub: '350\u7bc7\u6587\u7ae0\u662f\u4e00\u4e2a\u6863\u6848\u3002 7\u6761\u7cbe\u9009\u8def\u7ebf\u662f\u4e00\u5f20\u5730\u56fe\u3002\u6bcf\u6761\u8def\u7ebf\u662f\u4e00\u7cfb\u5217\u6784\u5efa\u601d\u60f3\u7684\u6587\u7ae0\u3002\u9009\u62e9\u5438\u5f15\u4f60\u7684\u90a3\u6761\u3002' },
+    ja: { title: '\u8aad\u66f8\u30eb\u30fc\u30c8', sub: '350\u306e\u30c6\u30ad\u30b9\u30c8\u306f\u30a2\u30fc\u30ab\u30a4\u30d6\u3002 7\u3064\u306e\u53b3\u9078\u30eb\u30fc\u30c8\u306f\u5730\u56f3\u3002\u5404\u30eb\u30fc\u30c8\u306f\u30a2\u30a4\u30c7\u30a2\u3092\u69cb\u7bc9\u3059\u308b\u30c6\u30ad\u30b9\u30c8\u306e\u9023\u7d9a\u3067\u3059\u3002\u60f9\u304b\u308c\u308b\u3082\u306e\u3092\u9078\u3093\u3067\u304f\u3060\u3055\u3044\u3002' },
+    ko: { title: '\ub9ac\ub529 \ub8e8\ud2b8', sub: '350\uac1c\uc758 \uae00\uc740 \uc544\uce74\uc774\ube0c\uc785\ub2c8\ub2e4. 7\uac1c\uc758 \ud050\ub808\uc774\uc158 \ub8e8\ud2b8\ub294 \uc9c0\ub3c4\uc785\ub2c8\ub2e4. \uac01 \ub8e8\ud2b8\ub294 \uc544\uc774\ub514\uc5b4\ub97c \uad6c\ucd95\ud558\ub294 \ud14d\uc2a4\ud2b8 \uc2dc\ud000\uc2a4\uc785\ub2c8\ub2e4. \ub04c\ub9ac\ub294 \uac83\uc744 \uc120\ud0dd\ud558\uc138\uc694.' },
+    tr: { title: 'Okuma rotalar\u0131', sub: '350 metin bir ar\u015fivdir. 7 se\u00e7ilmi\u015f rota bir haritad\u0131r. Her rota, bir fikir in\u015fa eden metin dizisidir. Sizi \u00e7ekeni se\u00e7in.' }
+  };
+  var t = i18n[lang];
+  if (t) {
+    var titleEl = document.getElementById('rutas-intl-title');
+    var subEl = document.getElementById('rutas-intl-subtitle');
+    if (titleEl) titleEl.textContent = t.title;
+    if (subEl) subEl.textContent = t.sub;
+  }
+})();
+window.__rutasJson = fetch('{{asset "data/rutas.json"}}').then(function(r){return r.json()});
+</script>
+<script src="{{asset "js/rutas.js"}}" defer></script>

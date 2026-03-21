@@ -152,7 +152,7 @@
     })
     .catch(function () {})
     .then(function () {
-      return fetch('/ghost/api/content/pages/slug/' + PAGE_SLUG + '/?key=' + CONTENT_KEY + '&formats=html');
+      return fetch('/ghost/api/content/pages/slug/' + PAGE_SLUG + '/?key=' + CONTENT_KEY + '&formats=html', { headers: { 'Accept-Version': 'v5.0' } });
     })
     .then(function (res) { return res.json(); })
     .then(function (data) {

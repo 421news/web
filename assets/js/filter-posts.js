@@ -88,7 +88,7 @@
             btn.textContent = isEN ? 'Loading...' : 'Cargando...';
         }
 
-        fetch(url)
+        fetch(url, { headers: { 'Accept-Version': 'v5.0' } })
             .then(function (r) { return r.json(); })
             .then(function (data) {
                 var posts = data.posts || [];

@@ -52,6 +52,158 @@ routes:
     template: analytics
     data: page.analytics
 
+  # === International rutas & canon ===
+  /zh/rutas/:
+    template: rutas-intl
+    data: page.rutas
+  /zh/canon/:
+    template: canon-intl
+    data: page.canon
+  /ja/rutas/:
+    template: rutas-intl
+    data: page.rutas
+  /ja/canon/:
+    template: canon-intl
+    data: page.canon
+  /ko/rutas/:
+    template: rutas-intl
+    data: page.rutas
+  /ko/canon/:
+    template: canon-intl
+    data: page.canon
+  /tr/rutas/:
+    template: rutas-intl
+    data: page.rutas
+  /tr/canon/:
+    template: canon-intl
+    data: page.canon
+  /pt/rutas/:
+    template: rutas-intl
+    data: page.rutas
+  /pt/canon/:
+    template: canon-intl
+    data: page.canon
+  /fr/rutas/:
+    template: rutas-intl
+    data: page.rutas
+  /fr/canon/:
+    template: canon-intl
+    data: page.canon
+
+  # === International tag pages (4 primary tags x 6 langs) ===
+  /zh/tag/culture/:
+    template: tag-intl
+    data: tag.culture
+  /zh/tag/tech/:
+    template: tag-intl
+    data: tag.tech
+  /zh/tag/games/:
+    template: tag-intl
+    data: tag.games
+  /zh/tag/real-life/:
+    template: tag-intl
+    data: tag.real-life
+  /ja/tag/culture/:
+    template: tag-intl
+    data: tag.culture
+  /ja/tag/tech/:
+    template: tag-intl
+    data: tag.tech
+  /ja/tag/games/:
+    template: tag-intl
+    data: tag.games
+  /ja/tag/real-life/:
+    template: tag-intl
+    data: tag.real-life
+  /ko/tag/culture/:
+    template: tag-intl
+    data: tag.culture
+  /ko/tag/tech/:
+    template: tag-intl
+    data: tag.tech
+  /ko/tag/games/:
+    template: tag-intl
+    data: tag.games
+  /ko/tag/real-life/:
+    template: tag-intl
+    data: tag.real-life
+  /tr/tag/culture/:
+    template: tag-intl
+    data: tag.culture
+  /tr/tag/tech/:
+    template: tag-intl
+    data: tag.tech
+  /tr/tag/games/:
+    template: tag-intl
+    data: tag.games
+  /tr/tag/real-life/:
+    template: tag-intl
+    data: tag.real-life
+  /pt/tag/culture/:
+    template: tag-intl
+    data: tag.culture
+  /pt/tag/tech/:
+    template: tag-intl
+    data: tag.tech
+  /pt/tag/games/:
+    template: tag-intl
+    data: tag.games
+  /pt/tag/real-life/:
+    template: tag-intl
+    data: tag.real-life
+  /fr/tag/culture/:
+    template: tag-intl
+    data: tag.culture
+  /fr/tag/tech/:
+    template: tag-intl
+    data: tag.tech
+  /fr/tag/games/:
+    template: tag-intl
+    data: tag.games
+  /fr/tag/real-life/:
+    template: tag-intl
+    data: tag.real-life
+
+  # === International "what is 421" pages ===
+  /zh/what-is-421/:
+    template: page-intl
+    data: page.what-is-421
+  /ja/what-is-421/:
+    template: page-intl
+    data: page.what-is-421
+  /ko/what-is-421/:
+    template: page-intl
+    data: page.what-is-421
+  /tr/what-is-421/:
+    template: page-intl
+    data: page.what-is-421
+  /pt/what-is-421/:
+    template: page-intl
+    data: page.what-is-421
+  /fr/what-is-421/:
+    template: page-intl
+    data: page.what-is-421
+
+  # === International subscribe pages ===
+  /zh/subscribe/:
+    template: subscribe-intl
+    data: page.subscribe
+  /ja/subscribe/:
+    template: subscribe-intl
+    data: page.subscribe
+  /ko/subscribe/:
+    template: subscribe-intl
+    data: page.subscribe
+  /tr/subscribe/:
+    template: subscribe-intl
+    data: page.subscribe
+  /pt/subscribe/:
+    template: subscribe-intl
+    data: page.subscribe
+  /fr/subscribe/:
+    template: subscribe-intl
+    data: page.subscribe
+
   /es/tag/cultura/:
     template: tag-cultura
     data: tag.cultura
@@ -141,11 +293,35 @@ collections:
   /es/:
     permalink: /es/{slug}/
     template: index
-    filter: 'tag:-hash-en'
+    filter: 'tag:-hash-en+tag:-hash-zh+tag:-hash-ja+tag:-hash-ko+tag:-hash-tr+tag:-hash-pt+tag:-hash-fr'
   /en/:
     permalink: /en/{slug}/
     template: en
     filter: 'tag:hash-en'
+  /zh/:
+    permalink: /zh/{slug}/
+    template: zh
+    filter: 'tag:hash-zh'
+  /ja/:
+    permalink: /ja/{slug}/
+    template: ja
+    filter: 'tag:hash-ja'
+  /ko/:
+    permalink: /ko/{slug}/
+    template: ko
+    filter: 'tag:hash-ko'
+  /tr/:
+    permalink: /tr/{slug}/
+    template: tr
+    filter: 'tag:hash-tr'
+  /pt/:
+    permalink: /pt/{slug}/
+    template: pt
+    filter: 'tag:hash-pt'
+  /fr/:
+    permalink: /fr/{slug}/
+    template: fr
+    filter: 'tag:hash-fr'
 
 taxonomies:
   author: /author/{slug}/

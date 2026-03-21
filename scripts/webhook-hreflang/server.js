@@ -10,6 +10,8 @@ const GHOST_ADMIN_KEY = process.env.GHOST_ADMIN_KEY;
 const GHOST_CONTENT_KEY = process.env.GHOST_CONTENT_KEY;
 const GHOST_URL = process.env.GHOST_URL; // e.g. https://421bn.ghost.io
 const PORT = process.env.PORT || 10000;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const AUTO_TRANSLATE_ENABLED = !!ANTHROPIC_API_KEY;
 
 // --- Ghost API helpers ---
 
@@ -633,8 +635,246 @@ async function bootstrapRelatedPosts() {
 
 // --- Routes ---
 
+// =============================================================================
+// AUTO-TRANSLATION ENGINE (ES → 6 intl languages via Claude Haiku)
+// =============================================================================
+
+const INTL_LANGS = {
+  pt: 'Portuguese (Brazilian)',
+  fr: 'French',
+  zh: 'Chinese (Simplified)',
+  ja: 'Japanese',
+  ko: 'Korean',
+  tr: 'Turkish'
+};
+
+const TAG_MAP_INTL = {
+  'juegos': 'games', 'videojuegos': 'video-games', 'libros': 'books',
+  'peliculas': 'movies', 'historieta': 'comics', 'filosofia': 'philosophy',
+  'cultura': 'culture', 'tecnologia': 'tech', 'tutoriales': 'tutorials',
+  'vida-real': 'real-life', 'cripto': 'crypto', 'soberania': 'sovereignty',
+  'el-canon': 'the-canon', 'musica': 'music', 'deportes': 'sports',
+};
+const KEEP_TAGS_INTL = new Set(['argentina', 'memes', 'internet', 'series', 'magic-the-gathering', 'warhammer', 'cannabis']);
+const INTERNAL_KEEP_INTL = new Set(['hash-ensayo', 'hash-cronica', 'hash-guia', 'hash-novedades', 'hash-resena', 'hash-entrevista']);
+
+// Tags/slugs to exclude from auto-translation
+const EXCLUDE_TAGS_TRANSLATE = new Set(['wiki', 'satelite']);
+const EXCLUDE_SLUG_PATTERNS_TRANSLATE = [
+  /^revista-421-numero/, /suscribi/, /^email-/, /^re-suscribite/,
+  /wizard/, /^renova-/, /^promo-/, /^una-nueva-revista/,
+  /^no-pierdas-la-magia/, /^421-se-sostiene/, /^sumate-para-que/,
+  /^subi-de-nivel/, /^ultimo-dia-/, /^ultima-chance-/,
+];
+
+function callClaudeAPI(prompt, maxTokens) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt }]
+    });
+    const req = https.request({
+      hostname: 'api.anthropic.com',
+      path: '/v1/messages',
+      method: 'POST',
+      headers: {
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'content-length': Buffer.byteLength(body)
+      }
+    }, (res) => {
+      let data = '';
+      res.on('data', (c) => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 400) {
+          reject(new Error(`Claude ${res.statusCode}: ${data.slice(0, 300)}`));
+        } else {
+          try {
+            const parsed = JSON.parse(data);
+            if (parsed.content && parsed.content[0]) resolve(parsed.content[0].text);
+            else reject(new Error('No content in Claude response'));
+          } catch (e) { reject(new Error('Claude parse error')); }
+        }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(300000, () => { req.destroy(); reject(new Error('Claude timeout')); });
+    req.write(body);
+    req.end();
+  });
+}
+
+function splitHtmlForTranslation(html, maxChunkSize) {
+  if (html.length <= maxChunkSize) return [html];
+  const chunks = [];
+  let remaining = html;
+  while (remaining.length > 0) {
+    if (remaining.length <= maxChunkSize) { chunks.push(remaining); break; }
+    let splitAt = -1;
+    const searchEnd = Math.min(remaining.length, maxChunkSize);
+    for (const tag of ['</figure>', '</blockquote>', '</ul>', '</ol>', '</p>', '</h2>', '</h3>']) {
+      const idx = remaining.lastIndexOf(tag, searchEnd);
+      if (idx > maxChunkSize * 0.5) { splitAt = idx + tag.length; break; }
+    }
+    if (splitAt === -1) splitAt = searchEnd;
+    chunks.push(remaining.substring(0, splitAt));
+    remaining = remaining.substring(splitAt);
+  }
+  return chunks;
+}
+
+function mapTagsForIntlLang(esTags, lang) {
+  const result = [];
+  let hasLangTag = false;
+  for (const slug of esTags) {
+    if (slug === 'hash-es') { result.push({ slug: 'hash-' + lang }); hasLangTag = true; continue; }
+    const clean = slug.replace(/^hash-/, '');
+    if (INTERNAL_KEEP_INTL.has(slug)) { result.push({ slug }); continue; }
+    if (TAG_MAP_INTL[clean]) { result.push({ slug: TAG_MAP_INTL[clean] }); continue; }
+    if (KEEP_TAGS_INTL.has(clean)) { result.push({ slug: clean }); continue; }
+    result.push({ slug });
+  }
+  if (!hasLangTag) result.push({ slug: 'hash-' + lang });
+  return result;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+/**
+ * Translate a single post to one language and publish it.
+ */
+async function translateAndPublish(post, lang, langName) {
+  const html = post.html || '';
+  const CHUNK_SIZE = lang === 'zh' ? 8000 : 12000;
+
+  // Step 1: Translate metadata
+  const metaPrompt = `Translate from Spanish to ${langName}. Return ONLY valid JSON, no extra text:
+{"title":"translated title","custom_excerpt":"under 250 chars","meta_title":"under 60 chars","meta_description":"under 155 chars"}
+Keep proper nouns as-is.
+
+Title: ${post.title}
+Excerpt: ${(post.custom_excerpt || '').substring(0, 250)}
+Meta title: ${post.meta_title || post.title}
+Meta description: ${(post.meta_description || post.custom_excerpt || '').substring(0, 160)}`;
+
+  let metaResp = await callClaudeAPI(metaPrompt, 500);
+  metaResp = metaResp.trim().replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+  const meta = JSON.parse(metaResp);
+
+  // Step 2: Translate HTML in chunks
+  const chunks = splitHtmlForTranslation(html, CHUNK_SIZE);
+  const translatedChunks = [];
+  for (let i = 0; i < chunks.length; i++) {
+    const resp = await callClaudeAPI(
+      `Translate this HTML from Spanish to ${langName}. Return ONLY the translated HTML. Keep ALL HTML tags, attributes, URLs, images unchanged. Only translate visible text. Keep proper nouns as-is.\n\n${chunks[i]}`,
+      Math.min(Math.ceil(chunks[i].length / 2) + 2000, 64000)
+    );
+    let r = resp.trim();
+    if (r.startsWith('```')) r = r.replace(/^```(?:html)?\n?/, '').replace(/\n?```$/, '');
+    translatedChunks.push(r);
+    if (i < chunks.length - 1) await sleep(300);
+  }
+
+  // Step 3: Publish to Ghost
+  const esTags = (post.tags || []).map(t => t.slug);
+  const tags = mapTagsForIntlLang(esTags, lang);
+
+  const postData = {
+    title: meta.title,
+    slug: post.slug,
+    html: translatedChunks.join(''),
+    status: 'published',
+    published_at: post.published_at,
+    feature_image: post.feature_image || null,
+    feature_image_alt: post.feature_image_alt || null,
+    custom_excerpt: (meta.custom_excerpt || '').substring(0, 300),
+    meta_title: (meta.meta_title || '').substring(0, 70),
+    meta_description: (meta.meta_description || '').substring(0, 160),
+    tags: tags,
+    authors: (post.authors || []).map(a => ({ id: a.id, slug: a.slug })),
+  };
+
+  const result = await ghostRequest('POST', '/ghost/api/admin/posts/?source=html', { posts: [postData] });
+  return result.posts[0];
+}
+
+/**
+ * Check if a post should be auto-translated.
+ * Only ES posts that are not newsletters, promos, or excluded tags.
+ */
+function shouldAutoTranslate(post) {
+  const tags = (post.tags || []).map(t => t.slug);
+
+  // Skip non-ES posts (EN or intl)
+  if (tags.includes('hash-en') || tags.some(t => ['hash-pt', 'hash-fr', 'hash-zh', 'hash-ja', 'hash-ko', 'hash-tr'].includes(t))) {
+    return false;
+  }
+
+  // Skip excluded tags
+  if (tags.some(t => EXCLUDE_TAGS_TRANSLATE.has(t.replace(/^hash-/, '')))) return false;
+
+  // Skip newsletters
+  if (tags.some(t => t.startsWith('newsletter-'))) return false;
+
+  // Skip excluded slug patterns
+  if (EXCLUDE_SLUG_PATTERNS_TRANSLATE.some(re => re.test(post.slug))) return false;
+
+  return true;
+}
+
+/**
+ * Auto-translate an ES post to all 6 intl languages.
+ * Runs asynchronously (fire-and-forget from webhook).
+ */
+async function autoTranslatePost(postId) {
+  if (!AUTO_TRANSLATE_ENABLED) return;
+
+  // Fetch the full post with HTML
+  const data = await ghostRequest('GET', `/ghost/api/admin/posts/${postId}/?formats=html&include=tags,authors`);
+  const post = data.posts[0];
+
+  if (!shouldAutoTranslate(post)) {
+    console.log(`[translate] Skipping "${post.title}" (excluded)`);
+    return;
+  }
+
+  console.log(`[translate] Starting auto-translation: "${post.title}" → 6 languages`);
+
+  const results = { ok: 0, fail: 0, langs: {} };
+
+  for (const [lang, langName] of Object.entries(INTL_LANGS)) {
+    let retries = 0;
+    while (retries < 2) {
+      try {
+        const published = await translateAndPublish(post, lang, langName);
+        console.log(`[translate] ✓ ${lang}: /${lang}/${published.slug}/`);
+        results.ok++;
+        results.langs[lang] = published.slug;
+        break;
+      } catch (err) {
+        retries++;
+        if (retries >= 2) {
+          console.error(`[translate] ✗ ${lang}: ${err.message.substring(0, 100)}`);
+          results.fail++;
+        } else {
+          const wait = err.message.includes('429') ? 30000 : 5000;
+          await sleep(wait);
+        }
+      }
+    }
+    await sleep(500); // Gentle rate limit between languages
+  }
+
+  console.log(`[translate] Done: ${results.ok} ok, ${results.fail} failed`);
+  return results;
+}
+
+// --- Express endpoints ---
+
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.6.0', ga4: ga4Data ? 'ready' : 'not loaded' });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.7.0', ga4: ga4Data ? 'ready' : 'not loaded', autoTranslate: AUTO_TRANSLATE_ENABLED });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -647,6 +887,16 @@ app.post('/webhook/hreflang', async (req, res) => {
   } catch (err) {
     console.error(`[hreflang] Webhook error: ${err.message}`);
   }
+
+  // Auto-translate ES posts to 6 intl languages (fire-and-forget)
+  if (AUTO_TRANSLATE_ENABLED) {
+    const post = req.body?.post?.current;
+    if (post && post.id) {
+      autoTranslatePost(post.id).catch(err => {
+        console.error(`[translate] Error: ${err.message}`);
+      });
+    }
+  }
 });
 
 // Synchronous test endpoint (returns full result for debugging)
@@ -657,6 +907,26 @@ app.post('/test', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message, stack: err.stack });
   }
+});
+
+// --- Auto-translate endpoint (manual trigger) ---
+
+app.post('/webhook/translate', async (req, res) => {
+  if (!AUTO_TRANSLATE_ENABLED) {
+    return res.status(503).json({ error: 'Auto-translate not configured (missing ANTHROPIC_API_KEY)' });
+  }
+
+  const postId = req.body?.post_id || req.body?.post?.current?.id;
+  if (!postId) {
+    return res.status(400).json({ error: 'Missing post_id' });
+  }
+
+  // Respond immediately
+  res.status(200).json({ received: true, post_id: postId });
+
+  autoTranslatePost(postId).catch(err => {
+    console.error(`[translate] Manual trigger error: ${err.message}`);
+  });
 });
 
 // --- Related posts endpoints ---
@@ -1239,6 +1509,7 @@ app.listen(PORT, () => {
     console.warn(`[hreflang] WARNING: Missing env vars: ${missing.join(', ')}`);
   }
   console.log(`[hreflang] Listening on port ${PORT}`);
+  console.log(`[translate] Auto-translate: ${AUTO_TRANSLATE_ENABLED ? 'ENABLED (6 langs)' : 'DISABLED (no ANTHROPIC_API_KEY)'}`);
   console.log(`[keep-alive] Self-ping every 14min -> ${SELF_URL}`);
 
   // Bootstrap related posts on startup

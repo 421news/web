@@ -1,0 +1,91 @@
+{{!< default}}
+
+<script>
+  (function() {
+    var lang = window.location.pathname.match(/^\/([a-z]{2})\//);
+    lang = lang ? lang[1] : 'zh';
+    var i18n = {
+      zh: { title: '421 | 认知饮食的优质信息', desc: '阿根廷数字媒体，关于文化、科技、游戏和现实生活。', h1: '421 — 认知饮食的优质信息' },
+      ja: { title: '421 | 認知的食事のための上質な情報', desc: 'アルゼンチンのデジタルメディア。文化、テクノロジー、ゲーム、リアルライフ。', h1: '421 — 認知的食事のための上質な情報' },
+      ko: { title: '421 | 인지 다이어트를 위한 양질의 정보', desc: '문화, 기술, 게임, 현실에 대한 아르헨티나 디지털 미디어.', h1: '421 — 인지 다이어트를 위한 양질의 정보' },
+      tr: { title: '421 | Bilişsel diyetiniz için kaliteli bilgi', desc: 'Kültür, teknoloji, oyunlar ve gerçek hayat hakkında Arjantinli dijital medya.', h1: '421 — Bilişsel diyetiniz için kaliteli bilgi' },
+      pt: { title: '421 | Informação de qualidade para sua dieta cognitiva', desc: 'Mídia digital argentina sobre cultura, tecnologia, jogos e vida real.', h1: '421 — Informação de qualidade para sua dieta cognitiva' },
+      fr: { title: '421 | Information de qualité pour votre régime cognitif', desc: 'Média numérique argentin sur la culture, la technologie, les jeux et la vie réelle.', h1: '421 — Information de qualité pour votre régime cognitif' }
+    };
+    var t = i18n[lang] || i18n.zh;
+    document.title = t.title;
+    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
+    function setMeta(attr, key, val) {
+      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
+      if (el) { el.content = val; }
+      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
+    }
+    setMeta('name', 'description', t.desc);
+    setMeta('property', 'og:title', t.title);
+    setMeta('property', 'og:description', t.desc);
+    setMeta('property', 'og:image', img);
+    setMeta('property', 'og:url', 'https://www.421.news/' + lang + '/');
+    setMeta('property', 'og:type', 'website');
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', t.title);
+    setMeta('name', 'twitter:description', t.desc);
+    setMeta('name', 'twitter:image', img);
+
+    // Set sr-only h1
+    document.addEventListener('DOMContentLoaded', function() {
+      var h1 = document.getElementById('intl-home-h1');
+      if (h1) h1.textContent = t.h1;
+    });
+  })();
+</script>
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-intl"}}
+  <main>
+    <h1 class="sr-only" id="intl-home-h1">421</h1>
+
+    <!-- FEATURED POST -->
+    <div class="hero-desktop">
+      {{> "index-featured-post" languageFilter="'hash-tr'"}}
+    </div>
+    <div class="hero-mobile">
+      {{> "index-featured-post-mobile" languageFilter="'hash-tr'"}}
+    </div>
+
+    <!-- READING ROUTES -->
+    {{> "highlighted-posts-intl"}}
+
+    <!-- LAST POSTS -->
+    {{> "last-posts-intl"}}
+  </main>
+
+  {{> "site-footer"}}
+
+</div>
+<script src="{{asset "js/home-ruta.js"}}" defer></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var readDiv = document.getElementById("read-div");
+    if (readDiv) readDiv.textContent = "Read";
+    var readButton = document.getElementById("hero-mobile-read-button");
+    var authorPrefix = document.getElementById("hero-mobile-author-prefix");
+    var labels = {
+      zh: { read: '阅读文章 →', by: '作者' },
+      ja: { read: '記事を読む →', by: '著者' },
+      ko: { read: '기사 읽기 →', by: '저자' },
+      tr: { read: 'Yazıyı oku →', by: 'Yazan' },
+      pt: { read: 'Ler artigo →', by: 'Por' },
+      fr: { read: 'Lire l\u2019article →', by: 'Par' }
+    };
+    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+    var lang = m ? m[1] : 'zh';
+    var t = labels[lang] || labels.zh;
+    if (readButton) readButton.textContent = t.read;
+    if (authorPrefix) authorPrefix.textContent = t.by;
+    if (readDiv) {
+      var rdLabels = { zh: '阅读', ja: '読む', ko: '읽기', tr: 'Oku', pt: 'Ler', fr: 'Lire' };
+      readDiv.textContent = rdLabels[lang] || 'Read';
+    }
+  });
+</script>

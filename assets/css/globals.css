@@ -77,6 +77,8 @@ h1 {
   font-style: italic;
   font-weight: 700;
   line-height: 120%;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 h2 {
@@ -101,6 +103,8 @@ h3 {
   font-style: italic;
   font-weight: 700;
   line-height: 30px;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 p {

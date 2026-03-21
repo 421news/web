@@ -2,34 +2,23 @@
   <div class="global-container">
 
     {{!-- Desktop nav --}}
-    <nav class="site-nav" aria-label="Main navigation">
-      <a href="/en/" class="site-logo">
+    <nav class="site-nav" aria-label="Navigation">
+      <a href="/" class="site-logo intl-home-link">
         <img src='{{asset "images/frame-2.svg"}}' alt="421" />
       </a>
 
       <div class="nav-links">
-        <a href="/en/what-is-421/" class="nav-link">What is 421</a>
-        <a href="/en/tag/culture" class="nav-link">Culture</a>
-        <a href="/en/tag/tech" class="nav-link">Tech</a>
-        <a href="/en/tag/games" class="nav-link">Games</a>
-        <a href="/en/tag/real-life" class="nav-link">Real life</a>
-        <a href="/en/routes" class="nav-link">Paths</a>
-        <div class="nav-dropdown">
-          <span class="nav-link" role="button" tabindex="0">More+</span>
-          <div class="nav-dropdown-menu">
-            <a href="#" id="nav-explore-btn">Explorar</a>
-            <a href="/en/canon">Canon</a>
-            <a href="/es/revista-421">Magazine</a>
-            <a href="https://open.spotify.com/show/0mDtmWPN5NtlUQDDXcBK3F" target="_blank" rel="noopener">Podcast</a>
-            <a href="/es/pitcheale-a-421/">Pitch us</a>
-            <a href="/en/my-subscription/">My account</a>
-            <a href="/en/rss/">RSS</a>
-          </div>
-        </div>
+        <a href="/" class="nav-link intl-nav-link" data-path="/what-is-421/">What is 421</a>
+        <a href="/" class="nav-link intl-nav-link" data-path="/tag/culture">Culture</a>
+        <a href="/" class="nav-link intl-nav-link" data-path="/tag/tech">Tech</a>
+        <a href="/" class="nav-link intl-nav-link" data-path="/tag/games">Games</a>
+        <a href="/" class="nav-link intl-nav-link" data-path="/tag/real-life">Real life</a>
+        <a href="/es/rutas/" class="nav-link intl-nav-link" data-path="/rutas/">Routes</a>
+        <a href="/es/canon/" class="nav-link intl-nav-link" data-path="/canon/">Canon</a>
       </div>
 
       <div class="nav-actions">
-        <a href="/en/subscribe/" class="nav-subscribe-btn">Subscribe</a>
+        <a href="/" class="nav-subscribe-btn intl-nav-link" data-path="/subscribe/">Subscribe</a>
         <button class="nav-icon-btn" data-ghost-search aria-label="Search">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
@@ -49,7 +38,7 @@
         </button>
         {{> "lang-selector"}}
       </div>
-      <a href="/en/" class="site-logo site-logo--mobile">
+      <a href="/" class="site-logo site-logo--mobile intl-home-link">
         <img src='{{asset "images/frame-2.svg"}}' alt="421" />
       </a>
       <div class="nav-mobile-right">
@@ -66,23 +55,49 @@
 
   {{!-- Mobile expanded menu --}}
   <nav id="nav-mobile" class="nav-mobile">
-    <a href="/en/what-is-421/">What is 421</a>
-    <a href="/en/tag/culture">Culture</a>
-    <a href="/en/tag/tech">Tech</a>
-    <a href="/en/tag/games">Games</a>
-    <a href="/en/tag/real-life">Real life</a>
-    <a href="/en/routes">Paths</a>
-    <a href="/en/canon">Canon</a>
-    <a href="/es/revista-421">Magazine</a>
-    <a href="https://open.spotify.com/show/0mDtmWPN5NtlUQDDXcBK3F" target="_blank" rel="noopener">Podcast</a>
-    <a href="/es/pitcheale-a-421/">Pitch us</a>
-    <a href="/en/my-subscription/">My account</a>
-    <a href="/en/subscribe/" class="nav-mobile-subscribe">Subscribe</a>
+    <a href="/" class="intl-nav-link" data-path="/what-is-421/">What is 421</a>
+    <a href="/" class="intl-nav-link" data-path="/tag/culture">Culture</a>
+    <a href="/" class="intl-nav-link" data-path="/tag/tech">Tech</a>
+    <a href="/" class="intl-nav-link" data-path="/tag/games">Games</a>
+    <a href="/" class="intl-nav-link" data-path="/tag/real-life">Real life</a>
+    <a href="/es/rutas/" class="intl-nav-link" data-path="/rutas/">Routes</a>
+    <a href="/es/canon/" class="intl-nav-link" data-path="/canon/">Canon</a>
+    <a href="/" class="nav-mobile-subscribe intl-nav-link" data-path="/subscribe/">Subscribe</a>
   </nav>
 </header>
 
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    // Detect lang from URL
+    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+    var navLang = m ? m[1] : 'en';
+    var prefix = '/' + navLang;
+
+    // Set all intl nav links
+    document.querySelectorAll('.intl-nav-link').forEach(function(a) {
+      var path = a.getAttribute('data-path');
+      if (path) a.href = prefix + path;
+    });
+    document.querySelectorAll('.intl-home-link').forEach(function(a) {
+      a.href = prefix + '/';
+    });
+
+    // Translate nav labels
+    var labels = {
+      pt: { '/what-is-421/':'O que \u00e9 421', '/tag/culture':'Cultura', '/tag/tech':'Tecnologia', '/tag/games':'Jogos', '/tag/real-life':'Vida real', '/rutas/':'Rotas', '/canon/':'C\u00e2none', '/subscribe/':'Assinar' },
+      fr: { '/what-is-421/':'Qu\u2019est-ce que 421', '/tag/culture':'Culture', '/tag/tech':'Technologie', '/tag/games':'Jeux', '/tag/real-life':'Vie r\u00e9elle', '/rutas/':'Parcours', '/canon/':'Canon', '/subscribe/':'S\u2019abonner' },
+      tr: { '/what-is-421/':'421 nedir', '/tag/culture':'K\u00fclt\u00fcr', '/tag/tech':'Teknoloji', '/tag/games':'Oyunlar', '/tag/real-life':'Ger\u00e7ek', '/rutas/':'Rotalar', '/canon/':'Kanon', '/subscribe/':'Abone ol' },
+      zh: { '/what-is-421/':'421\u662f\u4ec0\u4e48', '/tag/culture':'\u6587\u5316', '/tag/tech':'\u79d1\u6280', '/tag/games':'\u6e38\u620f', '/tag/real-life':'\u73b0\u5b9e', '/rutas/':'\u8def\u7ebf', '/canon/':'\u7ecf\u5178', '/subscribe/':'\u8ba2\u9605' },
+      ja: { '/what-is-421/':'421\u3068\u306f', '/tag/culture':'\u30ab\u30eb\u30c1\u30e3\u30fc', '/tag/tech':'\u30c6\u30c3\u30af', '/tag/games':'\u30b2\u30fc\u30e0', '/tag/real-life':'\u30ea\u30a2\u30eb', '/rutas/':'\u30eb\u30fc\u30c8', '/canon/':'\u30ab\u30ce\u30f3', '/subscribe/':'\u8cfc\u8aad' },
+      ko: { '/what-is-421/':'421\uc774\ub780', '/tag/culture':'\ubb38\ud654', '/tag/tech':'\uae30\uc220', '/tag/games':'\uac8c\uc784', '/tag/real-life':'\ud604\uc2e4', '/rutas/':'\ub8e8\ud2b8', '/canon/':'\uce74\ub17c', '/subscribe/':'\uad6c\ub3c5' }
+    };
+    if (labels[navLang]) {
+      document.querySelectorAll('.intl-nav-link').forEach(function(a) {
+        var path = a.getAttribute('data-path');
+        if (path && labels[navLang][path]) a.textContent = labels[navLang][path];
+      });
+    }
+
     // Mobile menu toggle
     var mobileTrigger = document.getElementById("nav-mobile-trigger");
     var mobileMenu = document.getElementById("nav-mobile");
@@ -108,9 +123,9 @@
 
     // Active link highlighting
     var currentPath = window.location.pathname;
-    document.querySelectorAll('.nav-link, .nav-mobile a:not(.nav-mobile-subscribe)').forEach(function(link) {
+    document.querySelectorAll('.intl-nav-link').forEach(function(link) {
       var href = link.getAttribute('href');
-      if (href && href !== '/en/' && currentPath.startsWith(href)) {
+      if (href && href !== prefix + '/' && currentPath.startsWith(href)) {
         link.classList.add('is-active');
       }
     });

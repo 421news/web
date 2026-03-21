@@ -77,79 +77,7 @@
             </div>
           </div>
 
-          <!-- ===== SECTION 2: PAYMENT METHOD CHOOSER ===== -->
-          <div id="sub-section-chooser" style="display: none;">
-
-            <div class="sub-hero">
-              <h1 class="sub-hero-title">Choose payment</h1>
-            </div>
-            <hr class="sub-gradient-divider">
-
-            <div class="sub-card" style="max-width: 600px;">
-              <div class="sub-card-label" id="chooser-plan-name"></div>
-
-              <div class="payment-methods">
-                <button class="payment-method-btn" id="btn-stripe">
-                  <span class="payment-method-icon">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                      <rect width="40" height="40" rx="8" fill="#635BFF"/>
-                      <path d="M18.5 16.5c0-.83.68-1.15 1.81-1.15 1.62 0 3.67.49 5.29 1.37V11.8c-1.77-.7-3.52-.98-5.29-.98-4.33 0-7.21 2.26-7.21 6.04 0 5.89 8.11 4.95 8.11 7.49 0 .98-.85 1.3-2.05 1.3-1.77 0-4.04-.73-5.83-1.71v4.98c1.98.85 3.99 1.22 5.83 1.22 4.43 0 7.48-2.19 7.48-6.02-.02-6.36-8.14-5.23-8.14-7.62z" fill="white"/>
-                    </svg>
-                  </span>
-                  <span class="payment-method-name">Stripe</span>
-                  <span class="payment-method-desc">International credit card (USD)</span>
-                </button>
-
-                <button class="payment-method-btn" id="btn-mp">
-                  <span class="payment-method-icon">
-                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-                      <rect width="40" height="40" rx="8" fill="#009EE3"/>
-                      <path d="M28.5 18.5c0-4.14-3.36-6-7.5-6-4.14 0-8 2.36-8 7s3.36 8.5 8 8.5c3.14 0 5.5-1.36 6.5-3" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-                      <circle cx="21" cy="19.5" r="2" fill="white"/>
-                    </svg>
-                  </span>
-                  <span class="payment-method-name">MercadoPago</span>
-                  <span class="payment-method-desc">Argentine pesos (blue dollar rate)</span>
-                </button>
-              </div>
-
-              <p class="payment-method-note">
-                Stripe charges in USD. MercadoPago converts to ARS at today's blue dollar rate.
-              </p>
-            </div>
-
-            <button class="btn-back" id="btn-back-plan">&larr; Back to plans</button>
-          </div>
-
-          <!-- ===== SECTION 3: MERCADOPAGO FORM ===== -->
-          <div id="sub-section-mp" style="display: none;">
-
-            <div class="sub-hero">
-              <h1 class="sub-hero-title">Complete your subscription</h1>
-            </div>
-            <hr class="sub-gradient-divider">
-
-            <div class="sub-card">
-              <div class="sub-card-label" id="mp-plan-name"></div>
-
-              <form id="mp-form">
-                <input type="hidden" id="mp-sub-type" value="">
-                <div class="form-group">
-                  <label for="mp-name">Full name</label>
-                  <input type="text" id="mp-name" name="name" required placeholder="Your name">
-                </div>
-                <div class="form-group">
-                  <label for="mp-email">Email</label>
-                  <input type="email" id="mp-email" name="email" required placeholder="you@email.com">
-                </div>
-                <p class="form-note">Email must match your MercadoPago account.</p>
-                <button type="submit" class="btn-solid" id="mp-submit-btn">Go to MercadoPago</button>
-              </form>
-              <div id="mp-form-message" class="form-message"></div>
-            </div>
-
-            <button class="btn-back" id="btn-back-chooser">&larr; Change payment method</button>
-          </div>
+          <!-- EN version: Stripe only, no MercadoPago -->
 
         </div>
       </div>
@@ -161,10 +89,6 @@
       document.addEventListener('DOMContentLoaded', function() {
         var currentCadence = 'yearly';
         var tierData = null;
-
-        var sectionPlan = document.getElementById('sub-section-plan');
-        var sectionChooser = document.getElementById('sub-section-chooser');
-        var sectionMp = document.getElementById('sub-section-mp');
 
         fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
           .then(function(r) { return r.json(); })
@@ -202,22 +126,6 @@
           }
         }
 
-        function showSection(section) {
-          sectionPlan.style.display = 'none';
-          sectionChooser.style.display = 'none';
-          sectionMp.style.display = 'none';
-          section.style.display = 'block';
-          window.scrollTo(0, 0);
-        }
-
-        function getPlanLabel() {
-          if (!tierData) return '';
-          if (currentCadence === 'yearly') {
-            return 'Wizard Annual \u2014 ' + formatPrice(tierData.yearly_price) + ' USD/year';
-          }
-          return 'Wizard Monthly \u2014 ' + formatPrice(tierData.monthly_price) + ' USD/month';
-        }
-
         var toggleM = document.getElementById('toggle-monthly');
         var toggleY = document.getElementById('toggle-yearly');
 
@@ -236,67 +144,12 @@
         });
 
         document.getElementById('btn-suscribirme').addEventListener('click', function() {
-          document.getElementById('chooser-plan-name').textContent = getPlanLabel();
-          showSection(sectionChooser);
-        });
-
-        document.getElementById('btn-free').addEventListener('click', function() {
-          window.location.hash = '#/portal/signup/free';
-        });
-
-        document.getElementById('btn-stripe').addEventListener('click', function() {
           if (!tierData) return;
           window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
-        document.getElementById('btn-mp').addEventListener('click', function() {
-          document.getElementById('mp-plan-name').textContent = getPlanLabel() + ' \u2014 MercadoPago';
-          document.getElementById('mp-sub-type').value = currentCadence === 'yearly' ? 'wizard-yearly' : 'wizard-monthly';
-          showSection(sectionMp);
-        });
-
-        document.getElementById('btn-back-plan').addEventListener('click', function() {
-          showSection(sectionPlan);
-        });
-        document.getElementById('btn-back-chooser').addEventListener('click', function() {
-          showSection(sectionChooser);
-        });
-
-        document.getElementById('mp-form').addEventListener('submit', function(e) {
-          e.preventDefault();
-          var msg = document.getElementById('mp-form-message');
-          var btn = document.getElementById('mp-submit-btn');
-          msg.textContent = 'Processing...';
-          msg.className = 'form-message';
-          btn.disabled = true;
-          btn.textContent = 'Processing...';
-
-          fetch('https://mercadopago-ghost.onrender.com/subscribe', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              formSubType: document.getElementById('mp-sub-type').value,
-              formName: document.getElementById('mp-name').value,
-              formEmail: document.getElementById('mp-email').value
-            })
-          })
-          .then(function(r) {
-            if (!r.ok) throw new Error('Server error');
-            return r.json();
-          })
-          .then(function(data) {
-            if (data.success && data.redirectUrl) {
-              window.location.href = data.redirectUrl;
-            } else {
-              throw new Error(data.message || 'Processing error');
-            }
-          })
-          .catch(function(err) {
-            msg.textContent = 'Error processing subscription. Please try again.';
-            msg.className = 'form-message error';
-            btn.disabled = false;
-            btn.textContent = 'Go to MercadoPago';
-          });
+        document.getElementById('btn-free').addEventListener('click', function() {
+          window.location.hash = '#/portal/signup/free';
         });
       });
     </script>

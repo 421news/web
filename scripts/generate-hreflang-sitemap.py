@@ -98,6 +98,10 @@ def fetch_all_posts():
     return all_posts
 
 
+# --- All supported languages ---
+ALL_LANGS = ['es', 'en', 'zh', 'ja', 'ko', 'tr', 'pt', 'fr']
+
+
 # --- Classify posts by language ---
 def classify_posts(posts):
     """Separate posts into ES and EN based on #en/#es internal tags."""
@@ -111,6 +115,21 @@ def classify_posts(posts):
         else:
             es_posts.append(p)
     return es_posts, en_posts
+
+
+def classify_posts_multilang(posts):
+    """Classify posts into all 8 languages based on internal tags."""
+    by_lang = {lang: [] for lang in ALL_LANGS}
+    for p in posts:
+        tags = p.get('tags', [])
+        tag_slugs = [t.get('slug', '') for t in tags]
+        lang = 'es'  # default
+        for l in ALL_LANGS[1:]:  # skip es
+            if f'hash-{l}' in tag_slugs:
+                lang = l
+                break
+        by_lang[lang].append(p)
+    return by_lang
 
 
 # --- Parse timestamp ---
@@ -277,44 +296,45 @@ def match_pairs(es_posts, en_posts):
 
 # --- Generate hreflang sitemap XML ---
 def generate_sitemap(pairs, unpaired_es, unpaired_en):
-    """Generate a hreflang sitemap XML file."""
+    """Generate a hreflang sitemap XML file with all 8 languages."""
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
         '        xmlns:xhtml="http://www.w3.org/1999/xhtml">',
         '',
-        '  <!-- Homepage -->',
-        '  <url>',
-        f'    <loc>{SITE_URL}/es/</loc>',
-        f'    <xhtml:link rel="alternate" hreflang="es" href="{SITE_URL}/es/" />',
-        f'    <xhtml:link rel="alternate" hreflang="en" href="{SITE_URL}/en/" />',
-        f'    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/" />',
-        '  </url>',
-        '  <url>',
-        f'    <loc>{SITE_URL}/en/</loc>',
-        f'    <xhtml:link rel="alternate" hreflang="es" href="{SITE_URL}/es/" />',
-        f'    <xhtml:link rel="alternate" hreflang="en" href="{SITE_URL}/en/" />',
-        f'    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/" />',
-        '  </url>',
-        '',
+        '  <!-- Homepages -->',
     ]
 
-    # Paired posts
+    # Homepage entries for all languages
+    homepage_hreflangs = ''.join(
+        f'\n    <xhtml:link rel="alternate" hreflang="{l}" href="{SITE_URL}/{l}/" />'
+        for l in ALL_LANGS
+    ) + f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE_URL}/" />'
+
+    for lang in ALL_LANGS:
+        lines.extend([
+            '  <url>',
+            f'    <loc>{SITE_URL}/{lang}/</loc>{homepage_hreflangs}',
+            '  </url>',
+        ])
+    lines.append('')
+
+    # Paired posts (ES-EN pairs from timestamp matching)
     if pairs:
         lines.append('  <!-- Bilingual post pairs -->')
     for es_p, en_p in pairs:
         es_url = f'{SITE_URL}/es/{es_p["slug"]}/'
         en_url = f'{SITE_URL}/en/{en_p["slug"]}/'
+        hreflangs = (
+            f'\n    <xhtml:link rel="alternate" hreflang="es" href="{es_url}" />'
+            f'\n    <xhtml:link rel="alternate" hreflang="en" href="{en_url}" />'
+        )
         lines.extend([
             '  <url>',
-            f'    <loc>{es_url}</loc>',
-            f'    <xhtml:link rel="alternate" hreflang="es" href="{es_url}" />',
-            f'    <xhtml:link rel="alternate" hreflang="en" href="{en_url}" />',
+            f'    <loc>{es_url}</loc>{hreflangs}',
             '  </url>',
             '  <url>',
-            f'    <loc>{en_url}</loc>',
-            f'    <xhtml:link rel="alternate" hreflang="es" href="{es_url}" />',
-            f'    <xhtml:link rel="alternate" hreflang="en" href="{en_url}" />',
+            f'    <loc>{en_url}</loc>{hreflangs}',
             '  </url>',
         ])
 

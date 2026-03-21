@@ -1,0 +1,47 @@
+{{!< default}}
+
+
+  <div class="page-wrapper">
+    {{> "site-nav-intl"}}
+    <main style="min-height: 80vh;">
+      <div class="pv-xhuge">
+        <div class="global-container">
+          <div class="page-hero">
+            {{#page}}
+              <h1 class="flashy-h1">{{title}}</h1>
+              {{#if feature_image}}
+                <img src="{{feature_image}}" loading="lazy" alt="{{title}}" class="page-hero_img">
+              {{/if}}
+            {{/page}}
+          </div>
+          <div class="pt-medium">
+            <div class="rich-text w-richtext">{{#page}}{{content}}{{/page}}</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    {{> "site-footer"}}
+  </div>
+
+  <script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+      var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+      var lang = m ? m[1] : 'en';
+
+      var titles = {
+        en: 'What is 421',
+        pt: 'O que \u00e9 421',
+        fr: 'Qu\u2019est-ce que 421',
+        zh: '421\u662f\u4ec0\u4e48',
+        ja: '421\u3068\u306f',
+        ko: '421\uc774\ub780',
+        tr: '421 nedir'
+      };
+
+      var t = titles[lang];
+      if (t) {
+        var h1 = document.querySelector('.flashy-h1');
+        if (h1) h1.textContent = t;
+      }
+    });
+  </script>

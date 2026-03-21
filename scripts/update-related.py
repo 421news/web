@@ -1,7 +1,28 @@
 #!/usr/bin/env python3
 """
-Regenera related-posts.json y sube el theme a Ghost.
-Uso: python3 scripts/update-related.py
+Regenera related-posts.json usando TF-IDF sobre todos los posts de Ghost.
+
+Uso:
+  python3 scripts/update-related.py           # Regenera JSON + notifica a Render
+  python3 scripts/update-related.py --deploy   # Regenera JSON + sube theme a Ghost
+
+Flujo por defecto (sin --deploy):
+  1. Fetch de todos los posts via Content API
+  2. Separa ES (#es) y EN (#en), calcula TF-IDF por idioma
+  3. Guarda assets/data/related-posts.json (fallback local)
+  4. Notifica a Render (POST /webhook/related-posts) para que recompute
+  5. Los usuarios ven los related posts frescos via Render (sin deploy)
+
+Flujo con --deploy:
+  Pasos 1-3 + zip del theme, upload via Admin API y activate.
+  Requiere GHOST_ADMIN_API_KEY en .env.
+
+Notas:
+  - Todos los posts deben tener tag #es o #en. Sin tag = excluido del índice.
+  - El cliente (related-posts.js) intenta Render primero (3s timeout),
+    luego cae al JSON estático del theme como fallback.
+  - Render también recomputa automáticamente al recibir webhook de Ghost
+    al publicar un post (10s debounce).
 """
 
 import json
@@ -192,6 +213,22 @@ def compute_related(posts, lang):
     return result
 
 
+def notify_render():
+    """Trigger Render webhook to recompute related posts from fresh data."""
+    print('\nNotifying Render to recompute...')
+    try:
+        req = urllib.request.Request(
+            'https://webhook-hreflang.onrender.com/webhook/related-posts',
+            data=b'{}',
+            headers={'Content-Type': 'application/json'},
+            method='POST'
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            print(f'  Render: {resp.status} (recompute scheduled)')
+    except Exception as e:
+        print(f'  Render notification failed: {e}')
+
+
 def upload_and_activate():
     """Zip the theme, upload to Ghost, and activate."""
     zip_path = '/tmp/421-theme.zip'
@@ -205,6 +242,15 @@ def upload_and_activate():
     )
 
     print('Uploading and activating...')
+    env = os.environ.copy()
+    env_path = os.path.join(THEME_DIR, '.env')
+    if os.path.exists(env_path):
+        with open(env_path) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    k, v = line.split('=', 1)
+                    env[k.strip()] = v.strip()
     script = f"""
     const jwt = require('jsonwebtoken');
     const fs = require('fs');
@@ -237,7 +283,7 @@ def upload_and_activate():
     }});
     form.pipe(req);
     """
-    subprocess.run(['node', '-e', script], cwd=THEME_DIR)
+    subprocess.run(['node', '-e', script], cwd=THEME_DIR, env=env)
 
 
 def main():
@@ -267,9 +313,13 @@ def main():
         json.dump(result, f)
     print(f'\nSaved {len(result)} posts to related-posts.json')
 
-    upload_and_activate()
+    if '--deploy' in sys.argv:
+        upload_and_activate()
+    else:
+        notify_render()
     print('\nDone!')
 
 
 if __name__ == '__main__':
+    import sys
     main()

@@ -34,7 +34,7 @@
         var author = post.primary_author || {};
         var date = window.formatPostDate(post.published_at);
         var tagImg = tag.feature_image
-            ? '<img src="' + tag.feature_image + '" alt="' + window.escHtml(tag.name) + '" class="primary-tag-image" width="28" />'
+            ? '<img src="' + tag.feature_image + '" alt="' + window.escHtml(tag.name) + '" class="primary-tag-image" width="28" height="28" />'
             : '';
         var contentType = window.getContentType(post.tags);
         var ctHtml = contentType ? '<span class="tag-box-type"> &middot; ' + window.escHtml(contentType) + '</span>' : '';

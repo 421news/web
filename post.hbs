@@ -3,31 +3,35 @@
 {{#post}}
   {{#has tag="#en"}}
     {{> "post-en"}}
+  {{else}}{{#has tag="#zh"}}
+    {{> "post-intl" lang="zh"}}
+  {{else}}{{#has tag="#ja"}}
+    {{> "post-intl" lang="ja"}}
+  {{else}}{{#has tag="#ko"}}
+    {{> "post-intl" lang="ko"}}
+  {{else}}{{#has tag="#tr"}}
+    {{> "post-intl" lang="tr"}}
+  {{else}}{{#has tag="#pt"}}
+    {{> "post-intl" lang="pt"}}
+  {{else}}{{#has tag="#fr"}}
+    {{> "post-intl" lang="fr"}}
   {{else}}
     {{> "post-es"}}
-  {{/has}}
+  {{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}
 {{/post}}
 
 <script src="{{asset "js/reading-progress.js"}}" defer></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const englishMeta = document.querySelector('meta[name="english-version"]');
-    const spanishMeta = document.querySelector('meta[name="spanish-version"]');
-
-    if (englishMeta) {
-      const slug = englishMeta.getAttribute('content');
-      const linkContainer = document.getElementById('translation-link');
-      if (slug) {
-        linkContainer.innerHTML = '<a href="/en/' + slug + '" class="btn-translate">Read it in english.</a>';
-      }
+    var linkContainer = document.getElementById('translation-link');
+    if (!linkContainer) return;
+    var englishMeta = document.querySelector('meta[name="english-version"]');
+    var spanishMeta = document.querySelector('meta[name="spanish-version"]');
+    if (englishMeta && englishMeta.content) {
+      linkContainer.innerHTML = '<a href="/en/' + englishMeta.content + '" class="btn-translate">Read it in english.</a>';
     }
-
-    if (spanishMeta) {
-      const slug = spanishMeta.getAttribute('content');
-      const linkContainer = document.getElementById('translation-link');
-      if (slug) {
-        linkContainer.innerHTML = '<a href="/es/' + slug + '" class="btn-translate">Leer en español.</a>';
-      }
+    if (spanishMeta && spanishMeta.content) {
+      linkContainer.innerHTML = '<a href="/es/' + spanishMeta.content + '" class="btn-translate">Leer en espa\u00F1ol.</a>';
     }
   });
 </script>

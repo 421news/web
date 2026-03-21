@@ -1,0 +1,19 @@
+<div class="preview-section bg-gradient">
+    <div class="global-container">
+        <div class="pv-huge">
+            <div id="home-ruta-container" data-lang="intl" data-json="{{asset "data/rutas.json"}}">
+                <div class="text-center">
+                    <h2 class="text-black">Reading routes</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  // Set lang from URL for home-ruta.js
+  (function() {
+    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+    var c = document.getElementById('home-ruta-container');
+    if (c && m) c.setAttribute('data-lang', m[1]);
+  })();
+</script>

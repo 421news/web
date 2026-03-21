@@ -33,13 +33,7 @@
         <button class="nav-icon-btn" data-ghost-search aria-label="Buscar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
-        <a
-          href="/en/"
-          class="nav-icon-btn"
-        >
-          <img src='{{asset "images/argentina-flag.svg"}}' alt="" class="nav-flag" />
-          ES
-        </a>
+        {{> "lang-selector"}}
         <button id="mode-switch" class="nav-icon-btn" aria-label="Cambiar tema">
           <img src='{{asset "images/moon.svg"}}' class="is-moon" alt="Dark mode" />
           <img src='{{asset "images/sun.svg"}}' class="is-sun" alt="Light mode" style="display:none;" />
@@ -53,12 +47,7 @@
         <button id="nav-mobile-trigger" class="nav-icon-btn" aria-label="Menu">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
-        <a
-          href="/en/"
-          class="nav-icon-btn"
-        >
-          <img src='{{asset "images/argentina-flag.svg"}}' alt="" class="nav-flag" />
-        </a>
+        {{> "lang-selector"}}
       </div>
       <a href="/es/" class="site-logo site-logo--mobile">
         <img src='{{asset "images/frame-2.svg"}}' alt="421" />
@@ -124,31 +113,6 @@
       if (href && href !== '/es/' && currentPath.startsWith(href)) {
         link.classList.add('is-active');
       }
-    });
-
-    // Smart language switch: go to EN equivalent of current page
-    var enUrl = '/en/';
-    var enMeta = document.querySelector('meta[name="english-version"]');
-    if (enMeta && enMeta.content) {
-      enUrl = '/en/' + enMeta.content + '/';
-    } else {
-      var langMap = {
-        '/es/': '/en/',
-        '/es/tag/cultura/': '/en/tag/culture/',
-        '/es/tag/tecnologia/': '/en/tag/tech/',
-        '/es/tag/juegos/': '/en/tag/games/',
-        '/es/tag/vida-real/': '/en/tag/real-life/',
-        '/es/rutas/': '/en/routes/',
-        '/es/canon/': '/en/canon/',
-        '/es/suscribite/': '/en/subscribe/',
-        '/es/mi-suscripcion/': '/en/my-subscription/',
-        '/es/que-es-421/': '/en/what-is-421/'
-      };
-      var path = currentPath.replace(/\/?$/, '/');
-      if (langMap[path]) enUrl = langMap[path];
-    }
-    document.querySelectorAll('a[href="/en/"]').forEach(function(a) {
-      if (a.closest('.nav-actions') || a.closest('.nav-mobile-left')) a.href = enUrl;
     });
 
     // Sync mobile mode-switch with desktop

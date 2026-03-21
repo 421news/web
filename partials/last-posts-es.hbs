@@ -7,7 +7,7 @@
             <div class="last-posts-section">
                 {{#get "posts"
                     include="tags,authors"
-                    filter="tag:-'hash-en'+tag:-'hash-satelite'"
+                    filter="tag:-'hash-en'+tag:-'hash-zh'+tag:-'hash-ja'+tag:-'hash-ko'+tag:-'hash-tr'+tag:-'hash-pt'+tag:-'hash-fr'+tag:-'hash-satelite'"
                     limit="20"
                     order="published_at desc"
                     as |articles|

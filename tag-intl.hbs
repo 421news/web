@@ -1,0 +1,62 @@
+{{!< default}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-intl"}}
+  <main>
+    <div class="preview-section">
+      <div class="global-container">
+        <div class="pv-huge">
+          <div class="text-center pb-small">
+            {{#tag}}
+            <h1>{{name}}</h1>
+            {{#if description}}
+              <p class="home-ruta-tesis">{{description}}</p>
+            {{/if}}
+            {{/tag}}
+          </div>
+          {{!-- Posts are fetched client-side because custom routes don't provide collection posts.
+               The lang + tag filter is built from the URL path. --}}
+          <div id="tag-intl-posts" class="post-grid w-dyn-list">
+            <div role="list" class="post-cols w-dyn-items">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  {{> "site-footer"}}
+</div>
+<script>
+(function() {
+  var CONTENT_KEY = '420da6f85b5cc903b347de9e33';
+  var path = window.location.pathname;
+  var m = path.match(/^\/([a-z]{2})\/tag\/([^/]+)/);
+  if (!m) return;
+  var lang = m[1];
+  var tagSlug = m[2];
+  var langTag = 'hash-' + lang;
+
+  var filter = 'tag:' + tagSlug + '+tag:' + langTag;
+  var url = '/ghost/api/content/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=20&filter=' + encodeURIComponent(filter) + '&order=published_at%20desc';
+
+  fetch(url, { headers: { 'Accept-Version': 'v5.0' } })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var posts = data.posts || [];
+      var container = document.querySelector('#tag-intl-posts .w-dyn-items');
+      if (!container) return;
+      if (!posts.length) {
+        container.innerHTML = '<p style="text-align:center;opacity:0.6">No posts yet.</p>';
+        return;
+      }
+      var html = '';
+      posts.forEach(function(post) {
+        html += window.renderCard(post);
+      });
+      container.innerHTML = html;
+    })
+    .catch(function() {});
+})();
+</script>
+<script src="{{asset "js/pagination.js"}}" defer></script>
