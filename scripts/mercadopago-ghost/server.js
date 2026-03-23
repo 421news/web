@@ -412,13 +412,22 @@ async function deactivateMember(email) {
     return;
   }
 
+  // Skip members with active Stripe subscriptions — never touch those
+  const hasActiveStripe = (existing.subscriptions || []).some(
+    s => (s.status === 'active' || s.status === 'trialing') && s.price && s.price.amount > 0
+  );
+  if (hasActiveStripe) {
+    console.log(`[ghost] Skipping ${email} — has active Stripe subscription`);
+    return;
+  }
+
   const labels = buildCancelledLabels(existing.labels);
-  // Remove Wizard tier by sending empty tiers array
-  // Keep existing non-Wizard tiers
+  if (!labels.some(l => l.name === 'cancelados')) labels.push({ name: 'cancelados' });
+  // Remove Wizard tier, keep non-Wizard tiers
   const tiers = (existing.tiers || []).filter(t => t.id !== WIZARD_TIER_ID);
 
-  await updateMember(existing.id, { labels, tiers });
-  console.log(`[ghost] Deactivated member: ${email}`);
+  await updateMember(existing.id, { labels, tiers, comped: false });
+  console.log(`[ghost] Deactivated member: ${email} → free`);
 }
 
 // --- Debug/test endpoint ---
