@@ -70,7 +70,10 @@
     {{ghost_head}}
     {{!-- Preload feature image on post pages (LCP element) --}}
     {{#is "post"}}{{#post}}{{#if feature_image}}
-    <link rel="preload" as="image" href="{{feature_image}}" fetchpriority="high" />
+    <link rel="preload" as="image" href="{{img_url feature_image size='l'}}"
+      imagesrcset="{{img_url feature_image size='s'}} 300w, {{img_url feature_image size='m'}} 600w, {{img_url feature_image size='l'}} 1000w, {{img_url feature_image size='xl'}} 2000w"
+      imagesizes="(max-width: 768px) 100vw, 840px"
+      fetchpriority="high" />
     {{/if}}{{/post}}{{/is}}
     {{!-- Critical CSS (render-blocking) --}}
     <link href='{{asset "css/normalize.css"}}' rel='stylesheet' />
@@ -101,7 +104,7 @@
       }
     }
     </script>
-    <script src="{{asset "js/render-card.js"}}"></script>
+    <script src="{{asset "js/render-card.js"}}" defer></script>
   </head>
   <body class='{{body_class}}'>
     {{{body}}}

@@ -1,11 +1,4 @@
-/* Subtle page fade-in */
-@keyframes pageFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-body {
-  animation: pageFadeIn 0.3s ease;
-}
+/* Page fade-in removed for LCP performance */
 
 /* Hide Ghost's default post signup CTA */
 .gh-post-upgrade-cta,
@@ -1045,12 +1038,17 @@ body.light-mode .lang-filter-btn.is-active {
 
 .alt-post_featimg {
   aspect-ratio: 3 / 2;
-  background-position: 50%;
-  background-size: cover;
   width: 48%;
   height: 100%;
+  overflow: hidden;
   position: absolute;
   inset: 0% 0% 0% auto;
+}
+
+.alt-post_featimg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 /* POST AUTHOR BOX - IN POST */
