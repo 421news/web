@@ -80,33 +80,40 @@
 
   function fetchPosts() {
     if (postsCache) return Promise.resolve(postsCache);
-    var url = '/ghost/api/content/posts/?key=' + API_KEY +
+    var base = '/ghost/api/content/posts/?key=' + API_KEY +
       '&filter=tag:' + langTag +
       '&fields=title,url,excerpt,feature_image' +
-      '&limit=all&order=published_at desc';
-    return fetch(url).then(function (r) { return r.json(); }).then(function (data) {
-      postsCache = (data.posts || []).map(function (p) {
-        return {
-          title: p.title,
-          url: p.url,
-          excerpt: (p.excerpt || '').substring(0, 150),
-          img: p.feature_image,
-          _lower: (p.title + ' ' + (p.excerpt || '')).toLowerCase()
-        };
+      '&limit=100&order=published_at desc';
+    postsCache = [];
+    function fetchPage(page) {
+      return fetch(base + '&page=' + page).then(function (r) { return r.json(); }).then(function (data) {
+        var posts = data.posts || [];
+        posts.forEach(function (p) {
+          postsCache.push({
+            title: p.title,
+            url: p.url,
+            excerpt: (p.excerpt || '').substring(0, 150),
+            img: p.feature_image,
+            _lower: (p.title + ' ' + (p.excerpt || '')).toLowerCase()
+          });
+        });
+        var meta = data.meta && data.meta.pagination;
+        if (meta && meta.next) return fetchPage(meta.next);
+        return postsCache;
       });
-      return postsCache;
-    });
+    }
+    return fetchPage(1);
   }
 
   function fetchAuthors() {
     if (authorsCache) return Promise.resolve(authorsCache);
     var url = '/ghost/api/content/authors/?key=' + API_KEY +
-      '&limit=all&fields=name,slug,url,profile_image,bio';
+      '&limit=all&fields=name,slug,profile_image,bio';
     return fetch(url).then(function (r) { return r.json(); }).then(function (data) {
       authorsCache = (data.authors || []).map(function (a) {
         return {
           name: a.name,
-          url: a.url,
+          url: '/author/' + a.slug + '/',
           bio: (a.bio || '').substring(0, 120),
           img: a.profile_image,
           _lower: (a.name + ' ' + (a.bio || '')).toLowerCase()
