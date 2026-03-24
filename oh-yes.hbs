@@ -60,12 +60,51 @@
     text-align: center;
     background: #0a0a0a;
   }
+
+  #community-mobile-notice {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 2rem;
+    text-align: center;
+    color: #EAE6E1;
+    font-family: monospace;
+    background: #0a0a0a;
+  }
+
+  #community-mobile-notice h2 {
+    font-size: 1.3rem;
+    color: #6ee7b7;
+    margin-bottom: 1rem;
+  }
+
+  #community-mobile-notice p {
+    font-size: 1rem;
+    line-height: 1.6;
+    max-width: 320px;
+    color: #EAE6E1;
+  }
+
+  @media (max-width: 768px) {
+    #community-mobile-notice {
+      display: flex;
+    }
+    #community-game-wrap {
+      display: none;
+    }
+  }
 </style>
 
 <div class="page-wrapper" id="community-page">
   {{> "general-styling"}}
   {{> "site-nav-es"}}
   <main>
+    <div id="community-mobile-notice">
+      <h2>El Bosque aún no está disponible para una experiencia mobile</h2>
+      <p>Para entrar al Bosque, visitá esta página desde una computadora.</p>
+    </div>
     <div id="community-game-wrap">
       <div id="community-loading">Entrando al bosque...</div>
       <iframe
