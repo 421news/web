@@ -8,7 +8,8 @@ routes:
     data: page.gracias
   /oh-yes/:
     template: oh-yes
-    data: page.oh-yes
+  /community/:
+    template: community
   /es/rutas/:
     template: rutas
     data: page.rutas
