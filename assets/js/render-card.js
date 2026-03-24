@@ -41,10 +41,13 @@
         var isEn = post.tags && post.tags.some(function (t) { return t.slug === 'hash-en'; });
         var tagUrl = tag.slug ? '/' + (isEn ? 'en' : 'es') + '/tag/' + tag.slug + '/' : '';
 
+        var imgSrc = window.escHtml(post.feature_image || '');
+
         return '<div role="listitem" class="w-dyn-item">' +
             '<a href="' + post.url + '" class="post-card_link w-inline-block">' +
             '<div class="post-card">' +
-            '<div class="post-card_cover" style="background-image:url(\'' + window.escHtml(post.feature_image || '') + '\')">' +
+            '<div class="post-card_cover">' +
+            '<img src="' + imgSrc + '" alt="' + window.escHtml(post.title) + '" class="post-card_img" loading="lazy" width="300" height="200" />' +
             '<div class="post-card_ico">' + tagImg + '</div>' +
             '<div class="post-card_overlay" style="background-size:cover;background-position:center"></div>' +
             '<div class="tag-box" data-tag-url="' + window.escHtml(tagUrl) + '">' + window.escHtml(tag.name || 'Uncategorized') + ctHtml + '</div>' +

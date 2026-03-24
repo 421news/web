@@ -1,0 +1,282 @@
+/* Light mode overrides — loaded async */
+body.light-mode {
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .hero-mobile-title {
+  color: var(--negro);
+}
+body.light-mode .tag-box {
+  border-color: var(--verde);
+  background-color: var(--crema);
+}
+body.light-mode .post-card_ico {
+  border-color: var(--negro);
+  background-color: var(--crema);
+}
+body.light-mode .post-card_ico .primary-tag-image {
+  filter: invert(1);
+}
+body.light-mode .ruta-posts-count {
+  color: var(--verde);
+}
+body.light-mode .canon-number-badge {
+  background: var(--verde);
+  color: var(--crema);
+}
+body.light-mode .rich-text blockquote {
+  border-image: linear-gradient(180deg, var(--verde), var(--amarillo)) 1;
+}
+body.light-mode .flashy-h1 {
+  color: var(--verde);
+}
+body.light-mode .preview-section.bg-gradient {
+  background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
+}
+body.light-mode .alt-post-header {
+  background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
+}
+body.light-mode .button:hover {
+  background-image: linear-gradient(90deg, var(--verde), var(--amarillo));
+}
+body.light-mode .hl-post .flashy-h1 span,
+body.light-mode .hero-home .flashy-h1 span {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .hl-post .author-name_link:hover,
+body.light-mode .hero-home .author-name_link:hover {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .rich-text a {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .rutas-hero-title {
+  color: var(--amarillo);
+}
+body.light-mode .rutas-gradient-divider {
+  background: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .ruta-nombre a {
+  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+}
+body.light-mode .hero-mobile-header {
+  background-color: var(--crema) !important;
+}
+body.light-mode .hero-mobile-author {
+  color: var(--negro);
+}
+body.light-mode .hero-mobile-author a {
+  color: var(--negro) !important;
+}
+body.light-mode .hero-mobile-read-button {
+  color: var(--negro);
+  text-decoration-color: var(--negro);
+}
+body.light-mode .hero-mobile-suscribite-button {
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .plain-tags {
+  background-color: var(--crema) !important;
+}
+body.light-mode .flashy-h1.is-alt.flashy-h1-shadow span::before,
+body.light-mode .flashy-h1.is-alt.is-shadow .flashy-h1_shadow::before {
+  background: var(--crema);
+}
+  body.light-mode .author-box.is-home {
+    background: var(--crema);
+  }
+body.light-mode .rich-text pre {
+  background: #e8e4df;
+  color: #333;
+}
+body.light-mode .button {
+  border-color: var(--negro);
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .button:active {
+  color: var(--negro);
+}
+body.light-mode .button.is-icon {
+  color: var(--negro);
+}
+body.light-mode .post_author-box {
+  border-color: var(--negro);
+}
+body.light-mode .post-card {
+  border-color: var(--negro);
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .post-card:hover {
+  background-color: var(--negro);
+}
+body.light-mode .post-card:hover .post-card_info {
+  color: var(--crema);
+}
+body.light-mode .post-card:hover .tag-box {
+  color: var(--negro);
+}
+body.light-mode footer {
+  background-color: var(--verde);
+}
+body.light-mode footer .footer_copy,
+body.light-mode footer p,
+body.light-mode footer a,
+body.light-mode footer .is-italic {
+  color: var(--crema);
+}
+body.light-mode .footer-logo-link {
+  color: var(--crema);
+}
+body.light-mode .footer-slogan {
+  color: var(--crema);
+}
+body.light-mode footer svg path {
+  fill: var(--crema);
+}
+body.light-mode footer svg {
+  stroke: var(--crema);
+}
+body.light-mode .button.is-icon.footer-button {
+  background-color: transparent;
+  border-color: var(--crema);
+  color: var(--crema);
+}
+body.light-mode .button.is-icon.footer-button:hover {
+  background-color: var(--crema);
+  color: var(--verde);
+}
+body.light-mode .footer-button:hover svg path {
+  fill: var(--verde);
+}
+body.light-mode .footer-button:hover svg {
+  stroke: var(--verde);
+}
+body.light-mode .footer_newsletter-form {
+  background-color: rgba(234, 230, 225, 0.15);
+}
+body.light-mode .form-field {
+  background-color: rgba(234, 230, 225, 0.15);
+  color: var(--crema);
+}
+body.light-mode .plain-tags a {
+  color: var(--negro);
+}
+body.light-mode .lang-filter-btn {
+  color: var(--negro);
+  border-color: rgba(18, 18, 18, 0.15);
+}
+body.light-mode .lang-filter-btn:hover {
+  border-color: rgba(18, 18, 18, 0.4);
+}
+body.light-mode .lang-filter-btn.is-active {
+  color: var(--negro);
+}
+body.light-mode .home-ruta-tesis {
+  color: rgba(0, 0, 0, 0.85);
+}
+body.light-mode .rutas-hero-subtitle {
+  color: var(--negro);
+}
+body.light-mode .ruta-section {
+  border-bottom-color: rgba(18, 18, 18, 0.08);
+}
+body.light-mode .ruta-tesis {
+  color: rgba(18, 18, 18, 0.6);
+}
+body.light-mode .canon-item {
+  border-bottom-color: rgba(18, 18, 18, 0.08);
+  color: var(--negro);
+}
+body.light-mode .canon-item:hover {
+  background: rgba(18, 18, 18, 0.03);
+}
+body.light-mode .canon-cover {
+  border-color: rgba(18, 18, 18, 0.1);
+}
+body.light-mode .canon-info h3 {
+  color: var(--negro);
+}
+body.light-mode .canon-reason {
+  color: rgba(18, 18, 18, 0.6);
+}
+body.light-mode .revista-card {
+  background: rgba(18, 18, 18, 0.03);
+  border-color: rgba(18, 18, 18, 0.08);
+}
+body.light-mode .revista-card:hover {
+  border-color: rgba(18, 18, 18, 0.18);
+}
+body.light-mode .revista-card-credits a {
+  color: var(--negro);
+  border-bottom-color: rgba(18, 18, 18, 0.3);
+}
+body.light-mode .revista-card-credits a:hover {
+  border-bottom-color: var(--verde);
+}
+body.light-mode .revista-btn-cover {
+  color: var(--negro);
+  border-color: rgba(18, 18, 18, 0.15);
+}
+body.light-mode .revista-btn-cover:hover {
+  border-color: rgba(18, 18, 18, 0.35);
+  background-color: rgba(18, 18, 18, 0.05);
+}
+body.light-mode .pitch-cta-line {
+  color: rgba(18, 18, 18, 0.5);
+}
+body.light-mode .pitch-category-card {
+  background: rgba(18, 18, 18, 0.03);
+  border-color: rgba(18, 18, 18, 0.08);
+}
+body.light-mode .pitch-category-card:hover {
+  background: rgba(18, 18, 18, 0.06);
+}
+body.light-mode .pitch-category-card.is-active {
+  border-color: var(--verde);
+  background: rgba(23, 165, 131, 0.08);
+}
+body.light-mode .pitch-category-icon {
+  filter: invert(1);
+}
+body.light-mode .pitch-category-desc {
+  color: rgba(18, 18, 18, 0.45);
+}
+body.light-mode .pitch-form-hint {
+  color: rgba(18, 18, 18, 0.45);
+}
+body.light-mode .pitch-iframe-container {
+  background: rgba(18, 18, 18, 0.02);
+  border-color: rgba(18, 18, 18, 0.08);
+}
+body.light-mode .pitch-bottom {
+  color: rgba(18, 18, 18, 0.4);
+}
+body.light-mode .pitch-bottom strong {
+  color: rgba(18, 18, 18, 0.65);
+}
+body.light-mode .filter-select {
+  background-color: var(--crema);
+  color: var(--negro);
+  border-color: var(--negro);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23121212'/%3E%3C/svg%3E");
+}
+body.light-mode .filter-select option {
+  background-color: var(--crema);
+  color: var(--negro);
+}
+body.light-mode .filter-select:focus {
+  border-color: var(--verde);
+}
+body.light-mode .filter-empty {
+  color: rgba(18, 18, 18, 0.4);
+}
+body.light-mode .post-cta {
+  background: rgba(0, 0, 0, 0.03);
+}
+body.light-mode .post-cta-text {
+  color: var(--negro);
+}
+body.light-mode .mid-cta-dismiss { color: #1a1a1a; }

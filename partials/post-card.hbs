@@ -1,10 +1,17 @@
 <div role='listitem' class='w-dyn-item' data-post-id='{{id}}'>
   <a href='{{url}}' class='post-card_link w-inline-block'>
     <div class='post-card'>
-      <div
-        class='post-card_cover'
-        style="background-image: url('{{feature_image}}')"
-      >
+      <div class='post-card_cover'>
+        <img
+          src='{{img_url feature_image size="s"}}'
+          srcset='{{img_url feature_image size="s"}} 300w, {{img_url feature_image size="m"}} 600w'
+          sizes='(max-width: 768px) 50vw, 300px'
+          alt='{{title}}'
+          class='post-card_img'
+          loading='lazy'
+          width='300'
+          height='200'
+        />
         <div class='post-card_ico'>
           {{#if primary_tag}}
             {{#if primary_tag.feature_image}}
