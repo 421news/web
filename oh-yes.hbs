@@ -1,5 +1,99 @@
 {{!< default}}
 
+<style>
+  #community-game-wrap {
+    position: relative;
+    max-width: min(1100px, 96vw);
+    margin: 100px auto 0;
+    background: #0a0a0a;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  }
+  #community-frame {
+    display: none;
+    width: 100%;
+    height: min(85vh, 720px);
+    min-height: 420px;
+    border: none;
+    vertical-align: middle;
+  }
+  #community-loading {
+    min-height: min(85vh, 720px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6ee7b7;
+    font-family: monospace;
+    font-size: 1.2rem;
+    padding: 2rem;
+    text-align: center;
+  }
+</style>
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-es"}}
+  <main>
+    <div id="community-game-wrap">
+      <div id="community-loading">Entrando al bosque...</div>
+      <iframe
+        id="community-frame"
+        src="https://421-community-world-client.vercel.app/"
+        allow="autoplay"
+        title="421 — juego"
+      ></iframe>
+    </div>
+  </main>
+
+  <div class="global-container pt-small pb-small">
+    {{> "file-browser"}}
+  </div>
+  {{> "site-footer"}}
+</div>
+
+<script>
+(function () {
+  const iframe = document.getElementById('community-frame');
+  const loading = document.getElementById('community-loading');
+  const GAME_ORIGIN = 'https://421-community-world-client.vercel.app/';
+
+  window.addEventListener('message', async function (event) {
+    if (event.origin !== GAME_ORIGIN) return;
+    if (event.data && event.data.type === '421_REQUEST_AUTH') {
+      await sendToken();
+    }
+  });
+
+  async function sendToken() {
+    try {
+      const res = await fetch('/members/api/session', { credentials: 'include' });
+      if (res.status === 204 || !res.ok) {
+        iframe.contentWindow.postMessage({ type: '421_AUTH_FAILED' }, GAME_ORIGIN);
+        loading.innerHTML =
+          '<p>Necesitás estar suscrito a 421 para entrar.</p>' +
+          '<a href="/subscribe/" style="color:#6ee7b7;margin-top:1rem;display:inline-block;">Suscribite acá</a>';
+        return;
+      }
+      const token = await res.text();
+      iframe.contentWindow.postMessage({ type: '421_AUTH', token }, GAME_ORIGIN);
+    } catch (err) {
+      loading.textContent = 'Error al conectar. Intentá recargar la página.';
+    }
+  }
+
+  iframe.addEventListener('load', async function () {
+    await sendToken();
+    iframe.style.display = 'block';
+    loading.style.display = 'none';
+  });
+})();
+</script>
+
+
+{{!-- {{!< default}}
+
 <meta name="robots" content="noindex, nofollow">
 
     <style>
@@ -47,4 +141,4 @@
             try { iframe.contentWindow.focus(); } catch (e) { /* cross-origin may block this */ }
             });
         });
-    </script>
+    </script> --}}
