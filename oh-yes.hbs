@@ -1,25 +1,54 @@
 {{!< default}}
 
 <style>
+  /* Full-viewport layout for this page only */
+  #community-page {
+    height: 100vh;
+    padding-top: 96px; /* .site-header is fixed */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* prevent page scrolling */
+  }
+
+  body {
+    overflow: hidden; /* keep header/footer visible without scroll */
+  }
+
+  #community-page > main {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  #community-page footer.site-footer {
+    flex-shrink: 0;
+  }
+
   #community-game-wrap {
     position: relative;
-    max-width: min(1100px, 96vw);
-    margin: 100px auto 0;
+    min-height: 0;
+    height: 100%;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
     background: #0a0a0a;
-    border-radius: 4px;
+    border-radius: 0;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    box-shadow: none;
   }
+
   #community-frame {
     display: none;
     width: 100%;
-    height: min(85vh, 720px);
-    min-height: 420px;
+    height: 100%;
     border: none;
     vertical-align: middle;
   }
+
   #community-loading {
-    min-height: min(85vh, 720px);
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,10 +58,11 @@
     font-size: 1.2rem;
     padding: 2rem;
     text-align: center;
+    background: #0a0a0a;
   }
 </style>
 
-<div class="page-wrapper">
+<div class="page-wrapper" id="community-page">
   {{> "general-styling"}}
   {{> "site-nav-es"}}
   <main>
@@ -47,9 +77,6 @@
     </div>
   </main>
 
-  <div class="global-container pt-small pb-small">
-    {{> "file-browser"}}
-  </div>
   {{> "site-footer"}}
 </div>
 
@@ -90,6 +117,7 @@
   });
 })();
 </script>
+
 
 
 {{!-- {{!< default}}
