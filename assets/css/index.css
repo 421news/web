@@ -902,6 +902,10 @@ body {
 .author-name_link:hover {
   border-bottom: 1px solid var(--verde);
 }
+.author-social-links {
+  display: flex;
+  gap: 5px;
+}
 .post_author-box.is-full {
   grid-column-gap: 2rem;
   grid-row-gap: 2rem;
