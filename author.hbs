@@ -119,7 +119,7 @@
   var loading = false;
 
   function buildFilter(lang) {
-    var f = 'primary_author:' + authorSlug + '+tag:-hash-satelite';
+    var f = 'primary_author:' + authorSlug;
     var parts = LANG_FILTERS[lang].tag.split('+');
     parts.forEach(function(p) { f += '+tag:' + p; });
     return f;
