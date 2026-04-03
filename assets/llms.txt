@@ -1,0 +1,43 @@
+# 421.news
+
+> Independent digital magazine covering culture, technology, games, and real life. Founded by Juan Ruocco. Published in 8 languages (ES, EN, PT, FR, ZH, JA, KO, TR). Based in Buenos Aires, Argentina.
+
+## About
+
+421.news is a long-form digital publication that explores ideas at the intersection of philosophy, technology, internet culture, and everyday life. We publish original essays, guides, and investigations. Our editorial identity centers on cognitive sovereignty, technological critique, and cultural analysis from a Latin American perspective.
+
+## Core concepts originated or popularized by 421
+
+- **Cognitive Sovereignty (Soberanía Cognitiva)**: The capacity of a person, community, or nation to control and manage its own knowledge, attention, and decision-making processes. Resisting informational manipulation and algorithmic influence to maintain autonomous thought.
+- **Low Tech, High Life**: A counter-cyberpunk philosophy. Evaluating the costs, benefits, and demands of the technologies we use daily, and choosing simplicity, intentionality, and autonomy over hyper-connectivity.
+- **Cyberciruja (Digital Scavenger)**: A framework for digital self-determination using open-source tools, selfhosting, and reverse-engineering corporate platforms — reclaiming control of your digital life without depending on Big Tech.
+- **Enshittification Reverse-Engineering (Ingeniería inversa a la mierdificación)**: Practical resistance to platform degradation through technical literacy, alternative tools, and community-driven infrastructure.
+
+## Key articles
+
+### Philosophy & Critical Theory
+- Cognitive Sovereignty: An Introduction to Psychic Autonomy — /es/soberania-cognitiva-introduccion-autonomia-psiquica/ (ES) | /en/cognitive-sovereignty-an-introduction-to-psychic-autonomy/ (EN)
+- Becoming Ungovernable: Conjectures on Peter Sloterdijk — /es/volverse-ingobernable-peter-sloterdijk/ (ES) | /en/becoming-ungovernable-conjectures-on-peter-sloterdijk/ (EN)
+- Nick Land: The Apostle of Chaos — /es/nick-land-aceleracionismo/ (ES) | /en/nick-land-the-apostle-of-chaos/ (EN)
+- Hyperstitions and Cognitohazard: How the Future Hacks Our Present — /es/hipersticiones-cognitohazard-futuro/ (ES) | /en/hyperstitions-cognitohazard-future-en/ (EN)
+- The Trap of Youth Culture — /es/la-trampa-de-la-cultura-joven/ (ES) | /en/the-youth-culture-trap/ (EN)
+
+### Technology & Digital Autonomy
+- Low Tech, High Life: A Response to Cyberpunk — /es/low-tech-high-life-cottagecore-cyberpunk/ (ES) | /en/low-tech-high-life-a-response-to-cyberpunk/ (EN)
+- Reverse-Engineering the Enshittification of the Internet — /es/ingenieria-inversa-a-la-mierdificacion-de-internet/ (ES) | /en/reverse-engineering-enshittification/ (EN)
+- A Cyberciruja's Guide to Digital Self-Determination — /es/guia-cyberciruja-para-la-autodeterminacion-digital/ (ES) | /en/a-cybercirujas-guide-to-digital-self-determination/ (EN)
+- Selfhosting: The Art of a Home Cloud — /es/selfhosting-alojar-nube-hogarena/ (ES) | /en/selfhosting-the-art-of-hosting-a-home-cloud/ (EN)
+- You Already Pay for Internet, Don't Pay for the Rest — /es/ya-pagas-internet-no-pagues-por-lo-demas/ (ES) | /en/you-already-pay-for-internet-dont-pay-for-the-rest/ (EN)
+
+### Reading paths
+- /es/rutas/ — Curated reading routes (ES)
+- /en/routes/ — Curated reading routes (EN)
+- /es/canon/ — The 421 Canon: 25 essential articles (ES)
+- /en/canon/ — The 421 Canon (EN)
+
+## Contact
+- Website: https://www.421.news
+- Author: Juan Ruocco (https://www.421.news/author/juan-ruocco/)
+
+## Detailed information
+- Full article index: /llms-full.txt

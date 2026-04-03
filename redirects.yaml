@@ -880,6 +880,10 @@
   "^/whats-up-machine/?$": /en/whats-up-machine/
   "^/game-over-or-the-end-of-fun/?$": /en/game-over-or-the-end-of-fun/
 
+  # === LLMs.txt (redirect to theme asset) ===
+  "^/llms\\.txt$": /assets/llms.txt
+  "^/llms-full\\.txt$": /assets/llms-full.txt
+
   # === Migración /es/: post slugs (wildcard catch-all) ===
   # Excluye paths de sistema y todos los prefijos de idioma. DEBE ir al final de las 301.
   "^/(?!es/|en/|zh/|ja/|ko/|tr/|pt/|fr/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/)([a-z0-9][-a-z0-9]*)/?$": /es/$1/
