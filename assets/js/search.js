@@ -85,24 +85,31 @@
       '&fields=title,url,excerpt,feature_image' +
       '&limit=100&order=published_at desc';
     postsCache = [];
+    function addItem(p) {
+      postsCache.push({
+        title: p.title,
+        url: p.url,
+        excerpt: (p.excerpt || '').substring(0, 150),
+        img: p.feature_image,
+        _lower: (p.title + ' ' + (p.excerpt || '')).toLowerCase()
+      });
+    }
     function fetchPage(page) {
       return fetch(base + '&page=' + page).then(function (r) { return r.json(); }).then(function (data) {
-        var posts = data.posts || [];
-        posts.forEach(function (p) {
-          postsCache.push({
-            title: p.title,
-            url: p.url,
-            excerpt: (p.excerpt || '').substring(0, 150),
-            img: p.feature_image,
-            _lower: (p.title + ' ' + (p.excerpt || '')).toLowerCase()
-          });
-        });
+        (data.posts || []).forEach(addItem);
         var meta = data.meta && data.meta.pagination;
         if (meta && meta.next) return fetchPage(meta.next);
         return postsCache;
       });
     }
-    return fetchPage(1);
+    return fetchPage(1).then(function () {
+      // Also fetch pages so they appear in search
+      return fetch('/ghost/api/content/pages/?key=' + API_KEY +
+        '&fields=title,url,excerpt,feature_image&limit=all')
+        .then(function (r) { return r.json(); })
+        .then(function (data) { (data.pages || []).forEach(addItem); })
+        .catch(function () {});
+    }).then(function () { return postsCache; });
   }
 
   function fetchAuthors() {
