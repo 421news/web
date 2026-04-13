@@ -56,6 +56,15 @@
             </div>
         </div>
 
+        {{#unless @member.paid}}
+        <div class="global-container">
+          <div class="post-cta post-cta-end">
+            <p class="post-cta-text">Enjoyed the read? The Wizards are who keep 421 alive. Join and get the digital magazine, exclusive content, and more.</p>
+            <div class="post-cta-buttons"><a href="/en/subscribe/" class="post-cta-btn-primary">Become a Wizard &rarr;</a></div>
+          </div>
+        </div>
+        {{/unless}}
+
         <!-- RELATED POSTS -->
         <div class="preview-section" data-json="{{asset "data/related-posts.json"}}">
             <div class="global-container">
@@ -137,7 +146,7 @@
       if (hh.length < 3) return;
       var el = document.createElement('div');
       el.className = 'post-cta';
-      el.innerHTML = '<p class="post-cta-text">We need your support. Everything you read on 421 is made possible by the Wizards, our paid subscribers. Join and support essays, guides, and analysis you won\u2019t find anywhere else.</p><div class="post-cta-buttons"><a href="/en/subscribe/" class="post-cta-btn-primary">Become a Wizard \u2192</a><a href="/en/subscribe/" class="post-cta-btn-secondary">What\u2019s this?</a></div><button class="mid-cta-dismiss">Not now</button>';
+      el.innerHTML = '<p class="post-cta-text">If you\u2019ve read this far, 421 is for you. Essays, guides, and analysis you won\u2019t find anywhere else \u2014 and the Wizards are who make it possible.</p><div class="post-cta-buttons"><a href="/en/subscribe/" class="post-cta-btn-primary">Join 421 \u2192</a></div><button class="mid-cta-dismiss">Not now</button>';
       el.querySelector('.mid-cta-dismiss').onclick = function() { el.remove(); localStorage.setItem(KEY, Date.now()); };
       hh[2].parentNode.insertBefore(el, hh[2]);
     })();
