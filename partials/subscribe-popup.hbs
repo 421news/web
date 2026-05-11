@@ -123,30 +123,51 @@
   var dismissed = localStorage.getItem(KEY);
   if (dismissed && (Date.now() - parseInt(dismissed, 10)) < COOLDOWN_DAYS * 86400000) return;
 
-  // Fetch latest issue from revista.json
-  fetch('/assets/data/revista.json')
+  // Fetch latest issue from Ghost Content API (same source as revista.js)
+  fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
     .then(function(r) { return r.json(); })
-    .then(function(issues) {
-      var latest = issues[0];
-      if (!latest) return;
+    .then(function(data) {
+      var page = data.pages && data.pages[0];
+      if (!page || !page.html) return;
 
-      var coverEl = document.getElementById('sub-popup-cover');
-      var titleEl = document.getElementById('sub-popup-title');
-      var subtitleEl = document.getElementById('sub-popup-subtitle');
+      // Parse first h2 to get latest issue
+      var doc = new DOMParser().parseFromString(page.html, 'text/html');
+      var h2 = doc.querySelector('h2');
+      if (!h2) return;
 
-      coverEl.src = latest.cover;
-      coverEl.alt = 'Revista 421 #' + latest.numero;
-      titleEl.textContent = 'Revista 421 #' + latest.numero;
-      subtitleEl.textContent = latest.titulo;
+      var text = h2.textContent.trim();
+      var match = text.match(/#(\d+)\s*-\s*([^-]+?)(?:\s*-\s*(.+))?$/);
+      if (!match) return;
 
-      // Now set up scroll trigger
+      var numero = match[1];
+      var titulo = match[3] ? match[3].trim() : '';
+
+      // Get cover image from next figure
+      var cover = '';
+      var el = h2.nextElementSibling;
+      while (el && !el.matches('figure.kg-image-card') && !el.matches('h2')) {
+        el = el.nextElementSibling;
+      }
+      if (el && el.matches('figure.kg-image-card')) {
+        var img = el.querySelector('img.kg-image');
+        if (img) cover = img.src;
+      }
+
+      if (!cover) return;
+
+      // Populate popup
+      document.getElementById('sub-popup-cover').src = cover;
+      document.getElementById('sub-popup-cover').alt = 'Revista 421 #' + numero;
+      document.getElementById('sub-popup-title').textContent = 'Revista 421 #' + numero;
+      document.getElementById('sub-popup-subtitle').textContent = titulo;
+
+      // Set up scroll trigger
       var triggered = false;
       function onScroll() {
         if (triggered) return;
         var docHeight = document.documentElement.scrollHeight - window.innerHeight;
         if (docHeight <= 0) return;
-        var pct = window.scrollY / docHeight;
-        if (pct >= SCROLL_TRIGGER) {
+        if (window.scrollY / docHeight >= SCROLL_TRIGGER) {
           triggered = true;
           window.removeEventListener('scroll', onScroll);
           var popup = document.getElementById('sub-popup');
