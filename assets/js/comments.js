@@ -84,7 +84,7 @@
     }
 
     var isOwn = member && member.uuid === c.member.uuid;
-    var isPaid = c.member.status === 'paid';
+    var isPaid = commentsEnabled === 'paid';
     var replies = '';
     if (c.replies && c.replies.length && !isReply) {
       replies = '<div class="c421-replies">' + c.replies.map(function (r) { return renderComment(r, true); }).join('') + '</div>';
@@ -208,7 +208,7 @@
 
       } else if (action === 'delete') {
         if (!confirm(t.confirmDelete)) return;
-        apiCall('PUT', 'comments/' + id + '/', { comments: [{ status: 'deleted' }] }).then(reload).catch(function () {});
+        apiCall('PUT', 'comments/' + id + '/', { comments: [{ id: id, status: 'deleted' }] }).then(reload).catch(function () {});
       }
       return;
     }

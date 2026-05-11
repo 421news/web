@@ -2601,7 +2601,7 @@ footer {
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
-.c421-cancel-btn, .c421-cancel-edit {
+.c421-btn-cancel, .c421-btn-cancel-edit {
   background: none;
   border: none;
   color: var(--crema);
@@ -2614,7 +2614,7 @@ footer {
 .c421-cancel-btn:hover, .c421-cancel-edit:hover { opacity: 0.8; }
 .light-mode .c421-cancel-btn, .light-mode .c421-cancel-edit { color: var(--negro); }
 
-.c421-submit-btn, .c421-save-edit {
+.c421-btn-submit, .c421-btn-save-edit {
   background: var(--gradient-main);
   color: var(--negro);
   border: none;
