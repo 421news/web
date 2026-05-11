@@ -368,7 +368,9 @@
   }
 
   function deleteComment(id) {
-    return apiCall('DELETE', 'comments/' + id + '/');
+    return apiCall('PUT', 'comments/' + id + '/', {
+      comments: [{ status: 'deleted' }]
+    });
   }
 
   function toggleLike(id, currentlyLiked) {
