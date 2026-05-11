@@ -102,6 +102,7 @@
     }
     if (isOwn) {
       actions += '<button class="c421-action" data-action="edit" data-id="' + c.id + '">' + t.edit + '</button>';
+      actions += '<button class="c421-action" data-action="delete" data-id="' + c.id + '">' + t.delete + '</button>';
     }
     actions += '</div>';
 
@@ -205,6 +206,15 @@
         editInput.style.height = editInput.scrollHeight + 'px';
         editInput.focus();
 
+      } else if (action === 'delete') {
+        if (!confirm(t.confirmDelete)) return;
+        fetch('https://webhook-hreflang.onrender.com/api/comments/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ comment_id: id, member_uuid: member.uuid })
+        }).then(function (r) { return r.json(); })
+          .then(function (data) { if (data.success) reload(); })
+          .catch(function () {});
       }
       return;
     }

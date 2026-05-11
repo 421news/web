@@ -956,6 +956,38 @@ app.options('/api/related-posts.json', (req, res) => {
   res.status(204).end();
 });
 
+// --- Comment delete proxy (Admin API required) ---
+app.options('/api/comments/delete', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Methods', 'POST');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(204).end();
+});
+
+app.post('/api/comments/delete', async (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  const { comment_id, member_uuid } = req.body || {};
+  if (!comment_id || !member_uuid) {
+    return res.status(400).json({ error: 'Missing comment_id or member_uuid' });
+  }
+  try {
+    // Fetch comment via Admin API to verify ownership
+    const comment = await ghostRequest('GET', `/ghost/api/admin/comments/${comment_id}/`);
+    const commentMember = comment.comments && comment.comments[0] && comment.comments[0].member;
+    if (!commentMember || commentMember.uuid !== member_uuid) {
+      return res.status(403).json({ error: 'Not your comment' });
+    }
+    // Delete via Admin API
+    await ghostRequest('PUT', `/ghost/api/admin/comments/${comment_id}/`, {
+      comments: [{ id: comment_id, status: 'deleted' }]
+    });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[comments] Delete error:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // --- Hreflang cron: check recent posts every 30 min ---
 
 async function hreflangCron() {
