@@ -1,5 +1,6 @@
 301:
   # === Existentes (migrados del YAML original, targets actualizados a /es/) ===
+  ^/en/latest-posts/: /en/last-posts/
   ^/nick-land-aceleracionismo-parte-2/: /es/nick-land-aceleracionismo/
   ^/nick-land-aceleracionismo-parte-1/: /es/nick-land-aceleracionismo/
   ^/en/nick-land-the-apostle-of-chaos-part-2/: /en/nick-land-the-apostle-of-chaos/
