@@ -1,15 +1,11 @@
 // Custom comments UI for 421.news (replaces Ghost comments-ui iframe)
 (function () {
-  // Find and remove Ghost's default comments script/iframe
-  var ghostScript = document.querySelector('script[data-ghost-comments]');
-  if (!ghostScript) return;
+  var container = document.querySelector('.post-comments[data-post-id]');
+  if (!container) return;
 
-  var postId = ghostScript.getAttribute('data-post-id');
-  var commentsEnabled = ghostScript.getAttribute('data-comments-enabled');
+  var postId = container.getAttribute('data-post-id');
+  var commentsEnabled = container.getAttribute('data-comments-enabled') || 'paid';
   if (!postId) return;
-
-  // Remove Ghost's script to prevent iframe from loading
-  ghostScript.remove();
 
   var langMatch = location.pathname.match(/^\/([a-z]{2})\//);
   var lang = langMatch ? langMatch[1] : 'es';
@@ -382,11 +378,6 @@
 
   // Init
   function init() {
-    // Create container where Ghost's script was
-    container = document.querySelector('.post-comments');
-    if (!container) return;
-
-    // Clear the container (remove any Ghost-rendered content)
     container.innerHTML = '<p class="c421-loading">...</p>';
 
     // Check member status
@@ -398,9 +389,10 @@
       .then(function (m) {
         if (m && m.email) {
           member = m;
-          // Ghost member status: 'free' or 'paid' (comped counts as paid)
-          if (!member.status) member.status = 'free';
-          if (member.paid || member.comped) member.status = 'paid';
+          // Ghost returns paid:true for paid+comped, or status string
+          if (m.paid === true) member.status = 'paid';
+          else if (m.subscriptions && m.subscriptions.length) member.status = 'paid';
+          else if (!member.status) member.status = 'free';
         }
       })
       .catch(function () {})
