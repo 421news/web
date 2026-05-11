@@ -4,16 +4,16 @@
   <div class="sub-popup-card">
     <button class="sub-popup-close" aria-label="Cerrar">&times;</button>
     <div class="sub-popup-header">
-      <img class="sub-popup-cover" src="https://www.421.news/content/images/2026/04/Revista-421--13.jpg" alt="Revista 421 #13" width="90" height="127" loading="lazy">
+      <img class="sub-popup-cover" id="sub-popup-cover" src="" alt="" width="90" height="127" loading="lazy">
       <div class="sub-popup-header-text">
         <span class="sub-popup-badge">{{#has tag="#en"}}NEW ISSUE{{else}}NUEVO N&Uacute;MERO{{/has}}</span>
-        <h3 class="sub-popup-title">Revista 421 #13</h3>
-        <p class="sub-popup-subtitle">{{#has tag="#en"}}Special: Isometric Perspective{{else}}Especial: Perspectiva Isom&eacute;trica{{/has}}</p>
+        <h3 class="sub-popup-title" id="sub-popup-title"></h3>
+        <p class="sub-popup-subtitle" id="sub-popup-subtitle"></p>
       </div>
     </div>
     <p class="sub-popup-text">{{#has tag="#en"}}5,000+ readers can&rsquo;t be wrong. Essays, guides and analysis you won&rsquo;t find anywhere else &mdash; plus every issue of the digital magazine.{{else}}5.000+ lectores no pueden estar equivocados. Ensayos, gu&iacute;as y an&aacute;lisis que no vas a encontrar en otro lado &mdash; m&aacute;s todos los n&uacute;meros de la revista digital.{{/has}}</p>
     <a href="{{#has tag="#en"}}/en/subscribe/{{else}}/es/suscribite/{{/has}}" class="sub-popup-btn sub-popup-btn-primary" data-popup-action="subscribe">{{#has tag="#en"}}Join 421 &rarr;{{else}}Sumate a 421 &rarr;{{/has}}</a>
-    <a href="{{#has tag="#en"}}/es/revista-421/{{else}}/es/revista-421/{{/has}}" class="sub-popup-btn sub-popup-btn-secondary" data-popup-action="revista">{{#has tag="#en"}}Browse the magazine{{else}}Hojear la revista{{/has}}</a>
+    <a href="/es/revista-421/" class="sub-popup-btn sub-popup-btn-secondary" data-popup-action="revista">{{#has tag="#en"}}Browse the magazine{{else}}Hojear la revista{{/has}}</a>
     <button class="sub-popup-later">{{#has tag="#en"}}Maybe later{{else}}Ahora no{{/has}}</button>
   </div>
 </div>
@@ -123,22 +123,42 @@
   var dismissed = localStorage.getItem(KEY);
   if (dismissed && (Date.now() - parseInt(dismissed, 10)) < COOLDOWN_DAYS * 86400000) return;
 
-  var triggered = false;
-  function onScroll() {
-    if (triggered) return;
-    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    if (docHeight <= 0) return;
-    var pct = window.scrollY / docHeight;
-    if (pct >= SCROLL_TRIGGER) {
-      triggered = true;
-      window.removeEventListener('scroll', onScroll);
-      var popup = document.getElementById('sub-popup');
-      if (popup) {
-        popup.style.display = 'flex';
-        if (typeof gtag === 'function') gtag('event', 'popup_shown', { event_category: 'engagement' });
+  // Fetch latest issue from revista.json
+  fetch('/assets/data/revista.json')
+    .then(function(r) { return r.json(); })
+    .then(function(issues) {
+      var latest = issues[0];
+      if (!latest) return;
+
+      var coverEl = document.getElementById('sub-popup-cover');
+      var titleEl = document.getElementById('sub-popup-title');
+      var subtitleEl = document.getElementById('sub-popup-subtitle');
+
+      coverEl.src = latest.cover;
+      coverEl.alt = 'Revista 421 #' + latest.numero;
+      titleEl.textContent = 'Revista 421 #' + latest.numero;
+      subtitleEl.textContent = latest.titulo;
+
+      // Now set up scroll trigger
+      var triggered = false;
+      function onScroll() {
+        if (triggered) return;
+        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (docHeight <= 0) return;
+        var pct = window.scrollY / docHeight;
+        if (pct >= SCROLL_TRIGGER) {
+          triggered = true;
+          window.removeEventListener('scroll', onScroll);
+          var popup = document.getElementById('sub-popup');
+          if (popup) {
+            popup.style.display = 'flex';
+            if (typeof gtag === 'function') gtag('event', 'popup_shown', { event_category: 'engagement' });
+          }
+        }
       }
-    }
-  }
+      window.addEventListener('scroll', onScroll, { passive: true });
+    })
+    .catch(function() {});
 
   function dismiss() {
     var popup = document.getElementById('sub-popup');
@@ -147,8 +167,6 @@
     if (typeof gtag === 'function') gtag('event', 'popup_dismissed', { event_category: 'engagement' });
   }
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-
   document.addEventListener('DOMContentLoaded', function() {
     var popup = document.getElementById('sub-popup');
     if (!popup) return;
@@ -156,7 +174,6 @@
     popup.querySelector('.sub-popup-later').addEventListener('click', dismiss);
     popup.querySelector('.sub-popup-backdrop').addEventListener('click', dismiss);
 
-    // Track CTA clicks
     var btns = popup.querySelectorAll('[data-popup-action]');
     for (var i = 0; i < btns.length; i++) {
       btns[i].addEventListener('click', function() {

@@ -1,5 +1,29 @@
 [
   {
+    "numero": 14,
+    "titulo": "Especial Inteligencia Artificial",
+    "fecha": "Abril 2026",
+    "cover": "https://www.421.news/content/images/2026/05/14_abril.jpg",
+    "pdf": "https://www.421.news/content/files/2026/05/14_abril.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Portada", "nombre": "Martín Pouso", "url": "https://www.instagram.com/terrorifico_napalm/" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
+    "numero": 13,
+    "titulo": "Especial Perspectiva Isométrica",
+    "fecha": "Marzo 2026",
+    "cover": "https://www.421.news/content/images/2026/04/Revista-421--13.jpg",
+    "pdf": "https://www.421.news/content/files/2026/04/13_marzo.pdf",
+    "size": "4 MB",
+    "creditos": [
+      { "rol": "Portada", "nombre": "Flavio Grieco Paglia" },
+      { "rol": "Diseño", "nombre": "Pablo Tempesta", "url": "https://www.instagram.com/pmtempesta" }
+    ]
+  },
+  {
     "numero": 12,
     "titulo": "Especial Manga/Animé",
     "fecha": "Febrero 2026",
