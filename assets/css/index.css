@@ -2517,6 +2517,34 @@ footer {
 }
 .mid-cta-dismiss:hover { opacity: 0.6; }
 
+/* === Share Button === */
+.post-share {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(234, 230, 225, 0.08);
+}
+.post-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid rgba(234, 230, 225, 0.15);
+  border-radius: 6px;
+  color: var(--crema);
+  font-family: inherit;
+  font-size: var(--fs-base);
+  font-weight: 700;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+.post-share-btn:hover { border-color: rgba(234, 230, 225, 0.4); }
+.post-share-btn svg { width: 18px; height: 18px; }
+.light-mode .post-share-btn { color: var(--negro); border-color: rgba(18, 18, 18, 0.15); }
+.light-mode .post-share-btn:hover { border-color: rgba(18, 18, 18, 0.35); }
+.light-mode .post-share { border-top-color: rgba(18, 18, 18, 0.08); }
+
 /* === Custom Comments (c421) === */
 .post-comments {
   margin-top: 3rem;
