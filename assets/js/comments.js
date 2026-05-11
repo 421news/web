@@ -102,7 +102,6 @@
     }
     if (isOwn) {
       actions += '<button class="c421-action" data-action="edit" data-id="' + c.id + '">' + t.edit + '</button>';
-      actions += '<button class="c421-action" data-action="delete" data-id="' + c.id + '">' + t.delete + '</button>';
     }
     actions += '</div>';
 
@@ -206,10 +205,6 @@
         editInput.style.height = editInput.scrollHeight + 'px';
         editInput.focus();
 
-      } else if (action === 'delete') {
-        if (!confirm(t.confirmDelete)) return;
-        console.log('[c421] Deleting comment', id);
-        apiCall('PUT', 'comments/' + id, { comments: [{ id: id, status: 'deleted' }] }).then(reload).catch(function (e) { console.error('[c421] Delete failed', e); });
       }
       return;
     }
@@ -296,7 +291,7 @@
       opts.body = JSON.stringify(body);
     }
     return fetch('/members/api/' + path, opts).then(function (r) {
-      if (!r.ok) return r.text().then(function (t) { console.error('[c421] API error', method, path, r.status, t); throw new Error('API ' + r.status); });
+      if (!r.ok) throw new Error('API ' + r.status);
       if (r.status === 204) return {};
       return r.json();
     });
