@@ -735,10 +735,9 @@ body {
   text-decoration: none;
 }
 .share-icon-header {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 2rem;
+  height: 2rem;
   color: var(--negro);
-  margin-left: 0.4rem;
 }
 .light-mode .share-icon-header { color: var(--crema); }
 
