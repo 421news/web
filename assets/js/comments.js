@@ -176,7 +176,7 @@
       if (action === 'like') {
         if (!member) return;
         var liked = btn.getAttribute('data-liked') === '1';
-        apiCall(liked ? 'DELETE' : 'POST', 'comments/' + id + '/like/').then(reload).catch(function () {});
+        apiCall(liked ? 'DELETE' : 'POST', 'comments/' + id + '/like').then(reload).catch(function () {});
 
       } else if (action === 'reply') {
         var box = container.querySelector('.c421-reply-box[data-parent="' + id + '"]');
@@ -208,7 +208,7 @@
 
       } else if (action === 'delete') {
         if (!confirm(t.confirmDelete)) return;
-        apiCall('PUT', 'comments/' + id + '/', { comments: [{ id: id, status: 'deleted' }] }).then(reload).catch(function () {});
+        apiCall('PUT', 'comments/' + id, { comments: [{ id: id, status: 'deleted' }] }).then(reload).catch(function () {});
       }
       return;
     }
@@ -222,7 +222,7 @@
       if (!newText) return;
       saveBtn.textContent = t.saving;
       saveBtn.disabled = true;
-      apiCall('PUT', 'comments/' + editId + '/', {
+      apiCall('PUT', 'comments/' + editId, {
         comments: [{ html: '<p>' + esc(newText).replace(/\n/g, '</p><p>') + '</p>' }]
       }).then(reload).catch(function () { saveBtn.textContent = t.save; saveBtn.disabled = false; });
       return;
@@ -246,7 +246,7 @@
       submitBtn.disabled = true;
       var body = { comments: [{ html: '<p>' + esc(text).replace(/\n/g, '</p><p>') + '</p>', post_id: postId }] };
       if (parentId) body.comments[0].parent_id = parentId;
-      apiCall('POST', 'comments/', body).then(reload).catch(function () { submitBtn.textContent = t.save; submitBtn.disabled = false; });
+      apiCall('POST', 'comments', body).then(reload).catch(function () { submitBtn.textContent = t.save; submitBtn.disabled = false; });
       return;
     }
 
