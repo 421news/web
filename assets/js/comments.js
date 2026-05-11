@@ -53,7 +53,6 @@
 
   var member = null;
   var comments = [];
-  var container = null;
   var pagination = null;
 
   function timeAgo(dateStr) {
