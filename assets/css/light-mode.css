@@ -84,7 +84,7 @@ body.light-mode .flashy-h1.is-alt.is-shadow .flashy-h1_shadow::before {
   background: var(--crema);
 }
   body.light-mode .author-box.is-home {
-    background: transparent;
+    background-color: transparent;
   }
 body.light-mode .rich-text pre {
   background: #e8e4df;
