@@ -7,6 +7,8 @@
   var commentsEnabled = container.getAttribute('data-comments-enabled') || 'paid';
   if (!postId) return;
 
+  var ARCHIMAGO_UUIDS = { '93ff5ef7-b45c-4bcf-8bd5-58cea146b410': 1 };
+
   var langMatch = location.pathname.match(/^\/([a-z]{2})\//);
   var lang = langMatch ? langMatch[1] : 'es';
 
@@ -113,7 +115,7 @@
       '<div class="c421-body">' +
         '<div class="c421-header">' +
           '<span class="c421-author">' + esc(c.member.name || 'Anónimo') + '</span>' +
-          (isPaid ? '<span class="c421-badge">WIZARD</span>' : '') +
+          (isPaid ? (ARCHIMAGO_UUIDS[c.member.uuid] ? '<span class="c421-badge c421-badge-archimago">ARCHIMAGO</span>' : '<span class="c421-badge">WIZARD</span>') : '') +
           '<span class="c421-time">' + timeAgo(c.created_at) + edited + '</span>' +
         '</div>' +
         '<div class="c421-text">' + c.html + '</div>' +
