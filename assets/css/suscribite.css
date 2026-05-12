@@ -163,6 +163,16 @@
   color: var(--verde);
   font-weight: 700;
 }
+.plan-benefits li a {
+  color: var(--amarillo);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  font-weight: 600;
+}
+.plan-benefits li a:hover {
+  text-decoration-thickness: 2px;
+}
 
 /* ===== BUTTONS ===== */
 .btn-gradient {
