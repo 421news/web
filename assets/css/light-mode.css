@@ -50,8 +50,9 @@ body.light-mode .hero-home .author-name_link:hover {
 body.light-mode .rich-text a {
   background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
 }
-body.light-mode .rutas-hero-title {
-  color: var(--amarillo);
+body.light-mode .rutas-hero-title,
+body.light-mode .sub-hero-title {
+  color: var(--verde);
 }
 body.light-mode .rutas-gradient-divider {
   background: linear-gradient(280deg, var(--amarillo), var(--verde));
