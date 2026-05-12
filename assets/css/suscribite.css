@@ -396,6 +396,9 @@
   color: var(--negro);
   border-bottom-color: rgba(0, 0, 0, 0.06);
 }
+.light-mode .plan-benefits li a {
+  color: var(--verde);
+}
 .light-mode .btn-gradient {
   background: var(--gradient-main);
   color: var(--negro);
