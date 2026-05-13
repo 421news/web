@@ -43,9 +43,15 @@ routes:
   /en/subscribe/:
     template: subscribe
     data: page.subscribe
+  /es/revista-velociraptors-editorial-neptuno/:
+    template: page
+    data: page.revista-velociraptors-editorial-neptuno
   /es/que-es-421/:
     template: page
     data: page.que-es-421
+  /es/juan-ruocco-libros/:
+    template: libros
+    data: page.juan-ruocco-libros
   /en/what-is-421/:
     template: page
     data: page.what-is-421
