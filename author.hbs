@@ -16,6 +16,17 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"{{name}}","url":"https://www.421.news/author/{{slug}}/"{{#if bio}},"description":"{{bio}}"{{/if}}{{#if profile_image}},"image":"{{profile_image}}"{{/if}}{{#if twitter}},"sameAs":["https://x.com/{{twitter}}"]{{/if}} }
 </script>
+<style>
+  .bio-libros-link {
+    color: var(--verde);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    font-weight: 700;
+    transition: color 0.15s ease;
+  }
+  .bio-libros-link:hover { color: var(--amarillo); }
+</style>
   <div class="page-wrapper">
     {{> "site-nav-es" }}
     <div>
@@ -32,7 +43,7 @@
                       alt="Imagen de {{name}}"
                       class="author-photo is-medium"
                     />
-                    <p>{{bio}}</p>
+                    <p class="author-bio" data-author-slug="{{slug}}">{{bio}}</p>
                   </div>
                   <div class="nav_buttons is-post author-social-links">
                     {{#if twitter}}
@@ -235,5 +246,20 @@
 
   // Initial load
   fetchAndRender(currentLang, 1, false);
+})();
+</script>
+
+<script>
+// Linkify "tres libros..." en la bio de Juan Ruocco → /es/juan-ruocco-libros/
+(function () {
+  var bio = document.querySelector('p.author-bio[data-author-slug="juan-ruocco"]');
+  if (!bio) return;
+  var re = /(Publiqué\s+)([^.]*libros[^.]*)(\.)/i;
+  var m = bio.innerHTML.match(re);
+  if (!m) return;
+  bio.innerHTML = bio.innerHTML.replace(
+    re,
+    '$1<a href="/es/juan-ruocco-libros/" class="bio-libros-link">$2</a>$3'
+  );
 })();
 </script>
