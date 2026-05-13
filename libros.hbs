@@ -150,9 +150,18 @@
     flex-wrap: wrap;
   }
 
-  .libros-page .cover-strip-left { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .libros-page .cover-strip-left { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
   .libros-page .cover-strip-left span { opacity: 0.6; }
   .libros-page .cover-strip-left strong { color: var(--amarillo); font-weight: 800; }
+
+  .libros-page .cover-home-link {
+    color: var(--crema);
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    transition: color 0.15s ease, transform 0.15s ease;
+    display: inline-block;
+  }
+  .libros-page .cover-home-link:hover { color: var(--amarillo); transform: translateX(-2px); }
 
   .libros-page .cover-strip-right {
     background: var(--amarillo);
@@ -555,7 +564,6 @@
 
 <div class="page-wrapper libros-page">
   {{> "general-styling"}}
-  {{> "site-nav-es"}}
 
   <!-- ========== MAGAZINE COVER HERO ========== -->
   <section class="cover" aria-label="Tapa magazine: Juan Ruocco">
@@ -563,7 +571,7 @@
     <div class="cover-strip">
       <div class="cover-strip-inner">
         <div class="cover-strip-left">
-          <span>421 BIBLIOTECA</span>
+          <a href="/es/" class="cover-home-link" aria-label="Volver al inicio de 421">← 421 BIBLIOTECA</a>
           <span><strong>VOL.</strong> 01</span>
           <span><strong>2019—2023</strong></span>
         </div>
