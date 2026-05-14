@@ -45,8 +45,8 @@
 
             <div class="sub-card" id="sub-plan-card">
               <div class="plan-toggle">
-                <button class="plan-toggle-btn" id="toggle-monthly">Monthly</button>
-                <button class="plan-toggle-btn active" id="toggle-yearly">
+                <button class="plan-toggle-btn active" id="toggle-monthly">Monthly</button>
+                <button class="plan-toggle-btn" id="toggle-yearly">
                   Annual
                   <span class="toggle-badge">-17%</span>
                 </button>
@@ -55,7 +55,7 @@
               <div id="plan-price">
                 <div class="plan-price-row">
                   <span class="plan-price-big" id="price-amount">...</span>
-                  <span class="plan-price-period" id="price-period">USD / year</span>
+                  <span class="plan-price-period" id="price-period">USD / month</span>
                 </div>
                 <div class="plan-price-detail" id="price-detail"></div>
               </div>
@@ -86,7 +86,7 @@
 
     <script defer>
       document.addEventListener('DOMContentLoaded', function() {
-        var currentCadence = 'yearly';
+        var currentCadence = 'monthly';
         var tierData = null;
 
         fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')

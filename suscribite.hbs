@@ -45,8 +45,8 @@
 
             <div class="sub-card" id="sub-plan-card">
               <div class="plan-toggle">
-                <button class="plan-toggle-btn" id="toggle-monthly">Mensual</button>
-                <button class="plan-toggle-btn active" id="toggle-yearly">
+                <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
+                <button class="plan-toggle-btn" id="toggle-yearly">
                   Anual
                   <span class="toggle-badge">-17%</span>
                 </button>
@@ -55,7 +55,7 @@
               <div id="plan-price">
                 <div class="plan-price-row">
                   <span class="plan-price-big" id="price-amount">...</span>
-                  <span class="plan-price-period" id="price-period">USD / a&ntilde;o</span>
+                  <span class="plan-price-period" id="price-period">USD / mes</span>
                 </div>
                 <div class="plan-price-detail" id="price-detail"></div>
                 <div class="plan-price-ars" id="price-ars" style="display:none;"></div>
@@ -158,7 +158,7 @@
     <script defer>
       document.addEventListener('DOMContentLoaded', function() {
         // State
-        var currentCadence = 'yearly';
+        var currentCadence = 'monthly';
         var tierData = null;
         var blueRate = null;
 
