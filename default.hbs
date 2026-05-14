@@ -1,10 +1,12 @@
 {{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}{{#has tag="#zh"}}<html lang="zh">{{else}}{{#has tag="#ja"}}<html lang="ja">{{else}}{{#has tag="#ko"}}<html lang="ko">{{else}}{{#has tag="#tr"}}<html lang="tr">{{else}}{{#has tag="#pt"}}<html lang="pt">{{else}}{{#has tag="#fr"}}<html lang="fr">{{else}}<html lang="es">{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{else}}<html lang="es">{{/is}}
   <head>
-    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}<title>{{meta_title}}</title>{{/is}}
+    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}{{#is "home"}}<title>421 en español — Cultura, tecnología, juegos y vida real | 421.news</title>{{else}}<title>{{meta_title}}</title>{{/is}}{{/is}}
     <meta charset='utf-8' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <meta name="robots" content="max-image-preview:large">
-    <script>if(window.location.pathname==='/'){document.querySelector('meta[name="robots"]').content='noindex'}</script>
+    {{#is "home"}}
+    <meta name="description" content="421 en español: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina. Suscribite gratis al newsletter." />
+    {{/is}}
     <link href='https://fonts.googleapis.com' rel='preconnect' />
     <link href='https://fonts.gstatic.com' rel='preconnect' crossorigin='anonymous' />
     <link rel='preload' as='style' href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' onload="this.onload=null;this.rel='stylesheet'" />
@@ -66,6 +68,18 @@
     <link rel="alternate" type="application/rss+xml" title="421 — English" href="https://www.421.news/en/rss/" />
     <link rel="author" type="text/plain" href="https://www.421.news/assets/data/llms.txt" title="LLM Context" />
     {{ghost_head}}
+
+    {{!-- Override OG/Twitter for /es/ home (Ghost otherwise emits "(Page 1)") --}}
+    {{#is "home"}}
+    <meta property="og:title" content="421 en español — Cultura, tecnología, juegos y vida real" />
+    <meta property="og:description" content="421 en español: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    <meta property="og:url" content="https://www.421.news/es/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta name="twitter:title" content="421 en español — Cultura, tecnología, juegos y vida real" />
+    <meta name="twitter:description" content="421 en español: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    {{/is}}
+
     {{!-- Preload feature image on post pages (LCP element) --}}
     {{#is "post"}}{{#post}}{{#if feature_image}}
     <link rel="preload" as="image" href="{{img_url feature_image size='l'}}"

@@ -1,4 +1,192 @@
 {{!< default}}
-<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--negro);">
-  <img src="{{asset "images/favicon.svg"}}" alt="421" style="width:80px;opacity:0.5;" />
-</div>
+
+{{!-- Organization + WebSite JSON-LD para señal de entidad fuerte (marca "421") --}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://www.421.news/#org",
+      "name": "421",
+      "alternateName": ["421.news", "cuatro veintiuno", "421 Broadcasting Network"],
+      "url": "https://www.421.news/",
+      "logo": "https://www.421.news/content/images/2026/02/logo-421-publisher.png",
+      "description": "Medio digital independiente con base en Buenos Aires. Cultura, tecnología, juegos y vida real.",
+      "foundingDate": "2023",
+      "foundingLocation": "Buenos Aires, Argentina",
+      "sameAs": [
+        "https://www.instagram.com/421net/",
+        "https://www.goodreads.com/author/show/19864801.Juan_Ruocco"
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "Juan Ruocco",
+        "url": "https://www.421.news/author/juan-ruocco/"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.421.news/#website",
+      "url": "https://www.421.news/",
+      "name": "421",
+      "description": "421 — Medio digital independiente sobre cultura, tecnología, juegos y vida real",
+      "publisher": { "@id": "https://www.421.news/#org" },
+      "inLanguage": ["es-AR", "en", "pt", "fr", "zh", "ja", "ko", "tr"]
+    }
+  ]
+}
+</script>
+
+<style>
+  .landing-page {
+    min-height: 100vh;
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'Nunito Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 1.5rem;
+  }
+  .landing-page__logo { width: 120px; opacity: 0.95; margin-bottom: 2rem; }
+  .landing-page h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-style: italic;
+    font-weight: 700;
+    margin: 0 0 1rem;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+  }
+  .landing-page__tagline {
+    font-family: 'Lora', Georgia, serif;
+    font-style: italic;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    max-width: 620px;
+    margin: 0 auto 2rem;
+    opacity: 0.85;
+  }
+  .landing-page__intro {
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+    font-size: 1rem;
+    line-height: 1.55;
+    opacity: 0.8;
+  }
+  .landing-page__intro a { color: var(--amarillo); }
+  .landing-page__langs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+  .landing-page__langs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border: 1px solid rgba(234,230,225,0.25);
+    border-radius: 6px;
+    color: var(--crema);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    transition: all 0.15s ease;
+  }
+  .landing-page__langs a:hover {
+    border-color: var(--amarillo);
+    background: rgba(252, 210, 33, 0.08);
+  }
+  .landing-page__langs a.is-primary {
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    color: var(--negro);
+    border-color: transparent;
+  }
+  .landing-page__featured {
+    width: 100%;
+    max-width: 720px;
+    border-top: 1px solid rgba(234,230,225,0.12);
+    padding-top: 2rem;
+    text-align: left;
+  }
+  .landing-page__featured h2 {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin: 0 0 1rem;
+    font-style: normal;
+  }
+  .landing-page__featured ul { list-style: none; padding: 0; margin: 0; }
+  .landing-page__featured li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(234,230,225,0.06);
+  }
+  .landing-page__featured li:last-child { border-bottom: none; }
+  .landing-page__featured a {
+    color: var(--crema);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.15s ease;
+  }
+  .landing-page__featured a:hover { color: var(--amarillo); }
+  .landing-page__featured .meta {
+    display: block;
+    font-size: 0.78rem;
+    opacity: 0.5;
+    margin-top: 0.25rem;
+    font-weight: 400;
+  }
+</style>
+
+<main class="landing-page">
+  <img src="{{asset "images/frame-2.svg"}}" alt="421" class="landing-page__logo" />
+
+  <h1>421 — Medio digital independiente</h1>
+  <p class="landing-page__tagline">
+    Información de calidad para tu dieta cognitiva.
+  </p>
+
+  <p class="landing-page__intro">
+    <strong>421</strong> es un medio digital con base en Buenos Aires. Publicamos ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real, desde una mirada independiente. Fundado por <a href="/author/juan-ruocco/">Juan Ruocco</a> en 2023. Disponible en 8 idiomas.
+  </p>
+
+  <nav class="landing-page__langs" aria-label="Selector de idioma">
+    <a href="/es/" class="is-primary" hreflang="es"><span>🇦🇷</span> Español</a>
+    <a href="/en/" hreflang="en"><span>🇺🇸</span> English</a>
+    <a href="/pt/" hreflang="pt"><span>🇧🇷</span> Português</a>
+    <a href="/fr/" hreflang="fr"><span>🇫🇷</span> Français</a>
+    <a href="/zh/" hreflang="zh"><span>🇨🇳</span> 中文</a>
+    <a href="/ja/" hreflang="ja"><span>🇯🇵</span> 日本語</a>
+    <a href="/ko/" hreflang="ko"><span>🇰🇷</span> 한국어</a>
+    <a href="/tr/" hreflang="tr"><span>🇹🇷</span> Türkçe</a>
+  </nav>
+
+  <section class="landing-page__featured">
+    <h2>Lo más reciente en español</h2>
+    {{#get "posts" limit="5" filter="tag:-'hash-en'+tag:-'hash-zh'+tag:-'hash-ja'+tag:-'hash-ko'+tag:-'hash-tr'+tag:-'hash-pt'+tag:-'hash-fr'+tag:-'hash-satelite'+tag:-'Wiki'" order="published_at desc"}}
+      {{#if posts}}
+        <ul>
+          {{#foreach posts}}
+            <li>
+              <a href="{{url}}">{{title}}</a>
+              <span class="meta">{{primary_author.name}} · {{date published_at format="D MMM YYYY"}}</span>
+            </li>
+          {{/foreach}}
+        </ul>
+      {{/if}}
+    {{/get}}
+    <p style="margin-top: 1.25rem; font-size: 0.85rem; opacity: 0.5;">
+      <a href="/es/" style="color: var(--amarillo);">Ver todos los artículos en español →</a>
+    </p>
+  </section>
+</main>

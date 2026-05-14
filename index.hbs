@@ -1,28 +1,6 @@
 {{!< default}}
 
-<script>
-  document.title = '421 | Información de calidad para tu dieta cognitiva';
-  (function() {
-    var esDesc = 'Medio digital argentino sobre cultura, tecnología, juegos y la vida real. Ensayos, crónicas, guías y entrevistas.';
-    var esTitle = '421 | Información de calidad para tu dieta cognitiva';
-    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
-    function setMeta(attr, key, val) {
-      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
-      if (el) { el.content = val; }
-      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
-    }
-    setMeta('name', 'description', esDesc);
-    setMeta('property', 'og:title', esTitle);
-    setMeta('property', 'og:description', esDesc);
-    setMeta('property', 'og:image', img);
-    setMeta('property', 'og:url', 'https://www.421.news/es/');
-    setMeta('property', 'og:type', 'website');
-    setMeta('name', 'twitter:card', 'summary_large_image');
-    setMeta('name', 'twitter:title', esTitle);
-    setMeta('name', 'twitter:description', esDesc);
-    setMeta('name', 'twitter:image', img);
-  })();
-</script>
+{{!-- Meta (description/OG/Twitter) ahora viene server-side desde default.hbs vía {{#is "home"}} --}}
 
 <div class="page-wrapper">
   {{> "general-styling"}}
