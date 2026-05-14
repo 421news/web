@@ -14,7 +14,7 @@
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://www.421.news/es/"},{"@type":"ListItem","position":2,"name":"{{name}}"}]}
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"{{name}}","url":"https://www.421.news/author/{{slug}}/"{{#if bio}},"description":"{{bio}}"{{/if}}{{#if profile_image}},"image":"{{profile_image}}"{{/if}}{{#if twitter}},"sameAs":["https://x.com/{{twitter}}"]{{/if}} }
+{"@context":"https://schema.org","@type":"Person","name":"{{name}}","url":"https://www.421.news/author/{{slug}}/"{{#if bio}},"description":"{{bio}}"{{/if}}{{#if profile_image}},"image":"{{profile_image}}"{{/if}}{{#match slug "juan-ruocco"}},"jobTitle":"Escritor y director de 421","worksFor":{"@type":"Organization","name":"421","url":"https://www.421.news/"},"birthPlace":"Buenos Aires, Argentina","sameAs":["https://www.instagram.com/realjuanruocco/","https://x.com/realjuanruocco","https://www.goodreads.com/author/show/19864801.Juan_Ruocco"]{{else}}{{#if twitter}},"sameAs":["https://x.com/{{twitter}}"]{{/if}}{{/match}} }
 </script>
 <style>
   .bio-libros-link {

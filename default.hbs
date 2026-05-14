@@ -168,6 +168,149 @@
         setTimeout(removeGhostCTA, 3000);
       })();
     </script>
+    {{#is "post"}}
+    <script>
+      // HowTo JSON-LD auto-inject: detecta H2/H3 con prefijo "Paso N", "Step N", o "N." secuencial.
+      // Requiere tag "tutoriales" (ES) o "tutorials"/"how-to" (EN) para evitar false positives.
+      (function () {
+        var tags = Array.from(document.querySelectorAll('meta[property="article:tag"]')).map(function (m) {
+          return (m.getAttribute('content') || '').toLowerCase();
+        });
+        var isHowTo = tags.some(function (t) {
+          return /tutorial|how[- ]?to|guia|guide/i.test(t);
+        });
+        if (!isHowTo) return;
+        var content = document.querySelector('.post-content, .rich-text, article.post, main article');
+        if (!content) return;
+        var headings = content.querySelectorAll('h2, h3');
+        var steps = [];
+        var num = 1;
+        headings.forEach(function (h) {
+          var raw = (h.textContent || '').trim();
+          var m = raw.match(/^(?:paso|step)\s*(\d+)[:.\-\s]\s*(.+)$/i) || raw.match(/^(\d+)\.\s+(.+)$/);
+          if (!m) return;
+          var stepNum = parseInt(m[1], 10);
+          var stepName = m[2].trim();
+          // sólo pasos secuenciales
+          if (stepNum !== num && !(num === 1 && stepNum === 1)) return;
+          num++;
+          var bodyParts = [];
+          var n = h.nextElementSibling;
+          while (n && !/^H[123]$/.test(n.tagName)) {
+            if (/^(P|UL|OL)$/.test(n.tagName)) bodyParts.push((n.textContent || '').trim());
+            n = n.nextElementSibling;
+            if (bodyParts.length >= 3) break;
+          }
+          steps.push({ name: stepName, text: bodyParts.join(' ').slice(0, 500) });
+        });
+        if (steps.length < 3) return;
+        var title = ((document.querySelector('h1') || {}).textContent || document.title).trim();
+        var descEl = document.querySelector('meta[name="description"]');
+        var data = {
+          '@context': 'https://schema.org',
+          '@type': 'HowTo',
+          name: title,
+          description: descEl ? descEl.getAttribute('content') : title,
+          step: steps.map(function (s, i) {
+            return {
+              '@type': 'HowToStep',
+              position: i + 1,
+              name: s.name,
+              text: s.text || s.name
+            };
+          })
+        };
+        var sc = document.createElement('script');
+        sc.type = 'application/ld+json';
+        sc.textContent = JSON.stringify(data);
+        document.head.appendChild(sc);
+      })();
+    </script>
+    <script>
+      // FAQPage JSON-LD auto-inject: detecta H2s en forma de pregunta (terminan en "?" o "¿")
+      // seguidas de párrafos hasta la próxima H2. Mínimo 3 Q&A para considerar FAQPage.
+      (function () {
+        var content = document.querySelector('.post-content, .rich-text, article.post, .single-post-body, main article');
+        if (!content) return;
+        var h2s = content.querySelectorAll('h2');
+        if (h2s.length < 3) return;
+        var faqs = [];
+        h2s.forEach(function (h2) {
+          var raw = (h2.textContent || '').trim();
+          // Pregunta: contiene ? o ¿
+          if (!/[¿?]/.test(raw)) return;
+          // Recoger contenido hasta el próximo H2 (o H1, H3 mayor jerarquía)
+          var answerParts = [];
+          var n = h2.nextElementSibling;
+          while (n && !/^H[12]$/.test(n.tagName)) {
+            if (/^(P|UL|OL|BLOCKQUOTE)$/.test(n.tagName)) {
+              answerParts.push((n.textContent || '').trim());
+            }
+            n = n.nextElementSibling;
+            if (answerParts.length >= 4) break; // suficiente
+          }
+          var answer = answerParts.join(' ').trim();
+          if (answer.length < 40) return; // muy corto, no es respuesta válida
+          faqs.push({ q: raw, a: answer.slice(0, 600) });
+        });
+        if (faqs.length < 3) return;
+        var data = {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: faqs.map(function (f) {
+            return {
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a }
+            };
+          })
+        };
+        var s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.textContent = JSON.stringify(data);
+        document.head.appendChild(s);
+      })();
+    </script>
+    <script>
+      // VideoObject JSON-LD para YouTube embeds en el post (auto-inject)
+      (function () {
+        var iframes = document.querySelectorAll('figure iframe[src*="youtube"], iframe[src*="youtube-nocookie"]');
+        if (!iframes.length) return;
+        var postTitle = (document.querySelector('h1.post-title, .post_title, h1') || {}).textContent || document.title;
+        postTitle = (postTitle || '').trim();
+        var pubEl = document.querySelector('time[datetime]');
+        var postPub = pubEl ? pubEl.getAttribute('datetime') : new Date().toISOString();
+        var descEl = document.querySelector('meta[name="description"]');
+        var postDesc = descEl ? descEl.getAttribute('content') : postTitle;
+        iframes.forEach(function (iframe, idx) {
+          var src = iframe.getAttribute('src') || '';
+          var m = src.match(/(?:embed\/|v=|youtu\.be\/)([A-Za-z0-9_-]{6,})/);
+          if (!m) return;
+          var vid = m[1];
+          var caption = '';
+          var fig = iframe.closest('figure');
+          if (fig) {
+            var cap = fig.querySelector('figcaption');
+            if (cap) caption = (cap.textContent || '').trim();
+          }
+          var data = {
+            '@context': 'https://schema.org',
+            '@type': 'VideoObject',
+            name: caption || (postTitle + (iframes.length > 1 ? ' — video ' + (idx + 1) : '')),
+            description: postDesc || postTitle,
+            thumbnailUrl: 'https://i.ytimg.com/vi/' + vid + '/maxresdefault.jpg',
+            uploadDate: postPub,
+            embedUrl: 'https://www.youtube.com/embed/' + vid,
+            contentUrl: 'https://www.youtube.com/watch?v=' + vid
+          };
+          var s = document.createElement('script');
+          s.type = 'application/ld+json';
+          s.textContent = JSON.stringify(data);
+          document.head.appendChild(s);
+        });
+      })();
+    </script>
+    {{/is}}
     <script src="{{asset "js/search.js"}}" defer></script>
     <script src="{{asset "js/light-mode.js"}}" defer></script>
     <script src="{{asset "js/lang-selector.js"}}" defer></script>
