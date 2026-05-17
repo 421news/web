@@ -1777,10 +1777,17 @@ footer {
   margin: 0;
 }
 
-/* Wizards early-access strip on revista page (compact inline CTA) */
-.revista-wizard-strip {
-  margin: 1.5rem 0 0.5rem;
-  padding: 0.75rem 1rem;
+/* Wizards early-access announcement bar (full-width, below fixed nav, /es/revista-421/) */
+.revista-wizard-announce {
+  background: var(--amarillo);
+  color: var(--negro);
+  width: 100%;
+  margin-top: 96px; /* clear the fixed site-nav (~96px) */
+}
+.revista-wizard-announce-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.7rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1788,23 +1795,26 @@ footer {
   gap: 0.5rem 1.25rem;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: var(--fs-body);
-  color: var(--crema);
-  border-top: 1px solid rgba(252, 210, 33, 0.18);
-  border-bottom: 1px solid rgba(252, 210, 33, 0.18);
+  font-weight: 600;
+  text-align: center;
 }
-.revista-wizard-strip-text { opacity: 0.9; }
-.revista-wizard-strip-text strong { color: var(--amarillo); font-weight: 700; }
-.revista-wizard-strip-link {
-  color: var(--amarillo);
-  font-weight: 700;
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
+.revista-wizard-announce-inner strong { font-weight: 800; }
+.revista-wizard-announce-inner a {
+  color: var(--negro);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
   white-space: nowrap;
   transition: opacity 0.2s;
 }
-.revista-wizard-strip-link:hover { opacity: 0.75; }
+.revista-wizard-announce-inner a:hover { opacity: 0.75; }
+/* Page already has its own top padding for nav clearance via .rutas-hero;
+   when the announce bar is present we replaced that clearance, so remove
+   the hero's first-of-type extra top space on this template */
+.revista-wizard-announce + .revista-page .rutas-hero { padding-top: 2.5rem; }
 @media screen and (max-width: 640px) {
-  .revista-wizard-strip { font-size: var(--fs-sm); padding: 0.65rem 0.75rem; }
+  .revista-wizard-announce-inner { font-size: var(--fs-sm); padding: 0.6rem 1rem; }
 }
 
 #rutas-container,

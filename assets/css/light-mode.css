@@ -274,8 +274,4 @@ body.light-mode .filter-select:focus {
 body.light-mode .filter-empty {
   color: rgba(18, 18, 18, 0.4);
 }
-body.light-mode .revista-wizard-strip {
-  color: var(--negro);
-  border-top-color: rgba(252, 210, 33, 0.4);
-  border-bottom-color: rgba(252, 210, 33, 0.4);
-}
+/* .revista-wizard-announce already has yellow bg + dark text — no light-mode override needed */

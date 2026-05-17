@@ -29,6 +29,16 @@
   {{> "general-styling"}}
   {{> "site-nav-es"}}
 
+  {{!-- Wizards early-access announcement bar (visible to non-paid members only) --}}
+  {{#unless @member.paid}}
+  <div class="revista-wizard-announce">
+    <div class="revista-wizard-announce-inner">
+      <span>📕 Los <strong>Wizards</strong> leen cada nuevo n&uacute;mero <strong>un mes antes</strong> que el p&uacute;blico.</span>
+      <a href="/es/suscribite/" onclick="if(typeof gtag==='function')gtag('event','revista_wizard_cta_click',{event_category:'engagement',event_label:'revista_page'});">Hacete Wizard &rarr;</a>
+    </div>
+  </div>
+  {{/unless}}
+
   <div class="revista-page">
     <div class="global-container">
 
@@ -38,14 +48,6 @@
         <p class="rutas-hero-subtitle">Los números de la revista digital de 421, donde compilamos las notas destacadas del sitio e invitamos a diseñadores, fotógrafos e ilustradores.</p>
       </div>
       <hr class="rutas-gradient-divider">
-
-      {{!-- Wizards early-access strip (visible to non-paid members only) --}}
-      {{#unless @member.paid}}
-      <p class="revista-wizard-strip">
-        <span class="revista-wizard-strip-text">📕 Los <strong>Wizards</strong> leen cada nuevo n&uacute;mero <strong>un mes antes</strong> que el p&uacute;blico.</span>
-        <a href="/es/suscribite/" class="revista-wizard-strip-link" onclick="if(typeof gtag==='function')gtag('event','revista_wizard_cta_click',{event_category:'engagement',event_label:'revista_page'});">Hacete Wizard &rarr;</a>
-      </p>
-      {{/unless}}
 
       <!-- Revista container: JS will populate this -->
       <div id="revista-container"></div>
