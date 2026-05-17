@@ -59,33 +59,7 @@
             </div>
         </div>
 
-        {{#unless @member.paid}}
-        <div class="global-container">
-          <div class="post-cta post-cta-end">
-            <p class="post-cta-text">&iquest;Te gust&oacute; lo que le&iacute;ste? 421 existe gracias a los Wizards. Sum&aacute;te y acced&eacute; a la <a href="/es/revista-421/">Revista 421 #<span data-revista-numero>14</span></a> en PDF, comentar las notas, el <a href="/author/juan-ruocco/">Concilio mensual de wizards</a> (videollamada con Juan Ruocco) y la <a href="https://mtg.421.news">app de Magic 421</a>.</p>
-            <div class="post-cta-buttons"><a href="/es/revista-421/" class="post-cta-btn-primary">Le&eacute; la revista &rarr;</a></div>
-          </div>
-        </div>
-        <script>
-        (function(){
-          var slots = document.querySelectorAll('[data-revista-numero]');
-          if (!slots.length) return;
-          fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
-            .then(function(r){ return r.json(); })
-            .then(function(d){
-              var p = d.pages && d.pages[0];
-              if (!p || !p.html) return;
-              var doc = new DOMParser().parseFromString(p.html, 'text/html');
-              var h2 = doc.querySelector('h2');
-              if (!h2) return;
-              var m = h2.textContent.trim().match(/#(\d+)/);
-              if (!m) return;
-              slots.forEach(function(el){ el.textContent = m[1]; });
-            })
-            .catch(function(){});
-        })();
-        </script>
-        {{/unless}}
+        {{!-- End-of-post CTA banner removed (v3.33.28): redundant with subscribe-popup. Popup is the single conversion surface for non-paid members. --}}
 
         <!-- RELATED POSTS -->
         <div class="preview-section" data-json="{{asset "data/related-posts.json"}}">
