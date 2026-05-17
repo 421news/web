@@ -12,8 +12,12 @@
 
 /* ===== HERO ===== */
 .sub-hero {
-  padding: 5rem 0 2rem;
+  /* 8rem top = clears the 96px fixed site-header + breathing room */
+  padding: 8rem 0 2rem;
   text-align: center;
+}
+@media screen and (max-width: 768px) {
+  .sub-hero { padding-top: 6rem; }
 }
 .sub-hero-title {
   font-size: var(--fs-4xl);
