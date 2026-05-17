@@ -37,44 +37,105 @@
           <div id="sub-section-plan">
 
             <div class="sub-hero">
-              <h1 class="sub-hero-title">Join us!</h1>
-              <p class="sub-hero-subtitle">421 is an intellectual orientation outlet for navigating a world saturated with technology, images, and discourse.</p>
-              <p class="sub-hero-callout">Your financial support is essential for the project's survival.</p>
+              <span class="sub-hero-eyebrow">✨ Become a Wizard</span>
+              <h1 class="sub-hero-title">Read <span class="sub-hero-accent">Revista 421 before anyone else</span> and back the project</h1>
+              <p class="sub-hero-subtitle">Every new issue reaches Wizards <strong>one month before</strong> the public. Plus commenting on articles, the Magic app and the Monthly Council with Juan Ruocco.</p>
+              <div class="sub-hero-proof">228 wizards · 5,031 readers</div>
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="sub-card" id="sub-plan-card">
-              <div class="plan-toggle">
-                <button class="plan-toggle-btn active" id="toggle-monthly">Monthly</button>
-                <button class="plan-toggle-btn" id="toggle-yearly">
-                  Annual
-                  <span class="toggle-badge">-17%</span>
-                </button>
+            <div class="tier-grid">
+
+              <!-- FREE TIER -->
+              <div class="tier">
+                <h2 class="tier-name">Free</h2>
+                <p class="tier-tagline">To start reading 421</p>
+                <div class="tier-price"><span class="tier-price-amount">$0</span></div>
+                <ul class="tier-benefits">
+                  <li>Access to all articles on the site</li>
+                  <li>Weekly newsletter with the best of 421</li>
+                  <li>Download of <strong>released</strong> magazines (back issues)</li>
+                  <li>Access to the <a href="/en/canon/">421 Canon</a> and reading routes</li>
+                </ul>
+                <button class="btn-outline" id="btn-free">Sign up for free →</button>
+                <p class="tier-fine">No card · Cancel anytime</p>
               </div>
 
-              <div id="plan-price">
-                <div class="plan-price-row">
-                  <span class="plan-price-big" id="price-amount">...</span>
-                  <span class="plan-price-period" id="price-period">USD / month</span>
+              <!-- PAID TIER -->
+              <div class="tier featured" id="sub-plan-card">
+                <span class="tier-badge">Most popular</span>
+                <h2 class="tier-name">Wizard</h2>
+                <p class="tier-tagline">Full access + back the project</p>
+
+                <div class="plan-toggle">
+                  <button class="plan-toggle-btn active" id="toggle-monthly">Monthly</button>
+                  <button class="plan-toggle-btn" id="toggle-yearly">
+                    Annual
+                    <span class="toggle-badge">-17%</span>
+                  </button>
                 </div>
-                <div class="plan-price-detail" id="price-detail"></div>
+
+                <div id="plan-price" class="tier-price">
+                  <span class="tier-price-amount" id="price-amount">...</span>
+                  <span class="tier-price-period" id="price-period">USD / month</span>
+                  <div class="plan-price-detail" id="price-detail"></div>
+                </div>
+
+                <ul class="tier-benefits">
+                  <li class="tier-benefit-featured">📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release</li>
+                  <li>Comment and join discussions on every article</li>
+                  <li><strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other wizards</li>
+                  <li>Access to the <a href="https://mtg.421.news">Magic 421 app</a></li>
+                </ul>
+
+                <button class="btn-gradient" id="btn-suscribirme">Become a Wizard →</button>
+                <p class="tier-fine">Pay with international card (Stripe, USD)</p>
               </div>
 
-              <ul class="plan-benefits">
-                <li>Early access to <a href="/es/revista-421/">digital magazine</a> (PDF)</li>
-                <li>Comments on articles</li>
-                <li>Monthly wizards council (video call with <a href="/author/juan-ruocco/">Juan Ruocco</a>)</li>
-                <li>Access to the <a href="https://mtg.421.news">Magic app</a></li>
-              </ul>
-
-              <button class="btn-gradient" id="btn-suscribirme">Subscribe</button>
             </div>
 
-            <div class="free-tier-link">
-              <p>Just want to receive articles by email?</p>
-              <button class="btn-outline" id="btn-free">Sign up for free</button>
-            </div>
+            <!-- ===== FAQ ===== -->
+            <section class="sub-faq">
+              <h2>FAQ</h2>
+              <details class="sub-faq-item">
+                <summary>What exactly is "early access" to the magazine?</summary>
+                <p>Each new issue of Revista 421 is released first to Wizards only, as a PDF. One month later it's released to the rest of the public.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>How do I cancel?</summary>
+                <p>From your account, anytime. No commitment, no questions. You keep access until the end of the paid period.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>What about old issues of the magazine?</summary>
+                <p>They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for Wizards during its first month.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>What's the Monthly Council?</summary>
+                <p>A roughly 1-hour video call with Juan Ruocco and other Wizards. Open discussion, editorial proposals, debates. Announced in advance via newsletter.</p>
+              </details>
+            </section>
           </div>
+
+          {{!-- Revista # auto-update script (same source as subscribe-popup) --}}
+          <script>
+          (function(){
+            var slots = document.querySelectorAll('[data-revista-numero]');
+            if (!slots.length) return;
+            fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
+              .then(function(r){ return r.json(); })
+              .then(function(d){
+                var p = d.pages && d.pages[0];
+                if (!p || !p.html) return;
+                var doc = new DOMParser().parseFromString(p.html, 'text/html');
+                var h2 = doc.querySelector('h2');
+                if (!h2) return;
+                var m = h2.textContent.trim().match(/#(\d+)/);
+                if (!m) return;
+                slots.forEach(function(el){ el.textContent = m[1]; });
+              })
+              .catch(function(){});
+          })();
+          </script>
 
           <!-- EN version: Stripe only, no MercadoPago -->
 
@@ -144,10 +205,21 @@
 
         document.getElementById('btn-suscribirme').addEventListener('click', function() {
           if (!tierData) return;
+          if (typeof gtag === 'function') gtag('event', 'begin_checkout', {
+            event_category: 'subscription',
+            event_label: 'wizard_' + currentCadence + '_en',
+            value: currentCadence === 'yearly' ? (tierData.yearly_price/100) : (tierData.monthly_price/100),
+            currency: 'USD',
+            items: [{ item_id: tierData.id, item_name: 'Wizard ' + currentCadence }]
+          });
           window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
         document.getElementById('btn-free').addEventListener('click', function() {
+          if (typeof gtag === 'function') gtag('event', 'sign_up_intent', {
+            event_category: 'subscription',
+            event_label: 'free_newsletter_en'
+          });
           window.location.hash = '#/portal/signup/free';
         });
       });

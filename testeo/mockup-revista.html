@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup - Revista 421</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #121212;
+    --crema: #eae6e1;
+    --amarillo: #fcd221;
+    --verde: #17a583;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--negro);
+    color: var(--crema);
+    font-family: 'Nunito Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .global-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Hero (reusa estilos de rutas) */
+  .rutas-hero {
+    padding: 6rem 0 2.5rem;
+    text-align: center;
+  }
+
+  .rutas-hero-title {
+    font-size: 3rem;
+    font-style: italic;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .rutas-hero-subtitle {
+    font-family: 'Lora', Georgia, serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    opacity: 0.6;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .rutas-gradient-divider {
+    border: none;
+    height: 3px;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    margin: 0 0 3rem;
+    border-radius: 2px;
+  }
+
+  /* Revista grid */
+  .revista-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-bottom: 4rem;
+  }
+
+  /* Card */
+  .revista-card {
+    display: flex;
+    gap: 2rem;
+    background: rgba(234, 230, 225, 0.04);
+    border: 1px solid rgba(234, 230, 225, 0.08);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .revista-card:hover {
+    border-color: rgba(234, 230, 225, 0.18);
+  }
+
+  /* Cover */
+  .revista-card-cover {
+    flex-shrink: 0;
+    width: 220px;
+  }
+
+  .revista-card-cover img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: block;
+    transition: opacity 0.2s ease;
+    cursor: pointer;
+  }
+
+  .revista-card-cover img:hover {
+    opacity: 0.85;
+  }
+
+  /* Info */
+  .revista-card-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .revista-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .revista-card-number {
+    display: inline-block;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    color: var(--negro);
+    font-weight: 800;
+    font-size: 0.85rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .revista-card-fecha {
+    font-size: 0.9rem;
+    opacity: 0.5;
+    font-weight: 600;
+  }
+
+  .revista-card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  /* Credits */
+  .revista-card-credits {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    font-size: 0.85rem;
+    opacity: 0.5;
+    line-height: 1.6;
+  }
+
+  .revista-card-credits span {
+    white-space: nowrap;
+  }
+
+  .revista-credit-rol {
+    font-weight: 700;
+  }
+
+  /* Actions */
+  .revista-card-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .revista-btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    color: var(--negro);
+    border: none;
+    border-radius: var(--radius);
+    padding: 9px 20px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    font-style: italic;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .revista-btn-download:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+
+  .revista-btn-cover {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1.5px solid rgba(234, 230, 225, 0.15);
+    border-radius: var(--radius);
+    color: var(--crema);
+    padding: 8px 16px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .revista-btn-cover:hover {
+    border-color: rgba(234, 230, 225, 0.35);
+    background-color: rgba(234, 230, 225, 0.05);
+  }
+
+  .revista-btn-cover svg,
+  .revista-btn-download svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  /* Responsive */
+  @media screen and (max-width: 768px) {
+    .revista-card {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .revista-card-cover {
+      width: 180px;
+    }
+
+    .revista-card-header {
+      justify-content: center;
+    }
+
+    .revista-card-credits {
+      justify-content: center;
+    }
+
+    .revista-card-actions {
+      justify-content: center;
+    }
+
+    .rutas-hero-title {
+      font-size: 2rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .revista-card-cover {
+      width: 150px;
+    }
+
+    .revista-card-title {
+      font-size: 1.2rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="global-container">
+  <div class="rutas-hero">
+    <h1 class="rutas-hero-title">Revista 421</h1>
+    <p class="rutas-hero-subtitle">Los numeros de la revista digital de 421, donde compilamos las notas destacadas del sitio e invitamos a disenadores, fotografos e ilustradores.</p>
+  </div>
+  <hr class="rutas-gradient-divider">
+
+  <div class="revista-grid">
+
+    <!-- #11 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2026/02/11_diciembre.jpg" target="_blank">
+          <img src="https://www.421.news/content/images/2026/02/11_diciembre.jpg" alt="Revista 421 #11">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#11</span>
+          <span class="revista-card-fecha">Enero 2026</span>
+        </div>
+        <div class="revista-card-title">Especial Autonomia</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Marcelo Carne</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+          <span><span class="revista-credit-rol">Ilustraciones:</span> Galatemplo</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--11--enero-2026-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (4 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2026/02/11_diciembre.jpg" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #10 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2026/01/10_diciembre.jpg" target="_blank">
+          <img src="https://www.421.news/content/images/2026/01/10_diciembre.jpg" alt="Revista 421 #10">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#10</span>
+          <span class="revista-card-fecha">Diciembre 2025</span>
+        </div>
+        <div class="revista-card-title">Especial Videojuegos</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Martin Pouso</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--10--diciembre-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (4 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2026/01/10_diciembre.jpg" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #9 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/12/Revista-421--9-Especial-Aparatos.jpg" target="_blank">
+          <img src="https://www.421.news/content/images/2025/12/Revista-421--9-Especial-Aparatos.jpg" alt="Revista 421 #9">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#9</span>
+          <span class="revista-card-fecha">Noviembre 2025</span>
+        </div>
+        <div class="revista-card-title">Especial Aparatos</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Agustin Calcagno</span>
+          <span><span class="revista-credit-rol">Ilustraciones:</span> Galatemplo</span>
+          <span><span class="revista-credit-rol">Fotografia:</span> Alejandra Morasano</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--9--noviembre-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (4 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/12/Revista-421--9-Especial-Aparatos.jpg" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #8 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/10/image-57.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/10/image-57.png" alt="Revista 421 #8">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#8</span>
+          <span class="revista-card-fecha">Octubre 2025</span>
+        </div>
+        <div class="revista-card-title">Especial Musica</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Agustin Calcagno</span>
+          <span><span class="revista-credit-rol">Ilustraciones:</span> Galatemplo</span>
+          <span><span class="revista-credit-rol">Fotografia:</span> Alejandra Morasano</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--8--octubre-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (6 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/10/image-57.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #7 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/10/image-10.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/10/image-10.png" alt="Revista 421 #7">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#7</span>
+          <span class="revista-card-fecha">Septiembre 2025</span>
+        </div>
+        <div class="revista-card-title">Especial Tecnologia</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Charlee</span>
+          <span><span class="revista-credit-rol">Ilustraciones:</span> Galatemplo</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--7--septiembre-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (4 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/10/image-10.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #6 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/09/Revista-421--6--1-.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/09/Revista-421--6--1-.png" alt="Revista 421 #6">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#6</span>
+          <span class="revista-card-fecha">Agosto 2025</span>
+        </div>
+        <div class="revista-card-title">Especial Magic: The Gathering</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Mato Saw</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--6--agosto-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (6 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/09/Revista-421--6--1-.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #5 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/08/Revista-421--5.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/08/Revista-421--5.png" alt="Revista 421 #5">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#5</span>
+          <span class="revista-card-fecha">Julio 2025</span>
+        </div>
+        <div class="revista-card-title">Especial Warhammer</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Alen Brujo</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--5--julio-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (4 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/08/Revista-421--5.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #4 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/07/Revista-421--4-1.jpg" target="_blank">
+          <img src="https://www.421.news/content/images/2025/07/Revista-421--4-1.jpg" alt="Revista 421 #4">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#4</span>
+          <span class="revista-card-fecha">Junio 2025</span>
+        </div>
+        <div class="revista-card-title">Revista 421 #4</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Shoko</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--4--junio-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (5 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/07/Revista-421--4-1.jpg" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #3 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/05/Revista-421--3.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/05/Revista-421--3.png" alt="Revista 421 #3">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#3</span>
+          <span class="revista-card-fecha">Mayo 2025</span>
+        </div>
+        <div class="revista-card-title">Revista 421 #3</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa:</span> Kosmo</span>
+          <span><span class="revista-credit-rol">Diseno:</span> Galatemplo</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--3--mayo-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (14 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/05/Revista-421--3.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #2 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/05/Revista-421--2.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/05/Revista-421--2.png" alt="Revista 421 #2">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#2</span>
+          <span class="revista-card-fecha">Febrero 2025</span>
+        </div>
+        <div class="revista-card-title">Revista 421 #2</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa y diseno:</span> Galatemplo</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--2--febrero-2025-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (26 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/05/Revista-421--2.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- #1 -->
+    <div class="revista-card">
+      <div class="revista-card-cover">
+        <a href="https://www.421.news/content/images/2025/05/Revista-421--1.png" target="_blank">
+          <img src="https://www.421.news/content/images/2025/05/Revista-421--1.png" alt="Revista 421 #1">
+        </a>
+      </div>
+      <div class="revista-card-info">
+        <div class="revista-card-header">
+          <span class="revista-card-number">#1</span>
+          <span class="revista-card-fecha">Noviembre 2024</span>
+        </div>
+        <div class="revista-card-title">Revista 421 #1</div>
+        <div class="revista-card-credits">
+          <span><span class="revista-credit-rol">Tapa y diseno:</span> Pablo Tempesta</span>
+        </div>
+        <div class="revista-card-actions">
+          <a href="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/files/2026/02/Revista-421--1--noviembre-2024-.pdf" class="revista-btn-download" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar PDF (3 MB)
+          </a>
+          <a href="https://www.421.news/content/images/2025/05/Revista-421--1.png" target="_blank" class="revista-btn-cover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>
+            Ver tapa
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

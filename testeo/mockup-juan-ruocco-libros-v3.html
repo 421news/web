@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libros de Juan Ruocco — 421 (v3)</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,600;0,700;0,800;1,800&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #121212;
+    --crema: #eae6e1;
+    --amarillo: #fcd221;
+    --verde: #17a583;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--negro);
+    color: var(--crema);
+    font-family: 'Nunito Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  .global-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 5rem 0 3rem;
+    overflow: hidden;
+  }
+
+  /* Faded backdrop image */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/images/2025/05/villa_del_parque.jpeg');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.08;
+    filter: blur(4px);
+    z-index: 0;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, var(--negro) 100%);
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  /* Author portrait */
+  .hero-portrait {
+    position: relative;
+    width: 220px;
+    height: 220px;
+  }
+
+  .hero-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid var(--crema);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+  }
+
+  /* Yellow gradient ring "accent" */
+  .hero-portrait::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    z-index: -1;
+  }
+
+  /* Sparkle / wizard hat decoration */
+  .hero-portrait-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: var(--amarillo);
+    color: var(--negro);
+    font-weight: 800;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  /* Title block */
+  .hero-eyebrow {
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--verde);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-style: italic;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-bio {
+    font-family: 'Lora', Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    line-height: 1.55;
+    opacity: 0.85;
+    max-width: 580px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Stats row */
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(234,230,225,0.12);
+    border-bottom: 1px solid rgba(234,230,225,0.12);
+    padding: 1rem 0;
+    margin-top: 0.5rem;
+  }
+
+  .hero-stat {
+    flex: 1;
+    min-width: 110px;
+    padding: 0 1.25rem;
+    border-right: 1px solid rgba(234,230,225,0.08);
+  }
+
+  .hero-stat:first-child { padding-left: 0; }
+  .hero-stat:last-child { border-right: none; }
+
+  .hero-stat-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-style: italic;
+  }
+
+  .hero-stat-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    margin-top: 0.35rem;
+  }
+
+  /* Section divider with label */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    margin: 3.5rem 0 2.5rem;
+  }
+
+  .section-label-text {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    white-space: nowrap;
+  }
+
+  .section-label-line {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, var(--verde), var(--amarillo));
+    border-radius: 2px;
+  }
+
+  /* Books grid (vertical cards, 4 cols) */
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .book-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(234, 230, 225, 0.04);
+    border: 1px solid rgba(234, 230, 225, 0.08);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .book-card:hover {
+    border-color: rgba(234, 230, 225, 0.18);
+    transform: translateY(-3px);
+  }
+
+  .book-cover { width: 100%; margin-bottom: 1.25rem; }
+
+  .book-cover img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  }
+
+  .book-info { display: flex; flex-direction: column; gap: 0.6rem; flex: 1; }
+
+  .book-header { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+
+  .book-year {
+    background: linear-gradient(280deg, var(--verde), var(--amarillo));
+    color: var(--negro);
+    font-weight: 800;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .book-rating { font-size: 0.8rem; opacity: 0.6; font-weight: 600; }
+  .book-rating .star { color: var(--amarillo); }
+
+  .book-title { font-size: 1.2rem; font-weight: 700; line-height: 1.25; }
+
+  .book-synopsis {
+    font-family: 'Lora', Georgia, serif;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    opacity: 0.7;
+    flex: 1;
+  }
+
+  .book-actions { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 0.75rem; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    transition: transform 0.15s ease;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+  }
+
+  .btn:hover { transform: translateY(-1px); }
+
+  .btn-download { background: linear-gradient(280deg, var(--verde), var(--amarillo)); color: var(--negro); }
+
+  .btn-store {
+    background: transparent;
+    color: var(--crema);
+    border: 1px solid rgba(234,230,225,0.25);
+  }
+  .btn-store:hover { border-color: var(--crema); }
+
+  .btn svg { width: 14px; height: 14px; }
+
+  /* Tablet */
+  @media (max-width: 960px) {
+    .hero-inner { grid-template-columns: 160px 1fr; gap: 2rem; }
+    .hero-portrait { width: 160px; height: 160px; }
+    .hero-title { font-size: 3rem; }
+    .books-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding: 3rem 0 2rem; }
+    .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
+    .hero-portrait { margin: 0 auto; width: 140px; height: 140px; }
+    .hero-title { font-size: 2.5rem; }
+    .hero-bio { margin-left: auto; margin-right: auto; }
+    .hero-stat { padding: 0 0.75rem; }
+    .books-grid { grid-template-columns: 1fr; }
+    .book-cover { max-width: 260px; margin-left: auto; margin-right: auto; }
+  }
+</style>
+</head>
+<body>
+
+  <main class="global-container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-portrait">
+          <img src="https://storage.ghost.io/c/2b/7f/2b7f69fc-a243-4d2f-ae8e-db8312c6653a/content/images/2025/10/juan_ruocco-1.jpg" alt="Juan Ruocco">
+          <span class="hero-portrait-badge">AUTOR</span>
+        </div>
+        <div class="hero-text">
+          <p class="hero-eyebrow">Biblioteca · Juan Ruocco</p>
+          <h1 class="hero-title">Cuatro libros, una obra.</h1>
+          <p class="hero-bio">
+            "Escribo. Nací en 1987 en la Ciudad de Buenos Aires. Publiqué tres libros de ficción y un ensayo. Fundé 421 y soy columnista en streaming."
+          </p>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-num">4</div>
+              <div class="hero-stat-label">Libros</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">3</div>
+              <div class="hero-stat-label">Ficción</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">1</div>
+              <div class="hero-stat-label">Ensayo</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">2019<span style="opacity:0.5">—</span>23</div>
+              <div class="hero-stat-label">Publicados</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section label -->
+    <div class="section-label">
+      <span class="section-label-text">La obra completa</span>
+      <span class="section-label-line"></span>
+    </div>
+
+    <!-- BOOKS GRID -->
+    <div class="books-grid">
+
+      <article class="book-card">
+        <div class="book-cover">
+          <img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1685743447i/157368822.jpg" alt="¿La democracia en peligro?">
+        </div>
+        <div class="book-info">
+          <div class="book-header">
+            <span class="book-year">2023</span>
+            <span class="book-rating"><span class="star">★</span> 3.99</span>
+          </div>
+          <h2 class="book-title">¿La democracia en peligro?</h2>
+          <p class="book-synopsis">[Sinopsis a completar.]</p>
+          <div class="book-actions">
+            <a class="btn btn-download" href="#" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              EPUB
+            </a>
+            <a class="btn btn-store" href="https://www.goodreads.com/book/show/157368822-la-democracia-en-peligro" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="book-card">
+        <div class="book-cover">
+          <img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1577590158i/50054511.jpg" alt="Autopista al Espacio">
+        </div>
+        <div class="book-info">
+          <div class="book-header">
+            <span class="book-year">2019</span>
+            <span class="book-rating"><span class="star">★</span> 4.05</span>
+          </div>
+          <h2 class="book-title">Autopista al Espacio</h2>
+          <p class="book-synopsis">[Sinopsis a completar.]</p>
+          <div class="book-actions">
+            <a class="btn btn-download" href="#" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              EPUB
+            </a>
+            <a class="btn btn-store" href="https://www.goodreads.com/book/show/50054511-autopista-al-espacio" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="book-card">
+        <div class="book-cover">
+          <img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638816988i/59764767.jpg" alt="El Coloso Justicialista">
+        </div>
+        <div class="book-info">
+          <div class="book-header">
+            <span class="book-year">2021</span>
+            <span class="book-rating"><span class="star">★</span> 3.87</span>
+          </div>
+          <h2 class="book-title">El Coloso Justicialista</h2>
+          <p class="book-synopsis">[Sinopsis a completar.]</p>
+          <div class="book-actions">
+            <a class="btn btn-download" href="#" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              EPUB
+            </a>
+            <a class="btn btn-store" href="https://www.goodreads.com/book/show/59764767-el-coloso-justicialista" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </article>
+
+      <article class="book-card">
+        <div class="book-cover">
+          <img src="https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631938163i/59018104.jpg" alt="3220">
+        </div>
+        <div class="book-info">
+          <div class="book-header">
+            <span class="book-year">2021</span>
+            <span class="book-rating"><span class="star">★</span> 4.15</span>
+          </div>
+          <h2 class="book-title">3220</h2>
+          <p class="book-synopsis">[Sinopsis a completar.]</p>
+          <div class="book-actions">
+            <a class="btn btn-download" href="#" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              EPUB
+            </a>
+            <a class="btn btn-store" href="https://www.goodreads.com/book/show/59018104-3220" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Comprar
+            </a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </main>
+
+</body>
+</html>
