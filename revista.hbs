@@ -45,7 +45,7 @@
         <div class="revista-wizard-cta-content">
           <h2 class="revista-wizard-cta-title">¿Quer&eacute;s leer el pr&oacute;ximo n&uacute;mero antes que nadie?</h2>
           <p class="revista-wizard-cta-text">Los <strong>Wizards</strong> reciben cada nueva Revista 421 <strong>un mes antes</strong> de que se libere al p&uacute;blico. M&aacute;s la app de Magic, el Concilio mensual con Juan Ruocco y la posibilidad de comentar las notas.</p>
-          <a href="/es/suscribite/" class="revista-wizard-cta-btn">Hacete Wizard &rarr;</a>
+          <a href="/es/suscribite/" class="revista-wizard-cta-btn" onclick="if(typeof gtag==='function')gtag('event','revista_wizard_cta_click',{event_category:'engagement',event_label:'revista_page'});">Hacete Wizard &rarr;</a>
         </div>
       </div>
       {{/unless}}

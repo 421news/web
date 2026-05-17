@@ -2,6 +2,20 @@
 
 <meta name="robots" content="noindex, nofollow">
 
+<script>
+  // Track signup completion (fired when user lands on /gracias/ after Ghost Portal signup)
+  (function(){
+    if (typeof gtag !== 'function') return;
+    var params = new URLSearchParams(window.location.search);
+    var isPaid = params.get('type') === 'paid' || /portal\/checkout/.test(document.referrer || '');
+    gtag('event', isPaid ? 'purchase' : 'sign_up', {
+      event_category: 'subscription',
+      event_label: isPaid ? 'completed_paid' : 'completed_free',
+      transaction_id: params.get('session_id') || ('signup_' + Date.now())
+    });
+  })();
+</script>
+
     <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
     <div class="page-wrapper">
       {{> "general-styling"}}

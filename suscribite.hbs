@@ -264,25 +264,41 @@
           updatePriceDisplay();
         });
 
-        // Suscribirme → show payment chooser
+        // Track helper (GA4)
+        function track(name, label, extra) {
+          if (typeof gtag !== 'function') return;
+          var data = { event_category: 'subscription', event_label: label || '' };
+          if (extra) Object.assign(data, extra);
+          gtag('event', name, data);
+        }
+
+        // Suscribirme → show payment chooser (intent to subscribe paid)
         document.getElementById('btn-suscribirme').addEventListener('click', function() {
+          track('begin_checkout', 'wizard_' + currentCadence, {
+            value: currentCadence === 'yearly' ? (tierData && tierData.yearly_price || 50) : (tierData && tierData.monthly_price || 5),
+            currency: 'USD',
+            items: [{ item_id: (tierData && tierData.id) || 'wizard', item_name: 'Wizard ' + currentCadence }]
+          });
           document.getElementById('chooser-plan-name').textContent = getPlanLabel();
           showSection(sectionChooser);
         });
 
         // Free signup → Ghost Portal
         document.getElementById('btn-free').addEventListener('click', function() {
+          track('sign_up_intent', 'free_newsletter');
           window.location.hash = '#/portal/signup/free';
         });
 
         // Stripe → Ghost Portal with tier
         document.getElementById('btn-stripe').addEventListener('click', function() {
           if (!tierData) return;
+          track('payment_method_selected', 'stripe_' + currentCadence);
           window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
         // MercadoPago → show form
         document.getElementById('btn-mp').addEventListener('click', function() {
+          track('payment_method_selected', 'mercadopago_' + currentCadence);
           document.getElementById('mp-plan-name').textContent = getPlanLabel() + ' \u2014 MercadoPago';
           document.getElementById('mp-sub-type').value = currentCadence === 'yearly' ? 'wizard-yearly' : 'wizard-monthly';
           showSection(sectionMp);
@@ -321,6 +337,10 @@
           })
           .then(function(data) {
             if (data.success && data.redirectUrl) {
+              track('purchase_initiated', 'mercadopago_' + currentCadence, {
+                value: currentCadence === 'yearly' ? (tierData && tierData.yearly_price || 50) : (tierData && tierData.monthly_price || 5),
+                currency: 'USD'
+              });
               window.location.href = data.redirectUrl;
             } else {
               throw new Error(data.message || 'Error al procesar');
