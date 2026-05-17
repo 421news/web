@@ -274,12 +274,3 @@ body.light-mode .filter-select:focus {
 body.light-mode .filter-empty {
   color: rgba(18, 18, 18, 0.4);
 }
-body.light-mode .post-cta {
-  background: rgba(0, 0, 0, 0.03);
-}
-body.light-mode .post-cta-text {
-  color: var(--negro);
-}
-body.light-mode .post-cta-benefits {
-  color: var(--negro);
-}
