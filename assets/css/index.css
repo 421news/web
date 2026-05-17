@@ -2717,3 +2717,197 @@ footer {
 .c421-load-more:hover { border-color: rgba(234,230,225,0.3); }
 .light-mode .c421-load-more { color: var(--negro); border-color: rgba(26,26,26,0.1); }
 .light-mode .c421-load-more:hover { border-color: rgba(26,26,26,0.25); }
+
+/* ============================================================
+   FEATURED POST HEADER (v3.33.40)
+   New layout: 50/50 split, B&W image with hover-to-color,
+   pill footer with Suscribite + translation + Share.
+   Replaces .alt-post-header*.
+   ============================================================ */
+.featured-post-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+  background: var(--crema);
+  color: var(--negro);
+  margin-top: 96px; /* clear fixed site-nav */
+}
+.featured-post-text {
+  padding: 3rem 3.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.featured-post-breadcrumb {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--negro);
+  opacity: 0.7;
+  margin-bottom: 1.25rem;
+}
+.featured-post-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+.featured-post-title {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 4rem;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  color: var(--negro);
+  text-transform: uppercase;
+}
+/* Adaptive sizing for very long titles */
+.featured-post-title:where(:not(:empty)):nth-child(n) {
+  /* JS could add classes if desired; for now, font-size scales via @container later */
+}
+.featured-post-byline {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--negro);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.featured-post-author {
+  font-weight: 800;
+  color: var(--negro);
+  text-decoration: none;
+  border-bottom: 2px solid var(--amarillo);
+  padding-bottom: 1px;
+}
+.featured-post-sep { opacity: 0.4; }
+.featured-post-meta { opacity: 0.6; font-weight: 500; }
+.featured-post-excerpt {
+  font-family: 'Lora', serif;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--negro);
+  max-width: 540px;
+  margin: 0 0 2rem;
+}
+
+/* Pill footer */
+.featured-post-footer {
+  display: inline-flex;
+  align-items: stretch;
+  background: var(--gradient-main);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
+  padding-right: 20px;
+  align-self: flex-start;
+  margin-top: auto;
+}
+.featured-post-pill-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--negro);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.75rem 0.95rem;
+  background: transparent;
+  border: none;
+  border-left: 1.5px solid rgba(26, 26, 26, 0.25);
+  transition: background 0.15s ease;
+  font-family: inherit;
+  cursor: pointer;
+}
+.featured-post-pill-item.is-primary {
+  border-left: none;
+  padding: 0.75rem 1rem 0.75rem 1.25rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+}
+.featured-post-pill-item:hover { background: rgba(26, 26, 26, 0.12); }
+.featured-post-pill-item svg { flex-shrink: 0; }
+/* Translation link wrapper: gets populated by JS in post.hbs with <a class="btn-translate"> */
+.featured-post-pill-translation { display: inline-flex; }
+.featured-post-pill-translation:empty { display: none; }
+.featured-post-pill-translation .btn-translate {
+  /* Inherit the same styling as other pill items */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--negro);
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.75rem 0.95rem;
+  background: transparent;
+  border-left: 1.5px solid rgba(26, 26, 26, 0.25);
+  transition: background 0.15s ease;
+}
+.featured-post-pill-translation .btn-translate:hover { background: rgba(26, 26, 26, 0.12); }
+
+/* Image — halftone B&W with hover to color */
+.featured-post-image {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.featured-post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.12);
+  transition: filter 0.5s ease;
+}
+.featured-post-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(0,0,0,0.32) 1px, transparent 1px);
+  background-size: 3px 3px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.featured-post-image:hover img { filter: grayscale(0) contrast(1.02); }
+.featured-post-image:hover::after { opacity: 0; }
+
+@media (max-width: 900px) {
+  .featured-post-header {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .featured-post-image {
+    min-height: 320px;
+    order: -1; /* image on top in mobile */
+  }
+  .featured-post-text {
+    padding: 1.5rem 1.25rem;
+  }
+  .featured-post-title { font-size: 2.4rem; }
+  .featured-post-byline { font-size: 0.85rem; }
+  .featured-post-excerpt { font-size: 0.95rem; }
+  .featured-post-pill-item,
+  .featured-post-pill-translation .btn-translate {
+    padding: 0.6rem 0.65rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+  .featured-post-pill-item.is-primary {
+    padding: 0.6rem 0.75rem 0.6rem 0.9rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+}
+@media (max-width: 600px) {
+  .featured-post-title { font-size: 2rem; }
+}
