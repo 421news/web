@@ -41,24 +41,24 @@ body.light-mode .button:hover {
 }
 body.light-mode .hl-post .flashy-h1 span,
 body.light-mode .hero-home .flashy-h1 span {
-  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+  background-image: linear-gradient(135deg, var(--verde), var(--amarillo));
 }
 body.light-mode .hl-post .author-name_link:hover,
 body.light-mode .hero-home .author-name_link:hover {
-  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+  background-image: linear-gradient(135deg, var(--verde), var(--amarillo));
 }
 body.light-mode .rich-text a {
-  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+  background-image: linear-gradient(135deg, var(--verde), var(--amarillo));
 }
 body.light-mode .rutas-hero-title,
 body.light-mode .sub-hero-title {
   color: var(--verde);
 }
 body.light-mode .rutas-gradient-divider {
-  background: linear-gradient(280deg, var(--amarillo), var(--verde));
+  background: linear-gradient(135deg, var(--verde), var(--amarillo));
 }
 body.light-mode .ruta-nombre a {
-  background-image: linear-gradient(280deg, var(--amarillo), var(--verde));
+  background-image: linear-gradient(135deg, var(--verde), var(--amarillo));
 }
 body.light-mode .hero-mobile-header {
   background-color: var(--crema) !important;
@@ -167,10 +167,10 @@ body.light-mode .plain-tags a {
 }
 body.light-mode .lang-filter-btn {
   color: var(--negro);
-  border-color: rgba(18, 18, 18, 0.15);
+  border-color: rgba(26, 26, 26, 0.15);
 }
 body.light-mode .lang-filter-btn:hover {
-  border-color: rgba(18, 18, 18, 0.4);
+  border-color: rgba(26, 26, 26, 0.4);
 }
 body.light-mode .lang-filter-btn.is-active {
   color: var(--negro);
@@ -182,58 +182,58 @@ body.light-mode .rutas-hero-subtitle {
   color: var(--negro);
 }
 body.light-mode .ruta-section {
-  border-bottom-color: rgba(18, 18, 18, 0.08);
+  border-bottom-color: rgba(26, 26, 26, 0.08);
 }
 body.light-mode .ruta-tesis {
-  color: rgba(18, 18, 18, 0.6);
+  color: rgba(26, 26, 26, 0.6);
 }
 body.light-mode .canon-item {
-  border-bottom-color: rgba(18, 18, 18, 0.08);
+  border-bottom-color: rgba(26, 26, 26, 0.08);
   color: var(--negro);
 }
 body.light-mode .canon-item:hover {
-  background: rgba(18, 18, 18, 0.03);
+  background: rgba(26, 26, 26, 0.03);
 }
 body.light-mode .canon-cover {
-  border-color: rgba(18, 18, 18, 0.1);
+  border-color: rgba(26, 26, 26, 0.1);
 }
 body.light-mode .canon-info h3 {
   color: var(--negro);
 }
 body.light-mode .canon-reason {
-  color: rgba(18, 18, 18, 0.6);
+  color: rgba(26, 26, 26, 0.6);
 }
 body.light-mode .revista-card {
-  background: rgba(18, 18, 18, 0.03);
-  border-color: rgba(18, 18, 18, 0.08);
+  background: rgba(26, 26, 26, 0.03);
+  border-color: rgba(26, 26, 26, 0.08);
 }
 body.light-mode .revista-card:hover {
-  border-color: rgba(18, 18, 18, 0.18);
+  border-color: rgba(26, 26, 26, 0.18);
 }
 body.light-mode .revista-card-credits a {
   color: var(--negro);
-  border-bottom-color: rgba(18, 18, 18, 0.3);
+  border-bottom-color: rgba(26, 26, 26, 0.3);
 }
 body.light-mode .revista-card-credits a:hover {
   border-bottom-color: var(--verde);
 }
 body.light-mode .revista-btn-cover {
   color: var(--negro);
-  border-color: rgba(18, 18, 18, 0.15);
+  border-color: rgba(26, 26, 26, 0.15);
 }
 body.light-mode .revista-btn-cover:hover {
-  border-color: rgba(18, 18, 18, 0.35);
-  background-color: rgba(18, 18, 18, 0.05);
+  border-color: rgba(26, 26, 26, 0.35);
+  background-color: rgba(26, 26, 26, 0.05);
 }
 body.light-mode .pitch-cta-line {
-  color: rgba(18, 18, 18, 0.5);
+  color: rgba(26, 26, 26, 0.5);
 }
 body.light-mode .pitch-category-card {
-  background: rgba(18, 18, 18, 0.03);
-  border-color: rgba(18, 18, 18, 0.08);
+  background: rgba(26, 26, 26, 0.03);
+  border-color: rgba(26, 26, 26, 0.08);
 }
 body.light-mode .pitch-category-card:hover {
-  background: rgba(18, 18, 18, 0.06);
+  background: rgba(26, 26, 26, 0.06);
 }
 body.light-mode .pitch-category-card.is-active {
   border-color: var(--verde);
@@ -243,20 +243,20 @@ body.light-mode .pitch-category-icon {
   filter: invert(1);
 }
 body.light-mode .pitch-category-desc {
-  color: rgba(18, 18, 18, 0.45);
+  color: rgba(26, 26, 26, 0.45);
 }
 body.light-mode .pitch-form-hint {
-  color: rgba(18, 18, 18, 0.45);
+  color: rgba(26, 26, 26, 0.45);
 }
 body.light-mode .pitch-iframe-container {
-  background: rgba(18, 18, 18, 0.02);
-  border-color: rgba(18, 18, 18, 0.08);
+  background: rgba(26, 26, 26, 0.02);
+  border-color: rgba(26, 26, 26, 0.08);
 }
 body.light-mode .pitch-bottom {
-  color: rgba(18, 18, 18, 0.4);
+  color: rgba(26, 26, 26, 0.4);
 }
 body.light-mode .pitch-bottom strong {
-  color: rgba(18, 18, 18, 0.65);
+  color: rgba(26, 26, 26, 0.65);
 }
 body.light-mode .filter-select {
   background-color: var(--crema);
@@ -272,6 +272,6 @@ body.light-mode .filter-select:focus {
   border-color: var(--verde);
 }
 body.light-mode .filter-empty {
-  color: rgba(18, 18, 18, 0.4);
+  color: rgba(26, 26, 26, 0.4);
 }
 /* .revista-wizard-announce already has yellow bg + dark text — no light-mode override needed */

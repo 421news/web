@@ -1,11 +1,13 @@
 :root {
-  --negro: #121212;
+  /* Brand colors — per 421 brand manual */
+  --negro: #1a1a1a;
   --crema: #eae6e1;
   --amarillo: #fcd221;
   --verde: #17a583;
   --radius: 8px;
   --border-width: 2px;
-  --gradient-main: linear-gradient(280deg, var(--verde), var(--amarillo));
+  /* Manual specifies -45° (verde→amarillo, top-left to bottom-right); CSS equivalent: 135deg */
+  --gradient-main: linear-gradient(135deg, var(--verde), var(--amarillo));
 
   /* Typographic scale */
   --fs-2xs: 0.6875rem; /* 11px */

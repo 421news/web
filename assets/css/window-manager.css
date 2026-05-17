@@ -21,21 +21,21 @@
   align-items: center;
   justify-content: center;
   font-size: var(--fs-xl);
-  box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.3);
+  box-shadow: 2px 2px 0 rgba(26, 26, 26, 0.3);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   animation: wm-pulse 3s ease-in-out infinite;
 }
 .wm-launcher:hover {
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 3px 3px 0 rgba(18, 18, 18, 0.4);
+  box-shadow: 3px 3px 0 rgba(26, 26, 26, 0.4);
 }
 .wm-launcher:active {
   transform: translateY(-50%) scale(0.95);
 }
 
 @keyframes wm-pulse {
-  0%, 100% { box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.3); }
-  50% { box-shadow: 2px 2px 8px rgba(18, 18, 18, 0.15); }
+  0%, 100% { box-shadow: 2px 2px 0 rgba(26, 26, 26, 0.3); }
+  50% { box-shadow: 2px 2px 8px rgba(26, 26, 26, 0.15); }
 }
 
 /* ---- Floating Windows ---- */
@@ -108,8 +108,8 @@
   right: 3px;
   width: 8px;
   height: 8px;
-  border-right: 2px solid rgba(18, 18, 18, 0.3);
-  border-bottom: 2px solid rgba(18, 18, 18, 0.3);
+  border-right: 2px solid rgba(26, 26, 26, 0.3);
+  border-bottom: 2px solid rgba(26, 26, 26, 0.3);
 }
 
 /* ---- Taskbar ---- */
@@ -208,7 +208,7 @@
 }
 .wm-post-meta {
   font-size: var(--fs-xs);
-  color: rgba(18, 18, 18, 0.5);
+  color: rgba(26, 26, 26, 0.5);
   margin-bottom: 16px;
   font-weight: 600;
 }
@@ -256,7 +256,7 @@
   transition: background 0.12s ease, transform 0.1s ease;
 }
 .wm-folder-item:hover {
-  background-color: rgba(18, 18, 18, 0.06);
+  background-color: rgba(26, 26, 26, 0.06);
   transform: translateY(-2px);
 }
 .wm-folder-item-icon {
@@ -280,7 +280,7 @@
   justify-content: center;
   padding: 40px;
   font-size: var(--fs-base);
-  color: rgba(18, 18, 18, 0.5);
+  color: rgba(26, 26, 26, 0.5);
   font-weight: 600;
 }
 .wm-error {
@@ -307,10 +307,10 @@ body.light-mode .wm-launcher {
 body.light-mode .wm-window {
   border-color: var(--crema);
   background-color: var(--negro);
-  box-shadow: 4px 4px 0 rgba(18, 18, 18, 0.15);
+  box-shadow: 4px 4px 0 rgba(26, 26, 26, 0.15);
 }
 body.light-mode .wm-window.wm-focused {
-  box-shadow: 6px 6px 0 rgba(18, 18, 18, 0.15), 0 0 0 1px rgba(18, 18, 18, 0.15);
+  box-shadow: 6px 6px 0 rgba(26, 26, 26, 0.15), 0 0 0 1px rgba(26, 26, 26, 0.15);
 }
 body.light-mode .wm-resize-handle::after {
   border-right-color: rgba(234, 230, 225, 0.3);
@@ -322,15 +322,15 @@ body.light-mode .wm-taskbar {
   border-top-color: var(--negro);
 }
 body.light-mode .wm-taskbar-item {
-  background: rgba(18, 18, 18, 0.08);
-  border-color: rgba(18, 18, 18, 0.15);
+  background: rgba(26, 26, 26, 0.08);
+  border-color: rgba(26, 26, 26, 0.15);
   color: var(--negro);
 }
 body.light-mode .wm-taskbar-item:hover {
-  background: rgba(18, 18, 18, 0.15);
+  background: rgba(26, 26, 26, 0.15);
 }
 body.light-mode .wm-taskbar-item.is-active {
-  background: rgba(18, 18, 18, 0.15);
+  background: rgba(26, 26, 26, 0.15);
   border-color: var(--negro);
 }
 body.light-mode .wm-post-body {
@@ -354,7 +354,7 @@ body.light-mode .wm-post-link {
   border-color: var(--crema);
 }
 body.light-mode .wm-post-link:hover {
-  box-shadow: 2px 2px 0 rgba(18, 18, 18, 0.15);
+  box-shadow: 2px 2px 0 rgba(26, 26, 26, 0.15);
 }
 body.light-mode .wm-folder-item {
   color: var(--crema);

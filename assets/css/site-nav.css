@@ -19,7 +19,7 @@
 
 body.light-mode .site-header {
     background-color: var(--crema);
-    border-bottom-color: rgba(18, 18, 18, 0.1);
+    border-bottom-color: rgba(26, 26, 26, 0.1);
 }
 
 /* --- Desktop nav layout --- */
@@ -108,7 +108,7 @@ body.light-mode .nav-link:hover {
 }
 
 body.light-mode .nav-link.is-active {
-    background-color: rgba(18, 18, 18, 0.08);
+    background-color: rgba(26, 26, 26, 0.08);
 }
 
 /* --- Dropdown (Más+) --- */
@@ -161,7 +161,7 @@ body.light-mode .nav-link.is-active {
 
 body.light-mode .nav-dropdown-menu {
     background-color: var(--crema);
-    border-color: rgba(18, 18, 18, 0.12);
+    border-color: rgba(26, 26, 26, 0.12);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
@@ -266,12 +266,12 @@ body.light-mode .nav-subscribe-btn {
 
 body.light-mode .nav-icon-btn {
     color: var(--negro);
-    border-color: rgba(18, 18, 18, 0.15);
+    border-color: rgba(26, 26, 26, 0.15);
 }
 
 body.light-mode .nav-icon-btn:hover {
-    border-color: rgba(18, 18, 18, 0.35);
-    background-color: rgba(18, 18, 18, 0.05);
+    border-color: rgba(26, 26, 26, 0.35);
+    background-color: rgba(26, 26, 26, 0.05);
 }
 
 body.light-mode .nav-icon-btn svg {
@@ -348,16 +348,16 @@ body.light-mode .nav-icon-btn .nav-flag {
 
 body.light-mode .nav-mobile {
     background-color: var(--crema);
-    border-top-color: rgba(18, 18, 18, 0.08);
+    border-top-color: rgba(26, 26, 26, 0.08);
 }
 
 body.light-mode .nav-mobile a {
     color: var(--negro);
-    border-bottom-color: rgba(18, 18, 18, 0.06);
+    border-bottom-color: rgba(26, 26, 26, 0.06);
 }
 
 body.light-mode .nav-mobile a:hover {
-    background: rgba(18, 18, 18, 0.04);
+    background: rgba(26, 26, 26, 0.04);
     color: var(--verde);
 }
 
@@ -464,7 +464,7 @@ body.light-mode .nav-mobile-subscribe {
 
 body.light-mode .lang-selector-menu {
     background: var(--crema);
-    border-color: rgba(18, 18, 18, 0.12);
+    border-color: rgba(26, 26, 26, 0.12);
 }
 
 .lang-selector.is-open .lang-selector-menu {
@@ -494,7 +494,7 @@ body.light-mode .lang-option {
 }
 
 body.light-mode .lang-option:hover {
-    background: rgba(18, 18, 18, 0.06);
+    background: rgba(26, 26, 26, 0.06);
 }
 
 .lang-option.is-current {
