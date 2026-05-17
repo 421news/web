@@ -19,8 +19,9 @@
     {{#unless @site.icon}}
       <link href='{{asset "images/webclip.png"}}' rel='apple-touch-icon' />
     {{/unless}}
-    {{!-- Server-side hreflang: homepage --}}
-    {{#is "home"}}
+    {{!-- Server-side hreflang: landing (/) AND collection homepages (/es/, /en/, /pt/, /fr/, /zh/, /ja/, /ko/, /tr/) --}}
+    {{!-- Critical: must render on ALL collection homes for hreflang reciprocity. Without it, Google picks / as canonical for /es/ (was the bug). --}}
+    {{#is "home, index"}}{{#unless tag}}{{#unless author}}
     <link rel="alternate" hreflang="es" href="https://www.421.news/es/" />
     <link rel="alternate" hreflang="en" href="https://www.421.news/en/" />
     <link rel="alternate" hreflang="zh" href="https://www.421.news/zh/" />
@@ -30,6 +31,9 @@
     <link rel="alternate" hreflang="pt" href="https://www.421.news/pt/" />
     <link rel="alternate" hreflang="fr" href="https://www.421.news/fr/" />
     <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
+    {{/unless}}{{/unless}}{{/is}}
+    {{!-- OG image fallback for landing only (collection homes have their own overrides below) --}}
+    {{#is "home"}}
     <meta property="og:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     <meta name="twitter:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
