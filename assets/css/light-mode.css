@@ -274,3 +274,10 @@ body.light-mode .filter-select:focus {
 body.light-mode .filter-empty {
   color: rgba(18, 18, 18, 0.4);
 }
+body.light-mode .revista-wizard-cta {
+  background: rgba(0, 0, 0, 0.03);
+}
+body.light-mode .revista-wizard-cta-title,
+body.light-mode .revista-wizard-cta-text {
+  color: var(--negro);
+}
