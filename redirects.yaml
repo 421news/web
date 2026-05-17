@@ -107,6 +107,21 @@
   "^/es/tag/politica/?$": /es/
   "^/es/tag/economia/?$": /es/
 
+  # === Migración cuatroveintiuno.com — tags renombrados (orden importa: antes del wildcard) ===
+  "^/tag/videogames/?$": /es/tag/juegos/
+  "^/tag/music/?$": /es/tag/musica/
+  "^/tag/technology/?$": /es/tag/tecnologia/
+
+  # === Migración cuatroveintiuno.com — tags eliminados → home ES ===
+  "^/tag/(aire-libre|arquitectura|artefactos|canon-421|chupi|ciencia-ficcion|ciudades|consumibles|diseno|drogas|ethereum|galerias-421|hongos|humor|juguetes|laburo|mente|monstruos|p2p|poder|politics|punk|recitales|rol|superheroes|vigilancia)/?$": /es/
+
+  # === Migración cuatroveintiuno.com — authors renombrados ===
+  "^/author/belu/?$": /author/belu-liendo/
+  "^/author/ndb/?$": /author/juanbn/
+
+  # === Migración cuatroveintiuno.com — /en/posts/ catch-all (existía /posts/ pero no /en/posts/) ===
+  "^/en/posts/(.*)": /en/$1
+
   # === Migración /es/: tag pages (wildcard) ===
   "^/tag/(.+)$": /es/tag/$1
 
