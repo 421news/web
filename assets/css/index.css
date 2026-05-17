@@ -2757,8 +2757,8 @@ footer {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 900;
   font-style: italic;
-  font-size: 4rem;
-  line-height: 0.98;
+  font-size: 3rem;
+  line-height: 1;
   letter-spacing: -0.02em;
   margin: 0 0 1.25rem;
   color: var(--negro);
@@ -2802,11 +2802,11 @@ footer {
   display: inline-flex;
   align-items: stretch;
   background: var(--gradient-main);
-  clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
-  padding-right: 28px;
+  border-radius: 4px;
   align-self: flex-start;
   margin-top: auto;
   max-width: 100%;
+  overflow: hidden;
 }
 .featured-post-pill-item {
   display: inline-flex;
@@ -2894,7 +2894,7 @@ footer {
   .featured-post-text {
     padding: 1.5rem 1.25rem;
   }
-  .featured-post-title { font-size: 2.4rem; }
+  .featured-post-title { font-size: 2rem; }
   .featured-post-byline { font-size: 0.85rem; }
   .featured-post-excerpt { font-size: 0.95rem; }
   .featured-post-pill-item,

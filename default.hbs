@@ -39,24 +39,8 @@
     <meta name="twitter:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     {{/is}}
-    {{!-- Server-side hreflang: post self-referential --}}
-    {{#is "post"}}{{#post}}{{#has tag="#en"}}
-    <link rel="alternate" hreflang="en" href="{{url absolute=true}}" />
-    {{else}}{{#has tag="#zh"}}
-    <link rel="alternate" hreflang="zh" href="{{url absolute=true}}" />
-    {{else}}{{#has tag="#ja"}}
-    <link rel="alternate" hreflang="ja" href="{{url absolute=true}}" />
-    {{else}}{{#has tag="#ko"}}
-    <link rel="alternate" hreflang="ko" href="{{url absolute=true}}" />
-    {{else}}{{#has tag="#tr"}}
-    <link rel="alternate" hreflang="tr" href="{{url absolute=true}}" />
-    {{else}}{{#has tag="#pt"}}
-    <link rel="alternate" hreflang="pt" href="{{url absolute=true}}" />
-    {{else}}{{#has tag="#fr"}}
-    <link rel="alternate" hreflang="fr" href="{{url absolute=true}}" />
-    {{else}}
-    <link rel="alternate" hreflang="es" href="{{url absolute=true}}" />
-    {{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{/is}}
+    {{!-- Server-side hreflang for posts is provided by codeinjection_head (migrated 2026-02 + webhook for new posts). --}}
+    {{!-- The legacy self-referential block here was creating duplicate hreflang="es" entries when paired with codeinjection. Removed v3.33.42. --}}
     <script>
       (function() {
         var p = window.location.pathname;
