@@ -2480,6 +2480,32 @@ footer {
   margin: 0 auto 1.5rem;
 }
 
+.post-cta-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 1.5rem;
+  max-width: 520px;
+  text-align: left;
+  font-family: 'Lora', serif;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  color: var(--crema);
+}
+.post-cta-benefits li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.post-cta-benefits li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--amarillo);
+  font-weight: bold;
+}
+.post-cta-benefits a { color: var(--amarillo); text-decoration: underline; }
+.post-cta-benefits strong { color: var(--amarillo); }
+
 .post-cta-buttons {
   display: flex;
   gap: 1rem;

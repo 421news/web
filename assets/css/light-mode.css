@@ -280,4 +280,6 @@ body.light-mode .post-cta {
 body.light-mode .post-cta-text {
   color: var(--negro);
 }
-body.light-mode .mid-cta-dismiss { color: #1a1a1a; }
+body.light-mode .post-cta-benefits {
+  color: var(--negro);
+}

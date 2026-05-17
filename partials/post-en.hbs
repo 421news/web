@@ -60,10 +60,35 @@
         {{#unless @member.paid}}
         <div class="global-container">
           <div class="post-cta post-cta-end">
-            <p class="post-cta-text">Enjoyed the read? The Wizards are who keep 421 alive. Join and get the digital magazine, exclusive content, and more.</p>
+            <p class="post-cta-text">Enjoyed this? 421 runs on Wizards. Join and unlock:</p>
+            <ul class="post-cta-benefits">
+              <li><strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF (plus the full back catalog)</li>
+              <li>Commenting on articles</li>
+              <li>The <strong>Monthly Wizard Council</strong> (video call with Juan Ruocco)</li>
+              <li>The <a href="https://mtg.421.news">Magic 421 app</a></li>
+            </ul>
             <div class="post-cta-buttons"><a href="/en/subscribe/" class="post-cta-btn-primary">Become a Wizard &rarr;</a></div>
           </div>
         </div>
+        <script>
+        (function(){
+          var slots = document.querySelectorAll('[data-revista-numero]');
+          if (!slots.length) return;
+          fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
+            .then(function(r){ return r.json(); })
+            .then(function(d){
+              var p = d.pages && d.pages[0];
+              if (!p || !p.html) return;
+              var doc = new DOMParser().parseFromString(p.html, 'text/html');
+              var h2 = doc.querySelector('h2');
+              if (!h2) return;
+              var m = h2.textContent.trim().match(/#(\d+)/);
+              if (!m) return;
+              slots.forEach(function(el){ el.textContent = m[1]; });
+            })
+            .catch(function(){});
+        })();
+        </script>
         {{/unless}}
 
         <!-- RELATED POSTS -->
@@ -138,20 +163,5 @@
     })();
     </script>
     {{/has}}
-    {{#unless @member.paid}}
-    <script>
-    (function() {
-      var KEY = 'mid_cta_dismissed';
-      var d = localStorage.getItem(KEY);
-      if (d && (Date.now() - parseInt(d, 10)) < 3 * 86400000) return;
-      var hh = document.querySelectorAll('.rich-text h2');
-      if (hh.length < 3) return;
-      var el = document.createElement('div');
-      el.className = 'post-cta';
-      el.innerHTML = '<p class="post-cta-text">If you\u2019ve read this far, 421 is for you. Essays, guides, and analysis you won\u2019t find anywhere else \u2014 and the Wizards are who make it possible.</p><div class="post-cta-buttons"><a href="/en/subscribe/" class="post-cta-btn-primary">Join 421 \u2192</a></div><button class="mid-cta-dismiss">Not now</button>';
-      el.querySelector('.mid-cta-dismiss').onclick = function() { el.remove(); localStorage.setItem(KEY, Date.now()); };
-      hh[2].parentNode.insertBefore(el, hh[2]);
-    })();
-    </script>
-    {{/unless}}
+    {{!-- Mid-post CTA removed: B1 (post-cta-end) is the single unified upsell banner --}}
 </div>
