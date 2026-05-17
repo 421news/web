@@ -37,45 +37,110 @@
           <div id="sub-section-plan">
 
             <div class="sub-hero">
-              <h1 class="sub-hero-title">&iexcl;Sumate!</h1>
-              <p class="sub-hero-subtitle">421 es un medio de orientaci&oacute;n intelectual para navegar un mundo saturado de tecnolog&iacute;a, im&aacute;genes y discursos.</p>
-              <p class="sub-hero-callout">Tu aporte econ&oacute;mico es esencial para la subsistencia del proyecto.</p>
+              <span class="sub-hero-eyebrow">✨ Hacete Wizard</span>
+              <h1 class="sub-hero-title">Le&eacute; <span class="sub-hero-accent">Revista 421 antes que nadie</span> y banc&aacute; el proyecto</h1>
+              <p class="sub-hero-subtitle">Cada nuevo n&uacute;mero llega a los Wizards <strong>un mes antes</strong> que al p&uacute;blico. M&aacute;s comentar las notas, la app de Magic y el Concilio mensual con Juan Ruocco.</p>
+              <div class="sub-hero-proof">228 wizards · 5.031 lectores</div>
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="sub-card" id="sub-plan-card">
-              <div class="plan-toggle">
-                <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
-                <button class="plan-toggle-btn" id="toggle-yearly">
-                  Anual
-                  <span class="toggle-badge">-17%</span>
-                </button>
+            <div class="tier-grid">
+
+              <!-- FREE TIER -->
+              <div class="tier">
+                <h2 class="tier-name">Gratis</h2>
+                <p class="tier-tagline">Para empezar a leer 421</p>
+                <div class="tier-price"><span class="tier-price-amount">$0</span></div>
+                <ul class="tier-benefits">
+                  <li>Acceso a todas las notas del sitio</li>
+                  <li>Newsletter semanal con lo mejor de 421</li>
+                  <li>Descarga de revistas <strong>liberadas</strong> (n&uacute;meros viejos)</li>
+                  <li>Acceso al <a href="/es/canon/">Canon 421</a> y rutas de lectura</li>
+                </ul>
+                <button class="btn-outline" id="btn-free">Registrate gratis &rarr;</button>
+                <p class="tier-fine">Sin tarjeta &middot; Cancel&aacute;s cuando quieras</p>
               </div>
 
-              <div id="plan-price">
-                <div class="plan-price-row">
-                  <span class="plan-price-big" id="price-amount">...</span>
-                  <span class="plan-price-period" id="price-period">USD / mes</span>
+              <!-- PAID TIER -->
+              <div class="tier featured" id="sub-plan-card">
+                <span class="tier-badge">M&aacute;s popular</span>
+                <h2 class="tier-name">Wizard</h2>
+                <p class="tier-tagline">El acceso completo + banc&aacute;s el proyecto</p>
+
+                <div class="plan-toggle">
+                  <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
+                  <button class="plan-toggle-btn" id="toggle-yearly">
+                    Anual
+                    <span class="toggle-badge">-17%</span>
+                  </button>
                 </div>
-                <div class="plan-price-detail" id="price-detail"></div>
-                <div class="plan-price-ars" id="price-ars" style="display:none;"></div>
+
+                <div id="plan-price" class="tier-price">
+                  <span class="tier-price-amount" id="price-amount">...</span>
+                  <span class="tier-price-period" id="price-period">USD / mes</span>
+                  <div class="plan-price-detail" id="price-detail"></div>
+                  <div class="plan-price-ars" id="price-ars" style="display:none;"></div>
+                </div>
+
+                <ul class="tier-benefits">
+                  <li class="tier-benefit-featured">📕 Le&eacute; la <strong>Revista 421 #<span data-revista-numero>14</span></strong> en PDF <strong>un mes antes</strong> de que se libere al p&uacute;blico</li>
+                  <li>Comentar y participar en debates de cada nota</li>
+                  <li><strong>Concilio mensual</strong>: videollamada con <a href="/author/juan-ruocco/">Juan Ruocco</a> y otros wizards</li>
+                  <li>Acceso a la <a href="https://mtg.421.news">app de Magic 421</a></li>
+                </ul>
+
+                <button class="btn-gradient" id="btn-suscribirme">Hacete Wizard &rarr;</button>
+                <p class="tier-fine">Pag&aacute;s en pesos (MP) o tarjeta (Stripe)</p>
               </div>
 
-              <ul class="plan-benefits">
-                <li>Acceso anticipado a la <a href="/es/revista-421/">revista digital</a> (PDF)</li>
-                <li>Comentarios en notas</li>
-                <li>Concilio mensual de wizards (videollamada con <a href="/author/juan-ruocco/">Juan Ruocco</a>)</li>
-                <li>Acceso a la <a href="https://mtg.421.news">app de Magic</a></li>
-              </ul>
-
-              <button class="btn-gradient" id="btn-suscribirme">Suscribirme</button>
             </div>
 
-            <div class="free-tier-link">
-              <p style="font-size: var(--fs-lg);">&iquest;S&oacute;lo quer&eacute;s recibir nuestro newsletter?</p>
-              <button class="btn-outline" id="btn-free">Registrate gratis</button>
-            </div>
+            <!-- ===== FAQ ===== -->
+            <section class="sub-faq">
+              <h2>Preguntas frecuentes</h2>
+              <details class="sub-faq-item">
+                <summary>¿Qu&eacute; es exactamente el "acceso anticipado" a la revista?</summary>
+                <p>Cada nuevo n&uacute;mero de Revista 421 sale primero solo para Wizards, en PDF. Un mes despu&eacute;s se libera para el resto.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>¿Puedo pagar en pesos argentinos?</summary>
+                <p>S&iacute;. Tenés dos m&eacute;todos: <strong>MercadoPago</strong> (pesos argentinos, d&eacute;bito autom&aacute;tico) o <strong>Stripe</strong> (tarjeta internacional en USD). Despu&eacute;s de elegir el plan, eleg&iacute;s el m&eacute;todo.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>¿C&oacute;mo cancelo?</summary>
+                <p>Desde tu cuenta, en cualquier momento. Sin permanencia, sin preguntas. Conserv&aacute;s el acceso hasta el final del per&iacute;odo pago.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>¿Qu&eacute; pasa con los n&uacute;meros viejos de la revista?</summary>
+                <p>Quedan disponibles para todos (gratis). Solo el <strong>&uacute;ltimo n&uacute;mero</strong> est&aacute; reservado a los Wizards durante el primer mes.</p>
+              </details>
+              <details class="sub-faq-item">
+                <summary>¿Qu&eacute; incluye el Concilio mensual?</summary>
+                <p>Una videollamada de aprox. 1 hora con Juan Ruocco y otros Wizards. Charla abierta, propuestas editoriales, debates. Se anuncia con tiempo via newsletter.</p>
+              </details>
+            </section>
           </div>
+
+          {{!-- Revista # auto-update script (same source as subscribe-popup) --}}
+          <script>
+          (function(){
+            var slots = document.querySelectorAll('[data-revista-numero]');
+            if (!slots.length) return;
+            fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
+              .then(function(r){ return r.json(); })
+              .then(function(d){
+                var p = d.pages && d.pages[0];
+                if (!p || !p.html) return;
+                var doc = new DOMParser().parseFromString(p.html, 'text/html');
+                var h2 = doc.querySelector('h2');
+                if (!h2) return;
+                var m = h2.textContent.trim().match(/#(\d+)/);
+                if (!m) return;
+                slots.forEach(function(el){ el.textContent = m[1]; });
+              })
+              .catch(function(){});
+          })();
+          </script>
 
           <!-- ===== SECTION 2: PAYMENT METHOD CHOOSER ===== -->
           <div id="sub-section-chooser" style="display: none;">
