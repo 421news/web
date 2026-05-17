@@ -1777,52 +1777,34 @@ footer {
   margin: 0;
 }
 
-/* Wizards early-access CTA on revista page */
-.revista-wizard-cta {
-  margin: 2.5rem 0 1rem;
-  padding: 2rem 2rem;
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.025);
-  border: 2px solid transparent;
-  border-image: var(--gradient-main) 1;
-}
-.revista-wizard-cta-content {
-  max-width: 720px;
-  margin: 0 auto;
-  text-align: center;
-}
-.revista-wizard-cta-title {
-  font-family: 'Lora', serif;
-  font-style: italic;
-  font-size: var(--fs-xl);
-  line-height: 1.2;
-  color: var(--crema);
-  margin: 0 0 1rem;
-}
-.revista-wizard-cta-text {
-  font-family: 'Lora', serif;
-  font-size: var(--fs-lg);
-  line-height: 1.6;
-  color: var(--crema);
-  margin: 0 0 1.5rem;
-}
-.revista-wizard-cta-text strong { color: var(--amarillo); }
-.revista-wizard-cta-btn {
-  display: inline-block;
-  padding: 0.85rem 2rem;
-  background: linear-gradient(90deg, var(--amarillo), var(--verde));
-  color: var(--negro);
-  font-weight: 800;
+/* Wizards early-access strip on revista page (compact inline CTA) */
+.revista-wizard-strip {
+  margin: 1.5rem 0 0.5rem;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: var(--fs-body);
-  border-radius: var(--radius);
+  color: var(--crema);
+  border-top: 1px solid rgba(252, 210, 33, 0.18);
+  border-bottom: 1px solid rgba(252, 210, 33, 0.18);
+}
+.revista-wizard-strip-text { opacity: 0.9; }
+.revista-wizard-strip-text strong { color: var(--amarillo); font-weight: 700; }
+.revista-wizard-strip-link {
+  color: var(--amarillo);
+  font-weight: 700;
   text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  white-space: nowrap;
   transition: opacity 0.2s;
 }
-.revista-wizard-cta-btn:hover { opacity: 0.9; }
-@media screen and (max-width: 768px) {
-  .revista-wizard-cta { padding: 1.5rem 1.25rem; }
-  .revista-wizard-cta-title { font-size: var(--fs-lg); }
-  .revista-wizard-cta-text { font-size: var(--fs-body); }
+.revista-wizard-strip-link:hover { opacity: 0.75; }
+@media screen and (max-width: 640px) {
+  .revista-wizard-strip { font-size: var(--fs-sm); padding: 0.65rem 0.75rem; }
 }
 
 #rutas-container,
