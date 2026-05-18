@@ -571,21 +571,24 @@ body {
   background-color: var(--negro);
   color: var(--crema);
   height: 100%;
-  transition: all 0.2s;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
-.post-card:hover {
-  background-color: var(--crema);
-  transform: translateY(-5px);
-}
-.post-card:hover .post-card_info {
-  color: var(--negro);
-}
-.post-card:hover .tag-box {
-  color: var(--crema);
-}
-.post-card:hover .tag-box:hover {
-  color: var(--amarillo);
+@media (hover: hover) {
+  .post-card:hover {
+    background-color: var(--crema);
+    transform: translateY(-5px);
+  }
+  .post-card:hover .post-card_info,
+  .post-card:hover .post-card_info h3 {
+    color: var(--negro);
+  }
+  .post-card:hover .tag-box {
+    color: var(--crema);
+  }
+  .post-card:hover .tag-box:hover {
+    color: var(--amarillo);
+  }
 }
 
 .post-card_cover {
@@ -641,6 +644,16 @@ body {
 .post-card_info {
   padding: 1.5rem;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.post-card_info h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
 }
 
 .tag-box {
@@ -3078,13 +3091,13 @@ footer {
 .featured-post-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: 560px;
+  min-height: clamp(560px, 55vw, 900px);
   background: var(--crema);
   color: var(--negro);
   margin-top: 96px; /* clear fixed site-nav */
 }
 .featured-post-text {
-  padding: 3rem 3.5rem 2rem;
+  padding: clamp(2.5rem, 3.5vw, 5rem) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3093,7 +3106,7 @@ footer {
 .featured-post-breadcrumb {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1vw, 1.15rem);
   color: var(--negro);
   opacity: 0.7;
   margin-bottom: 1.25rem;
@@ -3108,7 +3121,7 @@ footer {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 900;
   font-style: italic;
-  font-size: 3rem;
+  font-size: clamp(2.4rem, 3.6vw, 5.2rem);
   line-height: 1;
   letter-spacing: -0.02em;
   margin: 0 0 1.25rem;
@@ -3121,7 +3134,7 @@ footer {
 }
 .featured-post-byline {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1vw, 1.15rem);
   font-weight: 600;
   margin-bottom: 1.5rem;
   color: var(--negro);
@@ -3141,10 +3154,10 @@ footer {
 .featured-post-meta { opacity: 0.6; font-weight: 500; }
 .featured-post-excerpt {
   font-family: 'Lora', serif;
-  font-size: 1.05rem;
+  font-size: clamp(1rem, 1.1vw, 1.35rem);
   line-height: 1.6;
   color: var(--negro);
-  max-width: 540px;
+  max-width: clamp(480px, 36vw, 720px);
   margin: 0 0 2rem;
 }
 
@@ -3272,13 +3285,17 @@ footer {
 .home-featured-post {
   position: relative;
   width: 100%;
-  height: 100vh; /* ocupa toda la pantalla; rutas aparece después del scroll */
+  height: 100vh; /* fallback */
+  height: 100dvh; /* dynamic viewport: ignora la barra de URL en mobile */
   min-height: 540px;
   overflow: hidden;
   background: var(--negro);
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.home-featured-bg {
+  object-position: center;
 }
 .home-featured-image-link {
   position: absolute;
@@ -3309,14 +3326,14 @@ footer {
 .home-featured-content {
   position: relative;
   z-index: 3;
-  max-width: 880px;
+  max-width: clamp(880px, 70vw, 1400px);
   margin: 0;
-  padding: 0 3.5rem;
+  padding: 0 clamp(2.5rem, 4vw, 6rem);
 }
 .home-featured-breadcrumb {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: clamp(0.8rem, 0.95vw, 1.1rem);
   color: var(--amarillo);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -3340,20 +3357,20 @@ footer {
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 900;
   font-style: italic;
-  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-size: clamp(1.8rem, 3.6vw, 5rem);
   line-height: 1.02;
   letter-spacing: -0.02em;
   color: var(--crema);
   margin: 0 0 1rem;
   text-transform: uppercase;
-  max-width: 800px;
+  max-width: clamp(800px, 65vw, 1300px);
   text-shadow: 0 2px 12px rgba(0,0,0,0.25);
 }
 .home-featured-byline {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.9rem;
+  font-size: clamp(0.85rem, 1vw, 1.2rem);
   color: var(--crema);
   flex-wrap: wrap;
   position: relative;
@@ -3415,12 +3432,32 @@ footer {
 
 @media (max-width: 768px) {
   .home-featured-post {
-    height: 100vh;
+    height: 100vh; /* fallback */
+    height: 100dvh;
     min-height: 480px;
   }
-  .home-featured-content { padding: 0 1.5rem; }
-  .home-featured-title { font-size: clamp(1.4rem, 5vw, 1.9rem); }
-  .home-featured-byline { font-size: 0.8rem; gap: 0.4rem; }
+  .home-featured-bg {
+    /* En mobile, mantener foco en el centro de la imagen al cropear */
+    object-position: center center;
+  }
+  .home-featured-overlay {
+    /* Más contraste en mobile: gradient con más negro arriba y abajo */
+    background: linear-gradient(180deg,
+      rgba(18,18,18,0.55) 0%,
+      rgba(18,18,18,0.15) 35%,
+      rgba(18,18,18,0.15) 50%,
+      rgba(18,18,18,0.85) 100%);
+  }
+  .home-featured-content {
+    padding: 0 1.25rem;
+    /* anclar al pie del viewport en mobile en lugar del centro */
+    margin-top: auto;
+    margin-bottom: 6vh;
+    max-width: 100%;
+  }
+  .home-featured-title { font-size: clamp(1.6rem, 7vw, 2.4rem); max-width: 100%; }
+  .home-featured-breadcrumb { font-size: 0.78rem; }
+  .home-featured-byline { font-size: 0.78rem; gap: 0.4rem; }
   .home-featured-share svg { width: 13px; height: 13px; }
   .home-featured-translation .btn-translate { font-size: 0.7rem; padding: 0.1rem 0.35rem; }
   .home-featured-translation .btn-translate svg { width: 11px; height: 11px; }

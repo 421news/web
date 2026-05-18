@@ -60,8 +60,20 @@ body {
 
 .global-container {
   width: 1220px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Wide-screen scaling: keep the same proportions as 13-14" laptops on 24"+ */
+@media (min-width: 1600px) {
+  .global-container { width: 1440px; }
+}
+@media (min-width: 1900px) {
+  .global-container { width: 1640px; }
+}
+@media (min-width: 2300px) {
+  .global-container { width: 1920px; }
 }
 
 .global-container.is-fixed {
