@@ -2921,7 +2921,7 @@ footer {
 .home-featured-post {
   position: relative;
   width: 100%;
-  height: calc(100vh - 66px); /* ocupa el total disponible (viewport menos nav fija) */
+  height: 100vh; /* ocupa toda la pantalla; rutas aparece después del scroll */
   min-height: 540px;
   overflow: hidden;
   background: var(--negro);
@@ -3033,7 +3033,7 @@ footer {
 
 @media (max-width: 768px) {
   .home-featured-post {
-    height: calc(100vh - 70px); /* mobile nav probably shorter */
+    height: 100vh;
     min-height: 480px;
   }
   .home-featured-content { padding: 0 1.5rem; }
