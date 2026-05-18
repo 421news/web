@@ -1,15 +1,14 @@
 <div class="preview-section">
     <div class="global-container">
         <div class="pv-huge">
-            <div class="preview-section_flex-header pb-small">
-                <h2 id="last-posts-title">Last posts →</h2>
+            <div class="last-posts-header">
+                <h2 class="last-posts-title" id="last-posts-title">Last posts</h2>
             </div>
             <div class="last-posts-section">
             </div>
             <button
-                class="button"
+                class="btn-load-more"
                 id="load-more-home"
-                style="display: block; margin: auto; margin-top: 50px;"
             >
                 Load more
             </button>
@@ -23,12 +22,12 @@
   lang = lang ? lang[1] : 'en';
 
   var labels = {
-    pt: { title: 'Últimos posts →', btn: 'Carregar mais' },
-    fr: { title: 'Derniers articles →', btn: 'Charger plus' },
-    zh: { title: '最新文章 →', btn: '加载更多' },
-    ja: { title: '最新記事 →', btn: 'もっと読む' },
-    ko: { title: '최신 글 →', btn: '더 보기' },
-    tr: { title: 'Son yazılar →', btn: 'Daha fazla' }
+    pt: { title: 'Últimos posts', btn: 'Carregar mais' },
+    fr: { title: 'Derniers articles', btn: 'Charger plus' },
+    zh: { title: '最新文章', btn: '加载更多' },
+    ja: { title: '最新記事', btn: 'もっと読む' },
+    ko: { title: '최신 글', btn: '더 보기' },
+    tr: { title: 'Son yazılar', btn: 'Daha fazla' }
   };
 
   var titleEl = document.getElementById('last-posts-title');

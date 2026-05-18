@@ -1,8 +1,9 @@
 <div class="preview-section">
     <div class="global-container">
         <div class="pv-huge">
-            <div class="preview-section_flex-header pb-small">
-                <h2><a href="/en/last-posts/" class="section-title-link">Last posts →</a></h2>
+            <div class="last-posts-header">
+                <h2 class="last-posts-title"><a href="/en/last-posts/">Last posts</a></h2>
+                <a href="/en/last-posts/" class="last-posts-more">View all →</a>
             </div>
             <div class="last-posts-section">
                 {{#get "posts"
@@ -20,9 +21,8 @@
                 {{/get}}
             </div>
             <button
-                class="button"
+                class="btn-load-more"
                 id="load-more-home"
-                style="display: block; margin: auto; margin-top: 50px;"
             >
                 Load more
             </button>
