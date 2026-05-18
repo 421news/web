@@ -1,8 +1,8 @@
 <div class="featured-post-header">
   <div class="featured-post-text">
-    {{#primary_tag}}
-      <div class="featured-post-breadcrumb">/ <a href="{{url}}">{{name}}</a></div>
-    {{/primary_tag}}
+    {{#if primary_tag}}
+      <div class="featured-post-breadcrumb">/ <a href="/{{#has tag="#en"}}en{{else}}{{#has tag="#pt"}}pt{{else}}{{#has tag="#fr"}}fr{{else}}{{#has tag="#zh"}}zh{{else}}{{#has tag="#ja"}}ja{{else}}{{#has tag="#ko"}}ko{{else}}{{#has tag="#tr"}}tr{{else}}es{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}</a></div>
+    {{/if}}
 
     <h1 class="featured-post-title">{{title}}</h1>
 
