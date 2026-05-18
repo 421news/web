@@ -1,35 +1,30 @@
-<div class="post-header">
-  <div class="global-container">
-    <div class="pt-xhuge">
-      <div class="post-meta">
-        <div class="hl-post_meta">
-          <div class="plain-tags">
-            {{#foreach tags}}
-              <a href="{{#if ../lang}}/en{{else}}/es{{/if}}/tag/{{slug}}">{{name}}</a>{{#unless @last}}, {{/unless}}
-            {{/foreach}}
-          </div>
-          <h1 class="flashy-h1 no-highlight">{{title}}</h1>
-          {{> "author-box"}}
-        </div>
-        <div class="hl-post_meta">
-          <p class="hl-post_preview">{{excerpt}}</p>
-          {{reading_time}}
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="display: flex; justify-content: center;">
-    <img src="{{img_url feature_image size='l'}}"
-      srcset="{{img_url feature_image size='s'}} 300w,
-              {{img_url feature_image size='m'}} 600w,
+<div class="home-featured-post">
+  {{#if feature_image}}
+    <img
+      class="home-featured-bg"
+      src="{{img_url feature_image size='l'}}"
+      srcset="{{img_url feature_image size='m'}} 600w,
               {{img_url feature_image size='l'}} 1000w,
               {{img_url feature_image size='xl'}} 2000w"
-      sizes="(max-width: 768px) 100vw, 840px"
+      sizes="100vw"
       alt="{{title}}"
-      width="840"
       loading="eager"
       fetchpriority="high"
-      style="width: 840px; max-width: 100%; height: auto;"
     />
+  {{/if}}
+  <div class="home-featured-overlay"></div>
+  <div class="home-featured-content">
+    {{#if primary_tag}}
+      <div class="home-featured-breadcrumb">/ <a href="/{{#has tag="#en"}}en{{else}}{{#has tag="#pt"}}pt{{else}}{{#has tag="#fr"}}fr{{else}}{{#has tag="#zh"}}zh{{else}}{{#has tag="#ja"}}ja{{else}}{{#has tag="#ko"}}ko{{else}}{{#has tag="#tr"}}tr{{else}}es{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}</a></div>
+    {{/if}}
+    <h1 class="home-featured-title">{{title}}</h1>
+    <div class="home-featured-byline">
+      <span class="home-featured-by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
+      {{#primary_author}}<a href="{{url}}" class="home-featured-author">{{name}}</a>{{/primary_author}}
+      <span class="home-featured-meta">· {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</span>
+      <a href="#/share" class="home-featured-share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </a>
+    </div>
   </div>
 </div>
