@@ -214,7 +214,7 @@ body {
 .hero-home {
   background-position: 50%;
   background-size: cover;
-  height: calc(100vh - 96px);
+  height: calc(100vh - 66px);
   margin-top: 96px;
   position: relative;
 }
@@ -2921,7 +2921,7 @@ footer {
 .home-featured-post {
   position: relative;
   width: 100%;
-  height: calc(100vh - 96px); /* ocupa el total disponible (viewport menos nav fija) */
+  height: calc(100vh - 66px); /* ocupa el total disponible (viewport menos nav fija) */
   min-height: 540px;
   overflow: hidden;
   background: var(--negro);
