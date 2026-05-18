@@ -60,13 +60,13 @@
         </div>
 
         <!-- RELATED POSTS -->
-        <div class="preview-section" data-json="{{asset "data/related-posts.json"}}">
+        <div class="preview-section related-section" data-json="{{asset "data/related-posts.json"}}">
             <div class="global-container">
                 <div class="pv-huge">
-                    <div class="preview-section_flex-header">
-                        <h2>Textos relacionados</h2>
+                    <div class="related-header">
+                        <h2 class="related-title">Textos relacionados</h2>
                         {{#if primary_tag}}
-                            <a href="/es/tag/{{primary_tag.slug}}" class="button w-button">Leer más</a>
+                            <a href="/es/tag/{{primary_tag.slug}}" class="related-more">Ver todo →</a>
                         {{/if}}
                     </div>
                     {{#get "posts"

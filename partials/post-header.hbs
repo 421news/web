@@ -21,7 +21,8 @@
     <div class="home-featured-byline">
       <span class="home-featured-by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
       {{#primary_author}}<a href="{{url}}" class="home-featured-author">{{name}}</a>{{/primary_author}}
-      <span class="home-featured-meta">· {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</span>
+      <span class="home-featured-meta">· {{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</span>
+      <span id="translation-link" class="home-featured-translation"></span>
       <a href="#/share" class="home-featured-share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
       </a>
