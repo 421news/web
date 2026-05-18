@@ -2921,9 +2921,8 @@ footer {
 .home-featured-post {
   position: relative;
   width: 100%;
-  height: calc(100vh - 96px); /* clear fixed nav (~96px) */
+  height: calc(100vh - 96px); /* ocupa el total disponible (viewport menos nav fija) */
   min-height: 540px;
-  max-height: 820px;
   overflow: hidden;
   background: var(--negro);
   display: flex;
