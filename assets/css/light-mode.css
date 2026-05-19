@@ -47,8 +47,12 @@ body.light-mode .hl-post .author-name_link:hover,
 body.light-mode .hero-home .author-name_link:hover {
   background-image: linear-gradient(135deg, var(--verde), var(--amarillo));
 }
-body.light-mode .rich-text a {
-  background-image: linear-gradient(135deg, var(--verde), var(--amarillo));
+body.light-mode .rich-text a,
+body.light-mode .rich-text a u,
+body.light-mode .rich-text a em {
+  background-image: none;
+  color: var(--verde);
+  -webkit-text-fill-color: var(--verde);
 }
 body.light-mode .rutas-hero-title,
 body.light-mode .sub-hero-title {
