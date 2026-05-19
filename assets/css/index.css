@@ -2069,6 +2069,14 @@ footer {
   .home-ruta-cta { text-align: left; }
 }
 
+/* Tag hero (home-ruta style applied to tag landings) — respects fixed nav height */
+.tag-hero-section .pv-huge {
+  padding-top: calc(80px + 3rem);
+}
+@media (max-width: 768px) {
+  .tag-hero-section .pv-huge { padding-top: calc(70px + 2rem); }
+}
+
 /* =============================================
    RUTAS DE LECTURA + CANON 421
    ============================================= */
