@@ -1,21 +1,21 @@
-{{!-- params: tag (slug), languageFilter, eyebrow, postsLabel --}}
+{{!-- params: tagSlug, languageFilter, eyebrow, postsLabel --}}
 <section class="preview-section home-ruta-section tag-hero-section">
   <div class="global-container">
     <div class="pv-huge">
-      <div class="home-ruta-header">
-        <div class="home-ruta-header-main">
-          <div class="home-ruta-eyebrow">{{eyebrow}}</div>
-          {{#tag}}
-            <h1 class="home-ruta-title">{{name}}</h1>
-            <div class="home-ruta-meta">{{count.posts}} {{../postsLabel}}</div>
-          {{/tag}}
-        </div>
-        {{#tag}}
-          {{#if description}}
-            <p class="home-ruta-tesis">{{description}}</p>
-          {{/if}}
-        {{/tag}}
-      </div>
+      {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tagInfo|}}
+        {{#foreach tagInfo}}
+          <div class="home-ruta-header">
+            <div class="home-ruta-header-main">
+              <div class="home-ruta-eyebrow">{{../eyebrow}}</div>
+              <h1 class="home-ruta-title">{{name}}</h1>
+              <div class="home-ruta-meta">{{count.posts}} {{../postsLabel}}</div>
+            </div>
+            {{#if description}}
+              <p class="home-ruta-tesis">{{description}}</p>
+            {{/if}}
+          </div>
+        {{/foreach}}
+      {{/get}}
 
       {{#get "posts"
           include="tags,authors"
