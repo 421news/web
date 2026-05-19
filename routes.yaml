@@ -1,7 +1,4 @@
 routes:
-  /robots.txt:
-    template: robots
-    content_type: text/plain
   /: landing
   /es/suscribite/:
     template: suscribite
