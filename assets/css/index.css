@@ -565,13 +565,20 @@ body {
   flex-direction: column;
   gap: 16px;
 }
-/* POST PREVIEW CARD*/
+/* POST PREVIEW CARD
+   ─ Layout chain for equal heights across browsers (incl. Safari):
+   .post-cols (grid auto-rows 1fr) → .w-dyn-item (flex) → .post-card_link (flex col)
+   → .post-card (flex col, flex-grow 1). The card grows to fill its grid cell,
+   y Safari recibe la altura explícita via flex chain. */
 .post-card {
   border: var(--border-width) solid var(--crema);
   border-radius: var(--radius);
   background-color: var(--negro);
   color: var(--crema);
-  height: 100%;            /* llena la celda del grid; auto-rows: 1fr iguala alturas */
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  width: 100%;
   min-height: 0;
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
@@ -592,6 +599,7 @@ body {
   justify-content: flex-start;
   align-items: flex-end;
   height: 200px;
+  flex-shrink: 0;          /* Safari: no compactar la imagen cuando la card crece */
   padding-bottom: 0.75rem;
   padding-left: 0.75rem;
   transition: all 0.2s;
@@ -640,6 +648,7 @@ body {
 .post-card_info {
   padding: 1.5rem;
   min-width: 0;
+  flex: 1 1 auto;   /* el info crece para llenar la card cuando otras filas son más altas */
 }
 
 .tag-box {
@@ -1211,10 +1220,7 @@ body {
   width: 100%;
   text-decoration: none;
   display: flex;
-}
-
-.post-card {
-  width: 100%;
+  flex-direction: column;   /* Safari: hijos flex-column igualan altura confiable */
 }
 
 footer {
