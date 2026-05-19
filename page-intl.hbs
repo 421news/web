@@ -4,16 +4,21 @@
   <div class="page-wrapper">
     {{> "site-nav-intl"}}
     <main style="min-height: 80vh;">
-      <div class="pv-xhuge">
+      {{#page}}
+        {{> "section-hero"
+            eyebrow="421 · page"
+            eyebrowId="page-intl-eyebrow"
+            title=title
+            titleId="page-intl-title"
+            tesis=excerpt}}
+      {{/page}}
+      <div class="pv-large">
         <div class="global-container">
-          <div class="page-hero">
-            {{#page}}
-              <h1 class="flashy-h1">{{title}}</h1>
-              {{#if feature_image}}
-                <img src="{{feature_image}}" loading="lazy" alt="{{title}}" class="page-hero_img">
-              {{/if}}
-            {{/page}}
-          </div>
+          {{#page}}
+            {{#if feature_image}}
+              <img src="{{feature_image}}" loading="lazy" alt="{{title}}" class="page-hero_img">
+            {{/if}}
+          {{/page}}
           <div class="pt-medium">
             <div class="rich-text w-richtext">{{#page}}{{content}}{{/page}}</div>
           </div>
@@ -28,20 +33,22 @@
       var m = window.location.pathname.match(/^\/([a-z]{2})\//);
       var lang = m ? m[1] : 'en';
 
-      var titles = {
-        en: 'What is 421',
-        pt: 'O que \u00e9 421',
-        fr: 'Qu\u2019est-ce que 421',
-        zh: '421\u662f\u4ec0\u4e48',
-        ja: '421\u3068\u306f',
-        ko: '421\uc774\ub780',
-        tr: '421 nedir'
+      var i18n = {
+        en: { eyebrow: '421 · page', title: 'What is 421' },
+        pt: { eyebrow: '421 · página', title: 'O que é 421' },
+        fr: { eyebrow: '421 · page', title: 'Qu’est-ce que 421' },
+        zh: { eyebrow: '421 · 页面', title: '421是什么' },
+        ja: { eyebrow: '421 · ページ', title: '421とは' },
+        ko: { eyebrow: '421 · 페이지', title: '421이란' },
+        tr: { eyebrow: '421 · sayfa', title: '421 nedir' }
       };
 
-      var t = titles[lang];
+      var t = i18n[lang];
       if (t) {
-        var h1 = document.querySelector('.flashy-h1');
-        if (h1) h1.textContent = t;
+        var eyeEl = document.getElementById('page-intl-eyebrow');
+        var titleEl = document.getElementById('page-intl-title');
+        if (eyeEl) eyeEl.textContent = t.eyebrow;
+        if (titleEl) titleEl.textContent = t.title;
       }
     });
   </script>

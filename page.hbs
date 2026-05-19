@@ -4,16 +4,19 @@
   <div class="page-wrapper">
     {{> "site-nav-es"}}
     <main style="min-height: 80vh;">
-      <div class="pv-xhuge">
+      {{#page}}
+        {{> "section-hero"
+            eyebrow="421 · página"
+            title=title
+            tesis=excerpt}}
+      {{/page}}
+      <div class="pv-large">
         <div class="global-container">
-          <div class="page-hero">
-            {{#page}}
-              <h1 class="flashy-h1">{{title}}</h1>
-              {{#if feature_image}}
-                <img src="{{feature_image}}" loading="lazy" alt="{{title}}" class="page-hero_img">
-              {{/if}}
-            {{/page}}
-          </div>
+          {{#page}}
+            {{#if feature_image}}
+              <img src="{{feature_image}}" loading="lazy" alt="{{title}}" class="page-hero_img">
+            {{/if}}
+          {{/page}}
           <div class="pt-medium">
             <div class="rich-text w-richtext">{{#page}}{{content}}{{/page}}</div>
           </div>
