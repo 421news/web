@@ -56,7 +56,7 @@ routes:
     template: libros
     data: page.juan-ruocco-libros
   /en/what-is-421/:
-    template: page
+    template: page-en
     data: page.what-is-421
   /es/analytics/:
     template: analytics
