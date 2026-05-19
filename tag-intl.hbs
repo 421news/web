@@ -4,17 +4,26 @@
   {{> "general-styling"}}
   {{> "site-nav-intl"}}
   <main>
+    {{#tag}}
+    <section class="preview-section home-ruta-section section-hero-block">
+      <div class="global-container">
+        <div class="pv-huge">
+          <div class="home-ruta-header">
+            <div class="home-ruta-header-main">
+              <div class="home-ruta-eyebrow" id="tag-intl-eyebrow">Topic</div>
+              <h1 class="home-ruta-title">{{name}}</h1>
+            </div>
+            {{#if description}}
+              <p class="home-ruta-tesis">{{description}}</p>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+    </section>
+    {{/tag}}
     <div class="preview-section">
       <div class="global-container">
         <div class="pv-huge">
-          <div class="text-center pb-small">
-            {{#tag}}
-            <h1>{{name}}</h1>
-            {{#if description}}
-              <p class="rutas-hero-subtitle">{{description}}</p>
-            {{/if}}
-            {{/tag}}
-          </div>
           {{!-- Posts are fetched client-side because custom routes don't provide collection posts.
                The lang + tag filter is built from the URL path. --}}
           <div id="tag-intl-posts" class="post-grid w-dyn-list">
@@ -36,6 +45,11 @@
   var lang = m[1];
   var tagSlug = m[2];
   var langTag = 'hash-' + lang;
+
+  // i18n eyebrow
+  var eyebrows = { en: 'Topic', pt: 'Tema', fr: 'Sujet', zh: '主题', ja: 'トピック', ko: '주제', tr: 'Konu' };
+  var eyeEl = document.getElementById('tag-intl-eyebrow');
+  if (eyeEl && eyebrows[lang]) eyeEl.textContent = eyebrows[lang];
 
   var filter = 'tag:' + tagSlug + '+tag:' + langTag;
   var url = '/ghost/api/content/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=20&filter=' + encodeURIComponent(filter) + '&order=published_at%20desc';

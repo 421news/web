@@ -7,15 +7,14 @@
   {{> "general-styling"}}
   {{> "site-nav-en"}}
 
+  {{> "section-hero"
+      eyebrow="421 · section"
+      title="Reading Paths"
+      meta="7 paths"
+      tesis="350 texts is an archive. 7 curated paths are a map. Each route is a sequence that builds an idea. Pick the one that calls you and let yourself go."}}
+
   <div class="rutas-page">
     <div class="global-container">
-
-      <!-- Hero -->
-      <div class="rutas-hero">
-        <h1 class="rutas-hero-title">Reading Paths</h1>
-        <p class="rutas-hero-subtitle">350 texts is an archive. 7 curated paths are a map. Each route is a sequence of texts that build an idea. Pick the one that calls you and let yourself go.</p>
-      </div>
-      <hr class="rutas-gradient-divider">
 
       <!-- Rutas container: JS will populate this -->
       <div id="rutas-container" data-json="{{asset "data/rutas.json"}}"></div>

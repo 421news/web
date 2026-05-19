@@ -1,14 +1,15 @@
-{{!-- params: eyebrow, title, meta (optional), tesis (HTML allowed via triple-brace) --}}
+{{!-- params: eyebrow, title, meta, tesis (HTML allowed)
+     optional: titleId, tesisId, eyebrowId, metaId (for JS i18n hooks) --}}
 <section class="preview-section home-ruta-section section-hero-block">
   <div class="global-container">
     <div class="pv-huge">
       <div class="home-ruta-header">
         <div class="home-ruta-header-main">
-          {{#if eyebrow}}<div class="home-ruta-eyebrow">{{eyebrow}}</div>{{/if}}
-          <h1 class="home-ruta-title">{{title}}</h1>
-          {{#if meta}}<div class="home-ruta-meta">{{meta}}</div>{{/if}}
+          {{#if eyebrow}}<div class="home-ruta-eyebrow"{{#if eyebrowId}} id="{{eyebrowId}}"{{/if}}>{{eyebrow}}</div>{{/if}}
+          <h1 class="home-ruta-title"{{#if titleId}} id="{{titleId}}"{{/if}}>{{title}}</h1>
+          {{#if meta}}<div class="home-ruta-meta"{{#if metaId}} id="{{metaId}}"{{/if}}>{{meta}}</div>{{/if}}
         </div>
-        {{#if tesis}}<p class="home-ruta-tesis">{{{tesis}}}</p>{{/if}}
+        {{#if tesis}}<p class="home-ruta-tesis"{{#if tesisId}} id="{{tesisId}}"{{/if}}>{{{tesis}}}</p>{{/if}}
       </div>
     </div>
   </div>
