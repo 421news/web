@@ -131,27 +131,25 @@
     // Equalize post-card heights per row (Safari fix — grid auto-rows 1fr + stretch
     // don't reliably equalize across browsers when content varies).
     function equalizeCardRows() {
-        var cols = document.querySelectorAll('.post-cols');
-        cols.forEach(function (col) {
-            var cards = col.querySelectorAll('.post-card');
-            // Reset to measure natural height
-            cards.forEach(function (c) { c.style.minHeight = ''; });
-            // Bail if single-column (mobile)
-            if (window.innerWidth <= 600) return;
-            // Group by top offset (rounded to handle subpixel)
-            var rows = {};
-            cards.forEach(function (c) {
-                var top = Math.round(c.getBoundingClientRect().top);
-                if (!rows[top]) rows[top] = [];
-                rows[top].push(c);
-            });
-            // Apply max height per row
-            Object.keys(rows).forEach(function (key) {
-                var group = rows[key];
-                var maxH = 0;
-                group.forEach(function (c) { if (c.offsetHeight > maxH) maxH = c.offsetHeight; });
-                group.forEach(function (c) { c.style.minHeight = maxH + 'px'; });
-            });
+        var cards = document.querySelectorAll('.post-card');
+        // Reset all to measure natural heights
+        cards.forEach(function (c) { c.style.minHeight = ''; });
+        // Bail if single-column (mobile)
+        if (window.innerWidth <= 600) return;
+        // Group by top offset (rounded to handle subpixel)
+        var rows = {};
+        cards.forEach(function (c) {
+            var top = Math.round(c.getBoundingClientRect().top + window.scrollY);
+            if (!rows[top]) rows[top] = [];
+            rows[top].push(c);
+        });
+        // Apply max height per row (only when row has 2+ cards)
+        Object.keys(rows).forEach(function (key) {
+            var group = rows[key];
+            if (group.length < 2) return;
+            var maxH = 0;
+            group.forEach(function (c) { if (c.offsetHeight > maxH) maxH = c.offsetHeight; });
+            group.forEach(function (c) { c.style.minHeight = maxH + 'px'; });
         });
     }
 
