@@ -5,11 +5,8 @@
     {{> "general-styling"}}
     {{> "site-nav-en"}}
     <main>
-      <!-- FEATURED POST -->
-      {{> "tag-page-featured-post" slug="culture" languageFilter="'hash-en'"}}
-
-      <!-- HIGHLIGHTED POSTS -->
-      {{> "tag-page-highlighted-posts-en" tag="culture" languageFilter="'hash-en'"}}
+      <!-- TAG HERO (featured + intro) -->
+      {{> "tag-hero-section" tagSlug="culture" languageFilter="'hash-en'" eyebrow="Topic" postsLabel="posts"}}
 
       <!-- LAST POSTS -->
       {{> "last-posts-en-tag" tag="culture"}}

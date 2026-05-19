@@ -5,11 +5,8 @@
     {{> "general-styling"}}
     {{> "site-nav-en"}}
     <main>
-      <!-- FEATURED POST -->
-      {{> "tag-page-featured-post" slug="real-life" languageFilter="'hash-en'"}}
-
-      <!-- HIGHLIGHTED POSTS -->
-      {{> "tag-page-highlighted-posts-en" tag="real-life" languageFilter="'hash-en'"}}
+      <!-- TAG HERO (featured + intro) -->
+      {{> "tag-hero-section" tagSlug="real-life" languageFilter="'hash-en'" eyebrow="Topic" postsLabel="posts"}}
 
       <!-- LAST POSTS -->
       {{> "last-posts-en-tag" tag="real-life"}}

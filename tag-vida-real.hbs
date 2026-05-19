@@ -5,11 +5,8 @@
     {{> "general-styling"}}
     {{> "site-nav-es"}}
     <main>
-      <!-- FEATURED POST -->
-      {{> "tag-page-featured-post" slug="vida-real" languageFilter="-'hash-en'"}}
-
-      <!-- HIGHLIGHTED POSTS -->
-      {{> "tag-page-highlighted-posts-es" tag="vida-real" languageFilter="-'hash-en'"}}
+      <!-- TAG HERO (featured + intro) -->
+      {{> "tag-hero-section" tagSlug="vida-real" languageFilter="-'hash-en'" eyebrow="Tema" postsLabel="notas"}}
 
       <!-- LAST POSTS -->
       {{> "last-posts-es-tag" tag="vida-real"}}

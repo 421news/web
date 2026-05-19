@@ -5,11 +5,8 @@
     {{> "general-styling"}}
     {{> "site-nav-en"}}
     <main>
-      <!-- FEATURED POST -->
-      {{> "tag-page-featured-post" slug="games" languageFilter="'hash-en'"}}
-
-      <!-- HIGHLIGHTED POSTS -->
-      {{> "tag-page-highlighted-posts-en" tag="games" languageFilter="'hash-en'"}}
+      <!-- TAG HERO (featured + intro) -->
+      {{> "tag-hero-section" tagSlug="games" languageFilter="'hash-en'" eyebrow="Topic" postsLabel="posts"}}
 
       <!-- LAST POSTS -->
       {{> "last-posts-en-tag" tag="games"}}
