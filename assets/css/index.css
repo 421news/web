@@ -572,22 +572,16 @@ body {
   background-color: var(--negro);
   color: var(--crema);
   height: 100%;
-  /* color SIN transición: Safari renderea intermedios crema-sobre-crema durante el hover */
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 @media (hover: hover) {
   .post-card:hover {
-    background-color: var(--crema);
     transform: translateY(-5px);
-  }
-  .post-card:hover .post-card_info {
-    color: var(--negro);
+    border-color: var(--amarillo);
   }
   .post-card:hover .tag-box {
-    color: var(--crema);
-  }
-  .post-card:hover .tag-box:hover {
+    border-color: var(--crema);
     color: var(--amarillo);
   }
 }
