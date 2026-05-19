@@ -1,0 +1,15 @@
+{{!-- params: eyebrow, title, meta (optional), tesis (HTML allowed via triple-brace) --}}
+<section class="preview-section home-ruta-section section-hero-block">
+  <div class="global-container">
+    <div class="pv-huge">
+      <div class="home-ruta-header">
+        <div class="home-ruta-header-main">
+          {{#if eyebrow}}<div class="home-ruta-eyebrow">{{eyebrow}}</div>{{/if}}
+          <h1 class="home-ruta-title">{{title}}</h1>
+          {{#if meta}}<div class="home-ruta-meta">{{meta}}</div>{{/if}}
+        </div>
+        {{#if tesis}}<p class="home-ruta-tesis">{{{tesis}}}</p>{{/if}}
+      </div>
+    </div>
+  </div>
+</section>
