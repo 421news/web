@@ -1661,6 +1661,13 @@ footer {
     gap: 0.75rem;
   }
 
+  /* Single-column mobile: remove fixed aspect-ratio (creates huge empty cards
+     at full screen width). Let content set the natural height. */
+  .post-card {
+    aspect-ratio: auto;
+    height: auto;
+  }
+
   .post_author-box {
     grid-column-gap: 27px;
     grid-row-gap: 27px;
@@ -2776,7 +2783,7 @@ footer {
 }
 
 .section-title-link:hover {
-  text-decoration: underline;
+  opacity: 0.7;
 }
 
 /* =============================================
