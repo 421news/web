@@ -127,4 +127,66 @@
         e.stopPropagation();
         window.location.href = url;
     });
+
+    // Equalize post-card heights per row (Safari fix — grid auto-rows 1fr + stretch
+    // don't reliably equalize across browsers when content varies).
+    function equalizeCardRows() {
+        var cols = document.querySelectorAll('.post-cols');
+        cols.forEach(function (col) {
+            var cards = col.querySelectorAll('.post-card');
+            // Reset to measure natural height
+            cards.forEach(function (c) { c.style.minHeight = ''; });
+            // Bail if single-column (mobile)
+            if (window.innerWidth <= 600) return;
+            // Group by top offset (rounded to handle subpixel)
+            var rows = {};
+            cards.forEach(function (c) {
+                var top = Math.round(c.getBoundingClientRect().top);
+                if (!rows[top]) rows[top] = [];
+                rows[top].push(c);
+            });
+            // Apply max height per row
+            Object.keys(rows).forEach(function (key) {
+                var group = rows[key];
+                var maxH = 0;
+                group.forEach(function (c) { if (c.offsetHeight > maxH) maxH = c.offsetHeight; });
+                group.forEach(function (c) { c.style.minHeight = maxH + 'px'; });
+            });
+        });
+    }
+
+    var equalizeTimer = null;
+    function scheduleEqualize() {
+        clearTimeout(equalizeTimer);
+        equalizeTimer = setTimeout(equalizeCardRows, 50);
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        scheduleEqualize();
+    } else {
+        window.addEventListener('DOMContentLoaded', scheduleEqualize);
+    }
+    window.addEventListener('load', scheduleEqualize);
+    window.addEventListener('resize', scheduleEqualize);
+
+    // Re-equalize when cards are added/removed dynamically (pagination, rutas, etc.)
+    new MutationObserver(function (mutations) {
+        var relevant = false;
+        for (var i = 0; i < mutations.length; i++) {
+            var added = mutations[i].addedNodes;
+            for (var j = 0; j < added.length; j++) {
+                var node = added[j];
+                if (node.nodeType !== 1) continue;
+                if ((node.classList && node.classList.contains('post-card')) ||
+                    (node.querySelector && node.querySelector('.post-card'))) {
+                    relevant = true;
+                    break;
+                }
+            }
+            if (relevant) break;
+        }
+        if (relevant) scheduleEqualize();
+    }).observe(document.documentElement, { childList: true, subtree: true });
+
+    window.equalizeCardRows = equalizeCardRows;
 })();
