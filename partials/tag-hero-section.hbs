@@ -2,20 +2,27 @@
 <section class="preview-section home-ruta-section tag-hero-section">
   <div class="global-container">
     <div class="pv-huge">
-      {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tagInfo|}}
-        {{#foreach tagInfo}}
-          <div class="home-ruta-header">
-            <div class="home-ruta-header-main">
-              <div class="home-ruta-eyebrow">{{../eyebrow}}</div>
+      <div class="home-ruta-header">
+        <div class="home-ruta-header-main">
+          <div class="home-ruta-eyebrow">{{eyebrow}}</div>
+          {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tagInfo|}}
+            {{#foreach tagInfo}}
               <h1 class="home-ruta-title">{{name}}</h1>
-              <div class="home-ruta-meta">{{count.posts}} {{../postsLabel}}</div>
-            </div>
+            {{/foreach}}
+          {{/get}}
+          <div class="home-ruta-meta">
+            {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tc|}}{{#foreach tc}}{{count.posts}}{{/foreach}}{{/get}}
+            {{postsLabel}}
+          </div>
+        </div>
+        {{#get "tags" filter="slug:{{tagSlug}}" limit="1" as |tagDesc|}}
+          {{#foreach tagDesc}}
             {{#if description}}
               <p class="home-ruta-tesis">{{description}}</p>
             {{/if}}
-          </div>
-        {{/foreach}}
-      {{/get}}
+          {{/foreach}}
+        {{/get}}
+      </div>
 
       {{#get "posts"
           include="tags,authors"
