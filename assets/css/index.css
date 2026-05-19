@@ -571,9 +571,8 @@ body {
   border-radius: var(--radius);
   background-color: var(--negro);
   color: var(--crema);
-  height: 100%;
-  aspect-ratio: 7 / 11;     /* fija la forma del card → mismo width = mismo height en cualquier browser */
-  overflow: hidden;
+  height: 100%;            /* llena la celda del grid; auto-rows: 1fr iguala alturas */
+  min-height: 0;
   transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
