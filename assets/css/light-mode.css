@@ -33,6 +33,29 @@ body.light-mode .flashy-h1 {
 body.light-mode .preview-section.bg-gradient {
   background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
 }
+body.light-mode .home-ruta-section {
+  background: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
+  color: var(--crema);
+}
+body.light-mode .home-ruta-eyebrow,
+body.light-mode .home-ruta-title,
+body.light-mode .home-ruta-meta,
+body.light-mode .home-ruta-tesis,
+body.light-mode .home-ruta-cta a {
+  color: var(--crema);
+}
+body.light-mode .home-ruta-title a {
+  border-bottom-color: var(--crema);
+}
+body.light-mode .home-ruta-cta a {
+  border-bottom-color: var(--crema);
+}
+body.light-mode .home-ruta-header {
+  border-bottom-color: rgba(234, 230, 225, 0.3);
+}
+body.light-mode .home-ruta-header::after {
+  background: var(--crema);
+}
 body.light-mode .alt-post-header {
   background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
 }
