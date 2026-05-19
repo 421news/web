@@ -1,0 +1,57 @@
+{{!-- params: tag (slug), languageFilter, eyebrow, postsLabel --}}
+<section class="preview-section home-ruta-section tag-hero-section">
+  <div class="global-container">
+    <div class="pv-huge">
+      <div class="home-ruta-header">
+        <div class="home-ruta-header-main">
+          <div class="home-ruta-eyebrow">{{eyebrow}}</div>
+          {{#tag}}
+            <h1 class="home-ruta-title">{{name}}</h1>
+            <div class="home-ruta-meta">{{count.posts}} {{../postsLabel}}</div>
+          {{/tag}}
+        </div>
+        {{#tag}}
+          {{#if description}}
+            <p class="home-ruta-tesis">{{description}}</p>
+          {{/if}}
+        {{/tag}}
+      </div>
+
+      {{#get "posts"
+          include="tags,authors"
+          limit="4"
+          order="published_at desc"
+          filter="primary_tag:{{tagSlug}}+featured:true+tag:-'Wiki'+tag:{{languageFilter}}"
+          as |featured|
+      }}
+        {{#if featured}}
+          <div class="post-grid w-dyn-list">
+            <div role="list" class="post-cols w-dyn-items">
+              {{#foreach featured}}
+                {{> "post-card"}}
+              {{/foreach}}
+            </div>
+          </div>
+        {{else}}
+          {{#get "posts"
+              include="tags,authors"
+              limit="4"
+              order="published_at desc"
+              filter="primary_tag:{{../tagSlug}}+tag:-'Wiki'+tag:{{../languageFilter}}"
+              as |fallback|
+          }}
+            {{#if fallback}}
+              <div class="post-grid w-dyn-list">
+                <div role="list" class="post-cols w-dyn-items">
+                  {{#foreach fallback}}
+                    {{> "post-card"}}
+                  {{/foreach}}
+                </div>
+              </div>
+            {{/if}}
+          {{/get}}
+        {{/if}}
+      {{/get}}
+    </div>
+  </div>
+</section>
