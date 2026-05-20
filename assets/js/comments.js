@@ -168,6 +168,27 @@
     container.innerHTML = html;
   }
 
+  function findComment(id) {
+    for (var i = 0; i < comments.length; i++) {
+      if (comments[i].id === id) return comments[i];
+      var reps = comments[i].replies || [];
+      for (var j = 0; j < reps.length; j++) if (reps[j].id === id) return reps[j];
+    }
+    return null;
+  }
+
+  function removeComment(id) {
+    for (var i = 0; i < comments.length; i++) {
+      if (comments[i].id === id) { comments.splice(i, 1); return; }
+      var reps = comments[i].replies || [];
+      for (var j = 0; j < reps.length; j++) {
+        if (reps[j].id === id) { reps.splice(j, 1); return; }
+      }
+    }
+  }
+
+  function textToHtml(text) { return '<p>' + esc(text).replace(/\n/g, '</p><p>') + '</p>'; }
+
   // Single event delegation handler — no re-binding needed
   container.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-action]');
@@ -177,8 +198,18 @@
 
       if (action === 'like') {
         if (!member) return;
-        var liked = btn.getAttribute('data-liked') === '1';
-        apiCall(liked ? 'DELETE' : 'POST', 'comments/' + id + '/like').then(reload).catch(function () {});
+        var c = findComment(id);
+        if (!c) return;
+        var wasLiked = !!c.liked;
+        c.liked = !wasLiked;
+        c.count = c.count || { likes: 0 };
+        c.count.likes = Math.max(0, (c.count.likes || 0) + (wasLiked ? -1 : 1));
+        render();
+        apiCall(wasLiked ? 'DELETE' : 'POST', 'comments/' + id + '/like').catch(function () {
+          c.liked = wasLiked;
+          c.count.likes = Math.max(0, (c.count.likes || 0) + (wasLiked ? 1 : -1));
+          render();
+        });
 
       } else if (action === 'reply') {
         var box = container.querySelector('.c421-reply-box[data-parent="' + id + '"]');
@@ -196,7 +227,6 @@
         var commentEl = btn.closest('.c421-comment');
         var textEl = commentEl.querySelector('.c421-text');
         var actionsEl = commentEl.querySelector('.c421-actions');
-        var currentHTML = textEl.innerHTML;
         var currentText = textEl.textContent.trim();
         textEl.innerHTML = '<textarea class="c421-input c421-edit-input" rows="2">' + esc(currentText) + '</textarea>' +
           '<div class="c421-compose-actions" style="display:flex">' +
@@ -210,13 +240,18 @@
 
       } else if (action === 'delete') {
         if (!confirm(t.confirmDelete)) return;
+        var del = findComment(id);
+        if (!del) return;
+        var prevStatus = del.status;
+        del.status = 'deleted';
+        render();
         fetch('https://webhook-hreflang.onrender.com/api/comments/delete', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ comment_id: id, member_uuid: member.uuid })
         }).then(function (r) { return r.json(); })
-          .then(function (data) { if (data.success) reload(); })
-          .catch(function () {});
+          .then(function (data) { if (!data.success) throw new Error('delete failed'); })
+          .catch(function () { del.status = prevStatus; render(); });
       }
       return;
     }
@@ -228,17 +263,26 @@
       var textarea = saveBtn.closest('.c421-text').querySelector('.c421-edit-input');
       var newText = textarea.value.trim();
       if (!newText) return;
-      saveBtn.textContent = t.saving;
-      saveBtn.disabled = true;
+      var editC = findComment(editId);
+      if (!editC) return;
+      var prevHtml = editC.html;
+      var prevEditedAt = editC.edited_at;
+      editC.html = textToHtml(newText);
+      editC.edited_at = new Date().toISOString();
+      render();
       apiCall('PUT', 'comments/' + editId, {
-        comments: [{ html: '<p>' + esc(newText).replace(/\n/g, '</p><p>') + '</p>' }]
-      }).then(reload).catch(function () { saveBtn.textContent = t.save; saveBtn.disabled = false; });
+        comments: [{ html: editC.html }]
+      }).catch(function () {
+        editC.html = prevHtml;
+        editC.edited_at = prevEditedAt;
+        render();
+      });
       return;
     }
 
     // Cancel edit
     if (e.target.closest('.c421-btn-cancel-edit')) {
-      reload();
+      render();
       return;
     }
 
@@ -250,11 +294,41 @@
       var text = input.value.trim();
       if (!text) return;
       var parentId = compose.getAttribute('data-parent') || null;
-      submitBtn.textContent = t.saving;
-      submitBtn.disabled = true;
-      var body = { comments: [{ html: '<p>' + esc(text).replace(/\n/g, '</p><p>') + '</p>', post_id: postId }] };
+      var tempId = 'temp-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+      var optimistic = {
+        id: tempId,
+        member: { uuid: member.uuid, name: member.name, avatar_image: member.avatar_image },
+        html: textToHtml(text),
+        status: 'published',
+        created_at: new Date().toISOString(),
+        count: { likes: 0 },
+        liked: false,
+        replies: [],
+        _pending: true
+      };
+      if (parentId) {
+        var parent = findComment(parentId);
+        if (parent) { parent.replies = parent.replies || []; parent.replies.push(optimistic); }
+      } else {
+        comments.unshift(optimistic);
+      }
+      render();
+      var body = { comments: [{ html: optimistic.html, post_id: postId }] };
       if (parentId) body.comments[0].parent_id = parentId;
-      apiCall('POST', 'comments', body).then(reload).catch(function () { submitBtn.textContent = t.save; submitBtn.disabled = false; });
+      apiCall('POST', 'comments', body)
+        .then(function (data) {
+          var saved = data && data.comments && data.comments[0];
+          if (saved) {
+            for (var k in saved) if (Object.prototype.hasOwnProperty.call(saved, k)) optimistic[k] = saved[k];
+            optimistic.replies = optimistic.replies || [];
+            delete optimistic._pending;
+          }
+        })
+        .catch(function () {
+          removeComment(tempId);
+          render();
+          alert(lang === 'en' ? 'Could not post comment. Try again.' : 'No se pudo publicar el comentario. Intentá de nuevo.');
+        });
       return;
     }
 
@@ -318,10 +392,10 @@
       });
   }
 
-  // Init
+  // Init — fetch member + comments in parallel
   function init() {
     container.innerHTML = '<p class="c421-loading">...</p>';
-    fetch('/members/api/member/', { credentials: 'same-origin' })
+    var memberPromise = fetch('/members/api/member/', { credentials: 'same-origin' })
       .then(function (r) { return (!r.ok || r.status === 204) ? null : r.json(); })
       .then(function (m) {
         if (m && m.email) {
@@ -331,8 +405,14 @@
           else if (!member.status) member.status = 'free';
         }
       })
-      .catch(function () {})
-      .then(reload);
+      .catch(function () {});
+    var commentsPromise = apiCall('GET', 'comments/?filter=post_id:' + postId + '&limit=20&order=created_at%20desc')
+      .then(function (data) {
+        comments = data.comments || [];
+        pagination = data.meta ? data.meta.pagination : null;
+      })
+      .catch(function () {});
+    Promise.all([memberPromise, commentsPromise]).then(render);
   }
 
   if (document.readyState === 'loading') {
