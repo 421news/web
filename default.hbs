@@ -1,12 +1,19 @@
 {{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}{{#has tag="#zh"}}<html lang="zh">{{else}}{{#has tag="#ja"}}<html lang="ja">{{else}}{{#has tag="#ko"}}<html lang="ko">{{else}}{{#has tag="#tr"}}<html lang="tr">{{else}}{{#has tag="#pt"}}<html lang="pt">{{else}}{{#has tag="#fr"}}<html lang="fr">{{else}}<html lang="es">{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{else}}<html lang="es">{{/is}}
   <head>
-    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}{{#is "home"}}<title>421 en español — Cultura, tecnología, juegos y vida real | 421.news</title>{{else}}<title>{{meta_title}}</title>{{/is}}{{/is}}
+    {{!-- TITLE:
+         - post/page/author: dynamic meta_title
+         - tag: dynamic meta_title (preserve tag-specific titles)
+         - landing/collection homes/error/etc: static 421 brand title (avoids Ghost's "(Page N)" suffix on paginated collections like /es/, /en/)
+         CRITICAL — RECURRING PITFALL: {{#is "home"}} matches ONLY /, NOT /es/. /es/ is a Ghost collection, not the "home" route. Don't try to override meta inside {{#is "home"}} expecting /es/ to be covered. --}}
+    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}{{#is "tag"}}<title>{{meta_title}} | 421.news</title>{{else}}<title>421 — Cultura, tecnología, juegos y vida real | 421.news</title>{{/is}}{{/is}}
     <meta charset='utf-8' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <meta name="robots" content="max-image-preview:large">
-    {{#is "home"}}
-    <meta name="description" content="421 en español: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina. Suscribite gratis al newsletter." />
-    {{/is}}
+    {{!-- Description: applies to landing AND all collection homes (/es/, /en/, etc).
+         NOTE: {{#is "home"}} only matches /, NOT /es/. Use {{#unless}} chain for collection homes. --}}
+    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
+    <meta name="description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina. Suscribite gratis al newsletter." />
+    {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
     <link href='https://fonts.googleapis.com' rel='preconnect' />
     <link href='https://fonts.gstatic.com' rel='preconnect' crossorigin='anonymous' />
     <link rel='preload' as='style' href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' onload="this.onload=null;this.rel='stylesheet'" />
@@ -33,12 +40,13 @@
     <link rel="alternate" hreflang="fr" href="https://www.421.news/fr/" />
     <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
     {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
-    {{!-- OG image fallback for landing only (collection homes have their own overrides below) --}}
-    {{#is "home"}}
+    {{!-- OG image + Twitter card: applies to landing AND all collection homes (/es/, /en/, etc).
+         {{#is "home"}} would only match /, not /es/. Use {{#unless}} chain. --}}
+    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
     <meta property="og:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     <meta name="twitter:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
-    {{/is}}
+    {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
     {{!-- Server-side hreflang for posts is provided by codeinjection_head (migrated 2026-02 + webhook for new posts). --}}
     {{!-- The legacy self-referential block here was creating duplicate hreflang="es" entries when paired with codeinjection. Removed v3.33.42. --}}
     <script>
@@ -58,16 +66,18 @@
     <link rel="author" type="text/plain" href="https://www.421.news/assets/data/llms.txt" title="LLM Context" />
     {{ghost_head}}
 
-    {{!-- Override OG/Twitter for /es/ home (Ghost otherwise emits "(Page 1)") --}}
-    {{#is "home"}}
-    <meta property="og:title" content="421 en español — Cultura, tecnología, juegos y vida real" />
-    <meta property="og:description" content="421 en español: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
-    <meta property="og:url" content="https://www.421.news/es/" />
+    {{!-- Override Ghost's auto-generated OG/Twitter on landing AND collection homes —
+         Ghost otherwise appends "(Page 1)" to the title on paginated collection homes.
+         CRITICAL: {{#is "home"}} only matches /, not /es/. Must use {{#unless}} chain.
+         These overrides come AFTER {{ghost_head}} so they take precedence. --}}
+    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
+    <meta property="og:title" content="421 — Cultura, tecnología, juegos y vida real" />
+    <meta property="og:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_AR" />
-    <meta name="twitter:title" content="421 en español — Cultura, tecnología, juegos y vida real" />
-    <meta name="twitter:description" content="421 en español: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
-    {{/is}}
+    <meta name="twitter:title" content="421 — Cultura, tecnología, juegos y vida real" />
+    <meta name="twitter:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
 
     {{!-- Preload feature image on post pages (LCP element) --}}
     {{#is "post"}}{{#post}}{{#if feature_image}}
