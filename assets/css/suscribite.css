@@ -672,7 +672,7 @@
   letter-spacing: 0.5px;
 }
 .tier-name {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-weight: 800;
   font-size: var(--fs-xl);
   color: var(--crema);
@@ -714,7 +714,7 @@
 .tier-benefits li {
   position: relative;
   padding: 0.55rem 0 0.55rem 1.75rem;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: var(--fs-body);
   line-height: 1.55;
   text-align: left;
@@ -789,7 +789,7 @@
 }
 .sub-faq-item[open] summary::after { transform: rotate(45deg); }
 .sub-faq-item p {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   margin: 1rem 0 0;
   color: var(--crema);
   opacity: 0.85;

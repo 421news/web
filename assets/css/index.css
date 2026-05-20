@@ -428,8 +428,8 @@ body {
 }
 .light-mode .related-header { border-bottom-color: rgba(26, 26, 26, 0.12); }
 .related-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: 1.75rem;
   line-height: 1.05;
@@ -440,7 +440,7 @@ body {
 }
 .light-mode .related-title { color: var(--negro); }
 .related-more {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -485,8 +485,8 @@ body {
 }
 .light-mode .last-posts-header { border-bottom-color: rgba(26, 26, 26, 0.12); }
 .last-posts-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: 1.9rem;
   line-height: 1.05;
@@ -503,7 +503,7 @@ body {
 }
 .last-posts-title a:hover { opacity: 0.85; }
 .last-posts-more {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -521,7 +521,7 @@ body {
   display: block;
   width: max-content;
   margin: 3rem auto 0;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -1069,7 +1069,7 @@ body {
 }
 .post-author-info { min-width: 0; }
 .post-author-label {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -1079,8 +1079,8 @@ body {
 }
 .post-author-name {
   display: inline-block;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: 1.7rem;
   line-height: 1.05;
@@ -2004,7 +2004,7 @@ footer {
 }
 
 .home-ruta-eyebrow {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -2015,8 +2015,8 @@ footer {
 }
 
 .home-ruta-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: 2.6rem;
   line-height: 1;
@@ -2035,7 +2035,7 @@ footer {
 .home-ruta-title a:hover { opacity: 0.7; }
 
 .home-ruta-meta {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -2062,7 +2062,7 @@ footer {
   margin-top: 2rem;
 }
 .home-ruta-cta a {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.12em;
@@ -2154,9 +2154,9 @@ footer {
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem 1.25rem;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: var(--fs-body);
-  font-weight: 600;
+  font-weight: 700;
   text-align: center;
 }
 .revista-wizard-announce-inner strong { font-weight: 800; }
@@ -2867,8 +2867,8 @@ footer {
 .light-mode .post-comments { border-top-color: rgba(26, 26, 26, 0.1); }
 
 .c421-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: 1.5rem;
   line-height: 1.05;
@@ -2894,8 +2894,8 @@ footer {
 }
 .light-mode .c421-title { color: var(--negro); border-bottom-color: rgba(26, 26, 26, 0.12); }
 .c421-count {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
   font-style: normal;
   text-transform: none;
   letter-spacing: 0;
@@ -3131,8 +3131,8 @@ footer {
   position: relative;
 }
 .featured-post-breadcrumb {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
   font-size: clamp(0.85rem, 1vw, 1.15rem);
   color: var(--negro);
   opacity: 0.7;
@@ -3145,8 +3145,8 @@ footer {
   padding-bottom: 1px;
 }
 .featured-post-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: clamp(2.4rem, 3.6vw, 5.2rem);
   line-height: 1;
@@ -3160,9 +3160,9 @@ footer {
   /* JS could add classes if desired; for now, font-size scales via @container later */
 }
 .featured-post-byline {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: clamp(0.85rem, 1vw, 1.15rem);
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1.5rem;
   color: var(--negro);
   display: flex;
@@ -3365,8 +3365,8 @@ footer {
   padding: 0 clamp(2.5rem, 4vw, 6rem);
 }
 .home-featured-breadcrumb {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
   font-size: clamp(0.8rem, 0.95vw, 1.1rem);
   color: var(--amarillo);
   text-transform: uppercase;
@@ -3388,8 +3388,8 @@ footer {
   z-index: 4;
 }
 .home-featured-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: clamp(1.8rem, 3.6vw, 5rem);
   line-height: 1.02;
@@ -3446,7 +3446,7 @@ footer {
   color: var(--crema);
   opacity: 0.65;
   text-decoration: none;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -3478,8 +3478,8 @@ footer {
   padding: 1.5rem 1.25rem 2rem;
 }
 .post-mhero-breadcrumb {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
   font-size: 0.78rem;
   color: var(--amarillo);
   text-transform: uppercase;
@@ -3491,8 +3491,8 @@ footer {
   text-decoration: none;
 }
 .post-mhero-title {
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-  font-weight: 900;
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
   font-style: italic;
   font-size: clamp(1.6rem, 7vw, 2.4rem);
   line-height: 1.05;
@@ -3536,7 +3536,7 @@ footer {
   color: var(--crema);
   opacity: 0.75;
   text-decoration: none;
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
