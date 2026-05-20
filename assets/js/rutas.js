@@ -1,8 +1,6 @@
 (function () {
     var CONTENT_KEY = '420da6f85b5cc903b347de9e33';
     var API_BASE = '/ghost/api/content';
-    var BATCH_SIZE = 50;
-    var CANON_FIRST_SCREEN = 8;
 
     var rutasContainer = document.getElementById('rutas-container');
     var canonContainer = document.getElementById('canon-container');
@@ -12,189 +10,111 @@
     var JSON_PATH = container.getAttribute('data-json') || '/assets/data/rutas.json';
     var langMatch = window.location.pathname.match(/^\/([a-z]{2})\//);
     var pageLang = langMatch ? langMatch[1] : 'es';
-    var isEN = pageLang === 'en';
-    var intlLangs = ['zh','ja','ko','tr','pt','fr'];
+    var intlLangs = ['zh', 'ja', 'ko', 'tr', 'pt', 'fr'];
     var isIntl = intlLangs.indexOf(pageLang) !== -1;
-    var langTagFilter = isIntl ? '+tag:hash-' + pageLang : '';
+    var isEN = pageLang === 'en';
+    // Lang filter for tag queries: ES = exclude all lang tags, EN = include #en, intl = include #{lang}
+    var LANG_HASH_TAGS = ['hash-en', 'hash-pt', 'hash-fr', 'hash-zh', 'hash-ja', 'hash-ko', 'hash-tr'];
+    function appendLangFilter(tagFilter) {
+        if (pageLang === 'es') {
+            // Exclude all intl/EN posts (NQL: tag:-X for "NOT this tag")
+            return tagFilter + '+' + LANG_HASH_TAGS.map(function (t) { return 'tag:-' + t; }).join('+');
+        }
+        return tagFilter + '+tag:hash-' + pageLang;
+    }
 
-    // Use pre-fetched promise from inline script, or fetch now as fallback
     var jsonPromise = window.__rutasJson || fetch(JSON_PATH).then(function (r) { return r.json(); });
 
     jsonPromise
         .then(function (data) {
-            // Pick the right language key
             var rutasKey = 'rutas';
             var canonKey = 'canon';
             if (pageLang !== 'es') {
-                var tryRutas = 'rutas_' + pageLang;
-                var tryCanon = 'canon_' + pageLang;
-                if (data[tryRutas]) rutasKey = tryRutas;
-                if (data[tryCanon]) canonKey = tryCanon;
+                if (data['rutas_' + pageLang]) rutasKey = 'rutas_' + pageLang;
+                if (data['canon_' + pageLang]) canonKey = 'canon_' + pageLang;
             }
 
             if (rutasContainer && data[rutasKey]) {
-                loadRutasProgressive(data[rutasKey]);
+                // For rutas: pass ES (canonical) rutas for order + lang-specific for nombres/tesis
+                loadRutas(data['rutas'] || [], data[rutasKey]);
             }
             if (canonContainer && data[canonKey]) {
-                loadCanonProgressive(data[canonKey]);
+                loadCanon(data['canon'] || [], data[canonKey]);
             }
         })
         .catch(function () {});
 
-    function fetchPostsBySlugs(slugs) {
-        if (!isIntl) {
-            // ES/EN: exact slug match
-            var chunks = [];
-            for (var i = 0; i < slugs.length; i += BATCH_SIZE) {
-                chunks.push(slugs.slice(i, i + BATCH_SIZE));
-            }
-            return Promise.all(chunks.map(function (chunk) {
-                var filter = 'slug:[' + chunk.join(',') + ']';
-                return fetch(API_BASE + '/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=' + chunk.length + '&filter=' + encodeURIComponent(filter), { headers: { 'Accept-Version': 'v5.0' } })
-                    .then(function (r) { return r.json(); })
-                    .then(function (d) { return d.posts || []; })
-                    .catch(function () { return []; });
-            })).then(function (results) {
-                var map = {};
-                results.forEach(function (posts) {
-                    posts.forEach(function (p) { if (p) map[p.slug] = p; });
-                });
-                return map;
-            });
-        }
-
-        // Intl: slugs have suffixes like -2, -3 etc. Fetch all posts for this lang, match by slug prefix
-        var filter = 'tag:hash-' + pageLang;
-        return fetch(API_BASE + '/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=all&filter=' + encodeURIComponent(filter), { headers: { 'Accept-Version': 'v5.0' } })
+    // --- Fetch all posts matching an NQL filter (handles pagination) ---
+    function fetchPostsByFilter(filter) {
+        var url = API_BASE + '/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=100&filter=' + encodeURIComponent(filter);
+        return fetch(url + '&page=1', { headers: { 'Accept-Version': 'v5.0' } })
             .then(function (r) { return r.json(); })
-            .then(function (d) {
-                var posts = d.posts || [];
-                var map = {};
-                // For each target slug, find the post whose slug starts with it
-                slugs.forEach(function (targetSlug) {
-                    for (var j = 0; j < posts.length; j++) {
-                        var p = posts[j];
-                        if (p.slug === targetSlug || (p.slug.indexOf(targetSlug) === 0 && /^-\d+$/.test(p.slug.slice(targetSlug.length)))) {
-                            map[targetSlug] = p;
-                            break;
-                        }
-                    }
-                });
-                return map;
-            })
-            .catch(function () { return {}; });
-    }
-
-    // --- RUTAS: load first route, render, then load rest ---
-    function loadRutasProgressive(rutas) {
-        if (!rutas.length) return;
-
-        // First route slugs
-        var firstRoute = rutas[0];
-        var firstSlugs = firstRoute.slugs.slice();
-
-        // Use pre-fetched posts from inline script, or fetch now as fallback
-        var firstPostsPromise = window.__firstPosts || fetchPostsBySlugs(firstSlugs);
-
-        firstPostsPromise.then(function (postMap) {
-            // Render first route immediately
-            rutasContainer.innerHTML = renderOneRuta(firstRoute, 0, postMap);
-
-            // Now fetch and render the rest
-            if (rutas.length > 1) {
-                var restSlugs = [];
-                for (var i = 1; i < rutas.length; i++) {
-                    rutas[i].slugs.forEach(function (s) {
-                        if (restSlugs.indexOf(s) === -1 && !postMap[s]) restSlugs.push(s);
-                    });
+            .then(function (first) {
+                var posts = first.posts || [];
+                var pages = (first.meta && first.meta.pagination && first.meta.pagination.pages) || 1;
+                if (pages <= 1) return posts;
+                var rest = [];
+                for (var p = 2; p <= pages; p++) {
+                    rest.push(fetch(url + '&page=' + p, { headers: { 'Accept-Version': 'v5.0' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (d) { return d.posts || []; })
+                        .catch(function () { return []; }));
                 }
-
-                fetchPostsBySlugs(restSlugs).then(function (restMap) {
-                    // Merge maps
-                    var fullMap = {};
-                    var k;
-                    for (k in postMap) fullMap[k] = postMap[k];
-                    for (k in restMap) fullMap[k] = restMap[k];
-
-                    var html = '';
-                    for (var j = 1; j < rutas.length; j++) {
-                        html += renderOneRuta(rutas[j], j, fullMap);
-                    }
-                    rutasContainer.insertAdjacentHTML('beforeend', html);
+                return Promise.all(rest).then(function (arrs) {
+                    return posts.concat.apply(posts, arrs);
                 });
-            }
-        });
+            })
+            .catch(function () { return []; });
     }
 
-    function renderOneRuta(ruta, index, postMap) {
-        var routeLabels = {
-            es: { route: 'Ruta', texts: 'textos' },
-            en: { route: 'Path', texts: 'texts' },
-            pt: { route: 'Rota', texts: 'textos' },
-            fr: { route: 'Parcours', texts: 'textes' },
-            zh: { route: '\u8def\u7ebf', texts: '\u7bc7' },
-            ja: { route: '\u30eb\u30fc\u30c8', texts: '\u8a18\u4e8b' },
-            ko: { route: '\u2018\ub8e8\ud2b8', texts: '\uae00' },
-            tr: { route: 'Rota', texts: 'yaz\u0131' }
-        };
-        var rl = routeLabels[pageLang] || routeLabels.en;
-        var labelRoute = rl.route;
-        var labelTexts = rl.texts;
-        var num = String(index + 1).length < 2 ? '0' + (index + 1) : String(index + 1);
-        var html = '<div class="ruta-section">';
-        html += '<div class="ruta-header">';
-        html += '<div class="ruta-number">' + labelRoute + ' ' + num + '</div>';
-        if (ruta.link) {
-            html += '<h2 class="ruta-nombre"><a href="' + esc(ruta.link) + '" class="gradient-link">' + esc(ruta.nombre) + '</a></h2>';
-        } else {
-            html += '<h2 class="ruta-nombre">' + esc(ruta.nombre) + '</h2>';
+    // For intl: map an intl post's slug to its canonical (ES) slug via prefix matching
+    function canonicalSlug(post, knownEsSlugs) {
+        if (!isIntl) return post.slug;
+        for (var i = 0; i < knownEsSlugs.length; i++) {
+            var es = knownEsSlugs[i];
+            if (post.slug === es) return es;
+            if (post.slug.indexOf(es) === 0 && /^-\d+$/.test(post.slug.slice(es.length))) return es;
         }
-        html += '<p class="ruta-tesis">' + esc(ruta.tesis) + '</p>';
-        html += '<div class="ruta-posts-count">' + ruta.slugs.length + ' ' + labelTexts + '</div>';
-        html += '</div>';
-        html += '<div class="ruta-cards post-cols">';
-        ruta.slugs.forEach(function (slug) {
-            var post = postMap[slug];
-            if (post) html += window.renderCard(post);
-        });
-        html += '</div></div>';
-        return html;
+        return null;
     }
 
-    // --- CANON: load first N items, render, then load rest ---
-    function loadCanonProgressive(canon) {
-        if (!canon.length) return;
-
-        var firstItems = canon.slice(0, CANON_FIRST_SCREEN);
-        var restItems = canon.slice(CANON_FIRST_SCREEN);
-
-        var firstSlugs = firstItems.map(function (c) { return c.slug; });
-
-        // Use pre-fetched posts from inline script, or fetch now as fallback
-        var firstPostsPromise = window.__firstPosts || fetchPostsBySlugs(firstSlugs);
-
-        firstPostsPromise.then(function (postMap) {
-            // Render first screen immediately
-            canonContainer.innerHTML = renderCanonItems(firstItems, 0, postMap);
-
-            // Fetch and append the rest
-            if (restItems.length) {
-                var restSlugs = restItems.map(function (c) { return c.slug; });
-
-                fetchPostsBySlugs(restSlugs).then(function (restMap) {
-                    var html = renderCanonItems(restItems, CANON_FIRST_SCREEN, restMap);
-                    var list = canonContainer.querySelector('.canon-list');
-                    if (list) {
-                        list.insertAdjacentHTML('beforeend', html);
-                    }
-                });
-            }
+    // --- CANON ---
+    function loadCanon(canonEs, canonLang) {
+        // canonEs: [{slug, razon}, ...] in ES (order source)
+        // canonLang: same shape but razones in current lang (for ES, same as canonEs)
+        var orderMap = {};
+        var razonMap = {};
+        canonEs.forEach(function (c, i) { orderMap[c.slug] = i; });
+        // canonLang[i] corresponds to canonEs[i] (same order, translated razones)
+        canonEs.forEach(function (c, i) {
+            var langItem = canonLang[i] || c;
+            razonMap[c.slug] = langItem.razon || c.razon;
         });
+        var esSlugList = canonEs.map(function (c) { return c.slug; });
+
+        fetchPostsByFilter(appendLangFilter('tag:hash-canon'))
+            .then(function (posts) {
+                posts.sort(function (a, b) {
+                    var ca = canonicalSlug(a, esSlugList);
+                    var cb = canonicalSlug(b, esSlugList);
+                    var oa = (ca && orderMap[ca] !== undefined) ? orderMap[ca] : Infinity;
+                    var ob = (cb && orderMap[cb] !== undefined) ? orderMap[cb] : Infinity;
+                    if (oa !== ob) return oa - ob;
+                    return new Date(b.published_at) - new Date(a.published_at);
+                });
+
+                var items = posts.map(function (p) {
+                    var cs = canonicalSlug(p, esSlugList);
+                    return { slug: p.slug, razon: (cs && razonMap[cs]) ? razonMap[cs] : '' };
+                });
+                var postMap = {};
+                posts.forEach(function (p) { postMap[p.slug] = p; });
+                canonContainer.innerHTML = renderCanonItems(items, 0, postMap);
+            });
     }
 
     function renderCanonItems(items, startIndex, postMap) {
-        var isFirst = startIndex === 0;
-        var html = isFirst ? '<div class="canon-list">' : '';
+        var html = startIndex === 0 ? '<div class="canon-list">' : '';
         items.forEach(function (item, i) {
             var post = postMap[item.slug];
             if (!post) return;
@@ -210,10 +130,76 @@
                 html += '<div class="canon-tag">' + esc(tag.name) + '</div>';
             }
             html += '<h3>' + esc(post.title) + '</h3>';
-            html += '<p class="canon-reason">' + esc(item.razon) + '</p>';
+            if (item.razon) html += '<p class="canon-reason">' + esc(item.razon) + '</p>';
             html += '</div></a>';
         });
-        if (isFirst) html += '</div>';
+        if (startIndex === 0) html += '</div>';
+        return html;
+    }
+
+    // --- RUTAS ---
+    function loadRutas(rutasEs, rutasLang) {
+        // rutasEs: [{id, nombre, tesis, slugs}, ...] (ES, order source)
+        // rutasLang: same shape but nombres/tesis translated
+        // We render each ruta in the order from rutasEs, with one tag query per ruta
+        // Use Promise.all to fetch all rutas' posts in parallel, then render in order
+
+        var rutaPromises = rutasEs.map(function (ruta, idx) {
+            var esSlugs = ruta.slugs || [];
+            var orderMap = {};
+            esSlugs.forEach(function (s, i) { orderMap[s] = i; });
+            return fetchPostsByFilter(appendLangFilter('tag:hash-ruta-' + ruta.id))
+                .then(function (posts) {
+                    posts.sort(function (a, b) {
+                        var ca = canonicalSlug(a, esSlugs);
+                        var cb = canonicalSlug(b, esSlugs);
+                        var oa = (ca && orderMap[ca] !== undefined) ? orderMap[ca] : Infinity;
+                        var ob = (cb && orderMap[cb] !== undefined) ? orderMap[cb] : Infinity;
+                        if (oa !== ob) return oa - ob;
+                        return new Date(b.published_at) - new Date(a.published_at);
+                    });
+                    return { ruta: ruta, rutaLang: rutasLang[idx] || ruta, idx: idx, posts: posts };
+                });
+        });
+
+        Promise.all(rutaPromises).then(function (results) {
+            var html = '';
+            results.forEach(function (r) {
+                html += renderOneRuta(r.rutaLang, r.idx, r.posts);
+            });
+            rutasContainer.innerHTML = html;
+        });
+    }
+
+    function renderOneRuta(ruta, index, posts) {
+        var routeLabels = {
+            es: { route: 'Ruta', texts: 'textos' },
+            en: { route: 'Path', texts: 'texts' },
+            pt: { route: 'Rota', texts: 'textos' },
+            fr: { route: 'Parcours', texts: 'textes' },
+            zh: { route: '路线', texts: '篇' },
+            ja: { route: 'ルート', texts: '記事' },
+            ko: { route: '‘루트', texts: '글' },
+            tr: { route: 'Rota', texts: 'yazı' }
+        };
+        var rl = routeLabels[pageLang] || routeLabels.en;
+        var num = String(index + 1).length < 2 ? '0' + (index + 1) : String(index + 1);
+        var html = '<div class="ruta-section">';
+        html += '<div class="ruta-header">';
+        html += '<div class="ruta-number">' + rl.route + ' ' + num + '</div>';
+        if (ruta.link) {
+            html += '<h2 class="ruta-nombre"><a href="' + esc(ruta.link) + '" class="gradient-link">' + esc(ruta.nombre) + '</a></h2>';
+        } else {
+            html += '<h2 class="ruta-nombre">' + esc(ruta.nombre) + '</h2>';
+        }
+        html += '<p class="ruta-tesis">' + esc(ruta.tesis) + '</p>';
+        html += '<div class="ruta-posts-count">' + posts.length + ' ' + rl.texts + '</div>';
+        html += '</div>';
+        html += '<div class="ruta-cards post-cols">';
+        posts.forEach(function (post) {
+            html += window.renderCard(post);
+        });
+        html += '</div></div>';
         return html;
     }
 
