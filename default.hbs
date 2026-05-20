@@ -40,12 +40,19 @@
     <link rel="alternate" hreflang="fr" href="https://www.421.news/fr/" />
     <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
     {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
-    {{!-- OG image + Twitter card: applies to landing AND all collection homes (/es/, /en/, etc).
-         {{#is "home"}} would only match /, not /es/. Use {{#unless}} chain. --}}
+    {{!-- OG/Twitter overrides for landing AND collection homes (/es/, /en/, etc).
+         CRITICAL: {{#is "home"}} only matches /, not /es/. Use {{#unless}} chain.
+         These come BEFORE {{ghost_head}} so they're FIRST (OG spec: first wins). --}}
     {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
+    <meta property="og:title" content="421 — Cultura, tecnología, juegos y vida real" />
+    <meta property="og:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
     <meta property="og:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
-    <meta name="twitter:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="421 — Cultura, tecnología, juegos y vida real" />
+    <meta name="twitter:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    <meta name="twitter:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg" />
     {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
     {{!-- Server-side hreflang for posts is provided by codeinjection_head (migrated 2026-02 + webhook for new posts). --}}
     {{!-- The legacy self-referential block here was creating duplicate hreflang="es" entries when paired with codeinjection. Removed v3.33.42. --}}
@@ -65,19 +72,6 @@
     <link rel="alternate" type="application/rss+xml" title="421 — English" href="https://www.421.news/en/rss/" />
     <link rel="author" type="text/plain" href="https://www.421.news/assets/data/llms.txt" title="LLM Context" />
     {{ghost_head}}
-
-    {{!-- Override Ghost's auto-generated OG/Twitter on landing AND collection homes —
-         Ghost otherwise appends "(Page 1)" to the title on paginated collection homes.
-         CRITICAL: {{#is "home"}} only matches /, not /es/. Must use {{#unless}} chain.
-         These overrides come AFTER {{ghost_head}} so they take precedence. --}}
-    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
-    <meta property="og:title" content="421 — Cultura, tecnología, juegos y vida real" />
-    <meta property="og:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_AR" />
-    <meta name="twitter:title" content="421 — Cultura, tecnología, juegos y vida real" />
-    <meta name="twitter:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
-    {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
 
     {{!-- Preload feature image on post pages (LCP element) --}}
     {{#is "post"}}{{#post}}{{#if feature_image}}
