@@ -1350,7 +1350,7 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
   const generated = today.toISOString().split('T')[0];
 
   return {
-    team: ['00285f8378c256764d05b03690b04ab876110c230a199a060064c33bfc734d24', '708e778156d49e0e207733e8f57251fbff7189c94bccbd175afafd04608c06e7'],
+    team: ['00285f8378c256764d05b03690b04ab876110c230a199a060064c33bfc734d24', '708e778156d49e0e207733e8f57251fbff7189c94bccbd175afafd04608c06e7', 'f3ea8d6eaa950fbe0ea7017430ed3118dd69a43bc45ffbfa107a672244c79f46'],
     generated,
     range: { start: '2024-09-18', end: generated },
     monthly, articles, pages, channels
