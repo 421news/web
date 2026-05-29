@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const https = require('https');
+const crypto = require('crypto');
 
 const app = express();
 app.use(express.json());
@@ -1350,11 +1351,44 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
   const generated = today.toISOString().split('T')[0];
 
   return {
-    team: ['00285f8378c256764d05b03690b04ab876110c230a199a060064c33bfc734d24', '708e778156d49e0e207733e8f57251fbff7189c94bccbd175afafd04608c06e7', 'f3ea8d6eaa950fbe0ea7017430ed3118dd69a43bc45ffbfa107a672244c79f46'],
+    team: [], // filled by getTeamHashes() in refreshGA4Data
     generated,
     range: { start: '2024-09-18', end: generated },
     monthly, articles, pages, channels
   };
+}
+
+// --- Team hashes for /analytics access ---
+// Safety fallback so a Ghost API failure never locks out the current team.
+// Identidad de los primeros 2 hashes desconocida — mantener.
+const FALLBACK_TEAM_HASHES = [
+  '00285f8378c256764d05b03690b04ab876110c230a199a060064c33bfc734d24',
+  '708e778156d49e0e207733e8f57251fbff7189c94bccbd175afafd04608c06e7',
+  'f3ea8d6eaa950fbe0ea7017430ed3118dd69a43bc45ffbfa107a672244c79f46'
+];
+
+function sha256Hex(str) {
+  return crypto.createHash('sha256').update(str.toLowerCase().trim()).digest('hex');
+}
+
+async function getTeamHashes() {
+  const hashes = new Set(FALLBACK_TEAM_HASHES);
+  try {
+    let page = 1;
+    let pages = 1;
+    do {
+      const res = await ghostRequest('GET', `/ghost/api/admin/members/?filter=${encodeURIComponent('label:equipo')}&limit=100&page=${page}`);
+      for (const m of (res.members || [])) {
+        if (m.email) hashes.add(sha256Hex(m.email));
+      }
+      pages = (res.meta && res.meta.pagination && res.meta.pagination.pages) || 1;
+      page++;
+    } while (page <= pages);
+    console.log(`[ga4] Team hashes resolved: ${hashes.size} (fallback=${FALLBACK_TEAM_HASHES.length} + Ghost label "equipo")`);
+  } catch (err) {
+    console.log(`[ga4] getTeamHashes failed, using fallback only: ${err.message}`);
+  }
+  return [...hashes];
 }
 
 // --- Titles enrichment from existing data ---
@@ -1423,6 +1457,8 @@ async function refreshGA4Data() {
     channelResult.rows || [],
     monthlyResult.rows || []
   );
+
+  ga4Data.team = await getTeamHashes();
 
   await enrichArticleTitles(ga4Data);
 
