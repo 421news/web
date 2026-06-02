@@ -14,7 +14,7 @@
     {{> "general-styling"}}
     {{> "site-nav-en"}}
     <main class="global-container" style="margin-bottom: 50px;">
-      <h1 style="margin-top: 120px;">Last posts</h1>
+      <h1 class="last-posts-title" style="margin-top: 120px; margin-bottom: 1.5rem;">Last posts</h1>
 
       <div class="filter-bar" id="filter-bar">
         <select id="filter-author" class="filter-select">
@@ -45,13 +45,7 @@
         {{/get}}
       </div>
 
-      <button
-          class="button"
-          id="load-more-posts"
-          style="display: block; margin: auto; margin-top: 50px;"
-      >
-          Load more
-      </button>
+      <button class="btn-load-more" id="load-more-posts">Load more</button>
     </main>
 
     <!-- FILE BROWSER NAVIGATION -->
