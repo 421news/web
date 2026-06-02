@@ -1156,6 +1156,87 @@ body {
   .post-author-bio { font-size: 0.95rem; }
 }
 
+/* ---------- Most read (home, dynamic GA4 historical) ---------- */
+.mr-since { cursor: default; opacity: 0.5; }
+.most-read-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  min-height: 84px;
+}
+.mr-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(234, 230, 225, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  text-decoration: none;
+  color: var(--crema);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.mr-card:hover { border-color: var(--amarillo); transform: translateY(-2px); }
+.mr-num {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.5rem;
+  width: 30px;
+  text-align: center;
+  flex-shrink: 0;
+  color: var(--amarillo);
+}
+.mr-thumb {
+  width: 84px;
+  height: 84px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.05);
+}
+.mr-body { min-width: 0; }
+.mr-chip {
+  display: inline-block;
+  background: var(--gradient-main);
+  color: var(--negro);
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 20px;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mr-title {
+  font-family: 'Nunito Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  margin: 6px 0 0;
+  color: var(--crema);
+}
+.mr-meta {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+  display: block;
+  margin-top: 6px;
+}
+.light-mode .mr-card {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(26, 26, 26, 0.12);
+  color: var(--negro);
+}
+.light-mode .mr-card:hover { border-color: var(--amarillo); }
+.light-mode .mr-num { color: var(--verde); }
+.light-mode .mr-title { color: var(--negro); }
+@media (max-width: 760px) {
+  .most-read-grid { grid-template-columns: 1fr; }
+}
+
 /* legacy class — kept for any leftover usage, will be removed once author.hbs is updated */
 .post_author-box {
   border: var(--border-width) solid var(--crema);

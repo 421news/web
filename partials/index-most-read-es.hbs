@@ -1,0 +1,87 @@
+<div class="preview-section" id="most-read-section">
+  <div class="global-container">
+    <div class="pv-huge">
+      <div class="last-posts-header">
+        <h2 class="last-posts-title">Lo más leído</h2>
+        <span class="last-posts-more mr-since">Desde 2024</span>
+      </div>
+      <div class="most-read-grid" id="most-read-grid" aria-busy="true"></div>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var grid = document.getElementById('most-read-grid');
+  var section = document.getElementById('most-read-section');
+  if (!grid) return;
+  var KEY = '420da6f85b5cc903b347de9e33';
+  var THEME_URL = '{{asset "data/ga4-data.json"}}';
+  var RENDER_URL = 'https://webhook-hreflang.onrender.com/api/ga4-data.json';
+  var N = 6; // cards visibles
+
+  function esc(s) {
+    return (s || '').replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function thumb(u) { return u ? u.replace('/images/', '/images/size/w160/') : ''; }
+  function hide() { if (section) section.style.display = 'none'; }
+
+  function getData() {
+    var ctrl = new AbortController();
+    var t = setTimeout(function () { ctrl.abort(); }, 5000);
+    return fetch(RENDER_URL, { signal: ctrl.signal })
+      .then(function (r) { clearTimeout(t); return r.json(); })
+      .catch(function () { clearTimeout(t); return fetch(THEME_URL).then(function (r) { return r.json(); }); });
+  }
+
+  getData().then(function (d) {
+    // ranking histórico (suma de todos los meses), solo posts ES
+    var arts = (d.articles || []).filter(function (a) { return !a.en; });
+    arts.forEach(function (a) {
+      var tot = 0, m = a.m || {};
+      for (var k in m) { tot += (m[k].pv || 0); }
+      a._tot = tot;
+    });
+    arts.sort(function (a, b) { return b._tot - a._tot; });
+    if (!arts.length) return hide();
+
+    // pido extra por si algún slug no existe como post publicado
+    var pool = arts.slice(0, N + 5);
+    var slugs = pool.map(function (a) { return a.slug; });
+    var filter = 'slug:[' + slugs.join(',') + ']';
+    var url = '/ghost/api/content/posts/?key=' + KEY +
+      '&limit=20&include=tags,authors&filter=' + encodeURIComponent(filter);
+
+    return fetch(url, { headers: { 'Accept-Version': 'v5.0' } })
+      .then(function (r) { return r.json(); })
+      .then(function (pd) {
+        var bySlug = {};
+        (pd.posts || []).forEach(function (p) { bySlug[p.slug] = p; });
+        // re-ordenar según el ranking de analytics y quedarme con N
+        var ordered = [];
+        pool.forEach(function (a) {
+          var p = bySlug[a.slug];
+          if (p && ordered.length < N) { p._en = a.en; ordered.push(p); }
+        });
+        if (!ordered.length) return hide();
+
+        grid.innerHTML = ordered.map(function (p, i) {
+          var tags = (p.tags || []).filter(function (t) { return t.name.charAt(0) !== '#'; });
+          var tag = tags[0] ? tags[0].name : '';
+          var href = (p._en ? '/en/' : '/es/') + p.slug + '/';
+          return '<a class="mr-card" href="' + href + '">' +
+            '<span class="mr-num">' + (i + 1) + '</span>' +
+            '<img class="mr-thumb" src="' + esc(thumb(p.feature_image)) + '" loading="lazy" width="84" height="84" alt="" />' +
+            '<div class="mr-body">' +
+              (tag ? '<span class="mr-chip">' + esc(tag) + '</span>' : '') +
+              '<h3 class="mr-title">' + esc(p.title) + '</h3>' +
+              (p.reading_time ? '<span class="mr-meta">' + p.reading_time + ' min</span>' : '') +
+            '</div>' +
+          '</a>';
+        }).join('');
+        grid.setAttribute('aria-busy', 'false');
+      });
+  }).catch(hide);
+})();
+</script>
