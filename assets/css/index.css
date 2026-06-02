@@ -1157,6 +1157,7 @@ body {
 }
 
 /* ---------- Most read (home, dynamic GA4 historical) ---------- */
+#most-read-section .pv-huge { padding-top: 2.5rem; padding-bottom: 0; }
 .mr-since { cursor: default; opacity: 0.5; }
 .most-read-grid {
   display: grid;
