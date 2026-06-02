@@ -1,28 +1,26 @@
-{{!-- Post card (redesign). v1 = editorial; v2 (.pc--featured) = foil para canon/rutas.
-     Featured = tiene #canon o alguna #ruta-*. Tag/type/min sin fecha. --}}
+{{!-- Post card (redesign). v1 = editorial; v2 (.pc--featured) = mismo tamaño que v1
+     + foil para canon/rutas. Featured = #canon o alguna #ruta-*. Meta = autor · min. --}}
 {{#has tag="#canon, #ruta-argentina-como-laboratorio, #ruta-autonomia-en-accion, #ruta-canon-del-entretenimiento, #ruta-cultura-pop-como-teoria, #ruta-filosofia-para-la-vida-real, #ruta-hazlo-tu-mismo, #ruta-inteligencia-artificial, #ruta-internet-no-murio"}}
 <div role="listitem" class="w-dyn-item" data-post-id="{{id}}">
-  <article class="pc pc--featured">
-    <a class="pc__stretched" href="{{url}}" aria-label="{{title}}">{{title}}</a>
+  <a href="{{url}}" class="pc pc__link pc--featured">
     <div class="pc__cover">
       <img
-        src="{{img_url feature_image size="m"}}"
-        srcset="{{img_url feature_image size="m"}} 600w, {{img_url feature_image size="l"}} 1000w"
-        sizes="(max-width: 768px) 100vw, 320px"
-        alt="{{title}}" class="pc__img" loading="lazy" width="600" height="750"
+        src="{{img_url feature_image size="s"}}"
+        srcset="{{img_url feature_image size="s"}} 300w, {{img_url feature_image size="m"}} 600w"
+        sizes="(max-width: 768px) 100vw, 300px"
+        alt="{{title}}" class="pc__img" loading="lazy" width="600" height="375"
       />
       <div class="pc__overlay" style="background-size:cover;background-position:center"></div>
-      <div class="pc__mask"></div>
+      {{#has tag="#canon"}}<span class="pc__badge" data-href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/canon/"><span class="pc__star">★</span> canon</span>{{else}}<span class="pc__badge" data-href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/rutas/"><span class="pc__star">★</span> ruta</span>{{/has}}
+    </div>
+    <div class="pc__body">
       {{#if primary_tag}}
-      <span class="pc__tag pc__tag--pill" data-tag-url="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}{{#has tag="#ensayo"}}<span class="pc__type"> · ensayo</span>{{/has}}{{#has tag="#guia"}}<span class="pc__type"> · guía</span>{{/has}}{{#has tag="#resena"}}<span class="pc__type"> · reseña</span>{{/has}}{{#has tag="#cronica"}}<span class="pc__type"> · crónica</span>{{/has}}{{#has tag="#entrevista"}}<span class="pc__type"> · entrevista</span>{{/has}}{{#has tag="#novedades"}}<span class="pc__type"> · novedades</span>{{/has}}</span>
+      <span class="pc__tag" data-tag-url="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}{{#has tag="#ensayo"}}<span class="pc__type"> · ensayo</span>{{/has}}{{#has tag="#guia"}}<span class="pc__type"> · guía</span>{{/has}}{{#has tag="#resena"}}<span class="pc__type"> · reseña</span>{{/has}}{{#has tag="#cronica"}}<span class="pc__type"> · crónica</span>{{/has}}{{#has tag="#entrevista"}}<span class="pc__type"> · entrevista</span>{{/has}}{{#has tag="#novedades"}}<span class="pc__type"> · novedades</span>{{/has}}</span>
       {{/if}}
-      <div class="pc__titlebox"><h3 class="pc__title">{{title}}</h3></div>
+      <h3 class="pc__title">{{title}}</h3>
+      <div class="pc__meta">{{#primary_author}}{{name}}{{/primary_author}}{{#if reading_time}} <span class="pc__sep">·</span> {{reading_time minute="1 min" minutes="% min"}}{{/if}}</div>
     </div>
-    <div class="pc__body pc__body--featured">
-      <span class="pc__meta">{{#primary_author}}{{name}}{{/primary_author}}{{#if reading_time}} <span class="pc__sep">·</span> {{reading_time minute="1 min" minutes="% min"}}{{/if}}</span>
-      {{#has tag="#canon"}}<a class="pc__badge" href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/canon/"><span class="pc__star">★</span> canon</a>{{else}}<a class="pc__badge" href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/rutas/"><span class="pc__star">★</span> ruta</a>{{/has}}
-    </div>
-  </article>
+  </a>
 </div>
 {{else}}
 <div role="listitem" class="w-dyn-item" data-post-id="{{id}}">

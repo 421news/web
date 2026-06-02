@@ -6,17 +6,6 @@ body.light-mode {
 body.light-mode .hero-mobile-title {
   color: var(--negro);
 }
-body.light-mode .tag-box {
-  border-color: var(--verde);
-  background-color: var(--crema);
-}
-body.light-mode .post-card_ico {
-  border-color: var(--negro);
-  background-color: var(--crema);
-}
-body.light-mode .post-card_ico .primary-tag-image {
-  filter: invert(1);
-}
 body.light-mode .ruta-posts-count {
   color: var(--verde);
 }
@@ -131,20 +120,6 @@ body.light-mode .button.is-icon {
 }
 body.light-mode .post_author-box {
   border-color: var(--negro);
-}
-body.light-mode .post-card {
-  border-color: var(--negro);
-  background-color: var(--crema);
-  color: var(--negro);
-}
-body.light-mode .post-card:hover {
-  background-color: var(--negro);
-}
-body.light-mode .post-card:hover .post-card_info {
-  color: var(--crema);
-}
-body.light-mode .post-card:hover .tag-box {
-  color: var(--negro);
 }
 body.light-mode footer {
   background-color: var(--verde);

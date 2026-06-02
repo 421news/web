@@ -49,37 +49,25 @@
         var img = window.escHtml(post.feature_image || '');
         var title = window.escHtml(post.title);
         var overlay = '<div class="pc__overlay" style="background-size:cover;background-position:center"></div>';
-
-        if (featured) {
-            var badge = isCanon
-                ? '<a class="pc__badge" href="/' + lang + '/canon/"><span class="pc__star">★</span> canon</a>'
-                : '<a class="pc__badge" href="/' + lang + '/rutas/"><span class="pc__star">★</span> ruta</a>';
-            var tagPill = tag.slug
-                ? '<span class="pc__tag pc__tag--pill" data-tag-url="' + window.escHtml(tagUrl) + '">' + tagName + ctHtml + '</span>'
-                : '';
-            return '<div role="listitem" class="w-dyn-item">' +
-                '<article class="pc pc--featured">' +
-                '<a class="pc__stretched" href="' + post.url + '" aria-label="' + title + '">' + title + '</a>' +
-                '<div class="pc__cover">' +
-                '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="750" />' +
-                overlay + '<div class="pc__mask"></div>' + tagPill +
-                '<div class="pc__titlebox"><h3 class="pc__title">' + title + '</h3></div>' +
-                '</div>' +
-                '<div class="pc__body pc__body--featured">' +
-                '<span class="pc__meta">' + meta + '</span>' + badge +
-                '</div></article></div>';
-        }
-
         var tagSpan = '<span class="pc__tag"' + (tag.slug ? ' data-tag-url="' + window.escHtml(tagUrl) + '"' : '') + '>' + tagName + ctHtml + '</span>';
+        var body = '<div class="pc__body">' + tagSpan +
+            '<h3 class="pc__title">' + title + '</h3>' +
+            '<div class="pc__meta">' + meta + '</div></div>';
+
+        // v2 = misma geometría que v1 + foil + badge pill (canon/ruta) en el cover
+        var featuredCls = '', badge = '';
+        if (featured) {
+            featuredCls = ' pc--featured';
+            badge = isCanon
+                ? '<span class="pc__badge" data-href="/' + lang + '/canon/"><span class="pc__star">★</span> canon</span>'
+                : '<span class="pc__badge" data-href="/' + lang + '/rutas/"><span class="pc__star">★</span> ruta</span>';
+        }
         return '<div role="listitem" class="w-dyn-item">' +
-            '<a href="' + post.url + '" class="pc pc__link">' +
+            '<a href="' + post.url + '" class="pc pc__link' + featuredCls + '">' +
             '<div class="pc__cover">' +
             '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="375" />' +
-            overlay + '</div>' +
-            '<div class="pc__body">' + tagSpan +
-            '<h3 class="pc__title">' + title + '</h3>' +
-            '<div class="pc__meta">' + meta + '</div>' +
-            '</div></a></div>';
+            overlay + badge + '</div>' +
+            body + '</a></div>';
     };
 
     // --- Lazy-load textura.webp via IntersectionObserver ---
@@ -148,11 +136,11 @@
         }
     });
 
-    // Event delegation for tag chip click → navigate to tag page
+    // Event delegation: tag chip → tag page · badge → canon/rutas (inside card link)
     document.addEventListener('click', function (e) {
         var tagEl = e.target.closest('.pc__tag');
-        if (!tagEl) return;
-        var url = tagEl.dataset.tagUrl;
+        var badgeEl = e.target.closest('.pc__badge');
+        var url = (tagEl && tagEl.dataset.tagUrl) || (badgeEl && badgeEl.dataset.href);
         if (!url) return;
         e.preventDefault();
         e.stopPropagation();
