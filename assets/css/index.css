@@ -3638,7 +3638,7 @@ footer {
 .pc__star { font-size: 0.85em; line-height: 1; }
 
 /* ---- v2 FULL (magazine) — solo página de rutas: título sobre la imagen, vertical ---- */
-.pc--full .pc__cover { aspect-ratio: auto; flex: 1 1 auto; min-height: 380px; border-bottom: none; }
+.pc--full .pc__cover { aspect-ratio: auto; flex: 1 1 auto; min-height: 320px; border-bottom: none; }
 .pc--full .pc__overlay { z-index: 0; }
 .pc--full .pc__mask {
   position: absolute; inset: 0; z-index: 1; pointer-events: none;
@@ -3654,12 +3654,10 @@ footer {
   position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
   padding: 20px 20px 18px; pointer-events: none;
 }
-.pc--full .pc__title { color: var(--crema); font-size: 1.45rem; }
+.pc--full .pc__title { color: var(--crema); font-size: 1.2rem; }
 .pc--full .pc__meta { margin-top: 8px; }
 .pc--full .pc__meta--over { color: var(--crema); opacity: 0.8; }
-/* grid de la página de rutas: 3 col para que las cards verticales respiren */
-.ruta-cards.post-cols { grid-template-columns: repeat(3, 1fr); }
-@media screen and (max-width: 991px) { .ruta-cards.post-cols { grid-template-columns: repeat(2, 1fr); } }
+/* .ruta-cards usa el grid normal de .post-cols (4 col desktop, igual que el resto) */
 
 /* ---- light mode ---- */
 body.light-mode .pc__link { border-color: var(--negro); background: transparent; color: var(--negro); }
