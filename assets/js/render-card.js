@@ -55,22 +55,17 @@
             '<h3 class="pc__title">' + title + '</h3>' +
             '<div class="pc__meta">' + meta + '</div></div>';
 
-        // v2 = misma geometría que v1 + foil + badge pill (canon/ruta) en el cover
-        var featuredCls = '', badge = '';
+        // Foil (canon/ruta) = SIEMPRE formato magazine: imagen vertical, título sobre
+        // la imagen, foil. La grilla (auto-rows 1fr + equalize) iguala alturas por fila.
         if (featured) {
-            featuredCls = ' pc--featured';
-            badge = isCanon
+            var badge = isCanon
                 ? '<span class="pc__badge" data-href="/' + lang + '/canon/"><span class="pc__star">★</span> canon</span>'
                 : '<span class="pc__badge" data-href="/' + lang + '/rutas/"><span class="pc__star">★</span> ruta</span>';
-        }
-
-        // Modo full (magazine) — solo para la página de rutas: título sobre la imagen, vertical
-        if (featured && opts.full) {
             var tagPill = tag.slug
                 ? '<span class="pc__tag pc__tag--pill" data-tag-url="' + window.escHtml(tagUrl) + '">' + tagName + ctHtml + '</span>'
                 : '';
             return '<div role="listitem" class="w-dyn-item">' +
-                '<a href="' + post.url + '" class="pc pc__link pc--featured pc--full">' +
+                '<a href="' + post.url + '" class="pc pc__link pc--featured">' +
                 '<div class="pc__cover">' +
                 '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="800" />' +
                 overlay + '<div class="pc__mask"></div>' + badge + tagPill +
@@ -80,10 +75,10 @@
         }
 
         return '<div role="listitem" class="w-dyn-item">' +
-            '<a href="' + post.url + '" class="pc pc__link' + featuredCls + '">' +
+            '<a href="' + post.url + '" class="pc pc__link">' +
             '<div class="pc__cover">' +
             '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="375" />' +
-            overlay + badge + '</div>' +
+            overlay + '</div>' +
             body + '</a></div>';
     };
 

@@ -3618,7 +3618,27 @@ footer {
   animation: pcFoilSweep 5.5s linear infinite; transition: opacity 0.25s ease;
 }
 @keyframes pcFoilSweep { 0% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
-.pc--featured .pc__cover { border-bottom: none; } /* el borde foil ya delimita */
+/* foil = full-frame magazine: imagen llena la card, título sobre la imagen.
+   flex:1 + min-height hace que llene la celda; la grilla (auto-rows 1fr +
+   equalize) iguala su altura a la de las cards normales de la fila. */
+.pc--featured .pc__cover { aspect-ratio: auto; flex: 1 1 auto; min-height: 300px; border-bottom: none; }
+.pc--featured .pc__overlay { z-index: 0; }
+.pc--featured .pc__mask {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(18,18,18,0) 38%, rgba(18,18,18,.55) 66%, rgba(18,18,18,.93) 100%);
+}
+.pc--featured .pc__tag--pill {
+  position: absolute; top: 14px; left: 14px; z-index: 4;
+  background: var(--negro); border: 1px solid var(--amarillo); color: var(--crema);
+  border-radius: 999px; padding: 5px 12px;
+}
+.pc--featured .pc__tag--pill::before { margin-right: 2px; }
+.pc--featured .pc__titlebox {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 20px 20px 18px; pointer-events: none;
+}
+.pc--featured .pc__title { color: var(--crema); font-size: 1.3rem; }
+.pc--featured .pc__meta--over { color: var(--crema); opacity: 0.85; margin-top: 8px; }
 @media (hover: hover) {
   .pc--featured:hover { transform: translateY(-5px); }
   .pc--featured:hover::after { opacity: 1; animation-duration: 2.8s; }
@@ -3637,34 +3657,12 @@ footer {
 .pc__badge:hover { transform: translateY(-1px); }
 .pc__star { font-size: 0.85em; line-height: 1; }
 
-/* ---- v2 FULL (magazine) — solo página de rutas: título sobre la imagen, vertical ---- */
-.pc--full .pc__cover { aspect-ratio: auto; flex: 1 1 auto; min-height: 320px; border-bottom: none; }
-.pc--full .pc__overlay { z-index: 0; }
-.pc--full .pc__mask {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(180deg, rgba(18,18,18,0) 38%, rgba(18,18,18,.55) 66%, rgba(18,18,18,.93) 100%);
-}
-.pc--full .pc__tag--pill {
-  position: absolute; top: 14px; left: 14px; z-index: 4;
-  background: var(--negro); border: 1px solid var(--amarillo); color: var(--crema);
-  border-radius: 999px; padding: 5px 12px;
-}
-.pc--full .pc__tag--pill::before { margin-right: 2px; }
-.pc--full .pc__titlebox {
-  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
-  padding: 20px 20px 18px; pointer-events: none;
-}
-.pc--full .pc__title { color: var(--crema); font-size: 1.2rem; }
-.pc--full .pc__meta { margin-top: 8px; }
-.pc--full .pc__meta--over { color: var(--crema); opacity: 0.8; }
-/* .ruta-cards usa el grid normal de .post-cols (4 col desktop, igual que el resto) */
-
 /* ---- light mode ---- */
 body.light-mode .pc__link { border-color: var(--negro); background: transparent; color: var(--negro); }
 body.light-mode .pc__link:not(.pc--featured):hover { border-color: var(--amarillo); }
 body.light-mode .pc__title { color: var(--negro); }
 body.light-mode .pc__type { color: var(--negro); }
-body.light-mode .pc--full .pc__title, body.light-mode .pc--full .pc__meta--over { color: var(--crema); } /* sobre imagen oscura */
+body.light-mode .pc--featured .pc__title, body.light-mode .pc--featured .pc__meta--over { color: var(--crema); } /* sobre imagen oscura */
 
 /* ---- mobile: 1 columna (el grid .post-cols ya pasa a flex column <600px) ---- */
 @media screen and (max-width: 600px) {
