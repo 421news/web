@@ -2,6 +2,9 @@
 body.light-mode {
   background-color: var(--crema);
   color: var(--negro);
+  /* REGLA: el amarillo no contrasta sobre fondo claro → en light mode todo el
+     amarillo pasa a verde. Vale para cualquier elemento que use var(--amarillo). */
+  --amarillo: var(--verde);
 }
 body.light-mode .hero-mobile-title {
   color: var(--negro);
