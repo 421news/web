@@ -1,4 +1,5 @@
 // Shared post card rendering utilities + event delegation for hover + lazy texture
+// Redesign: .pc (v1 editorial) / .pc--featured (v2 foil for canon/rutas)
 (function () {
     var TEXTURA = '/assets/images/textura.webp';
 
@@ -17,9 +18,9 @@
         if (!tags) return '';
         var map = {
             'hash-ensayo': 'ensayo',
-            'hash-guia': 'gu\u00eda',
-            'hash-resena': 'rese\u00f1a',
-            'hash-cronica': 'cr\u00f3nica',
+            'hash-guia': 'guía',
+            'hash-resena': 'reseña',
+            'hash-cronica': 'crónica',
             'hash-entrevista': 'entrevista',
             'hash-novedades': 'novedades'
         };
@@ -32,32 +33,53 @@
     window.renderCard = function (post) {
         var tag = post.primary_tag || {};
         var author = post.primary_author || {};
-        var date = window.formatPostDate(post.published_at);
-        var tagImg = tag.feature_image
-            ? '<img src="' + tag.feature_image + '" alt="' + window.escHtml(tag.name) + '" class="primary-tag-image" width="28" height="28" />'
-            : '';
-        var contentType = window.getContentType(post.tags);
-        var ctHtml = contentType ? '<span class="tag-box-type"> &middot; ' + window.escHtml(contentType) + '</span>' : '';
-        var isEn = post.tags && post.tags.some(function (t) { return t.slug === 'hash-en'; });
-        var tagUrl = tag.slug ? '/' + (isEn ? 'en' : 'es') + '/tag/' + tag.slug + '/' : '';
+        var tags = post.tags || [];
+        var isEn = tags.some(function (t) { return t.slug === 'hash-en'; });
+        var isCanon = tags.some(function (t) { return t.slug === 'hash-canon'; });
+        var isRuta = tags.some(function (t) { return (t.slug || '').indexOf('hash-ruta-') === 0; });
+        var featured = isCanon || isRuta;
+        var lang = isEn ? 'en' : 'es';
 
-        var imgSrc = window.escHtml(post.feature_image || '');
+        var ct = window.getContentType(tags);
+        var ctHtml = ct ? '<span class="pc__type"> · ' + window.escHtml(ct) + '</span>' : '';
+        var tagUrl = tag.slug ? '/' + lang + '/tag/' + tag.slug + '/' : '';
+        var tagName = window.escHtml(tag.name || 'Uncategorized');
+        var rt = post.reading_time ? (' <span class="pc__sep">·</span> ' + post.reading_time + ' min') : '';
+        var meta = window.escHtml(author.name || '') + rt;
+        var img = window.escHtml(post.feature_image || '');
+        var title = window.escHtml(post.title);
+        var overlay = '<div class="pc__overlay" style="background-size:cover;background-position:center"></div>';
 
+        if (featured) {
+            var badge = isCanon
+                ? '<a class="pc__badge" href="/' + lang + '/canon/"><span class="pc__star">★</span> canon</a>'
+                : '<a class="pc__badge" href="/' + lang + '/rutas/"><span class="pc__star">★</span> ruta</a>';
+            var tagPill = tag.slug
+                ? '<span class="pc__tag pc__tag--pill" data-tag-url="' + window.escHtml(tagUrl) + '">' + tagName + ctHtml + '</span>'
+                : '';
+            return '<div role="listitem" class="w-dyn-item">' +
+                '<article class="pc pc--featured">' +
+                '<a class="pc__stretched" href="' + post.url + '" aria-label="' + title + '">' + title + '</a>' +
+                '<div class="pc__cover">' +
+                '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="750" />' +
+                overlay + '<div class="pc__mask"></div>' + tagPill +
+                '<div class="pc__titlebox"><h3 class="pc__title">' + title + '</h3></div>' +
+                '</div>' +
+                '<div class="pc__body pc__body--featured">' +
+                '<span class="pc__meta">' + meta + '</span>' + badge +
+                '</div></article></div>';
+        }
+
+        var tagSpan = '<span class="pc__tag"' + (tag.slug ? ' data-tag-url="' + window.escHtml(tagUrl) + '"' : '') + '>' + tagName + ctHtml + '</span>';
         return '<div role="listitem" class="w-dyn-item">' +
-            '<a href="' + post.url + '" class="post-card_link w-inline-block">' +
-            '<div class="post-card">' +
-            '<div class="post-card_cover">' +
-            '<img src="' + imgSrc + '" alt="' + window.escHtml(post.title) + '" class="post-card_img" loading="lazy" width="300" height="200" />' +
-            '<div class="post-card_ico">' + tagImg + '</div>' +
-            '<div class="post-card_overlay" style="background-size:cover;background-position:center"></div>' +
-            '<div class="tag-box" data-tag-url="' + window.escHtml(tagUrl) + '">' + window.escHtml(tag.name || 'Uncategorized') + ctHtml + '</div>' +
-            '</div>' +
-            '<div class="post-card_info">' +
-            '<h3>' + window.escHtml(post.title) + '</h3>' +
-            '<div class="pt-xsmall">' +
-            '<div class="is-italic">' + window.escHtml(author.name || '') + '</div>' +
-            '<div class="is-italic">' + date + '</div>' +
-            '</div></div></div></a></div>';
+            '<a href="' + post.url + '" class="pc pc__link">' +
+            '<div class="pc__cover">' +
+            '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="375" />' +
+            overlay + '</div>' +
+            '<div class="pc__body">' + tagSpan +
+            '<h3 class="pc__title">' + title + '</h3>' +
+            '<div class="pc__meta">' + meta + '</div>' +
+            '</div></a></div>';
     };
 
     // --- Lazy-load textura.webp via IntersectionObserver ---
@@ -77,6 +99,15 @@
         }
     }
 
+    // .pc__overlay = redesign cards · .post-card_overlay = tag-page hero (legacy)
+    var OVERLAY_SEL = '.pc__overlay, .post-card_overlay';
+    function isOverlay(n) {
+        return n.classList && (n.classList.contains('pc__overlay') || n.classList.contains('post-card_overlay'));
+    }
+
+    // Scan overlays already in the DOM (server-rendered cards + tag hero)
+    document.querySelectorAll(OVERLAY_SEL).forEach(observeOverlay);
+
     // Watch for new overlays added to the DOM (pagination, rutas, related posts, etc.)
     new MutationObserver(function (mutations) {
         for (var i = 0; i < mutations.length; i++) {
@@ -84,10 +115,8 @@
             for (var j = 0; j < added.length; j++) {
                 var node = added[j];
                 if (node.nodeType !== 1) continue;
-                if (node.classList && node.classList.contains('post-card_overlay')) {
-                    observeOverlay(node);
-                }
-                var overlays = node.querySelectorAll && node.querySelectorAll('.post-card_overlay');
+                if (isOverlay(node)) observeOverlay(node);
+                var overlays = node.querySelectorAll && node.querySelectorAll(OVERLAY_SEL);
                 if (overlays) {
                     for (var k = 0; k < overlays.length; k++) observeOverlay(overlays[k]);
                 }
@@ -95,55 +124,53 @@
         }
     }).observe(document.documentElement, { childList: true, subtree: true });
 
-    // Event delegation for post card hover (covers both server-rendered and JS-rendered cards)
+    // Event delegation for post card hover (server-rendered + JS-rendered cards).
+    // Keeps mix-blend-mode:difference (set in CSS); only swaps the texture for a
+    // verde→amarillo wash, same color-inversion effect as before.
     document.addEventListener('mouseover', function (e) {
-        var card = e.target.closest('.post-card');
+        var card = e.target.closest('.pc');
         if (!card) return;
-        var overlay = card.querySelector('.post-card_overlay');
+        var overlay = card.querySelector('.pc__overlay');
         if (overlay) {
             overlay.style.backgroundImage = 'linear-gradient(180deg,var(--verde),var(--amarillo)),url(' + TEXTURA + ')';
             overlay.style.backgroundBlendMode = 'overlay';
         }
     });
     document.addEventListener('mouseout', function (e) {
-        var card = e.target.closest('.post-card');
+        var card = e.target.closest('.pc');
         if (!card) return;
         var related = e.relatedTarget;
         if (related && card.contains(related)) return;
-        var overlay = card.querySelector('.post-card_overlay');
+        var overlay = card.querySelector('.pc__overlay');
         if (overlay) {
             overlay.style.backgroundImage = "url('" + TEXTURA + "')";
             overlay.style.backgroundBlendMode = '';
         }
     });
 
-    // Event delegation for tag-box click → navigate to tag page
+    // Event delegation for tag chip click → navigate to tag page
     document.addEventListener('click', function (e) {
-        var tagBox = e.target.closest('.tag-box');
-        if (!tagBox) return;
-        var url = tagBox.dataset.tagUrl;
+        var tagEl = e.target.closest('.pc__tag');
+        if (!tagEl) return;
+        var url = tagEl.dataset.tagUrl;
         if (!url) return;
         e.preventDefault();
         e.stopPropagation();
         window.location.href = url;
     });
 
-    // Equalize post-card heights per row (Safari fix — grid auto-rows 1fr + stretch
+    // Equalize card heights per row (Safari fix — grid auto-rows 1fr + stretch
     // don't reliably equalize across browsers when content varies).
     function equalizeCardRows() {
-        var cards = document.querySelectorAll('.post-card');
-        // Reset all to measure natural heights
+        var cards = document.querySelectorAll('.pc');
         cards.forEach(function (c) { c.style.minHeight = ''; });
-        // Bail if single-column (mobile)
-        if (window.innerWidth <= 600) return;
-        // Group by top offset (rounded to handle subpixel)
+        if (window.innerWidth <= 600) return; // single column on mobile
         var rows = {};
         cards.forEach(function (c) {
             var top = Math.round(c.getBoundingClientRect().top + window.scrollY);
             if (!rows[top]) rows[top] = [];
             rows[top].push(c);
         });
-        // Apply max height per row (only when row has 2+ cards)
         Object.keys(rows).forEach(function (key) {
             var group = rows[key];
             if (group.length < 2) return;
@@ -175,8 +202,8 @@
             for (var j = 0; j < added.length; j++) {
                 var node = added[j];
                 if (node.nodeType !== 1) continue;
-                if ((node.classList && node.classList.contains('post-card')) ||
-                    (node.querySelector && node.querySelector('.post-card'))) {
+                if ((node.classList && node.classList.contains('pc')) ||
+                    (node.querySelector && node.querySelector('.pc'))) {
                     relevant = true;
                     break;
                 }

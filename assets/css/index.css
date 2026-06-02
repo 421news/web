@@ -3636,3 +3636,158 @@ footer {
   padding: 0.2rem;
 }
 .post-mhero-share svg { width: 14px; height: 14px; }
+
+/* ============================================================ */
+/* POST CARDS — redesign (.pc v1 editorial / .pc--featured foil) */
+/* Reemplaza el sistema legacy .post-card (que queda sin uso).    */
+/* ============================================================ */
+.post-cols .w-dyn-item { display: flex; height: 100%; }
+
+.pc {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--crema);
+  border-radius: var(--radius);
+}
+
+/* ---- v1: editorial limpia ---- */
+.pc__link {
+  border: var(--border-width) solid var(--crema);
+  background: var(--negro);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+@media (hover: hover) {
+  .pc__link:hover { transform: translateY(-5px); border-color: var(--amarillo); }
+  .pc__link:hover .pc__title { color: var(--amarillo); }
+}
+.pc__cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.pc__link .pc__cover { border-bottom: var(--border-width) solid var(--crema); }
+.pc__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.pc__overlay {
+  position: absolute; inset: 0;
+  background-position: center; background-size: cover;
+  mix-blend-mode: difference;
+  transition: background-image 0.2s ease, background-blend-mode 0.2s ease;
+  pointer-events: none;
+}
+.pc__body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 auto;
+}
+.pc__tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em;
+  text-transform: uppercase; color: var(--amarillo);
+  text-decoration: none; width: fit-content; cursor: pointer;
+}
+.pc__tag::before { content: '\25B6'; font-size: 0.7em; transform: translateY(-1px); opacity: 0.9; }
+.pc__type { color: var(--crema); opacity: 0.55; font-weight: 400; text-transform: lowercase; letter-spacing: 0; }
+.pc__title {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 700; font-size: 1.2rem; line-height: 1.2;
+  margin: 0; color: var(--crema); transition: color 0.2s ease;
+}
+.pc__meta {
+  margin-top: auto;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.75rem; font-style: italic; opacity: 0.65;
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+}
+.pc__sep { opacity: 0.5; }
+
+/* ---- v2: foil para canon/rutas ---- */
+.pc--featured {
+  position: relative;
+  border: 3px solid transparent;
+  background:
+    linear-gradient(var(--negro), var(--negro)) padding-box,
+    linear-gradient(135deg, #fcd221 0%, #17a583 25%, #4ec5ff 45%, #c084fc 65%, #ff7ac6 80%, #fcd221 100%) border-box;
+  background-size: auto, 300% 300%;
+  background-position: 0 0, 0% 50%;
+  transition: transform 0.2s ease;
+  animation: pcFoilBorder 7s ease-in-out infinite;
+}
+@keyframes pcFoilBorder { 0%, 100% { background-position: 0 0, 0% 50%; } 50% { background-position: 0 0, 100% 50%; } }
+.pc--featured::after {
+  content: ''; position: absolute; inset: 0; border-radius: var(--radius);
+  background: linear-gradient(115deg, transparent 28%, rgba(255,235,150,.38) 40%, rgba(192,132,252,.48) 50%, rgba(78,197,255,.40) 60%, transparent 72%);
+  background-size: 250% 100%;
+  mix-blend-mode: overlay; opacity: 0.5; pointer-events: none; z-index: 3;
+  animation: pcFoilSweep 5.5s linear infinite; transition: opacity 0.25s ease;
+}
+@keyframes pcFoilSweep { 0% { background-position: 160% 0; } 100% { background-position: -60% 0; } }
+@media (hover: hover) {
+  .pc--featured:hover { transform: translateY(-5px); }
+  .pc--featured:hover::after { opacity: 1; animation-duration: 2.8s; }
+  .pc--featured:hover .pc__title { color: var(--amarillo); }
+  .pc--featured:hover .pc__img { transform: scale(1.04); }
+}
+.pc__stretched { position: absolute; inset: 0; z-index: 3; text-indent: -9999px; white-space: nowrap; overflow: hidden; }
+.pc--featured .pc__cover { aspect-ratio: auto; flex: 1 1 auto; min-height: 240px; }
+.pc--featured .pc__img { transition: transform 0.4s ease; }
+.pc--featured .pc__overlay { z-index: 1; }
+.pc__mask {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(18,18,18,0) 0%, rgba(18,18,18,0) 40%, rgba(18,18,18,.78) 78%, rgba(18,18,18,.95) 100%);
+}
+.pc__tag--pill {
+  position: absolute; top: 14px; left: 14px; z-index: 4;
+  background: var(--negro); border: 1px solid var(--amarillo); color: var(--crema);
+  border-radius: 999px; padding: 5px 12px;
+}
+.pc__tag--pill::before { margin-right: 2px; }
+.pc__titlebox { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 20px 16px; z-index: 2; pointer-events: none; }
+.pc__body--featured {
+  padding: 13px 20px 15px;
+  flex: 0 0 auto;
+  flex-direction: row; justify-content: space-between; align-items: center; gap: 10px;
+  border-top: 1px solid #2a2a2a;
+  position: relative; z-index: 4;
+}
+.pc__body--featured .pc__meta { margin-top: 0; }
+.pc__badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'Nunito Sans', sans-serif; font-style: normal; font-weight: 700;
+  font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--amarillo); text-decoration: none;
+  padding: 3px 8px; border: 1px solid var(--amarillo); border-radius: 999px;
+  background: rgba(252,210,33,.08); transition: background 0.2s ease, color 0.2s ease;
+  white-space: nowrap; flex-shrink: 0;
+}
+.pc__badge:hover { background: var(--amarillo); color: var(--negro); }
+.pc__star { font-size: 0.85em; line-height: 1; }
+
+/* ---- light mode ---- */
+body.light-mode .pc__link { border-color: var(--negro); background: transparent; color: var(--negro); }
+body.light-mode .pc__link:hover { border-color: var(--amarillo); }
+body.light-mode .pc__title { color: var(--negro); }
+body.light-mode .pc__type { color: var(--negro); }
+body.light-mode .pc__tag--pill { background: var(--crema); color: var(--negro); }
+body.light-mode .pc--featured .pc__title { color: var(--crema); } /* sobre imagen+mask: queda crema */
+
+/* ---- mobile: 1 columna (el grid .post-cols ya pasa a flex column <600px) ---- */
+@media screen and (max-width: 600px) {
+  .post-cols .w-dyn-item { height: auto; }
+  .pc { height: auto; }
+  .pc__title { font-size: 1.15rem; }
+  .pc--featured .pc__cover { aspect-ratio: 16 / 11; flex: 0 0 auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc--featured, .pc--featured::after { animation: none; }
+}
+
