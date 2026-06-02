@@ -60,28 +60,3 @@
 
 </div>
 <script src="{{asset "js/home-ruta.js"}}" defer></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    var readDiv = document.getElementById("read-div");
-    if (readDiv) readDiv.textContent = "Read";
-    var readButton = document.getElementById("hero-mobile-read-button");
-    var authorPrefix = document.getElementById("hero-mobile-author-prefix");
-    var labels = {
-      zh: { read: '阅读文章 →', by: '作者' },
-      ja: { read: '記事を読む →', by: '著者' },
-      ko: { read: '기사 읽기 →', by: '저자' },
-      tr: { read: 'Yazıyı oku →', by: 'Yazan' },
-      pt: { read: 'Ler artigo →', by: 'Por' },
-      fr: { read: 'Lire l\u2019article →', by: 'Par' }
-    };
-    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
-    var lang = m ? m[1] : 'zh';
-    var t = labels[lang] || labels.zh;
-    if (readButton) readButton.textContent = t.read;
-    if (authorPrefix) authorPrefix.textContent = t.by;
-    if (readDiv) {
-      var rdLabels = { zh: '阅读', ja: '読む', ko: '읽기', tr: 'Oku', pt: 'Ler', fr: 'Lire' };
-      readDiv.textContent = rdLabels[lang] || 'Read';
-    }
-  });
-</script>
