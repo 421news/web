@@ -3637,11 +3637,36 @@ footer {
 .pc__badge:hover { transform: translateY(-1px); }
 .pc__star { font-size: 0.85em; line-height: 1; }
 
+/* ---- v2 FULL (magazine) — solo página de rutas: título sobre la imagen, vertical ---- */
+.pc--full .pc__cover { aspect-ratio: auto; flex: 1 1 auto; min-height: 380px; border-bottom: none; }
+.pc--full .pc__overlay { z-index: 0; }
+.pc--full .pc__mask {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, rgba(18,18,18,0) 38%, rgba(18,18,18,.55) 66%, rgba(18,18,18,.93) 100%);
+}
+.pc--full .pc__tag--pill {
+  position: absolute; top: 14px; left: 14px; z-index: 4;
+  background: var(--negro); border: 1px solid var(--amarillo); color: var(--crema);
+  border-radius: 999px; padding: 5px 12px;
+}
+.pc--full .pc__tag--pill::before { margin-right: 2px; }
+.pc--full .pc__titlebox {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  padding: 20px 20px 18px; pointer-events: none;
+}
+.pc--full .pc__title { color: var(--crema); font-size: 1.45rem; }
+.pc--full .pc__meta { margin-top: 8px; }
+.pc--full .pc__meta--over { color: var(--crema); opacity: 0.8; }
+/* grid de la página de rutas: 3 col para que las cards verticales respiren */
+.ruta-cards.post-cols { grid-template-columns: repeat(3, 1fr); }
+@media screen and (max-width: 991px) { .ruta-cards.post-cols { grid-template-columns: repeat(2, 1fr); } }
+
 /* ---- light mode ---- */
 body.light-mode .pc__link { border-color: var(--negro); background: transparent; color: var(--negro); }
 body.light-mode .pc__link:not(.pc--featured):hover { border-color: var(--amarillo); }
 body.light-mode .pc__title { color: var(--negro); }
 body.light-mode .pc__type { color: var(--negro); }
+body.light-mode .pc--full .pc__title, body.light-mode .pc--full .pc__meta--over { color: var(--crema); } /* sobre imagen oscura */
 
 /* ---- mobile: 1 columna (el grid .post-cols ya pasa a flex column <600px) ---- */
 @media screen and (max-width: 600px) {

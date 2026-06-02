@@ -197,7 +197,7 @@
         html += '</div>';
         html += '<div class="ruta-cards post-cols">';
         posts.forEach(function (post) {
-            html += window.renderCard(post);
+            html += window.renderCard(post, { full: true });
         });
         html += '</div></div>';
         return html;
