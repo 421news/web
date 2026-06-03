@@ -3088,16 +3088,18 @@ footer {
 .featured-post-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* Cap al viewport: hero + nav fijo (96px) entran en pantalla sin scroll,
-     así el pill footer (Suscribite/EN/Share) queda visible above the fold.
+  /* Hero llega hasta arriba (pasa bajo el nav fijo) — sin franja negra al
+     scrollear. El texto compensa con padding-top para que el nav no lo pise.
+     Cap al viewport: el pill footer (Suscribite/EN/Share) queda above the fold.
      Si el contenido necesita más alto, crece (no hay max-height a propósito) */
-  min-height: clamp(480px, calc(100vh - 96px), 900px);
+  min-height: clamp(576px, 100vh, 996px);
   background: var(--crema);
   color: var(--negro);
-  margin-top: 96px; /* clear fixed site-nav */
+  margin-top: 0;
 }
 .featured-post-text {
-  padding: clamp(2.5rem, 3.5vw, 5rem) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
+  /* 96px extra arriba = altura del nav fijo (el hero pasa por debajo) */
+  padding: calc(96px + clamp(2.5rem, 3.5vw, 5rem)) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
