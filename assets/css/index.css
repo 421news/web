@@ -3088,7 +3088,10 @@ footer {
 .featured-post-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  min-height: clamp(560px, 55vw, 900px);
+  /* Cap al viewport: hero + nav fijo (96px) entran en pantalla sin scroll,
+     así el pill footer (Suscribite/EN/Share) queda visible above the fold.
+     Si el contenido necesita más alto, crece (no hay max-height a propósito) */
+  min-height: clamp(480px, calc(100vh - 96px), 900px);
   background: var(--crema);
   color: var(--negro);
   margin-top: 96px; /* clear fixed site-nav */
