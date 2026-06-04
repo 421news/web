@@ -971,6 +971,11 @@ body {
   border-top-color: rgba(26, 26, 26, 0.12);
   border-bottom-color: rgba(26, 26, 26, 0.12);
 }
+/* Posts con co-autores: cards apiladas comparten un solo borde divisor */
+.post-author-card + .post-author-card {
+  margin-top: 0;
+  border-top: none;
+}
 .post-author-photo {
   width: 88px;
   height: 88px;

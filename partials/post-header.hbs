@@ -21,7 +21,11 @@
       <h1 class="home-featured-title">{{title}}</h1>
       <div class="home-featured-byline">
         <span class="home-featured-by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
-        {{#primary_author}}<a href="{{url}}" class="home-featured-author">{{name}}</a>{{/primary_author}}
+        {{#has tag="#en"}}
+          {{#foreach authors}}{{#unless @first}}<span class="home-featured-by">and</span> {{/unless}}<a href="{{url}}" class="home-featured-author">{{name}}</a> {{/foreach}}
+        {{else}}
+          {{#foreach authors}}{{#unless @first}}<span class="home-featured-by">y</span> {{/unless}}<a href="{{url}}" class="home-featured-author">{{name}}</a> {{/foreach}}
+        {{/has}}
         <span class="home-featured-meta">· {{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</span>
         <span id="translation-link" class="home-featured-translation"></span>
         <a href="#/share" class="home-featured-share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
@@ -54,7 +58,11 @@
     <h1 class="post-mhero-title">{{title}}</h1>
     <div class="post-mhero-byline">
       <span class="post-mhero-by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
-      {{#primary_author}}<a href="{{url}}" class="post-mhero-author">{{name}}</a>{{/primary_author}}
+      {{#has tag="#en"}}
+        {{#foreach authors}}{{#unless @first}}<span class="post-mhero-by">and</span> {{/unless}}<a href="{{url}}" class="post-mhero-author">{{name}}</a> {{/foreach}}
+      {{else}}
+        {{#foreach authors}}{{#unless @first}}<span class="post-mhero-by">y</span> {{/unless}}<a href="{{url}}" class="post-mhero-author">{{name}}</a> {{/foreach}}
+      {{/has}}
       <div class="post-mhero-meta">{{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</div>
       <div class="post-mhero-actions">
         <span id="translation-link-mobile" class="post-mhero-translation"></span>

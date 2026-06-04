@@ -7,7 +7,12 @@
     <h1 class="featured-post-title">{{title}}</h1>
 
     <div class="featured-post-byline">
-      {{#primary_author}}<span>por</span> <a href="{{url}}" class="featured-post-author">{{name}}</a>{{/primary_author}}
+      <span>{{#has tag="#en"}}by{{else}}por{{/has}}</span>
+      {{#has tag="#en"}}
+        {{#foreach authors}}{{#unless @first}}<span>and</span> {{/unless}}<a href="{{url}}" class="featured-post-author">{{name}}</a> {{/foreach}}
+      {{else}}
+        {{#foreach authors}}{{#unless @first}}<span>y</span> {{/unless}}<a href="{{url}}" class="featured-post-author">{{name}}</a> {{/foreach}}
+      {{/has}}
       <span class="featured-post-sep">·</span>
       <span class="featured-post-meta">{{date published_at format="D MMM YYYY"}} · {{reading_time minute="1 min" minutes="% min"}}</span>
     </div>
