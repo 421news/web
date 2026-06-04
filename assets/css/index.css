@@ -3688,6 +3688,13 @@ footer {
   .pc--featured:hover::after { opacity: 1; animation-duration: 2.8s; }
   .pc--featured:hover .pc__title { color: var(--amarillo); }
 }
+/* Touch/reduced-motion: animaciones foil congeladas (causaban jank de scroll
+   en /rutas/ — N cards × 2 animaciones infinitas + mix-blend-mode repintando
+   cada frame). El borde degradado y el brillo quedan estáticos, mismo look. */
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .pc--featured { animation: none; }
+  .pc--featured::after { animation: none; background-position: 50% 0; }
+}
 /* badge canon/ruta: pill en la esquina del cover */
 .pc__badge {
   position: absolute; top: 12px; right: 12px; z-index: 4;
