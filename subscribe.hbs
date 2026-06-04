@@ -82,7 +82,7 @@
                 </div>
 
                 <ul class="tier-benefits">
-                  <li class="tier-benefit-featured">📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release</li>
+                  <li class="tier-benefit-featured">📕 Read <strong>Revista 421</strong> in PDF <strong>one month before</strong> public release</li>
                   <li>Comment and join discussions on every article</li>
                   <li><strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other wizards</li>
                   <li>Access to the <a href="https://mtg.421.news">Magic 421 app</a></li>
@@ -116,26 +116,6 @@
             </section>
           </div>
 
-          {{!-- Revista # auto-update script (same source as subscribe-popup) --}}
-          <script>
-          (function(){
-            var slots = document.querySelectorAll('[data-revista-numero]');
-            if (!slots.length) return;
-            fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
-              .then(function(r){ return r.json(); })
-              .then(function(d){
-                var p = d.pages && d.pages[0];
-                if (!p || !p.html) return;
-                var doc = new DOMParser().parseFromString(p.html, 'text/html');
-                var h2 = doc.querySelector('h2');
-                if (!h2) return;
-                var m = h2.textContent.trim().match(/#(\d+)/);
-                if (!m) return;
-                slots.forEach(function(el){ el.textContent = m[1]; });
-              })
-              .catch(function(){});
-          })();
-          </script>
 
           <!-- EN version: Stripe only, no MercadoPago -->
 

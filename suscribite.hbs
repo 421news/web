@@ -83,7 +83,7 @@
                 </div>
 
                 <ul class="tier-benefits">
-                  <li class="tier-benefit-featured">📕 Le&eacute; la <strong>Revista 421 #<span data-revista-numero>14</span></strong> en PDF <strong>un mes antes</strong> de que se libere al p&uacute;blico</li>
+                  <li class="tier-benefit-featured">📕 Le&eacute; la <strong>Revista 421</strong> en PDF <strong>un mes antes</strong> de que se libere al p&uacute;blico</li>
                   <li>Comentar y participar en debates de cada nota</li>
                   <li><strong>Concilio mensual</strong>: videollamada con <a href="/author/juan-ruocco/">Juan Ruocco</a> y otros wizards</li>
                   <li>Acceso a la <a href="https://mtg.421.news">app de Magic 421</a></li>
@@ -121,26 +121,6 @@
             </section>
           </div>
 
-          {{!-- Revista # auto-update script (same source as subscribe-popup) --}}
-          <script>
-          (function(){
-            var slots = document.querySelectorAll('[data-revista-numero]');
-            if (!slots.length) return;
-            fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
-              .then(function(r){ return r.json(); })
-              .then(function(d){
-                var p = d.pages && d.pages[0];
-                if (!p || !p.html) return;
-                var doc = new DOMParser().parseFromString(p.html, 'text/html');
-                var h2 = doc.querySelector('h2');
-                if (!h2) return;
-                var m = h2.textContent.trim().match(/#(\d+)/);
-                if (!m) return;
-                slots.forEach(function(el){ el.textContent = m[1]; });
-              })
-              .catch(function(){});
-          })();
-          </script>
 
           <!-- ===== SECTION 2: PAYMENT METHOD CHOOSER ===== -->
           <div id="sub-section-chooser" style="display: none;">
