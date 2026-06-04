@@ -1070,6 +1070,9 @@ body {
 
 /* ---------- Most read (home, dynamic GA4 historical) ---------- */
 #most-read-section .pv-huge { padding-top: 2.5rem; padding-bottom: 0; }
+/* Menos aire entre "Lo más leído" → file browser → "Últimas notas" en la home */
+#most-read-section + .global-container.pt-small.pb-small { padding-top: 1rem; padding-bottom: 0; }
+#most-read-section + .global-container + .preview-section .pv-huge { padding-top: 2rem; }
 .mr-since { cursor: default; opacity: 0.5; }
 .most-read-grid {
   display: grid;
