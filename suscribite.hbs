@@ -77,7 +77,6 @@
                   <span class="tier-price-amount" id="price-amount">...</span>
                   <span class="tier-price-period" id="price-period">USD / mes</span>
                   <div class="plan-price-detail" id="price-detail"></div>
-                  <div class="plan-price-ars" id="price-ars" style="display:none;"></div>
                 </div>
 
                 <ul class="tier-benefits">
@@ -203,7 +202,6 @@
         // State
         var currentCadence = 'monthly';
         var tierData = null;
-        var blueRate = null;
 
         // DOM refs
         var sectionPlan = document.getElementById('sub-section-plan');
@@ -224,24 +222,9 @@
             if (tierData) updatePriceDisplay();
           });
 
-        // Fetch blue dollar rate
-        fetch('https://dolarapi.com/v1/dolares/blue')
-          .then(function(r) { return r.json(); })
-          .then(function(data) {
-            if (data && data.venta) {
-              blueRate = data.venta;
-              updatePriceDisplay();
-            }
-          })
-          .catch(function() { /* silently fail — USD price stays visible */ });
-
         function formatPrice(cents) {
           var dollars = cents / 100;
           return '$' + (dollars % 1 === 0 ? dollars : dollars.toFixed(2));
-        }
-
-        function formatARS(amount) {
-          return '$' + Math.round(amount).toLocaleString('es-AR');
         }
 
         function updatePriceDisplay() {
@@ -249,7 +232,6 @@
           var amountEl = document.getElementById('price-amount');
           var periodEl = document.getElementById('price-period');
           var detailEl = document.getElementById('price-detail');
-          var arsEl = document.getElementById('price-ars');
 
           if (currentCadence === 'yearly') {
             amountEl.textContent = formatPrice(tierData.yearly_price);
@@ -260,16 +242,6 @@
             amountEl.textContent = formatPrice(tierData.monthly_price);
             periodEl.textContent = 'USD / mes';
             detailEl.textContent = 'Sin compromiso, cancela cuando quieras';
-          }
-
-          // Show ARS equivalent if blue rate available
-          if (blueRate && arsEl) {
-            var usdCents = currentCadence === 'yearly' ? tierData.yearly_price : tierData.monthly_price;
-            var usd = usdCents / 100;
-            var ars = usd * blueRate;
-            var period = currentCadence === 'yearly' ? 'a\u00f1o' : 'mes';
-            arsEl.innerHTML = '\u2248 ' + formatARS(ars) + ' ARS/' + period + ' con MercadoPago';
-            arsEl.style.display = 'block';
           }
         }
 
