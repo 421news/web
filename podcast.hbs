@@ -1,0 +1,27 @@
+{{!< default}}
+
+{{!-- Random Podcast — página con header estilo sección.
+     Ruta: /es/random-podcast-juan-ruocco/ (routes.yaml, data: page.random-podcast-juan-ruocco) --}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-es"}}
+  <main style="min-height: 80vh;">
+    {{#page}}
+      {{> "section-hero"
+          eyebrow="421 · Podcast"
+          title=title
+          tesis=custom_excerpt}}
+    {{/page}}
+    <div class="pv-large">
+      <div class="global-container">
+        <div class="rich-text w-richtext">{{#page}}{{content}}{{/page}}</div>
+      </div>
+    </div>
+  </main>
+  <!-- FILE BROWSER NAVIGATION -->
+  <div class="global-container pt-small pb-small">
+    {{> "file-browser"}}
+  </div>
+  {{> "site-footer"}}
+</div>

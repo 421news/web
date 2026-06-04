@@ -52,6 +52,9 @@ routes:
   /es/juan-ruocco-libros/:
     template: libros
     data: page.juan-ruocco-libros
+  /es/random-podcast-juan-ruocco/:
+    template: podcast
+    data: page.random-podcast-juan-ruocco
   /en/what-is-421/:
     template: page-en
     data: page.what-is-421
