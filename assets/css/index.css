@@ -896,6 +896,11 @@ body {
   padding: 5px 15px;
   margin-bottom: 10px;
 }
+/* Destacado (kg-blockquote-alt): sin barra degradada, se diferencia de la cita */
+.rich-text blockquote.kg-blockquote-alt {
+  border-left: none;
+  border-image: none;
+}
 .rich-text pre {
   padding: 10px;
   background: #555;

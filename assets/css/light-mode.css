@@ -19,6 +19,9 @@ body.light-mode .canon-number-badge {
 body.light-mode .rich-text blockquote {
   border-image: linear-gradient(180deg, var(--verde), var(--amarillo)) 1;
 }
+body.light-mode .rich-text blockquote.kg-blockquote-alt {
+  border-image: none;
+}
 body.light-mode .flashy-h1 {
   color: var(--verde);
 }
