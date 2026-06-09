@@ -3726,3 +3726,99 @@ body.light-mode .pc--featured .pc__title, body.light-mode .pc--featured .pc__met
   .pc--featured, .pc--featured::after { animation: none; }
 }
 
+
+/* ============================================================
+   QUÉ ES 421 / WHAT IS 421 — manifesto page
+   (templates: que-es-421.hbs, what-is-421.hbs)
+   ============================================================ */
+.qe421 .global-container { max-width: 760px; }
+
+/* HERO */
+.qe421-hero {
+  padding: 80px 0 64px;
+  border-bottom: 1px solid rgba(234, 230, 225, .12);
+}
+.qe421-kicker {                 /* <h1> de marca: "Qué es 421" / "What is 421" */
+  font-size: .82rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--verde);
+  margin: 0 0 28px;
+}
+.qe421-quote {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(2rem, 5.5vw, 3.4rem);
+  line-height: 1.15;
+  font-weight: 400;
+  color: var(--crema);
+  margin: 0 0 24px;
+}
+.qe421-grad {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.qe421-attribution {
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--amarillo);
+  margin: 0;
+}
+
+/* BODY */
+.qe421-body { padding: 56px 0 96px; }
+.qe421-body p {
+  font-size: 1.18rem;
+  line-height: 1.7;
+  margin: 0 0 28px;
+  color: var(--crema);
+}
+.qe421-body p.qe421-lead {
+  font-size: 1.32rem;
+  font-weight: 700;
+}
+.qe421-body p.qe421-emphasis {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* REMATE */
+.qe421-remate {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(2.6rem, 7.5vw, 4.2rem);
+  line-height: 1.1;
+  text-align: center;
+  margin: 56px 0 0;
+  color: var(--crema);
+}
+.qe421-remate a {
+  background: var(--gradient-main);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  border-bottom: 3px solid var(--verde);
+  padding-bottom: 3px;
+  transition: opacity .15s ease;
+}
+.qe421-remate a:hover { opacity: .75; }
+
+/* LIGHT MODE — flip de textos; --amarillo ya pasa a verde global */
+body.light-mode .qe421-hero { border-bottom-color: rgba(26, 26, 26, .14); }
+body.light-mode .qe421-quote,
+body.light-mode .qe421-body p,
+body.light-mode .qe421-remate { color: var(--negro); }
+body.light-mode .qe421-body p.qe421-emphasis { color: #000; }
+
+@media (max-width: 600px) {
+  .qe421-hero { padding: 56px 0 48px; }
+  .qe421-body { padding: 44px 0 72px; }
+  .qe421-body p { font-size: 1.1rem; }
+  .qe421-remate { margin-top: 44px; }
+}
+

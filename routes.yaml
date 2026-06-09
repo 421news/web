@@ -47,7 +47,7 @@ routes:
     template: page
     data: page.revista-velociraptors-editorial-neptuno
   /es/que-es-421/:
-    template: page
+    template: que-es-421
     data: page.que-es-421
   /es/juan-ruocco-libros/:
     template: libros
@@ -56,7 +56,7 @@ routes:
     template: podcast
     data: page.random-podcast-juan-ruocco
   /en/what-is-421/:
-    template: page-en
+    template: what-is-421
     data: page.what-is-421
   /es/analytics/:
     template: analytics
