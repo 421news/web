@@ -3735,7 +3735,7 @@ body.light-mode .pc--featured .pc__title, body.light-mode .pc--featured .pc__met
 
 /* HERO */
 .qe421-hero {
-  padding: 80px 0 64px;
+  padding: calc(80px + 3rem) 0 64px;   /* +offset para clarar la nav fija (66px) */
   border-bottom: 1px solid rgba(234, 230, 225, .12);
 }
 .qe421-kicker {                 /* <h1> de marca: "Qué es 421" / "What is 421" */
@@ -3816,7 +3816,7 @@ body.light-mode .qe421-remate { color: var(--negro); }
 body.light-mode .qe421-body p.qe421-emphasis { color: #000; }
 
 @media (max-width: 600px) {
-  .qe421-hero { padding: 56px 0 48px; }
+  .qe421-hero { padding: calc(66px + 1.5rem) 0 48px; }   /* nav mobile ~52px */
   .qe421-body { padding: 44px 0 72px; }
   .qe421-body p { font-size: 1.1rem; }
   .qe421-remate { margin-top: 44px; }
