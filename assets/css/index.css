@@ -466,7 +466,7 @@ body {
 .last-posts-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   padding-bottom: 1.25rem;
   margin-bottom: 2.5rem;
   border-bottom: 1px solid rgba(234, 230, 225, 0.14);
@@ -502,19 +502,37 @@ body {
   transition: opacity 0.15s ease;
 }
 .last-posts-title a:hover { opacity: 0.85; }
+/* CTA pill unificado (botón de navegación) — mismo lenguaje que .btn-load-more */
 .last-posts-more {
+  display: inline-block;
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--amarillo);
   text-decoration: none;
-  border-bottom: 2px solid var(--amarillo);
-  padding-bottom: 2px;
-  transition: opacity 0.15s ease;
+  background: transparent;
+  border: 1.5px solid var(--amarillo);
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.last-posts-more:hover { opacity: 0.8; }
+.last-posts-more:hover { background: var(--amarillo); color: var(--negro); }
+
+/* Paratexto de sección (NO clickeable) — claramente distinto del pill */
+.section-meta-label {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--crema);
+  opacity: 0.45;
+  cursor: default;
+}
+.light-mode .section-meta-label { color: var(--negro); }
 
 /* Load more outline pill button — replaces gradient .button on home */
 .btn-load-more {
@@ -1079,7 +1097,6 @@ body {
    Nota: ~ (no +) porque el <script> del partial queda como hermano intermedio */
 #most-read-section ~ .global-container.pt-small.pb-small { padding-top: 0.5rem; padding-bottom: 0; }
 #most-read-section ~ .preview-section .pv-huge { padding-top: 1rem; }
-.mr-since { cursor: default; opacity: 0.5; }
 .most-read-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2046,18 +2063,22 @@ footer {
   margin-top: 2rem;
 }
 .home-ruta-cta a {
+  display: inline-block;
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--negro);
   text-decoration: none;
-  border-bottom: 2px solid var(--negro);
-  padding-bottom: 2px;
-  transition: opacity 0.15s ease;
+  background: transparent;
+  border: 1.5px solid var(--negro);
+  border-radius: 999px;
+  padding: 0.5rem 1.1rem;
+  line-height: 1;
+  transition: background 0.15s ease, color 0.15s ease;
 }
-.home-ruta-cta a:hover { opacity: 0.7; }
+.home-ruta-cta a:hover { background: var(--negro); color: var(--crema); }
 
 @media (max-width: 768px) {
   .home-ruta-header { grid-template-columns: 1fr; gap: 1rem; }

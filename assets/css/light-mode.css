@@ -43,7 +43,11 @@ body.light-mode .home-ruta-title a {
   border-bottom-color: var(--crema);
 }
 body.light-mode .home-ruta-cta a {
-  border-bottom-color: var(--crema);
+  border-color: var(--crema);
+}
+body.light-mode .home-ruta-cta a:hover {
+  background: var(--crema);
+  color: var(--negro);
 }
 body.light-mode .home-ruta-header {
   border-bottom-color: rgba(234, 230, 225, 0.3);
