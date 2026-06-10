@@ -1152,6 +1152,19 @@ const GA4_EDITORIAL_SLUGS = new Set([
   'last-posts', 'analytics', 'gracias', 'oh-yes'
 ]);
 
+// Páginas editoriales migradas de path raíz (/suscribite/) a path con prefijo de
+// idioma (/es/suscribite/). Mapeo viejo→canónico para unificar las views pre y
+// post migración en una sola fila del dashboard. gracias/oh-yes quedan a nivel raíz
+// (sin prefijo de idioma), por eso se omiten a propósito.
+const GA4_EDITORIAL_CANONICAL = {
+  'suscribite': '/es/suscribite/', 'rutas': '/es/rutas/', 'canon': '/es/canon/',
+  'revista-421': '/es/revista-421/', 'pitcheale-a-421': '/es/pitcheale-a-421/',
+  'mi-suscripcion': '/es/mi-suscripcion/', 'ultimos-posts': '/es/ultimos-posts/',
+  'analytics': '/es/analytics/',
+  'subscribe': '/en/subscribe/', 'routes': '/en/routes/',
+  'my-subscription': '/en/my-subscription/', 'last-posts': '/en/last-posts/'
+};
+
 const GA4_HARD_MERGES = {};
 function addGA4Merge(paths, targetSlug, title, en) {
   for (const p of paths) GA4_HARD_MERGES[p] = { targetSlug, title, en };
@@ -1226,6 +1239,18 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
   const articleMap = {};
   const pageMap = {};
 
+  // Acumula meses de una página editorial en su entrada canónica (mergeando
+  // path viejo /suscribite/ con /es/suscribite/ en una sola fila).
+  function mergeEditorialPage(canonPath, slug, en, months) {
+    if (!pageMap[canonPath]) pageMap[canonPath] = { path: canonPath, title: slug, type: 'editorial', en, m: {} };
+    for (const [ym, data] of Object.entries(months)) {
+      if (!pageMap[canonPath].m[ym]) pageMap[canonPath].m[ym] = { pv: 0, u: 0, d: 0 };
+      pageMap[canonPath].m[ym].pv += data.pv;
+      pageMap[canonPath].m[ym].u += data.u;
+      if (data.d > pageMap[canonPath].m[ym].d) pageMap[canonPath].m[ym].d = data.d;
+    }
+  }
+
   for (const [path, months] of Object.entries(pathData)) {
     // Hard merges
     if (GA4_HARD_MERGES[path]) {
@@ -1246,9 +1271,8 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
     if (isGA4Article(path)) {
       const slug = ga4Slug(path);
       if (GA4_EDITORIAL_SLUGS.has(slug)) {
-        // Treat as page
-        const totalPV = Object.values(months).reduce((s, m) => s + m.pv, 0);
-        if (totalPV >= 50 && !pageMap[path]) pageMap[path] = { path, title: slug, type: 'editorial', en: path.startsWith('/en/'), m: months };
+        // Página editorial: acumular (mergea con su path raíz viejo si existe).
+        mergeEditorialPage(path, slug, path.startsWith('/en/'), months);
         continue;
       }
       const en = path.startsWith('/en/');
@@ -1259,6 +1283,15 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
         articleMap[slug].m[ym].u += data.u;
         articleMap[slug].m[ym].d = data.d;
       }
+      continue;
+    }
+
+    // Old root editorial page: /suscribite/, /rutas/, ... → mergear en su path
+    // canónico /es|en/{slug}/ para que el dashboard muestre una sola fila.
+    const editSlug = ga4OldSlug(path);
+    if (editSlug && GA4_EDITORIAL_CANONICAL[editSlug]) {
+      const canon = GA4_EDITORIAL_CANONICAL[editSlug];
+      mergeEditorialPage(canon, editSlug, canon.startsWith('/en/'), months);
       continue;
     }
 
