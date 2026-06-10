@@ -1861,11 +1861,21 @@ footer {
 }
 
 /* --- BOOKMARK CARD: compact typography --- */
-/* Fondo opaco: el rgba(255,255,255,0.6) de normalize mezclaba con el fondo
-   oscuro y bajaba el contraste del texto (fail Lighthouse). Sólido = AA. */
-.kg-bookmark-container,
-.kg-bookmark-container:hover {
-  background: #fff;
+/* Fondo opaco: el rgba(255,255,255,0.6) translúcido mezclaba con el fondo
+   oscuro y bajaba el contraste del texto (fail Lighthouse). Sólido = AA.
+   Especificidad .kg-bookmark-card + !important para ganarle a cards.min.css
+   (Ghost lo inyecta DESPUÉS del theme; mismo motivo que el hide del favicon). */
+.kg-bookmark-card .kg-bookmark-container,
+.kg-bookmark-card .kg-bookmark-container:hover {
+  background: #fff !important;
+}
+.kg-bookmark-card .kg-bookmark-description {
+  color: #4a5360 !important;
+}
+.kg-bookmark-card .kg-bookmark-metadata,
+.kg-bookmark-card .kg-bookmark-author,
+.kg-bookmark-card .kg-bookmark-publisher {
+  color: #394047 !important;
 }
 
 .kg-bookmark-title {
@@ -1878,7 +1888,6 @@ footer {
   font-size: var(--fs-sm);
   line-height: 1.4;
   font-style: normal;
-  color: #4a5360;
 }
 
 /* Bookmark thumbnail: remove extra space below image */
