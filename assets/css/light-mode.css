@@ -26,6 +26,10 @@ body.light-mode .flashy-h1 {
   color: var(--verde);
 }
 body.light-mode .preview-section.bg-gradient {
+  /* Mismo caso que .home-ruta-section: fondo verde/gradiente (sección "Posts
+     destacados" de tags), restauramos el amarillo real para que el gradient no
+     colapse a verde sólido y los tags .pc__tag se vean. */
+  --amarillo: #fcd221;
   background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
 }
 body.light-mode .home-ruta-section {
