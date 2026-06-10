@@ -40,6 +40,9 @@
     let isOpen = false;
     let hoverTimeout;
 
+    // Guard: la home no siempre tiene el dropdown de filtros (evita TypeError null.addEventListener)
+    if (!dropdownContainer || !dropdownToggle || !dropdownMenu) return;
+
     dropdownToggle.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();

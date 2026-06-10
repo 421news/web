@@ -530,7 +530,7 @@ body {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--crema);
-  opacity: 0.45;
+  opacity: 0.62;
   cursor: default;
 }
 .light-mode .section-meta-label { color: var(--negro); }
@@ -1161,7 +1161,7 @@ body {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  opacity: 0.5;
+  opacity: 0.68;
   display: block;
   margin-top: 6px;
 }
@@ -2912,7 +2912,7 @@ footer {
 .c421-empty {
   font-family: 'Lora', serif;
   font-style: italic;
-  opacity: 0.35;
+  opacity: 0.55;
   margin: 1rem 0 0;
 }
 
@@ -3189,7 +3189,7 @@ footer {
   padding-bottom: 1px;
 }
 .featured-post-sep { opacity: 0.4; }
-.featured-post-meta { opacity: 0.6; font-weight: 500; }
+.featured-post-meta { opacity: 0.75; font-weight: 500; }
 .featured-post-excerpt {
   font-family: 'Lora', serif;
   font-size: clamp(1rem, 1.1vw, 1.35rem);
