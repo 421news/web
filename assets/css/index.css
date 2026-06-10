@@ -1861,6 +1861,13 @@ footer {
 }
 
 /* --- BOOKMARK CARD: compact typography --- */
+/* Fondo opaco: el rgba(255,255,255,0.6) de normalize mezclaba con el fondo
+   oscuro y bajaba el contraste del texto (fail Lighthouse). Sólido = AA. */
+.kg-bookmark-container,
+.kg-bookmark-container:hover {
+  background: #fff;
+}
+
 .kg-bookmark-title {
   font-size: var(--fs-md);
   line-height: 1.3;
@@ -1871,6 +1878,7 @@ footer {
   font-size: var(--fs-sm);
   line-height: 1.4;
   font-style: normal;
+  color: #4a5360;
 }
 
 /* Bookmark thumbnail: remove extra space below image */
