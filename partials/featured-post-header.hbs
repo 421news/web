@@ -26,9 +26,9 @@
     {{!-- Pill footer: Suscribite + translation (dynamic via #translation-link JS) + Share --}}
     <div class="featured-post-footer">
       {{#has tag="#en"}}
-        <a href="/en/subscribe/" class="featured-post-pill-item is-primary">Subscribe</a>
+        <a href="/en/subscribe/" class="featured-post-pill-item is-primary" onclick="if(typeof gtag==='function')gtag('event','post_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Subscribe</a>
       {{else}}
-        <a href="/es/suscribite/" class="featured-post-pill-item is-primary">Suscribite</a>
+        <a href="/es/suscribite/" class="featured-post-pill-item is-primary" onclick="if(typeof gtag==='function')gtag('event','post_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Suscribite</a>
       {{/has}}
       {{!-- #translation-link is populated by JS in post.hbs from english-version/spanish-version meta tag --}}
       <span id="translation-link" class="featured-post-pill-translation"></span>

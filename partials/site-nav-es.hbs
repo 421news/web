@@ -29,7 +29,7 @@
       </div>
 
       <div class="nav-actions">
-        <a href="/es/suscribite/" class="nav-subscribe-btn">Suscribite</a>
+        <a href="/es/suscribite/" class="nav-subscribe-btn" onclick="if(typeof gtag==='function')gtag('event','nav_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Suscribite</a>
         <button class="nav-icon-btn" data-ghost-search aria-label="Buscar">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
@@ -77,7 +77,7 @@
     <a href="/es/random-podcast-juan-ruocco/">Podcast</a>
     <a href="/es/pitcheale-a-421/">Pitcheanos</a>
     <a href="/es/mi-suscripcion/">Mi cuenta</a>
-    <a href="/es/suscribite/" class="nav-mobile-subscribe">Suscribite</a>
+    <a href="/es/suscribite/" class="nav-mobile-subscribe" onclick="if(typeof gtag==='function')gtag('event','nav_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Suscribite</a>
   </nav>
 </header>
 
