@@ -64,9 +64,6 @@ body.light-mode .home-ruta-header {
 body.light-mode .home-ruta-header::after {
   background: var(--crema);
 }
-body.light-mode .alt-post-header {
-  background-image: linear-gradient(135deg, var(--verde) 70%, var(--amarillo));
-}
 body.light-mode .button:hover {
   background-image: linear-gradient(90deg, var(--verde), var(--amarillo));
 }
