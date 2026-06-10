@@ -92,6 +92,8 @@
     <link rel='preload' as='style' href='{{asset "css/light-mode.css"}}' onload="this.onload=null;this.rel='stylesheet'" />
     <link rel='preload' as='style' href='{{asset "css/progress-bar.css"}}' onload="this.onload=null;this.rel='stylesheet'" />
     <link rel='preload' as='style' href='{{asset "css/file-browser.css"}}' onload="this.onload=null;this.rel='stylesheet'" />
+    {{!-- Print stylesheet: solo se aplica al imprimir, no afecta pantalla --}}
+    <link href='{{asset "css/print.css"}}' rel='stylesheet' media='print' />
     <noscript>
       <link href='{{asset "css/light-mode.css"}}' rel='stylesheet' />
       <link href='{{asset "css/progress-bar.css"}}' rel='stylesheet' />

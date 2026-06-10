@@ -1,0 +1,106 @@
+/* ============================================================
+   print.css — Vista de impresión limpia para 421
+   Cargado con media="print": NO afecta la pantalla.
+   Objetivo: solo título + imagen destacada + texto e imágenes
+   del cuerpo. Negro sobre blanco, sin cromo (nav, sidebar,
+   footer, popups, botones, comentarios, relacionados).
+   ============================================================ */
+@media print {
+
+  /* --- Fondo blanco / texto negro (anula dark + light mode) --- */
+  html, body, body.light-mode {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  *, *::before, *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    /* anula títulos con gradient (-webkit-text-fill-color: transparent) */
+    -webkit-text-fill-color: #000 !important;
+    background-image: none !important;
+    filter: none !important;
+  }
+
+  /* --- Ocultar todo el cromo de la interfaz --- */
+  .site-header, .site-nav, nav,
+  .progress,
+  .file-browser,
+  .footer-desktop, .footer-mobile, footer,
+  .sub-popup,
+  .hero-mobile-suscribite-button,
+  .post-comments,
+  .related-section, .preview-section,
+  .post-author-card,
+  .lang-selector,
+  .featured-post-footer,
+  .home-featured-share, .home-featured-translation,
+  .post-mhero-actions, .post-mhero-share,
+  #translation-link, #translation-link-mobile {
+    display: none !important;
+  }
+
+  /* --- Header del post: usar el layout apilado (imagen → título),
+         más prolijo en papel que el hero con texto sobre la imagen --- */
+  .hero-desktop { display: none !important; }
+  .hero-mobile, .post-mhero { display: block !important; }
+  .home-featured-overlay { display: none !important; }
+
+  /* Header destacado (posts featured): se conserva, sin pills */
+  .featured-post-header { display: block !important; padding: 0 !important; }
+  .featured-post-image { margin-top: 1rem !important; }
+
+  /* --- Imágenes: a ancho completo, sin cortar entre páginas --- */
+  .post-mhero-image img,
+  .featured-post-image img,
+  .rich-text img, .w-richtext img,
+  figure img, .kg-card img {
+    max-width: 100% !important;
+    height: auto !important;
+    page-break-inside: avoid;
+  }
+  figure, img, table, pre, blockquote, .kg-card {
+    page-break-inside: avoid;
+  }
+
+  /* --- Contenedores: ancho completo, sin márgenes laterales raros --- */
+  main, .page-wrapper, .global-container, .pv-large, .pv-huge,
+  .rich-text, .w-richtext {
+    width: auto !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    float: none !important;
+  }
+
+  /* --- Tipografía del cuerpo --- */
+  .post-mhero-title, .featured-post-title, h1 {
+    font-size: 22pt !important;
+    line-height: 1.15 !important;
+    margin: 0 0 .4rem !important;
+  }
+  .post-mhero-byline, .featured-post-byline {
+    font-size: 10pt !important;
+    margin-bottom: 1rem !important;
+  }
+  .rich-text, .w-richtext {
+    font-size: 12pt !important;
+    line-height: 1.55 !important;
+  }
+  .rich-text h2, .w-richtext h2 { font-size: 16pt !important; }
+  .rich-text h3, .w-richtext h3 { font-size: 13pt !important; }
+  h1, h2, h3, h4 { page-break-after: avoid; }
+  p, li { orphans: 3; widows: 3; }
+
+  /* Links sin subrayado ni color (texto plano) */
+  a, a:visited { color: #000 !important; text-decoration: none !important; }
+
+  /* Bloques de código legibles en papel */
+  pre, code, .kg-code-card {
+    border: 1px solid #ccc !important;
+    font-size: 9.5pt !important;
+  }
+
+  /* Márgenes de página */
+  @page { margin: 1.8cm; }
+}
