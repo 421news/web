@@ -1098,83 +1098,81 @@ body {
    Nota: ~ (no +) porque el <script> del partial queda como hermano intermedio */
 #most-read-section ~ .global-container.pt-small.pb-small { padding-top: 0.5rem; padding-bottom: 0; }
 #most-read-section ~ .preview-section .pv-huge { padding-top: 1rem; }
+/* "Lo más leído" — índice editorial (v3.34.26). Filas separadas por hairline
+   crema, nº italic, título Lora, tag ▶ amarillo, meta italic "autor · min".
+   Misma familia visual que las cards .pc del resto de la home. */
 .most-read-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  min-height: 84px;
+  column-gap: 40px;
+  min-height: 72px;
 }
 .mr-card {
   display: flex;
   align-items: center;
-  gap: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(234, 230, 225, 0.1);
-  border-radius: 10px;
-  padding: 12px;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(234, 230, 225, 0.14);
   text-decoration: none;
   color: var(--crema);
-  transition: border-color 0.15s ease, transform 0.15s ease;
+  transition: padding-left 0.15s ease;
 }
-.mr-card:hover { border-color: var(--amarillo); transform: translateY(-2px); }
+.mr-card:hover { padding-left: 6px; }
+.mr-card:hover .mr-title { color: var(--amarillo); }
 .mr-num {
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 800;
   font-style: italic;
-  font-size: 1.5rem;
-  width: 30px;
-  text-align: center;
+  font-size: 1.8rem;
+  line-height: 1;
+  width: 34px;
   flex-shrink: 0;
   color: var(--amarillo);
 }
 .mr-thumb {
-  width: 84px;
-  height: 84px;
-  border-radius: 8px;
+  width: 72px;
+  height: 72px;
   object-fit: cover;
   flex-shrink: 0;
+  border: 1.5px solid var(--crema);
   background: rgba(255, 255, 255, 0.05);
+  filter: grayscale(0.15);
 }
 .mr-body { min-width: 0; }
 .mr-chip {
-  display: inline-block;
-  background: var(--gradient-main);
-  color: var(--negro);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 700;
-  padding: 1px 8px;
-  border-radius: 20px;
-  font-size: 0.62rem;
-  text-transform: uppercase;
+  font-size: 0.72rem;
   letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--amarillo);
 }
+.mr-chip::before { content: '\25B6'; font-size: 0.7em; transform: translateY(-1px); opacity: 0.9; }
 .mr-title {
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Lora', Georgia, serif;
   font-weight: 700;
-  font-size: 0.98rem;
-  line-height: 1.2;
-  margin: 6px 0 0;
+  font-size: 1.12rem;
+  line-height: 1.22;
+  margin: 5px 0 4px;
   color: var(--crema);
+  transition: color 0.15s ease;
 }
 .mr-meta {
   font-family: 'Nunito Sans', sans-serif;
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-style: italic;
   opacity: 0.68;
   display: block;
-  margin-top: 6px;
 }
-.light-mode .mr-card {
-  background: rgba(0, 0, 0, 0.03);
-  border-color: rgba(26, 26, 26, 0.12);
-  color: var(--negro);
-}
-.light-mode .mr-card:hover { border-color: var(--amarillo); }
-.light-mode .mr-num { color: var(--verde); }
+.light-mode .mr-card { border-color: rgba(26, 26, 26, 0.16); color: var(--negro); }
+.light-mode .mr-card:hover .mr-title { color: var(--verde); }
 .light-mode .mr-title { color: var(--negro); }
+.light-mode .mr-thumb { border-color: var(--negro); }
 @media (max-width: 760px) {
-  .most-read-grid { grid-template-columns: 1fr; }
+  .most-read-grid { grid-template-columns: 1fr; column-gap: 0; }
 }
 
 /* legacy class — kept for any leftover usage, will be removed once author.hbs is updated */

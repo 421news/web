@@ -68,13 +68,16 @@
           var tags = (p.tags || []).filter(function (t) { return t.name.charAt(0) !== '#'; });
           var tag = tags[0] ? tags[0].name : '';
           var href = '/en/' + p.slug + '/';
+          var author = p.primary_author ? p.primary_author.name : '';
+          var rt = p.reading_time ? (p.reading_time + ' min') : '';
+          var meta = [author, rt].filter(Boolean).join(' · ');
           return '<a class="mr-card" href="' + href + '">' +
             '<span class="mr-num">' + (i + 1) + '</span>' +
-            '<img class="mr-thumb" src="' + esc(thumb(p.feature_image)) + '" loading="lazy" width="84" height="84" alt="" />' +
+            '<img class="mr-thumb" src="' + esc(thumb(p.feature_image)) + '" loading="lazy" width="72" height="72" alt="" />' +
             '<div class="mr-body">' +
               (tag ? '<span class="mr-chip">' + esc(tag) + '</span>' : '') +
               '<h3 class="mr-title">' + esc(p.title) + '</h3>' +
-              (p.reading_time ? '<span class="mr-meta">' + p.reading_time + ' min</span>' : '') +
+              (meta ? '<span class="mr-meta">' + esc(meta) + '</span>' : '') +
             '</div>' +
           '</a>';
         }).join('');
