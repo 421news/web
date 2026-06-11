@@ -114,12 +114,15 @@
   .subtitle{color:var(--dim);font-size:1.05rem;max-width:60ch;margin-bottom:2.6rem;line-height:1.45}
 
   /* BAR CHART (growth) */
-  .chart{display:flex;align-items:flex-end;gap:.5%;height:46vh;margin-top:1rem;border-bottom:1px solid var(--line);padding-bottom:.2rem}
-  .bar-wrap{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%}
+  .chart{position:relative;display:flex;align-items:flex-end;gap:.5%;height:46vh;margin-top:1rem;padding-left:46px;border-bottom:1px solid var(--line);padding-bottom:.2rem}
+  .bar-wrap{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;z-index:1}
   .bar{width:74%;background:var(--gradient);border-radius:3px 3px 0 0;transition:height .3s}
   .bar.partial{background:repeating-linear-gradient(45deg,rgba(252,210,33,.4),rgba(252,210,33,.4) 4px,transparent 4px,transparent 8px);border:1px solid rgba(252,210,33,.5)}
   .bar-lbl{font-size:.58rem;color:var(--dim);margin-top:.4rem;transform:rotate(-90deg) translateX(-50%);transform-origin:left;white-space:nowrap;height:0}
-  .xaxis{display:flex;gap:.5%;margin-top:.5rem}
+  .gl{position:absolute;left:46px;right:0;height:0;border-top:1px dashed rgba(234,230,225,.13);z-index:0}
+  .gl i{position:absolute;left:-46px;top:-.6em;width:40px;text-align:right;font-style:normal;font-size:.6rem;color:var(--dim);font-family:'Space Grotesk',sans-serif}
+  .gl.gl0{border-top:none}
+  .xaxis{display:flex;gap:.5%;margin-top:.5rem;padding-left:46px}
   .xaxis span{flex:1;text-align:center;font-size:.56rem;color:var(--dim)}
 
   /* HBAR (geo, channels) */
@@ -257,28 +260,33 @@
   <h2 class="title" data-i18n="s4_title">~20× en 18 meses</h2>
   <p class="subtitle" data-i18n="s4_sub">Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong>~150K páginas vistas mensuales</strong>.</p>
   <div class="chart">
-    <div class="bar-wrap"><div class="bar" style="height:4.3%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:7.1%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:5.1%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:9.2%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:13.5%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:18.6%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:11.2%"></div></div>
+    <span class="gl" style="bottom:100%"><i>200K</i></span>
+    <span class="gl" style="bottom:75%"><i>150K</i></span>
+    <span class="gl" style="bottom:50%"><i>100K</i></span>
+    <span class="gl" style="bottom:25%"><i>50K</i></span>
+    <span class="gl gl0" style="bottom:0"><i>0</i></span>
+    <div class="bar-wrap"><div class="bar" style="height:3.7%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:6.1%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:4.4%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:7.9%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:11.6%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:16.0%"></div></div>
     <div class="bar-wrap"><div class="bar" style="height:9.6%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:11.1%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:16.5%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:20.1%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:30.9%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:55.1%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:100%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:74.6%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:94.3%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:79.1%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:89.6%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:76.7%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:69.7%"></div></div>
-    <div class="bar-wrap"><div class="bar" style="height:85.7%"></div></div>
-    <div class="bar-wrap"><div class="bar partial" style="height:36.5%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:8.3%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:9.5%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:14.2%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:17.3%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:26.6%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:47.4%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:86.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:64.2%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:81.1%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:68.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:77.1%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:66.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:59.9%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:73.7%"></div></div>
+    <div class="bar-wrap"><div class="bar partial" style="height:31.4%"></div></div>
   </div>
   <div class="xaxis">
     <span>S'24</span><span>O</span><span>N</span><span>D</span><span>E'25</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span><span>E'26</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J*</span>
