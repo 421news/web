@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow">
+<title>421 · Media Kit — Datos de audiencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --negro:#121212;
+    --negro-2:#1b1b1b;
+    --crema:#eae6e1;
+    --amarillo:#fcd221;
+    --verde:#17a583;
+    --gradient:linear-gradient(280deg,var(--verde),var(--amarillo));
+    --dim:rgba(234,230,225,.6);
+    --line:rgba(234,230,225,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--negro);
+    color:var(--crema);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;line-height:1.02}
+  a{color:inherit}
+
+  .slide{
+    min-height:100vh;
+    width:100%;
+    padding:6vh 7vw;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--amarillo);
+    margin-bottom:1.4rem;
+  }
+  .slide-num{
+    position:absolute;top:5vh;right:7vw;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.78rem;color:var(--dim);letter-spacing:.1em;
+  }
+  .gradient-text{
+    background:var(--gradient);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  /* LANGUAGE SWITCH */
+  .lang-switch{
+    position:fixed;bottom:1.4rem;right:1.4rem;z-index:999;
+    display:flex;gap:2px;padding:3px;border-radius:999px;
+    background:rgba(27,27,27,.82);border:1px solid var(--line);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    box-shadow:0 6px 24px rgba(0,0,0,.35);
+  }
+  .lang-switch button{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.78rem;
+    letter-spacing:.06em;color:var(--dim);background:none;border:none;cursor:pointer;
+    padding:.45rem .9rem;border-radius:999px;transition:all .18s;
+  }
+  .lang-switch button:hover{color:var(--crema)}
+  .lang-switch button.active{background:var(--gradient);color:var(--negro)}
+
+  .logo-link{display:inline-block;line-height:0;transition:opacity .18s}
+  .logo-link:hover{opacity:.82}
+
+  /* COVER */
+  .cover{justify-content:space-between;background:
+    radial-gradient(circle at 80% 15%,rgba(23,165,131,.18),transparent 45%),
+    radial-gradient(circle at 15% 90%,rgba(252,210,33,.12),transparent 45%),var(--negro);}
+  .cover-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .logo421{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:2.4rem;letter-spacing:-.03em}
+  .logo421 span{color:var(--amarillo)}
+  .brand-logo{height:88px;width:auto;display:block}
+  .brand-logo--sm{height:54px;width:auto;display:block}
+  .social-row{display:flex;align-items:center;gap:3.2rem;flex-wrap:wrap;margin:1rem 0 2.4rem}
+  .social-row .eyebrow{margin-right:1rem}
+  .social{display:inline-flex;align-items:center;gap:.85rem;color:var(--crema);text-decoration:none;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.15rem}
+  .social svg{color:var(--amarillo);flex:none}
+  .social:hover{color:var(--amarillo)}
+  .net-label{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin:1.6rem 0 1rem;display:flex;align-items:center;gap:.7rem}
+  .net-label svg{color:var(--amarillo);flex:none}
+  .net-label .sub{font-family:'Inter',sans-serif;font-weight:400;font-size:.72rem;color:var(--dim);text-transform:uppercase;letter-spacing:.14em}
+  .cover-mid h1{font-size:clamp(3rem,8vw,7rem);font-weight:700}
+  .cover-mid p{font-size:clamp(1.1rem,2vw,1.5rem);color:var(--dim);max-width:40ch;margin-top:1.6rem;line-height:1.4}
+  .cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;color:var(--dim);font-size:.9rem}
+
+  /* STAT GRID */
+  .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2.2rem;margin-top:1rem}
+  .stat-grid.cols4{grid-template-columns:repeat(4,1fr);gap:1.6rem}
+  .stat{border-top:2px solid var(--amarillo);padding-top:1.1rem}
+  .stat .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2.6rem,5.5vw,4.6rem);line-height:.95}
+  .stat .lbl{color:var(--dim);font-size:.95rem;margin-top:.6rem;line-height:1.35}
+  .stat.green{border-color:var(--verde)}
+
+  h2.title{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:700;margin-bottom:.4rem}
+  .subtitle{color:var(--dim);font-size:1.05rem;max-width:60ch;margin-bottom:2.6rem;line-height:1.45}
+
+  /* BAR CHART (growth) */
+  .chart{position:relative;display:flex;align-items:flex-end;gap:.5%;height:46vh;margin-top:1rem;padding-left:46px;border-bottom:1px solid var(--line);padding-bottom:.2rem}
+  .bar-wrap{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;position:relative;z-index:1}
+  .bar{width:74%;background:var(--gradient);border-radius:3px 3px 0 0;transition:height .3s}
+  .bar.partial{background:repeating-linear-gradient(45deg,rgba(252,210,33,.4),rgba(252,210,33,.4) 4px,transparent 4px,transparent 8px);border:1px solid rgba(252,210,33,.5)}
+  .bar-lbl{font-size:.58rem;color:var(--dim);margin-top:.4rem;transform:rotate(-90deg) translateX(-50%);transform-origin:left;white-space:nowrap;height:0}
+  .gl{position:absolute;left:46px;right:0;height:0;border-top:1px dashed rgba(234,230,225,.13);z-index:0}
+  .gl i{position:absolute;left:-46px;top:-.6em;width:40px;text-align:right;font-style:normal;font-size:.6rem;color:var(--dim);font-family:'Space Grotesk',sans-serif}
+  .gl.gl0{border-top:none}
+  .xaxis{display:flex;gap:.5%;margin-top:.5rem;padding-left:46px}
+  .xaxis span{flex:1;text-align:center;font-size:.56rem;color:var(--dim)}
+
+  /* HBAR (geo, channels) */
+  .hbars{display:flex;flex-direction:column;gap:1.05rem;margin-top:.5rem}
+  .hbar-row{display:grid;grid-template-columns:150px 1fr 70px;align-items:center;gap:1rem}
+  .hbar-name{font-size:.95rem;font-weight:500}
+  .hbar-track{height:18px;background:var(--negro-2);border-radius:99px;overflow:hidden}
+  .hbar-fill{height:100%;background:var(--gradient);border-radius:99px}
+  .hbar-fill.solid{background:var(--verde)}
+  .hbar-val{font-family:'Space Grotesk',sans-serif;font-weight:600;text-align:right;font-size:.95rem}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:4vw;align-items:center}
+  .donut-wrap{display:flex;gap:2.5rem;align-items:center;flex-wrap:wrap}
+  .legend{display:flex;flex-direction:column;gap:.7rem}
+  .legend div{display:flex;align-items:center;gap:.6rem;font-size:.95rem}
+  .dot{width:12px;height:12px;border-radius:3px;flex:none}
+
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem}
+  ul.clean li{display:flex;justify-content:space-between;gap:1rem;padding-bottom:.7rem;border-bottom:1px solid var(--line);font-size:1rem}
+  ul.clean li .v{font-family:'Space Grotesk',sans-serif;font-weight:600;color:var(--amarillo);white-space:nowrap}
+  ul.clean li .t{color:var(--crema)}
+
+  .pillrow{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.6rem}
+  .pill{border:1.5px solid var(--amarillo);border-radius:999px;padding:.5rem 1.1rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+
+  .note{color:var(--dim);font-size:.78rem;margin-top:auto;padding-top:2rem;line-height:1.5}
+  .big-callout{font-size:clamp(1.4rem,3vw,2.4rem);font-weight:600;line-height:1.25;max-width:24ch}
+  .big-callout .gradient-text{font-weight:700}
+
+  .formats{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;margin-top:1rem}
+  .fmt{border:1px solid var(--line);border-radius:14px;padding:1.4rem 1.5rem;background:var(--negro-2)}
+  .fmt h3{font-size:1.15rem;margin-bottom:.5rem;color:var(--amarillo)}
+  .fmt p{color:var(--dim);font-size:.9rem;line-height:1.45}
+
+  @media (max-width:760px){
+    .stat-grid,.stat-grid.cols4,.two-col,.formats{grid-template-columns:1fr 1fr}
+    .hbar-row{grid-template-columns:90px 1fr 56px;gap:.6rem}
+    .chart{height:34vh}
+    .lang-switch{bottom:1rem;right:1rem}
+  }
+
+  /* PRINT → slides as landscape PDF pages */
+  @page{size:1280px 720px;margin:0}
+  @media print{
+    body{background:var(--negro)}
+    .slide{min-height:720px;height:720px;page-break-after:always;border:none}
+    .chart{height:340px}
+    .lang-switch{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SWITCH -->
+<div class="lang-switch" role="group" aria-label="Idioma / Language">
+  <button type="button" data-setlang="es" class="active">ES</button>
+  <button type="button" data-setlang="en">EN</button>
+</div>
+
+<!-- 1 · COVER -->
+<section class="slide cover">
+  <div class="cover-top">
+    <a class="logo-link" href="https://www.421.news/" target="_blank" rel="noopener" aria-label="421">
+    <svg class="brand-logo" viewBox="0 0 167 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="421">
+      <g clip-path="url(#clip0_11_15)">
+        <path d="M87.3617 0.991943C59.5368 0.991943 35.0847 7.46992 21.0952 17.247C17.6134 19.6801 14.7791 22.3177 12.7032 25.1117C12.6842 25.1374 12.6669 25.1632 12.6478 25.1873C12.6478 25.1873 12.6478 25.1873 12.6461 25.189C10.4542 26.7818 8.53582 28.4589 6.92218 30.2081C5.56825 31.6738 4.42901 33.1911 3.52177 34.7496C1.85619 37.6071 0.969727 40.6055 0.969727 43.6967C0.969727 63.1856 36.1962 78.9854 79.6502 78.9854C106.706 78.9854 130.573 72.8596 144.732 63.5327C148.793 60.8573 152.056 57.9191 154.366 54.7866C158.253 51.9617 161.276 48.874 163.272 45.5937C165.078 42.6262 166.042 39.5041 166.042 36.2806C166.042 16.7917 130.816 0.991943 87.3617 0.991943Z" fill="#EAE6E1"/>
+        <path d="M166.042 36.2806C166.042 39.5041 165.078 42.6279 163.272 45.5937C161.278 48.8705 158.255 51.9617 154.366 54.7849C156.939 51.2985 158.331 47.5698 158.331 43.695C158.331 24.2061 123.104 8.4081 79.6504 8.4081C58.1017 8.4081 38.5753 12.2932 24.3642 18.5873C19.899 20.565 15.9601 22.7799 12.6445 25.1873C12.6618 25.1615 12.6826 25.1357 12.7017 25.1099C14.7793 22.316 17.6136 19.6801 21.0936 17.2453C35.0866 7.46992 59.537 0.991943 87.3619 0.991943C130.816 0.991943 166.042 16.7917 166.042 36.2806Z" fill="url(#paint0_linear_11_15)"/>
+        <path d="M0.969727 43.696C0.969727 40.4724 1.9341 37.3486 3.73992 34.3828C5.73446 31.106 8.75744 28.0148 12.6461 25.1917C10.0733 28.6781 8.68126 32.4068 8.68126 36.2815C8.68126 55.7704 43.9077 71.5684 87.3617 71.5684C108.91 71.5684 128.437 67.6834 142.648 61.3892C147.113 59.4115 151.052 57.1966 154.368 54.7893C154.35 54.8151 154.329 54.8408 154.31 54.8666C152.233 57.6605 149.398 60.2964 145.918 62.7312C131.927 72.5083 107.477 78.9863 79.6519 78.9863C36.1962 78.9846 0.969727 63.1849 0.969727 43.696Z" fill="url(#paint1_linear_11_15)"/>
+        <path d="M60.077 59.8132H51.9067C51.3682 59.8132 50.8574 59.5795 50.506 59.1723C50.1545 58.7668 50.0021 58.229 50.0853 57.6997L51.0392 51.653H37.6679C37.1277 51.653 36.6152 51.4194 36.2654 51.0104C35.9157 50.6032 35.7633 50.0653 35.8482 49.5344L36.9632 42.6543C37.0134 42.345 37.1433 42.0529 37.3389 41.8089L53.78 21.2169C54.1315 20.777 54.6578 20.5244 55.224 20.5244H65.7715C66.3117 20.5244 66.8224 20.7581 67.1739 21.1671C67.5254 21.576 67.6777 22.1138 67.5912 22.6431L64.6149 41.1182H67.1826C67.721 41.1182 68.23 41.3501 68.5815 41.7557C68.933 42.1629 69.0871 42.6973 69.004 43.2248L67.9392 50.1049C67.8006 51.0035 67.0337 51.6565 66.1178 51.6565H62.9199L61.8967 58.265C61.7582 59.1637 60.9912 59.8167 60.0753 59.8167L60.077 59.8132ZM52.0486 57.863H59.9731L61.2353 49.7045H66.0139L67.0406 43.065H62.3105L65.6278 22.473H55.2811L38.8971 42.9946L37.8098 49.7045H53.3333L52.0469 57.863H52.0486ZM54.4085 43.065H45.6391L54.457 31.9373C54.5262 31.8514 54.592 31.7672 54.6578 31.683L57.1371 28.5231L54.4085 43.0633V43.065ZM49.6836 41.1147H52.7775L53.7367 36.0011L49.6836 41.1147Z" fill="#121212"/>
+        <path d="M96.972 59.8137H70.5028C69.7808 59.8137 69.1229 59.3927 68.8251 58.7415C68.5273 58.0885 68.6416 57.3204 69.116 56.7809L84.2187 39.6289C85.9103 37.6855 87.0841 36.1493 87.7057 35.0634C88.2199 34.1647 88.4935 33.3554 88.4935 32.723C88.4935 31.9223 88.2147 31.5615 88.0052 31.3604C87.7836 31.1474 87.3819 30.8656 86.4747 30.8656C85.5674 30.8656 84.9459 31.1336 84.4698 31.7092C83.9105 32.3862 83.6127 33.4155 83.5885 34.7712C83.5694 35.761 82.7436 36.5669 81.7463 36.5669H73.2037C72.6947 36.5669 72.203 36.3555 71.855 35.9844C71.507 35.6132 71.3286 35.1115 71.365 34.608C71.694 30.0322 73.2539 26.3877 75.9999 23.7724C78.7632 21.1434 82.4441 19.8118 86.9439 19.8118C91.12 19.8118 94.5671 20.9785 97.1901 23.281C99.879 25.6402 101.242 28.7349 101.242 32.4773C101.242 35.0307 100.566 37.5119 99.2332 39.8522C97.9658 42.0757 95.8224 44.5999 92.86 47.3526L91.7588 48.3664H98.2359C98.7778 48.3664 99.2886 48.6001 99.6383 49.009C99.988 49.418 100.14 49.9558 100.054 50.485L98.7917 58.2758C98.6462 59.1676 97.881 59.8137 96.972 59.8137ZM70.7711 57.8634H96.8681L98.0922 50.3149H90.5347C90.3079 50.3149 89.8872 50.3287 89.2501 50.3596L86.563 50.485L91.5199 45.9247C94.3334 43.3112 96.3539 40.9434 97.5226 38.8917C98.6878 36.8469 99.2782 34.687 99.2782 32.4756C99.2782 29.3157 98.1389 26.7142 95.8899 24.7398C93.6374 22.7621 90.6282 21.7603 86.9456 21.7603C82.9704 21.7603 79.7448 22.9099 77.3607 25.1797C75.0009 27.4255 73.647 30.6009 73.3353 34.6166H81.6286C81.6788 32.8674 82.1237 31.4721 82.9531 30.4721C83.8066 29.4394 84.9926 28.917 86.4764 28.917C87.6745 28.917 88.6493 29.2675 89.3713 29.9583C90.095 30.6508 90.4603 31.5804 90.4603 32.723C90.4603 33.7059 90.1088 34.8176 89.4163 36.0256C88.7324 37.2215 87.4823 38.8642 85.7042 40.9056L70.7729 57.8617L70.7711 57.8634Z" fill="#121212"/>
+        <path d="M116.62 59.8135H107.385C106.845 59.8135 106.334 59.5798 105.983 59.1708C105.631 58.7619 105.481 58.2241 105.565 57.6948L109.754 31.7743H106.469C105.894 31.7743 105.344 31.5011 104.997 31.0458C104.651 30.5887 104.539 29.989 104.698 29.4392L106.902 21.846C107.129 21.0676 107.856 20.5229 108.673 20.5229H122.292C122.832 20.5229 123.343 20.7566 123.693 21.1639C124.043 21.5711 124.197 22.1072 124.112 22.6365L118.442 58.2687C118.3 59.164 117.534 59.8118 116.622 59.8118L116.62 59.8135ZM107.527 57.8632H116.516L122.148 22.4732H108.765L106.632 29.8258H112.06L107.529 57.8632H107.527Z" fill="#121212"/>
+        <path d="M159.304 43.6966C159.285 49.824 155.457 55.1026 151.357 59.3365C149.279 61.4345 146.975 63.3195 144.447 64.8556C143.675 65.3196 142.701 65.9708 141.924 66.3798C139.943 67.4898 137.455 68.7751 135.36 69.6772C134.516 70.026 133.487 70.502 132.663 70.8353C131.977 71.1051 130.61 71.6154 129.924 71.8835C105.699 80.7121 75.8809 81.9269 50.5648 77.5126C35.7148 74.7547 19.1093 69.8525 7.81032 59.4757C-0.335785 51.8293 -2.86705 41.9319 3.87145 32.3971C6.09799 29.0601 9.35297 26.7061 12.5681 24.4053C15.7539 22.1354 19.0764 20.0305 22.6101 18.338C26.1611 16.6901 29.8178 15.2897 33.5333 14.0886C65.8424 3.55375 118.353 4.40946 146.916 24.151C153.33 28.6993 159.317 35.4573 159.3 43.6983L159.304 43.6966ZM157.359 43.6966C157.323 36.0828 151.658 29.9639 145.742 25.7696C117.846 6.61404 65.7126 5.66726 34.141 15.9427C31.4332 16.7967 28.6751 17.8173 26.0572 18.9239C21.689 20.802 17.2584 22.7574 13.3715 25.5136C10.2948 27.6992 7.75492 30.5739 5.48336 33.5277C0.768829 39.9747 0.799994 47.4046 5.48336 53.8671C11.9673 62.749 23.8705 68.0878 34.1427 71.4419C60.7574 79.865 94.1227 80.0282 121.023 72.6808C122.273 72.2924 123.914 71.8508 125.156 71.4384L127.881 70.5209C128.108 70.4435 128.336 70.3714 128.561 70.2889C129.252 70.0312 129.943 69.7579 130.575 69.5225C135.918 67.5087 141.095 64.8935 145.771 61.6613C152.191 57.3519 157.396 51.8378 157.361 43.6983L157.359 43.6966Z" fill="#121212"/>
+        <path d="M166.999 36.2799C167.054 46.8319 157.727 53.7463 149.54 58.7964C146.209 60.8567 142.652 62.52 138.999 63.9221C133.557 66.0184 127.868 67.6731 122.177 68.9206C103.142 73.0497 83.3477 73.6098 64.0498 71.0393C47.1101 68.6611 24.4291 62.666 12.9536 49.3595C9.1861 44.9487 6.81066 39.0618 8.01569 33.2471C8.84502 29.307 11.1166 25.8619 13.6634 22.8239C18.6671 16.6862 25.8211 12.7977 32.9942 9.69786C41.9887 5.91246 51.532 3.50169 61.1636 1.97241C89.7347 -2.52609 130.33 -0.0242577 154.611 16.7601C161.024 21.2998 167.009 28.0458 167.001 36.2799H166.999ZM165.087 36.2799C165.056 28.6592 159.393 22.5284 153.473 18.3254C130.254 2.34012 91.7448 -0.227015 64.3355 3.55496C53.8867 5.00863 43.5123 7.44002 33.7733 11.5158C27.6252 14.0933 21.8165 17.4697 16.7591 21.7843C11.6931 26.0131 8.74807 32.4017 9.91155 38.9759C11.8178 48.9643 22.4952 55.8083 31.1693 59.8497C56.875 71.474 91.4124 72.9156 118.931 67.6044C127.39 65.9566 135.749 63.4856 143.601 59.9356C150.521 56.9699 157.386 52.8185 161.578 46.4797C163.65 43.452 165.089 39.9605 165.089 36.2764L165.087 36.2799Z" fill="#121212"/>
+      </g>
+      <defs>
+        <linearGradient id="paint0_linear_11_15" x1="49.8863" y1="-12.2372" x2="135.594" y2="74.1229" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#17A583"/><stop offset="0.1" stop-color="#36AB75"/><stop offset="0.35" stop-color="#7BB857"/><stop offset="0.57" stop-color="#B2C340"/><stop offset="0.76" stop-color="#DACB2F"/><stop offset="0.91" stop-color="#F3D024"/><stop offset="1" stop-color="#FCD221"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_11_15" x1="117.127" y1="92.2137" x2="31.4179" y2="5.85366" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#17A583"/><stop offset="0.1" stop-color="#36AB75"/><stop offset="0.35" stop-color="#7BB857"/><stop offset="0.57" stop-color="#B2C340"/><stop offset="0.76" stop-color="#DACB2F"/><stop offset="0.91" stop-color="#F3D024"/><stop offset="1" stop-color="#FCD221"/>
+        </linearGradient>
+        <clipPath id="clip0_11_15"><rect width="167" height="80" fill="white"/></clipPath>
+      </defs>
+    </svg>
+    </a>
+    <div style="text-align:right;color:var(--dim);font-size:.85rem" data-i18n="cover_kit">Media Kit 2026<br>Datos de audiencia</div>
+  </div>
+  <div class="cover-mid">
+    <div class="eyebrow" data-i18n="cover_eyebrow">Cultura · Tecnología · Vida real</div>
+    <h1 data-i18n="cover_h1">La audiencia<br>que <span class="gradient-text">lee de verdad</span>.</h1>
+    <p data-i18n="cover_p">421 es un medio de cultura digital y pensamiento contemporáneo. Esto es lo que mide nuestra comunidad.</p>
+  </div>
+  <div class="cover-bottom">
+    <div>www.421.news</div>
+    <div data-i18n="cover_period">Período: sept 2024 – jun 2026</div>
+  </div>
+</section>
+
+<!-- 2 · QUÉ ES 421 -->
+<section class="slide">
+  <div class="slide-num">02</div>
+  <div class="eyebrow" data-i18n="s2_eye">Qué es 421</div>
+  <h2 class="title" data-i18n="s2_title">Un medio para una audiencia curiosa,<br>joven y de alto poder de atención.</h2>
+  <p class="subtitle" data-i18n="s2_sub">Ensayos, crítica cultural, tecnología y ciencia ficción. Long-form que la gente termina de leer. Publicado en 8 idiomas, con una revista propia y una comunidad de suscriptores.</p>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num">8</div><div class="lbl" data-i18n="s2_l1">idiomas (ES · EN · PT · FR · ZH · JA · KO · TR)</div></div>
+    <div class="stat green"><div class="num">14</div><div class="lbl" data-i18n="s2_l2">números de revista publicados</div></div>
+    <div class="stat"><div class="num" data-i18n="s2_n3">+1.400</div><div class="lbl" data-i18n="s2_l3">artículos publicados</div></div>
+    <div class="stat green"><div class="num" data-i18n="s2_n4">5.409</div><div class="lbl" data-i18n="s2_l4">suscriptores en la comunidad</div></div>
+  </div>
+  <div class="pillrow">
+    <span class="pill" data-i18n="s2_p1">Cultura</span><span class="pill" data-i18n="s2_p2">Tecnología</span><span class="pill" data-i18n="s2_p3">Vida real</span><span class="pill" data-i18n="s2_p4">Juegos</span><span class="pill" data-i18n="s2_p5">Ciencia ficción</span>
+  </div>
+</section>
+
+<!-- 3 · HEADLINE NUMBERS -->
+<section class="slide">
+  <div class="slide-num">03</div>
+  <div class="eyebrow" data-i18n="s3_eye">El número grande</div>
+  <h2 class="title" data-i18n="s3_title">Alcance acumulado</h2>
+  <p class="subtitle" data-i18n="s3_sub">Tráfico real medido en Google Analytics 4 desde el lanzamiento (sept 2024).</p>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num" data-i18n="s3_n1">1,58M</div><div class="lbl" data-i18n="s3_l1">páginas vistas</div></div>
+    <div class="stat green"><div class="num">576K</div><div class="lbl" data-i18n="s3_l2">sesiones</div></div>
+    <div class="stat"><div class="num">~270K</div><div class="lbl" data-i18n="s3_l3">lectores únicos</div></div>
+    <div class="stat green"><div class="num" data-i18n="s3_n4">5,1M+</div><div class="lbl" data-i18n="s3_l4">impresiones en Google (Search&nbsp;+&nbsp;Discover)</div></div>
+  </div>
+  <div class="note" data-i18n="s3_note">Fuente: GA4 (property 459246312) y Google Search Console (sc-domain:421.news). Datos sept 2024 – jun 2026.</div>
+</section>
+
+<!-- 4 · GROWTH -->
+<section class="slide">
+  <div class="slide-num">04</div>
+  <div class="eyebrow" data-i18n="s4_eye">Crecimiento</div>
+  <h2 class="title" data-i18n="s4_title">~20× en 18 meses</h2>
+  <p class="subtitle" data-i18n="s4_sub">Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong>~150K páginas vistas mensuales</strong>.</p>
+  <div class="chart">
+    <span class="gl" style="bottom:100%"><i>200K</i></span>
+    <span class="gl" style="bottom:75%"><i>150K</i></span>
+    <span class="gl" style="bottom:50%"><i>100K</i></span>
+    <span class="gl" style="bottom:25%"><i>50K</i></span>
+    <span class="gl gl0" style="bottom:0"><i>0</i></span>
+    <div class="bar-wrap"><div class="bar" style="height:3.7%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:6.1%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:4.4%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:7.9%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:11.6%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:16.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:9.6%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:8.3%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:9.5%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:14.2%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:17.3%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:26.6%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:47.4%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:86.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:64.2%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:81.1%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:68.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:77.1%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:66.0%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:59.9%"></div></div>
+    <div class="bar-wrap"><div class="bar" style="height:73.7%"></div></div>
+    <div class="bar-wrap"><div class="bar partial" style="height:31.4%"></div></div>
+  </div>
+  <div class="xaxis">
+    <span>S'24</span><span>O</span><span>N</span><span>D</span><span>E'25</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span><span>E'26</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J*</span>
+  </div>
+  <div class="note" data-i18n="s4_note">Pico de 172K páginas vistas en oct 2025. *Junio 2026 parcial (mes en curso).</div>
+</section>
+
+<!-- 5 · ENGAGEMENT -->
+<section class="slide">
+  <div class="slide-num">05</div>
+  <div class="eyebrow" data-i18n="s5_eye">Calidad de audiencia</div>
+  <h2 class="title" data-i18n="s5_title">No rebotan: leen.</h2>
+  <p class="subtitle" data-i18n="s5_sub">El diferencial de 421 frente al tráfico de clickbait: tiempos de lectura largos y una base que vuelve.</p>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num">93%</div><div class="lbl" data-i18n="s5_l1">tasa de engagement (sesiones con interacción)</div></div>
+    <div class="stat green"><div class="num">5:53</div><div class="lbl" data-i18n="s5_l2">duración promedio de sesión</div></div>
+    <div class="stat"><div class="num" data-i18n="s5_n3">2,75</div><div class="lbl" data-i18n="s5_l3">páginas por sesión</div></div>
+    <div class="stat green"><div class="num">34%</div><div class="lbl" data-i18n="s5_l4">de las sesiones son de lectores que vuelven</div></div>
+  </div>
+  <p class="big-callout" style="margin-top:2.4rem" data-i18n="s5_call">Casi <span class="gradient-text">6 minutos</span> de atención por sesión. Eso es tiempo de marca.</p>
+</section>
+
+<!-- 6 · GEO -->
+<section class="slide">
+  <div class="slide-num">06</div>
+  <div class="eyebrow" data-i18n="s6_eye">Audiencia · Geografía</div>
+  <h2 class="title" data-i18n="s6_title">Corazón argentino, alcance hispanohablante</h2>
+  <p class="subtitle" data-i18n="s6_sub">Distribución de lectores únicos. Núcleo fuerte en Argentina + presencia en toda Hispanoamérica y España.</p>
+  <div class="hbars">
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c1">🇦🇷 Argentina</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="hbar-val" data-i18n="s6_v1">64,3%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c2">🇪🇸 España</div><div class="hbar-track"><div class="hbar-fill" style="width:9.8%"></div></div><div class="hbar-val" data-i18n="s6_v2">6,3%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c3">🇺🇸 EE.UU.</div><div class="hbar-track"><div class="hbar-fill" style="width:9.4%"></div></div><div class="hbar-val" data-i18n="s6_v3">6,1%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c4">🇲🇽 México</div><div class="hbar-track"><div class="hbar-fill" style="width:5.2%"></div></div><div class="hbar-val" data-i18n="s6_v4">3,4%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c5">🇨🇱 Chile</div><div class="hbar-track"><div class="hbar-fill" style="width:3.7%"></div></div><div class="hbar-val" data-i18n="s6_v5">2,4%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c6">🇨🇴 Colombia</div><div class="hbar-track"><div class="hbar-fill" style="width:3.0%"></div></div><div class="hbar-val" data-i18n="s6_v6">1,9%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s6_c7">🇺🇾 Uruguay</div><div class="hbar-track"><div class="hbar-fill" style="width:2.6%"></div></div><div class="hbar-val" data-i18n="s6_v7">1,7%</div></div>
+  </div>
+  <div class="note" data-i18n="s6_note">Argentina concentra el 76% de las sesiones: es también la audiencia más fiel y recurrente.</div>
+</section>
+
+<!-- 7 · DEMO + DEVICE -->
+<section class="slide">
+  <div class="slide-num">07</div>
+  <div class="eyebrow" data-i18n="s7_eye">Audiencia · Perfil</div>
+  <h2 class="title" data-i18n="s7_title">Joven, mayoritariamente mobile</h2>
+  <div class="two-col" style="margin-top:1rem">
+    <div>
+      <h3 style="font-size:1.1rem;margin-bottom:1.2rem;color:var(--amarillo)" data-i18n="s7_age">Edad <span style="color:var(--dim);font-weight:400;font-size:.8rem">(muestra identificada)</span></h3>
+      <div class="hbars">
+        <div class="hbar-row"><div class="hbar-name">18–24</div><div class="hbar-track"><div class="hbar-fill" style="width:81%"></div></div><div class="hbar-val" data-i18n="s7_av1">18,5%</div></div>
+        <div class="hbar-row"><div class="hbar-name">25–34</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="hbar-val" data-i18n="s7_av2">22,9%</div></div>
+        <div class="hbar-row"><div class="hbar-name">35–44</div><div class="hbar-track"><div class="hbar-fill" style="width:60%"></div></div><div class="hbar-val" data-i18n="s7_av3">13,8%</div></div>
+        <div class="hbar-row"><div class="hbar-name">45–54</div><div class="hbar-track"><div class="hbar-fill" style="width:75%"></div></div><div class="hbar-val" data-i18n="s7_av4">17,3%</div></div>
+        <div class="hbar-row"><div class="hbar-name">55–64</div><div class="hbar-track"><div class="hbar-fill" style="width:52%"></div></div><div class="hbar-val" data-i18n="s7_av5">11,9%</div></div>
+        <div class="hbar-row"><div class="hbar-name">65+</div><div class="hbar-track"><div class="hbar-fill" style="width:68%"></div></div><div class="hbar-val" data-i18n="s7_av6">15,6%</div></div>
+      </div>
+    </div>
+    <div>
+      <h3 style="font-size:1.1rem;margin-bottom:1.2rem;color:var(--amarillo)" data-i18n="s7_dev">Dispositivo</h3>
+      <div class="hbars">
+        <div class="hbar-row"><div class="hbar-name">📱 Mobile</div><div class="hbar-track"><div class="hbar-fill solid" style="width:100%"></div></div><div class="hbar-val">71%</div></div>
+        <div class="hbar-row"><div class="hbar-name">💻 Desktop</div><div class="hbar-track"><div class="hbar-fill solid" style="width:40%"></div></div><div class="hbar-val">28%</div></div>
+        <div class="hbar-row"><div class="hbar-name">📟 Tablet</div><div class="hbar-track"><div class="hbar-fill solid" style="width:2%"></div></div><div class="hbar-val">1%</div></div>
+      </div>
+      <h3 style="font-size:1.1rem;margin:2rem 0 1.2rem;color:var(--amarillo)" data-i18n="s7_gender">Género <span style="color:var(--dim);font-weight:400;font-size:.8rem">(muestra)</span></h3>
+      <div class="hbars">
+        <div class="hbar-row"><div class="hbar-name" data-i18n="s7_gn1">Masculino</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="hbar-val">57%</div></div>
+        <div class="hbar-row"><div class="hbar-name" data-i18n="s7_gn2">Femenino</div><div class="hbar-track"><div class="hbar-fill" style="width:76%"></div></div><div class="hbar-val">43%</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="note" data-i18n="s7_note">Demografía sobre la fracción de usuarios identificada por Google. 41% de la audiencia identificada tiene entre 18 y 34 años.</div>
+</section>
+
+<!-- 8 · TRAFFIC SOURCES -->
+<section class="slide">
+  <div class="slide-num">08</div>
+  <div class="eyebrow" data-i18n="s8_eye">De dónde vienen</div>
+  <h2 class="title" data-i18n="s8_title">Marca propia, no rehén del algoritmo</h2>
+  <p class="subtitle" data-i18n="s8_sub">Reparto de sesiones por canal. Más de 7 de cada 10 sesiones vienen de comunidad propia (social + tráfico directo), no de SEO.</p>
+  <div class="hbars">
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s8_c1">Redes sociales</div><div class="hbar-track"><div class="hbar-fill" style="width:100%"></div></div><div class="hbar-val">43%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s8_c2">Directo</div><div class="hbar-track"><div class="hbar-fill" style="width:72%"></div></div><div class="hbar-val">31%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s8_c3">Búsqueda orgánica</div><div class="hbar-track"><div class="hbar-fill" style="width:55%"></div></div><div class="hbar-val">24%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s8_c4">Referral</div><div class="hbar-track"><div class="hbar-fill" style="width:4%"></div></div><div class="hbar-val">2%</div></div>
+    <div class="hbar-row"><div class="hbar-name" data-i18n="s8_c5">Email / Newsletter</div><div class="hbar-track"><div class="hbar-fill" style="width:2%"></div></div><div class="hbar-val">1%</div></div>
+  </div>
+  <p class="big-callout" style="margin-top:2.4rem" data-i18n="s8_call">El <span class="gradient-text">31% directo</span> es gente que escribe 421.news en el navegador. Eso es lealtad.</p>
+</section>
+
+<!-- 9 · TOP CONTENT -->
+<section class="slide">
+  <div class="slide-num">09</div>
+  <div class="eyebrow" data-i18n="s9_eye">Contenido top</div>
+  <h2 class="title" data-i18n="s9_title">Lo que más se lee</h2>
+  <p class="subtitle" data-i18n="s9_sub">Notas con mayor tráfico acumulado (páginas vistas). Mezcla de ensayo, tecnología y cultura.</p>
+  <ul class="clean">
+    <li><span class="t" data-i18n="s9_t1">Soberanía cognitiva: introducción a la autonomía psíquica</span><span class="v">~49K</span></li>
+    <li><span class="t" data-i18n="s9_t2">Low-Tech High-Life: cottagecore para cyberpunks</span><span class="v" data-i18n="s9_v2">24,8K</span></li>
+    <li><span class="t" data-i18n="s9_t3">Ya pagás internet, no pagues por lo demás</span><span class="v" data-i18n="s9_v3">19,2K</span></li>
+    <li><span class="t" data-i18n="s9_t4">Asimov, el optimismo y la ciencia ficción</span><span class="v" data-i18n="s9_v4">18,7K</span></li>
+    <li><span class="t" data-i18n="s9_t5">Claude Code: el fin del software como lo conocemos</span><span class="v" data-i18n="s9_v5">16,9K</span></li>
+    <li><span class="t" data-i18n="s9_t6">Cómo empezar a leer ciencia ficción</span><span class="v" data-i18n="s9_v6">15,6K</span></li>
+    <li><span class="t" data-i18n="s9_t7">Nick Land y el aceleracionismo</span><span class="v" data-i18n="s9_v7">13,5K</span></li>
+    <li><span class="t" data-i18n="s9_t8">Blade Runner (1982): Ridley Scott</span><span class="v" data-i18n="s9_v8">12,3K</span></li>
+  </ul>
+</section>
+
+<!-- 10 · GOOGLE VISIBILITY -->
+<section class="slide">
+  <div class="slide-num">10</div>
+  <div class="eyebrow" data-i18n="s10_eye">Visibilidad en Google</div>
+  <h2 class="title" data-i18n="s10_title">5,1M de impresiones · picos virales</h2>
+  <p class="subtitle" data-i18n="s10_sub">Presencia en Google Search y Google Discover (últimos ~12 meses con datos). Discover genera picos de hasta <strong>3.000 clicks en un solo día</strong>.</p>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num" data-i18n="s10_n1">3,85M</div><div class="lbl" data-i18n="s10_l1">impresiones en Búsqueda</div></div>
+    <div class="stat green"><div class="num" data-i18n="s10_n2">1,3M</div><div class="lbl" data-i18n="s10_l2">impresiones en Discover</div></div>
+    <div class="stat"><div class="num">73K</div><div class="lbl" data-i18n="s10_l3">clicks desde Google</div></div>
+    <div class="stat green"><div class="num" data-i18n="s10_n4">3.000</div><div class="lbl" data-i18n="s10_l4">clicks en el mejor día de Discover</div></div>
+  </div>
+  <div class="note" data-i18n="s10_note">Búsquedas de marca que rankean #1: "421", "revista 421", "421 news", "low tech high life", "soberanía cognitiva".</div>
+</section>
+
+<!-- 11 · COMMUNITY -->
+<section class="slide">
+  <div class="slide-num">11</div>
+  <div class="eyebrow" data-i18n="s11_eye">Comunidad</div>
+  <h2 class="title" data-i18n="s11_title">Una base que paga por leernos</h2>
+  <p class="subtitle" data-i18n="s11_sub">Más allá del tráfico: una comunidad de suscriptores registrados y un núcleo de miembros pagos que sostiene el proyecto.</p>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num" data-i18n="s11_n1">5.409</div><div class="lbl" data-i18n="s11_l1">suscriptores registrados</div></div>
+    <div class="stat green"><div class="num">242</div><div class="lbl" data-i18n="s11_l2">miembros pagos (wizards)</div></div>
+    <div class="stat"><div class="num">34%</div><div class="lbl" data-i18n="s11_l3">de sesiones de lectores recurrentes</div></div>
+    <div class="stat green"><div class="num">8</div><div class="lbl" data-i18n="s11_l4">idiomas con audiencia activa</div></div>
+  </div>
+  <p class="big-callout" style="margin-top:2.4rem" data-i18n="s11_call">Un canal de <span class="gradient-text">email directo</span> a miles de lectores fidelizados.</p>
+</section>
+
+<!-- 12 · REDES SOCIALES -->
+<section class="slide">
+  <div class="slide-num">12</div>
+  <div class="eyebrow" data-i18n="s12_eye">Redes sociales · @421net</div>
+  <h2 class="title" data-i18n="s12_title">+28.000 seguidores, millones de impresiones</h2>
+  <p class="subtitle" data-i18n="s12_sub">Comunidad propia y activa en Instagram y X, con alcance orgánico que se extiende mucho más allá de la base de seguidores.</p>
+
+  <h3 class="net-label">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+    <span class="nl-text" data-i18n="s12_ig">Instagram · @421net <span class="sub">últimos 90 días</span></span>
+  </h3>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num" data-i18n="s12_in1">16.111</div><div class="lbl" data-i18n="s12_il1">seguidores</div></div>
+    <div class="stat green"><div class="num">645K</div><div class="lbl" data-i18n="s12_il2">visualizaciones (90 d · ~215K/mes)</div></div>
+    <div class="stat"><div class="num">130K</div><div class="lbl" data-i18n="s12_il3">cuentas alcanzadas (90 d)</div></div>
+    <div class="stat green"><div class="num">43%</div><div class="lbl" data-i18n="s12_il4">del alcance son cuentas que NO siguen (descubrimiento)</div></div>
+  </div>
+
+  <h3 class="net-label">
+    <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    <span class="nl-text" data-i18n="s12_x">X · @421net <span class="sub">últimos 12 meses</span></span>
+  </h3>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num" data-i18n="s12_xn1">12.200</div><div class="lbl" data-i18n="s12_xl1">seguidores</div></div>
+    <div class="stat green"><div class="num" data-i18n="s12_xn2">3,06M</div><div class="lbl" data-i18n="s12_xl2">impresiones (12 m · ~251K/mes)</div></div>
+    <div class="stat"><div class="num" data-i18n="s12_xn3">+7.600</div><div class="lbl" data-i18n="s12_xl3">seguidores nuevos en el año</div></div>
+    <div class="stat green"><div class="num" data-i18n="s12_xn4">1,37%</div><div class="lbl" data-i18n="s12_xl4">engagement rate</div></div>
+  </div>
+  <div class="note" data-i18n="s12_note">Fuente: Instagram Insights y X Analytics (@421net), jun 2026. Mejor día en X: 77K impresiones. Reel top en IG: 30,9K visualizaciones.</div>
+</section>
+
+<!-- 13 · PODCAST -->
+<section class="slide">
+  <div class="slide-num">13</div>
+  <div class="eyebrow" data-i18n="s13_eye">Random · el podcast de 421</div>
+  <h2 class="title" data-i18n="s13_title">También sonamos</h2>
+  <p class="subtitle" data-i18n="s13_sub">Random, el podcast de 421, al aire desde 2019. Un catálogo consolidado que abre la puerta a sponsorships de audio. Métricas en Spotify (desde el inicio).</p>
+  <div class="stat-grid cols4">
+    <div class="stat"><div class="num" data-i18n="s13_n1">122,9K</div><div class="lbl" data-i18n="s13_l1">reproducciones en Spotify</div></div>
+    <div class="stat green"><div class="num" data-i18n="s13_n2">12.688</div><div class="lbl" data-i18n="s13_l2">horas de consumo</div></div>
+    <div class="stat"><div class="num" data-i18n="s13_n3">+4.949</div><div class="lbl" data-i18n="s13_l3">seguidores en Spotify</div></div>
+    <div class="stat green"><div class="num">2019</div><div class="lbl" data-i18n="s13_l4">al aire desde (~6 años de catálogo)</div></div>
+  </div>
+  <div class="note" data-i18n="s13_note">Fuente: Spotify for Creators (Random Podcast), métricas "desde el inicio". Cifras solo de Spotify; el total sumando el resto de las plataformas (Apple Podcasts, YouTube, etc.) es mayor.</div>
+</section>
+
+<!-- 14 · FORMATS / CLOSE -->
+<section class="slide" style="justify-content:space-between">
+  <div class="slide-num">14</div>
+  <div>
+    <div class="eyebrow" data-i18n="s14_eye">Trabajemos juntos</div>
+    <h2 class="title" data-i18n="s14_title">Formatos disponibles</h2>
+    <div class="formats">
+      <div class="fmt"><h3 data-i18n="s14_f1h">Contenido patrocinado</h3><p data-i18n="s14_f1p">Nota editorial de marca con el tono y la calidad de lectura de 421. Long-form que la audiencia termina.</p></div>
+      <div class="fmt"><h3 data-i18n="s14_f2h">Menciones en newsletter</h3><p data-i18n="s14_f2p">Llegada directa al inbox de la comunidad de suscriptores fidelizados.</p></div>
+      <div class="fmt"><h3 data-i18n="s14_f3h">Presencia en la revista</h3><p data-i18n="s14_f3p">Espacio en los números temáticos de la revista 421 (PDF + web).</p></div>
+      <div class="fmt"><h3 data-i18n="s14_f4h">Display & integraciones</h3><p data-i18n="s14_f4p">Banners y formatos a medida en sitio, con foco mobile (71% de la audiencia).</p></div>
+      <div class="fmt"><h3 data-i18n="s14_f5h">Sponsorship en el podcast</h3><p data-i18n="s14_f5p">Menciones y segmentos patrocinados en Random, el podcast de 421. Audio nativo con audiencia fiel.</p></div>
+    </div>
+  </div>
+  <div class="social-row">
+    <span class="eyebrow" style="margin:0" data-i18n="s14_follow">Seguinos</span>
+    <a class="social" href="https://instagram.com/421net" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+      @421net
+    </a>
+    <a class="social" href="https://x.com/421net" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      @421net
+    </a>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:1px solid var(--line);padding-top:1.6rem">
+    <a class="logo-link" href="https://www.421.news/" target="_blank" rel="noopener" aria-label="421">
+    <svg class="brand-logo--sm" viewBox="0 0 167 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="421">
+      <g clip-path="url(#clip0_11_15b)">
+        <path d="M87.3617 0.991943C59.5368 0.991943 35.0847 7.46992 21.0952 17.247C17.6134 19.6801 14.7791 22.3177 12.7032 25.1117C12.6842 25.1374 12.6669 25.1632 12.6478 25.1873C12.6478 25.1873 12.6478 25.1873 12.6461 25.189C10.4542 26.7818 8.53582 28.4589 6.92218 30.2081C5.56825 31.6738 4.42901 33.1911 3.52177 34.7496C1.85619 37.6071 0.969727 40.6055 0.969727 43.6967C0.969727 63.1856 36.1962 78.9854 79.6502 78.9854C106.706 78.9854 130.573 72.8596 144.732 63.5327C148.793 60.8573 152.056 57.9191 154.366 54.7866C158.253 51.9617 161.276 48.874 163.272 45.5937C165.078 42.6262 166.042 39.5041 166.042 36.2806C166.042 16.7917 130.816 0.991943 87.3617 0.991943Z" fill="#EAE6E1"/>
+        <path d="M166.042 36.2806C166.042 39.5041 165.078 42.6279 163.272 45.5937C161.278 48.8705 158.255 51.9617 154.366 54.7849C156.939 51.2985 158.331 47.5698 158.331 43.695C158.331 24.2061 123.104 8.4081 79.6504 8.4081C58.1017 8.4081 38.5753 12.2932 24.3642 18.5873C19.899 20.565 15.9601 22.7799 12.6445 25.1873C12.6618 25.1615 12.6826 25.1357 12.7017 25.1099C14.7793 22.316 17.6136 19.6801 21.0936 17.2453C35.0866 7.46992 59.537 0.991943 87.3619 0.991943C130.816 0.991943 166.042 16.7917 166.042 36.2806Z" fill="url(#paint0_linear_11_15b)"/>
+        <path d="M0.969727 43.696C0.969727 40.4724 1.9341 37.3486 3.73992 34.3828C5.73446 31.106 8.75744 28.0148 12.6461 25.1917C10.0733 28.6781 8.68126 32.4068 8.68126 36.2815C8.68126 55.7704 43.9077 71.5684 87.3617 71.5684C108.91 71.5684 128.437 67.6834 142.648 61.3892C147.113 59.4115 151.052 57.1966 154.368 54.7893C154.35 54.8151 154.329 54.8408 154.31 54.8666C152.233 57.6605 149.398 60.2964 145.918 62.7312C131.927 72.5083 107.477 78.9863 79.6519 78.9863C36.1962 78.9846 0.969727 63.1849 0.969727 43.696Z" fill="url(#paint1_linear_11_15b)"/>
+        <path d="M60.077 59.8132H51.9067C51.3682 59.8132 50.8574 59.5795 50.506 59.1723C50.1545 58.7668 50.0021 58.229 50.0853 57.6997L51.0392 51.653H37.6679C37.1277 51.653 36.6152 51.4194 36.2654 51.0104C35.9157 50.6032 35.7633 50.0653 35.8482 49.5344L36.9632 42.6543C37.0134 42.345 37.1433 42.0529 37.3389 41.8089L53.78 21.2169C54.1315 20.777 54.6578 20.5244 55.224 20.5244H65.7715C66.3117 20.5244 66.8224 20.7581 67.1739 21.1671C67.5254 21.576 67.6777 22.1138 67.5912 22.6431L64.6149 41.1182H67.1826C67.721 41.1182 68.23 41.3501 68.5815 41.7557C68.933 42.1629 69.0871 42.6973 69.004 43.2248L67.9392 50.1049C67.8006 51.0035 67.0337 51.6565 66.1178 51.6565H62.9199L61.8967 58.265C61.7582 59.1637 60.9912 59.8167 60.0753 59.8167L60.077 59.8132ZM52.0486 57.863H59.9731L61.2353 49.7045H66.0139L67.0406 43.065H62.3105L65.6278 22.473H55.2811L38.8971 42.9946L37.8098 49.7045H53.3333L52.0469 57.863H52.0486ZM54.4085 43.065H45.6391L54.457 31.9373C54.5262 31.8514 54.592 31.7672 54.6578 31.683L57.1371 28.5231L54.4085 43.0633V43.065ZM49.6836 41.1147H52.7775L53.7367 36.0011L49.6836 41.1147Z" fill="#121212"/>
+        <path d="M96.972 59.8137H70.5028C69.7808 59.8137 69.1229 59.3927 68.8251 58.7415C68.5273 58.0885 68.6416 57.3204 69.116 56.7809L84.2187 39.6289C85.9103 37.6855 87.0841 36.1493 87.7057 35.0634C88.2199 34.1647 88.4935 33.3554 88.4935 32.723C88.4935 31.9223 88.2147 31.5615 88.0052 31.3604C87.7836 31.1474 87.3819 30.8656 86.4747 30.8656C85.5674 30.8656 84.9459 31.1336 84.4698 31.7092C83.9105 32.3862 83.6127 33.4155 83.5885 34.7712C83.5694 35.761 82.7436 36.5669 81.7463 36.5669H73.2037C72.6947 36.5669 72.203 36.3555 71.855 35.9844C71.507 35.6132 71.3286 35.1115 71.365 34.608C71.694 30.0322 73.2539 26.3877 75.9999 23.7724C78.7632 21.1434 82.4441 19.8118 86.9439 19.8118C91.12 19.8118 94.5671 20.9785 97.1901 23.281C99.879 25.6402 101.242 28.7349 101.242 32.4773C101.242 35.0307 100.566 37.5119 99.2332 39.8522C97.9658 42.0757 95.8224 44.5999 92.86 47.3526L91.7588 48.3664H98.2359C98.7778 48.3664 99.2886 48.6001 99.6383 49.009C99.988 49.418 100.14 49.9558 100.054 50.485L98.7917 58.2758C98.6462 59.1676 97.881 59.8137 96.972 59.8137ZM70.7711 57.8634H96.8681L98.0922 50.3149H90.5347C90.3079 50.3149 89.8872 50.3287 89.2501 50.3596L86.563 50.485L91.5199 45.9247C94.3334 43.3112 96.3539 40.9434 97.5226 38.8917C98.6878 36.8469 99.2782 34.687 99.2782 32.4756C99.2782 29.3157 98.1389 26.7142 95.8899 24.7398C93.6374 22.7621 90.6282 21.7603 86.9456 21.7603C82.9704 21.7603 79.7448 22.9099 77.3607 25.1797C75.0009 27.4255 73.647 30.6009 73.3353 34.6166H81.6286C81.6788 32.8674 82.1237 31.4721 82.9531 30.4721C83.8066 29.4394 84.9926 28.917 86.4764 28.917C87.6745 28.917 88.6493 29.2675 89.3713 29.9583C90.095 30.6508 90.4603 31.5804 90.4603 32.723C90.4603 33.7059 90.1088 34.8176 89.4163 36.0256C88.7324 37.2215 87.4823 38.8642 85.7042 40.9056L70.7729 57.8617L70.7711 57.8634Z" fill="#121212"/>
+        <path d="M116.62 59.8135H107.385C106.845 59.8135 106.334 59.5798 105.983 59.1708C105.631 58.7619 105.481 58.2241 105.565 57.6948L109.754 31.7743H106.469C105.894 31.7743 105.344 31.5011 104.997 31.0458C104.651 30.5887 104.539 29.989 104.698 29.4392L106.902 21.846C107.129 21.0676 107.856 20.5229 108.673 20.5229H122.292C122.832 20.5229 123.343 20.7566 123.693 21.1639C124.043 21.5711 124.197 22.1072 124.112 22.6365L118.442 58.2687C118.3 59.164 117.534 59.8118 116.622 59.8118L116.62 59.8135ZM107.527 57.8632H116.516L122.148 22.4732H108.765L106.632 29.8258H112.06L107.529 57.8632H107.527Z" fill="#121212"/>
+        <path d="M159.304 43.6966C159.285 49.824 155.457 55.1026 151.357 59.3365C149.279 61.4345 146.975 63.3195 144.447 64.8556C143.675 65.3196 142.701 65.9708 141.924 66.3798C139.943 67.4898 137.455 68.7751 135.36 69.6772C134.516 70.026 133.487 70.502 132.663 70.8353C131.977 71.1051 130.61 71.6154 129.924 71.8835C105.699 80.7121 75.8809 81.9269 50.5648 77.5126C35.7148 74.7547 19.1093 69.8525 7.81032 59.4757C-0.335785 51.8293 -2.86705 41.9319 3.87145 32.3971C6.09799 29.0601 9.35297 26.7061 12.5681 24.4053C15.7539 22.1354 19.0764 20.0305 22.6101 18.338C26.1611 16.6901 29.8178 15.2897 33.5333 14.0886C65.8424 3.55375 118.353 4.40946 146.916 24.151C153.33 28.6993 159.317 35.4573 159.3 43.6983L159.304 43.6966ZM157.359 43.6966C157.323 36.0828 151.658 29.9639 145.742 25.7696C117.846 6.61404 65.7126 5.66726 34.141 15.9427C31.4332 16.7967 28.6751 17.8173 26.0572 18.9239C21.689 20.802 17.2584 22.7574 13.3715 25.5136C10.2948 27.6992 7.75492 30.5739 5.48336 33.5277C0.768829 39.9747 0.799994 47.4046 5.48336 53.8671C11.9673 62.749 23.8705 68.0878 34.1427 71.4419C60.7574 79.865 94.1227 80.0282 121.023 72.6808C122.273 72.2924 123.914 71.8508 125.156 71.4384L127.881 70.5209C128.108 70.4435 128.336 70.3714 128.561 70.2889C129.252 70.0312 129.943 69.7579 130.575 69.5225C135.918 67.5087 141.095 64.8935 145.771 61.6613C152.191 57.3519 157.396 51.8378 157.361 43.6983L157.359 43.6966Z" fill="#121212"/>
+        <path d="M166.999 36.2799C167.054 46.8319 157.727 53.7463 149.54 58.7964C146.209 60.8567 142.652 62.52 138.999 63.9221C133.557 66.0184 127.868 67.6731 122.177 68.9206C103.142 73.0497 83.3477 73.6098 64.0498 71.0393C47.1101 68.6611 24.4291 62.666 12.9536 49.3595C9.1861 44.9487 6.81066 39.0618 8.01569 33.2471C8.84502 29.307 11.1166 25.8619 13.6634 22.8239C18.6671 16.6862 25.8211 12.7977 32.9942 9.69786C41.9887 5.91246 51.532 3.50169 61.1636 1.97241C89.7347 -2.52609 130.33 -0.0242577 154.611 16.7601C161.024 21.2998 167.009 28.0458 167.001 36.2799H166.999ZM165.087 36.2799C165.056 28.6592 159.393 22.5284 153.473 18.3254C130.254 2.34012 91.7448 -0.227015 64.3355 3.55496C53.8867 5.00863 43.5123 7.44002 33.7733 11.5158C27.6252 14.0933 21.8165 17.4697 16.7591 21.7843C11.6931 26.0131 8.74807 32.4017 9.91155 38.9759C11.8178 48.9643 22.4952 55.8083 31.1693 59.8497C56.875 71.474 91.4124 72.9156 118.931 67.6044C127.39 65.9566 135.749 63.4856 143.601 59.9356C150.521 56.9699 157.386 52.8185 161.578 46.4797C163.65 43.452 165.089 39.9605 165.089 36.2764L165.087 36.2799Z" fill="#121212"/>
+      </g>
+      <defs>
+        <linearGradient id="paint0_linear_11_15b" x1="49.8863" y1="-12.2372" x2="135.594" y2="74.1229" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#17A583"/><stop offset="0.1" stop-color="#36AB75"/><stop offset="0.35" stop-color="#7BB857"/><stop offset="0.57" stop-color="#B2C340"/><stop offset="0.76" stop-color="#DACB2F"/><stop offset="0.91" stop-color="#F3D024"/><stop offset="1" stop-color="#FCD221"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_11_15b" x1="117.127" y1="92.2137" x2="31.4179" y2="5.85366" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#17A583"/><stop offset="0.1" stop-color="#36AB75"/><stop offset="0.35" stop-color="#7BB857"/><stop offset="0.57" stop-color="#B2C340"/><stop offset="0.76" stop-color="#DACB2F"/><stop offset="0.91" stop-color="#F3D024"/><stop offset="1" stop-color="#FCD221"/>
+        </linearGradient>
+        <clipPath id="clip0_11_15b"><rect width="167" height="80" fill="white"/></clipPath>
+      </defs>
+    </svg>
+    </a>
+    <div style="text-align:right;color:var(--dim);font-size:.95rem">www.421.news<br>admin@421.news</div>
+  </div>
+  <div class="note" data-i18n="s14_note">Datos: Google Analytics 4 y Google Search Console, sept 2024 – jun 2026. Métricas de engagement según reporte estándar de GA4.</div>
+</section>
+
+<script>
+(function(){
+  var I18N = {
+    es: {
+      __title: "421 · Media Kit — Datos de audiencia",
+      cover_kit: "Media Kit 2026<br>Datos de audiencia",
+      cover_eyebrow: "Cultura · Tecnología · Vida real",
+      cover_h1: 'La audiencia<br>que <span class="gradient-text">lee de verdad</span>.',
+      cover_p: "421 es un medio de cultura digital y pensamiento contemporáneo. Esto es lo que mide nuestra comunidad.",
+      cover_period: "Período: sept 2024 – jun 2026",
+
+      s2_eye: "Qué es 421",
+      s2_title: "Un medio para una audiencia curiosa,<br>joven y de alto poder de atención.",
+      s2_sub: "Ensayos, crítica cultural, tecnología y ciencia ficción. Long-form que la gente termina de leer. Publicado en 8 idiomas, con una revista propia y una comunidad de suscriptores.",
+      s2_n3: "+1.400", s2_n4: "5.409",
+      s2_l1: "idiomas (ES · EN · PT · FR · ZH · JA · KO · TR)",
+      s2_l2: "números de revista publicados",
+      s2_l3: "artículos publicados",
+      s2_l4: "suscriptores en la comunidad",
+      s2_p1: "Cultura", s2_p2: "Tecnología", s2_p3: "Vida real", s2_p4: "Juegos", s2_p5: "Ciencia ficción",
+
+      s3_eye: "El número grande",
+      s3_title: "Alcance acumulado",
+      s3_sub: "Tráfico real medido en Google Analytics 4 desde el lanzamiento (sept 2024).",
+      s3_n1: "1,58M", s3_n4: "5,1M+",
+      s3_l1: "páginas vistas", s3_l2: "sesiones", s3_l3: "lectores únicos",
+      s3_l4: "impresiones en Google (Search&nbsp;+&nbsp;Discover)",
+      s3_note: "Fuente: GA4 (property 459246312) y Google Search Console (sc-domain:421.news). Datos sept 2024 – jun 2026.",
+
+      s4_eye: "Crecimiento",
+      s4_title: "~20× en 18 meses",
+      s4_sub: "Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong>~150K páginas vistas mensuales</strong>.",
+      s4_note: "Pico de 172K páginas vistas en oct 2025. *Junio 2026 parcial (mes en curso).",
+
+      s5_eye: "Calidad de audiencia",
+      s5_title: "No rebotan: leen.",
+      s5_sub: "El diferencial de 421 frente al tráfico de clickbait: tiempos de lectura largos y una base que vuelve.",
+      s5_n3: "2,75",
+      s5_l1: "tasa de engagement (sesiones con interacción)",
+      s5_l2: "duración promedio de sesión",
+      s5_l3: "páginas por sesión",
+      s5_l4: "de las sesiones son de lectores que vuelven",
+      s5_call: 'Casi <span class="gradient-text">6 minutos</span> de atención por sesión. Eso es tiempo de marca.',
+
+      s6_eye: "Audiencia · Geografía",
+      s6_title: "Corazón argentino, alcance hispanohablante",
+      s6_sub: "Distribución de lectores únicos. Núcleo fuerte en Argentina + presencia en toda Hispanoamérica y España.",
+      s6_c1: "🇦🇷 Argentina", s6_c2: "🇪🇸 España", s6_c3: "🇺🇸 EE.UU.", s6_c4: "🇲🇽 México", s6_c5: "🇨🇱 Chile", s6_c6: "🇨🇴 Colombia", s6_c7: "🇺🇾 Uruguay",
+      s6_v1: "64,3%", s6_v2: "6,3%", s6_v3: "6,1%", s6_v4: "3,4%", s6_v5: "2,4%", s6_v6: "1,9%", s6_v7: "1,7%",
+      s6_note: "Argentina concentra el 76% de las sesiones: es también la audiencia más fiel y recurrente.",
+
+      s7_eye: "Audiencia · Perfil",
+      s7_title: "Joven, mayoritariamente mobile",
+      s7_age: 'Edad <span style="color:var(--dim);font-weight:400;font-size:.8rem">(muestra identificada)</span>',
+      s7_av1: "18,5%", s7_av2: "22,9%", s7_av3: "13,8%", s7_av4: "17,3%", s7_av5: "11,9%", s7_av6: "15,6%",
+      s7_dev: "Dispositivo",
+      s7_gender: 'Género <span style="color:var(--dim);font-weight:400;font-size:.8rem">(muestra)</span>',
+      s7_gn1: "Masculino", s7_gn2: "Femenino",
+      s7_note: "Demografía sobre la fracción de usuarios identificada por Google. 41% de la audiencia identificada tiene entre 18 y 34 años.",
+
+      s8_eye: "De dónde vienen",
+      s8_title: "Marca propia, no rehén del algoritmo",
+      s8_sub: "Reparto de sesiones por canal. Más de 7 de cada 10 sesiones vienen de comunidad propia (social + tráfico directo), no de SEO.",
+      s8_c1: "Redes sociales", s8_c2: "Directo", s8_c3: "Búsqueda orgánica", s8_c4: "Referral", s8_c5: "Email / Newsletter",
+      s8_call: 'El <span class="gradient-text">31% directo</span> es gente que escribe 421.news en el navegador. Eso es lealtad.',
+
+      s9_eye: "Contenido top",
+      s9_title: "Lo que más se lee",
+      s9_sub: "Notas con mayor tráfico acumulado (páginas vistas). Mezcla de ensayo, tecnología y cultura.",
+      s9_t1: "Soberanía cognitiva: introducción a la autonomía psíquica",
+      s9_t2: "Low-Tech High-Life: cottagecore para cyberpunks",
+      s9_t3: "Ya pagás internet, no pagues por lo demás",
+      s9_t4: "Asimov, el optimismo y la ciencia ficción",
+      s9_t5: "Claude Code: el fin del software como lo conocemos",
+      s9_t6: "Cómo empezar a leer ciencia ficción",
+      s9_t7: "Nick Land y el aceleracionismo",
+      s9_t8: "Blade Runner (1982): Ridley Scott",
+      s9_v2: "24,8K", s9_v3: "19,2K", s9_v4: "18,7K", s9_v5: "16,9K", s9_v6: "15,6K", s9_v7: "13,5K", s9_v8: "12,3K",
+
+      s10_eye: "Visibilidad en Google",
+      s10_title: "5,1M de impresiones · picos virales",
+      s10_sub: "Presencia en Google Search y Google Discover (últimos ~12 meses con datos). Discover genera picos de hasta <strong>3.000 clicks en un solo día</strong>.",
+      s10_n1: "3,85M", s10_n2: "1,3M", s10_n4: "3.000",
+      s10_l1: "impresiones en Búsqueda", s10_l2: "impresiones en Discover", s10_l3: "clicks desde Google", s10_l4: "clicks en el mejor día de Discover",
+      s10_note: 'Búsquedas de marca que rankean #1: "421", "revista 421", "421 news", "low tech high life", "soberanía cognitiva".',
+
+      s11_eye: "Comunidad",
+      s11_title: "Una base que paga por leernos",
+      s11_sub: "Más allá del tráfico: una comunidad de suscriptores registrados y un núcleo de miembros pagos que sostiene el proyecto.",
+      s11_n1: "5.409",
+      s11_l1: "suscriptores registrados", s11_l2: "miembros pagos (wizards)", s11_l3: "de sesiones de lectores recurrentes", s11_l4: "idiomas con audiencia activa",
+      s11_call: 'Un canal de <span class="gradient-text">email directo</span> a miles de lectores fidelizados.',
+
+      s12_eye: "Redes sociales · @421net",
+      s12_title: "+28.000 seguidores, millones de impresiones",
+      s12_sub: "Comunidad propia y activa en Instagram y X, con alcance orgánico que se extiende mucho más allá de la base de seguidores.",
+      s12_ig: 'Instagram · @421net <span class="sub">últimos 90 días</span>',
+      s12_in1: "16.111",
+      s12_il1: "seguidores", s12_il2: "visualizaciones (90 d · ~215K/mes)", s12_il3: "cuentas alcanzadas (90 d)", s12_il4: "del alcance son cuentas que NO siguen (descubrimiento)",
+      s12_x: 'X · @421net <span class="sub">últimos 12 meses</span>',
+      s12_xn1: "12.200", s12_xn2: "3,06M", s12_xn3: "+7.600", s12_xn4: "1,37%",
+      s12_xl1: "seguidores", s12_xl2: "impresiones (12 m · ~251K/mes)", s12_xl3: "seguidores nuevos en el año", s12_xl4: "engagement rate",
+      s12_note: "Fuente: Instagram Insights y X Analytics (@421net), jun 2026. Mejor día en X: 77K impresiones. Reel top en IG: 30,9K visualizaciones.",
+
+      s13_eye: "Random · el podcast de 421",
+      s13_title: "También sonamos",
+      s13_sub: "Random, el podcast de 421, al aire desde 2019. Un catálogo consolidado que abre la puerta a sponsorships de audio. Métricas en Spotify (desde el inicio).",
+      s13_n1: "122,9K", s13_n2: "12.688", s13_n3: "+4.949",
+      s13_l1: "reproducciones en Spotify", s13_l2: "horas de consumo", s13_l3: "seguidores en Spotify", s13_l4: "al aire desde (~6 años de catálogo)",
+      s13_note: 'Fuente: Spotify for Creators (Random Podcast), métricas "desde el inicio". Cifras solo de Spotify; el total sumando el resto de las plataformas (Apple Podcasts, YouTube, etc.) es mayor.',
+
+      s14_eye: "Trabajemos juntos",
+      s14_title: "Formatos disponibles",
+      s14_f1h: "Contenido patrocinado", s14_f1p: "Nota editorial de marca con el tono y la calidad de lectura de 421. Long-form que la audiencia termina.",
+      s14_f2h: "Menciones en newsletter", s14_f2p: "Llegada directa al inbox de la comunidad de suscriptores fidelizados.",
+      s14_f3h: "Presencia en la revista", s14_f3p: "Espacio en los números temáticos de la revista 421 (PDF + web).",
+      s14_f4h: "Display & integraciones", s14_f4p: "Banners y formatos a medida en sitio, con foco mobile (71% de la audiencia).",
+      s14_f5h: "Sponsorship en el podcast", s14_f5p: "Menciones y segmentos patrocinados en Random, el podcast de 421. Audio nativo con audiencia fiel.",
+      s14_follow: "Seguinos",
+      s14_note: "Datos: Google Analytics 4 y Google Search Console, sept 2024 – jun 2026. Métricas de engagement según reporte estándar de GA4."
+    },
+    en: {
+      __title: "421 · Media Kit — Audience data",
+      cover_kit: "Media Kit 2026<br>Audience data",
+      cover_eyebrow: "Culture · Technology · Real life",
+      cover_h1: 'The audience<br>that <span class="gradient-text">actually reads</span>.',
+      cover_p: "421 is a digital-culture and contemporary-thought magazine. This is what our community measures.",
+      cover_period: "Period: Sept 2024 – Jun 2026",
+
+      s2_eye: "What is 421",
+      s2_title: "A magazine for a curious, young audience<br>with a long attention span.",
+      s2_sub: "Essays, cultural criticism, technology and science fiction. Long-form that people actually finish. Published in 8 languages, with its own magazine and a community of subscribers.",
+      s2_n3: "+1,400", s2_n4: "5,409",
+      s2_l1: "languages (ES · EN · PT · FR · ZH · JA · KO · TR)",
+      s2_l2: "magazine issues published",
+      s2_l3: "articles published",
+      s2_l4: "subscribers in the community",
+      s2_p1: "Culture", s2_p2: "Technology", s2_p3: "Real life", s2_p4: "Games", s2_p5: "Science fiction",
+
+      s3_eye: "The big number",
+      s3_title: "Cumulative reach",
+      s3_sub: "Real traffic measured in Google Analytics 4 since launch (Sept 2024).",
+      s3_n1: "1.58M", s3_n4: "5.1M+",
+      s3_l1: "page views", s3_l2: "sessions", s3_l3: "unique readers",
+      s3_l4: "impressions on Google (Search&nbsp;+&nbsp;Discover)",
+      s3_note: "Source: GA4 (property 459246312) and Google Search Console (sc-domain:421.news). Data Sept 2024 – Jun 2026.",
+
+      s4_eye: "Growth",
+      s4_title: "~20× in 18 months",
+      s4_sub: "Page views per month. From ~7K at launch to a steady run-rate of <strong>~150K monthly page views</strong>.",
+      s4_note: "Peak of 172K page views in Oct 2025. *June 2026 partial (month in progress).",
+
+      s5_eye: "Audience quality",
+      s5_title: "They don't bounce: they read.",
+      s5_sub: "What sets 421 apart from clickbait traffic: long reading times and an audience that comes back.",
+      s5_n3: "2.75",
+      s5_l1: "engagement rate (sessions with interaction)",
+      s5_l2: "average session duration",
+      s5_l3: "pages per session",
+      s5_l4: "of sessions are from returning readers",
+      s5_call: 'Almost <span class="gradient-text">6 minutes</span> of attention per session. That\'s brand time.',
+
+      s6_eye: "Audience · Geography",
+      s6_title: "Argentine heart, Spanish-speaking reach",
+      s6_sub: "Distribution of unique readers. Strong core in Argentina + presence across Latin America and Spain.",
+      s6_c1: "🇦🇷 Argentina", s6_c2: "🇪🇸 Spain", s6_c3: "🇺🇸 USA", s6_c4: "🇲🇽 Mexico", s6_c5: "🇨🇱 Chile", s6_c6: "🇨🇴 Colombia", s6_c7: "🇺🇾 Uruguay",
+      s6_v1: "64.3%", s6_v2: "6.3%", s6_v3: "6.1%", s6_v4: "3.4%", s6_v5: "2.4%", s6_v6: "1.9%", s6_v7: "1.7%",
+      s6_note: "Argentina accounts for 76% of sessions: it's also the most loyal and recurring audience.",
+
+      s7_eye: "Audience · Profile",
+      s7_title: "Young, mostly mobile",
+      s7_age: 'Age <span style="color:var(--dim);font-weight:400;font-size:.8rem">(identified sample)</span>',
+      s7_av1: "18.5%", s7_av2: "22.9%", s7_av3: "13.8%", s7_av4: "17.3%", s7_av5: "11.9%", s7_av6: "15.6%",
+      s7_dev: "Device",
+      s7_gender: 'Gender <span style="color:var(--dim);font-weight:400;font-size:.8rem">(sample)</span>',
+      s7_gn1: "Male", s7_gn2: "Female",
+      s7_note: "Demographics based on the fraction of users identified by Google. 41% of the identified audience is between 18 and 34.",
+
+      s8_eye: "Where they come from",
+      s8_title: "A brand of its own, not hostage to the algorithm",
+      s8_sub: "Sessions by channel. More than 7 out of 10 sessions come from our own community (social + direct traffic), not SEO.",
+      s8_c1: "Social media", s8_c2: "Direct", s8_c3: "Organic search", s8_c4: "Referral", s8_c5: "Email / Newsletter",
+      s8_call: 'The <span class="gradient-text">31% direct</span> is people who type 421.news into their browser. That\'s loyalty.',
+
+      s9_eye: "Top content",
+      s9_title: "The most-read pieces",
+      s9_sub: "Pieces with the highest cumulative traffic (page views). A mix of essay, technology and culture.",
+      s9_t1: "Cognitive Sovereignty: an introduction to psychic autonomy",
+      s9_t2: "Low-Tech High-Life: cottagecore for cyberpunks",
+      s9_t3: "You already pay for internet — don't pay for the rest",
+      s9_t4: "Asimov, optimism and science fiction",
+      s9_t5: "Claude Code: the end of software as we know it",
+      s9_t6: "How to start reading science fiction",
+      s9_t7: "Nick Land and accelerationism",
+      s9_t8: "Blade Runner (1982): Ridley Scott",
+      s9_v2: "24.8K", s9_v3: "19.2K", s9_v4: "18.7K", s9_v5: "16.9K", s9_v6: "15.6K", s9_v7: "13.5K", s9_v8: "12.3K",
+
+      s10_eye: "Google visibility",
+      s10_title: "5.1M impressions · viral spikes",
+      s10_sub: "Presence on Google Search and Google Discover (last ~12 months with data). Discover drives spikes of up to <strong>3,000 clicks in a single day</strong>.",
+      s10_n1: "3.85M", s10_n2: "1.3M", s10_n4: "3,000",
+      s10_l1: "Search impressions", s10_l2: "Discover impressions", s10_l3: "clicks from Google", s10_l4: "clicks on the best Discover day",
+      s10_note: 'Brand searches ranking #1: "421", "revista 421", "421 news", "low tech high life", "soberanía cognitiva".',
+
+      s11_eye: "Community",
+      s11_title: "An audience that pays to read us",
+      s11_sub: "Beyond traffic: a community of registered subscribers and a core of paying members that sustains the project.",
+      s11_n1: "5,409",
+      s11_l1: "registered subscribers", s11_l2: "paying members (wizards)", s11_l3: "of sessions from returning readers", s11_l4: "languages with an active audience",
+      s11_call: 'A <span class="gradient-text">direct email</span> channel to thousands of loyal readers.',
+
+      s12_eye: "Social media · @421net",
+      s12_title: "+28,000 followers, millions of impressions",
+      s12_sub: "An active community of our own on Instagram and X, with organic reach that extends well beyond the follower base.",
+      s12_ig: 'Instagram · @421net <span class="sub">last 90 days</span>',
+      s12_in1: "16,111",
+      s12_il1: "followers", s12_il2: "views (90 d · ~215K/mo)", s12_il3: "accounts reached (90 d)", s12_il4: "of reach are non-followers (discovery)",
+      s12_x: 'X · @421net <span class="sub">last 12 months</span>',
+      s12_xn1: "12,200", s12_xn2: "3.06M", s12_xn3: "+7,600", s12_xn4: "1.37%",
+      s12_xl1: "followers", s12_xl2: "impressions (12 mo · ~251K/mo)", s12_xl3: "new followers this year", s12_xl4: "engagement rate",
+      s12_note: "Source: Instagram Insights and X Analytics (@421net), Jun 2026. Best day on X: 77K impressions. Top reel on IG: 30.9K views.",
+
+      s13_eye: "Random · the 421 podcast",
+      s13_title: "We sound good too",
+      s13_sub: "Random, the 421 podcast, on air since 2019. A consolidated catalogue that opens the door to audio sponsorships. Metrics on Spotify (all-time).",
+      s13_n1: "122.9K", s13_n2: "12,688", s13_n3: "+4,949",
+      s13_l1: "streams on Spotify", s13_l2: "hours consumed", s13_l3: "followers on Spotify", s13_l4: "on air since (~6-year catalogue)",
+      s13_note: 'Source: Spotify for Creators (Random Podcast), all-time metrics. Spotify figures only; the total across the other platforms (Apple Podcasts, YouTube, etc.) is higher.',
+
+      s14_eye: "Let's work together",
+      s14_title: "Available formats",
+      s14_f1h: "Sponsored content", s14_f1p: "A branded editorial piece with the tone and reading quality of 421. Long-form that the audience finishes.",
+      s14_f2h: "Newsletter mentions", s14_f2p: "Direct delivery to the inbox of our community of loyal subscribers.",
+      s14_f3h: "Presence in the magazine", s14_f3p: "Space in the themed issues of 421 magazine (PDF + web).",
+      s14_f4h: "Display & integrations", s14_f4p: "Banners and custom formats on site, mobile-first (71% of the audience).",
+      s14_f5h: "Podcast sponsorship", s14_f5p: "Mentions and sponsored segments on Random, the 421 podcast. Native audio with a loyal audience.",
+      s14_follow: "Follow us",
+      s14_note: "Data: Google Analytics 4 and Google Search Console, Sept 2024 – Jun 2026. Engagement metrics per GA4 standard reporting."
+    }
+  };
+
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var buttons = document.querySelectorAll('.lang-switch button');
+
+  function setLang(lang){
+    var dict = I18N[lang] || I18N.es;
+    document.documentElement.lang = lang;
+    for(var i=0;i<nodes.length;i++){
+      var key = nodes[i].getAttribute('data-i18n');
+      if(dict[key] != null) nodes[i].innerHTML = dict[key];
+    }
+    if(dict.__title) document.title = dict.__title;
+    for(var b=0;b<buttons.length;b++){
+      buttons[b].classList.toggle('active', buttons[b].getAttribute('data-setlang') === lang);
+    }
+    try{ localStorage.setItem('mk421lang', lang); }catch(e){}
+  }
+
+  for(var b=0;b<buttons.length;b++){
+    buttons[b].addEventListener('click', function(){
+      setLang(this.getAttribute('data-setlang'));
+    });
+  }
+
+  var init = 'es';
+  try{
+    var saved = localStorage.getItem('mk421lang');
+    if(saved === 'es' || saved === 'en') init = saved;
+    else if((navigator.language||'').toLowerCase().indexOf('en') === 0) init = 'en';
+  }catch(e){}
+  setLang(init);
+})();
+</script>
+
+</body>
+</html>

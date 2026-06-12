@@ -61,6 +61,9 @@ routes:
   /es/analytics/:
     template: analytics
     data: page.analytics
+  /es/media-kit/:
+    template: media-kit
+    data: page.media-kit
 
   # === International rutas & canon ===
   /zh/rutas/:
