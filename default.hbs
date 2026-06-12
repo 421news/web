@@ -117,6 +117,9 @@
     }
     </script>
     <script src="{{asset "js/render-card.js"}}" defer></script>
+    {{!-- Focal points: aplica object-position a feature images según foco detectado (no cambia ratios) --}}
+    <script>window.__FOCAL_SRC="{{asset "data/feature-focal.json"}}";</script>
+    <script src="{{asset "js/focal-points.js"}}" defer></script>
   </head>
   <body class='{{body_class}}'>
     {{{body}}}

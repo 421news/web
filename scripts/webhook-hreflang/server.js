@@ -634,6 +634,141 @@ async function bootstrapRelatedPosts() {
   });
 }
 
+// =============================================================================
+// FOCAL POINTS (feature-image object-position via Claude vision)
+// Calcula el "punto importante" de cada feature image para que object-fit:cover
+// no recorte el sujeto. NO cambia aspect ratios. Sirve /api/feature-focal.json.
+// Base = asset commiteado del theme (backfill); overlay = posts publicados desde
+// el último backfill (se computan por-post al publicar + se rellenan al arrancar).
+// El theme (focal-points.js) lo consume; si falla, usa el asset → sin regresión.
+// =============================================================================
+const FOCAL_ENABLED = !!ANTHROPIC_API_KEY;
+const FOCAL_MODEL = process.env.FOCAL_MODEL || 'claude-sonnet-4-6';
+let focalMap = {};       // { "2026/06/foo.webp": "47% 55%" }
+let focalReady = false;
+
+const FOCAL_PROMPT = `Esta imagen es la foto de portada de un artículo. Se va a recortar a formatos más angostos y cuadrados (vertical y casi-cuadrado, además de full-screen en distintas pantallas) usando object-fit: cover, que recorta los costados y a veces arriba/abajo.
+
+Identificá el SUJETO MÁS IMPORTANTE de la foto a nivel semántico: aquello de lo que realmente trata la imagen (una persona concreta, un objeto, un cuadro, un rostro, el foco de acción). No el área de mayor contraste, sino el tema.
+
+Devolvé SOLO un objeto JSON, sin texto extra, con el punto que SIEMPRE debe quedar visible al recortar:
+{"fx": <entero 0-100, posición horizontal en %>, "fy": <entero 0-100, posición vertical en %>}`;
+
+function focalKey(url) {
+  if (!url) return null;
+  const i = url.indexOf('/content/images/');
+  if (i < 0) return null;
+  return url.slice(i + 16).replace(/^size\/[^/]+\//, '').split('?')[0];
+}
+function focalMediaType(key) {
+  const ext = (key.split('.').pop() || '').toLowerCase();
+  if (ext === 'png') return 'image/png';
+  if (ext === 'webp') return 'image/webp';
+  if (ext === 'gif') return 'image/gif';
+  return 'image/jpeg';
+}
+function fetchImageBase64(url) {
+  return new Promise((resolve, reject) => {
+    https.get(url, (res) => {
+      if (res.statusCode !== 200) { res.resume(); reject(new Error('img HTTP ' + res.statusCode)); return; }
+      const chunks = [];
+      res.on('data', (c) => chunks.push(c));
+      res.on('end', () => resolve(Buffer.concat(chunks).toString('base64')));
+    }).on('error', reject);
+  });
+}
+function callClaudeVision(base64, mediaType) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model: FOCAL_MODEL,
+      max_tokens: 100,
+      messages: [{ role: 'user', content: [
+        { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+        { type: 'text', text: FOCAL_PROMPT },
+      ]}],
+    });
+    const req = https.request({
+      hostname: 'api.anthropic.com', path: '/v1/messages', method: 'POST',
+      headers: {
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+        'content-length': Buffer.byteLength(body),
+      },
+    }, (res) => {
+      let data = '';
+      res.on('data', (c) => { data += c; });
+      res.on('end', () => {
+        if (res.statusCode >= 400) { reject(new Error(`Claude ${res.statusCode}: ${data.slice(0, 200)}`)); return; }
+        try { resolve(JSON.parse(data).content[0].text); }
+        catch (e) { reject(new Error('Claude parse error')); }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(60000, () => { req.destroy(); reject(new Error('Claude timeout')); });
+    req.write(body);
+    req.end();
+  });
+}
+async function computeFocal(featureImageUrl) {
+  // versión liviana (w800) en el mismo host de storage → sin redirect
+  const resized = featureImageUrl.replace('/content/images/', '/content/images/size/w800/');
+  const key = focalKey(featureImageUrl);
+  const b64 = await fetchImageBase64(resized);
+  const txt = (await callClaudeVision(b64, focalMediaType(key)))
+    .trim().replace(/^```json?/i, '').replace(/```$/, '').trim();
+  const o = JSON.parse(txt);
+  const fx = Math.round(Math.min(95, Math.max(5, o.fx)));
+  const fy = Math.round(Math.min(95, Math.max(5, o.fy)));
+  return `${fx}% ${fy}%`;
+}
+// Por-post: computa el focal de UNA imagen si todavía no lo tenemos.
+async function updateFocalForPost(featureImageUrl) {
+  if (!FOCAL_ENABLED) return;
+  const key = focalKey(featureImageUrl);
+  if (!key || focalMap[key]) return; // ya conocido (base o overlay)
+  const pos = await computeFocal(featureImageUrl);
+  focalMap[key] = pos;
+  console.log(`[focal] ${key} → ${pos}`);
+}
+// Arranque: cargar base commiteada, luego rellenar posts recientes que falten
+// (cubre lo publicado desde el último backfill; sobrevive a restarts de Render).
+async function bootstrapFocal() {
+  try {
+    focalMap = await new Promise((resolve, reject) => {
+      https.get('https://www.421.news/assets/data/feature-focal.json', (res) => {
+        let d = ''; res.on('data', (c) => { d += c; });
+        res.on('end', () => res.statusCode === 200 ? resolve(JSON.parse(d)) : reject(new Error('HTTP ' + res.statusCode)));
+      }).on('error', reject);
+    });
+    console.log(`[focal] Loaded ${Object.keys(focalMap).length} from theme asset`);
+  } catch (err) {
+    console.log(`[focal] Bootstrap failed (${err.message})`);
+  }
+  focalReady = true;
+  if (!FOCAL_ENABLED) { console.log('[focal] Disabled (no ANTHROPIC_API_KEY) — serving committed base only'); return; }
+  // Rellenar los últimos ~50 posts que no estén en la base (normalmente 0-pocos)
+  try {
+    const list = await new Promise((resolve, reject) => {
+      const u = `${GHOST_URL}/ghost/api/content/posts/?key=${GHOST_CONTENT_KEY}&limit=50&fields=feature_image&order=published_at%20desc`;
+      https.get(u, (res) => {
+        let d = ''; res.on('data', (c) => { d += c; });
+        res.on('end', () => res.statusCode === 200 ? resolve(JSON.parse(d)) : reject(new Error('HTTP ' + res.statusCode)));
+      }).on('error', reject);
+    });
+    let filled = 0;
+    for (const p of (list.posts || [])) {
+      const key = focalKey(p.feature_image);
+      if (!p.feature_image || !key || focalMap[key]) continue;
+      try { await updateFocalForPost(p.feature_image); filled++; }
+      catch (e) { console.log(`[focal] fill ${key}: ${e.message}`); }
+    }
+    console.log(`[focal] Recent fill: ${filled} new (model ${FOCAL_MODEL})`);
+  } catch (err) {
+    console.log(`[focal] Recent fill failed: ${err.message}`);
+  }
+}
+
 // --- Routes ---
 
 // =============================================================================
@@ -875,7 +1010,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.7.0', ga4: ga4Data ? 'ready' : 'not loaded', autoTranslate: AUTO_TRANSLATE_ENABLED });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.8.0', ga4: ga4Data ? 'ready' : 'not loaded', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -895,6 +1030,16 @@ app.post('/webhook/hreflang', async (req, res) => {
     if (post && post.id) {
       autoTranslatePost(post.id).catch(err => {
         console.error(`[translate] Error: ${err.message}`);
+      });
+    }
+  }
+
+  // Focal point for this post's feature image (fire-and-forget, only the new one)
+  if (FOCAL_ENABLED) {
+    const img = req.body?.post?.current?.feature_image;
+    if (img) {
+      updateFocalForPost(img).catch(err => {
+        console.error(`[focal] Publish error: ${err.message}`);
       });
     }
   }
@@ -947,6 +1092,19 @@ app.get('/api/related-posts.json', (req, res) => {
     return;
   }
   res.json(relatedPostsJSON);
+});
+
+// Focal points JSON (base + overlay). Theme fetches this first, falls back to asset.
+app.get('/api/feature-focal.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Cache-Control', 'public, max-age=60');
+  if (!focalReady) { res.status(503).json({ error: 'not ready yet' }); return; }
+  res.json(focalMap);
+});
+app.options('/api/feature-focal.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Methods', 'GET');
+  res.status(204).end();
 });
 
 // CORS preflight for the JSON endpoint
@@ -1615,6 +1773,9 @@ app.listen(PORT, () => {
 
   // Bootstrap related posts on startup
   bootstrapRelatedPosts();
+
+  // Bootstrap focal points on startup (load base + fill recent)
+  bootstrapFocal().catch(err => console.error(`[focal] Bootstrap error: ${err.message}`));
 
   // Run first hreflang cron check 60s after startup
   setTimeout(hreflangCron, 60 * 1000);
