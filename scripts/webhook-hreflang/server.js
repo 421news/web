@@ -642,7 +642,11 @@ async function bootstrapRelatedPosts() {
 // el último backfill (se computan por-post al publicar + se rellenan al arrancar).
 // El theme (focal-points.js) lo consume; si falla, usa el asset → sin regresión.
 // =============================================================================
-const FOCAL_ENABLED = !!ANTHROPIC_API_KEY;
+// Key propia para focal, independiente de ANTHROPIC_API_KEY (que gatea
+// auto-translate, apagado a propósito). Si solo está ANTHROPIC_API_KEY, también
+// sirve; pero seteando FOCAL_API_KEY se activa focal SIN tocar auto-translate.
+const FOCAL_API_KEY = process.env.FOCAL_API_KEY || ANTHROPIC_API_KEY;
+const FOCAL_ENABLED = !!FOCAL_API_KEY;
 const FOCAL_MODEL = process.env.FOCAL_MODEL || 'claude-sonnet-4-6';
 let focalMap = {};       // { "2026/06/foo.webp": "47% 55%" }
 let focalReady = false;
@@ -690,7 +694,7 @@ function callClaudeVision(base64, mediaType) {
     const req = https.request({
       hostname: 'api.anthropic.com', path: '/v1/messages', method: 'POST',
       headers: {
-        'x-api-key': ANTHROPIC_API_KEY,
+        'x-api-key': FOCAL_API_KEY,
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json',
         'content-length': Buffer.byteLength(body),
