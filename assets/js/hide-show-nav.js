@@ -22,22 +22,20 @@ document.addEventListener("DOMContentLoaded", function() {
     var isMobile = mobileQuery.matches;
     mobileQuery.addEventListener("change", function(e) { isMobile = e.matches; });
 
-    // Sticky pill transitoria: oculta arriba (no ensucia el hero), aparece mientras
-    // se scrollea y se esconde sola ~4s después de que el usuario para de scrollear.
+    // Sticky pill: oculta arriba; aparece UNA sola vez al hacer el primer scroll,
+    // se muestra ~4s y se esconde para siempre (no reaparece — es molesto).
     var STICKY_SHOW_AT = 200;
-    var stickyTimer = null;
-    function showStickyWhileScrolling() {
-        if (!mobileSubButton) return;
+    var stickyState = "idle"; // idle -> shown -> done
+    function showStickyOnce() {
+        if (!mobileSubButton || stickyState !== "idle") return;
+        stickyState = "shown";
         mobileSubButton.classList.remove("nav-hidden");
-        clearTimeout(stickyTimer);
-        stickyTimer = setTimeout(function() { mobileSubButton.classList.add("nav-hidden"); }, 4000);
+        setTimeout(function() {
+            mobileSubButton.classList.add("nav-hidden");
+            stickyState = "done";
+        }, 4000);
     }
-    function hideSticky() {
-        if (!mobileSubButton) return;
-        clearTimeout(stickyTimer);
-        mobileSubButton.classList.add("nav-hidden");
-    }
-    hideSticky(); // estado inicial: oculta
+    if (mobileSubButton) mobileSubButton.classList.add("nav-hidden"); // estado inicial: oculta
 
     // auto-hide nav scroll
     function handleScroll() {
@@ -60,9 +58,8 @@ document.addEventListener("DOMContentLoaded", function() {
             if (header) header.classList.remove("nav-hidden");
         }
 
-        // --- sticky pill: visible mientras se scrollea, oculta arriba ---
-        if (currentScrollY <= STICKY_SHOW_AT) hideSticky();
-        else showStickyWhileScrolling();
+        // --- sticky pill: aparece una sola vez al pasar el umbral ---
+        if (currentScrollY > STICKY_SHOW_AT) showStickyOnce();
 
         lastScrollY = currentScrollY;
     }
