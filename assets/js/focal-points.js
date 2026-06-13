@@ -19,12 +19,6 @@
   var WEBHOOK = 'https://webhook-hreflang.onrender.com/api/feature-focal.json';
   var ASSET = window.__FOCAL_SRC || '/assets/data/feature-focal.json';
   var SELECTOR = '.home-featured-bg, .pc__img, .featured-post-image img, .post-mhero-image img';
-  // En los heros full-bleed la nav fija (sólida) tapa los ~96px de arriba. Para
-  // que la barra cubra fondo y no el sujeto, bajamos el encuadre del hero: se le
-  // resta a la Y del focal (menos Y = sujeto más abajo, con aire bajo la nav).
-  // No afecta cards (la nav no las tapa). Tuneá HERO_Y_BIAS si hace falta.
-  var HERO_SEL = '.home-featured-bg, .featured-post-image img';
-  var HERO_Y_BIAS = 18;
   var map = null;
 
   // Misma normalización que el script de backfill: queda "2026/06/foo.webp"
@@ -41,14 +35,7 @@
     var key = focalKey(img.getAttribute('src') || img.currentSrc || '');
     if (!key) return;
     var pos = map[key];
-    if (pos) {
-      // En heros: bajar el sujeto para que la nav no lo tape (resta a la Y)
-      if (img.matches && img.matches(HERO_SEL)) {
-        var m = pos.match(/^(\d+)%\s+(\d+)%$/);
-        if (m) pos = m[1] + '% ' + Math.max(5, parseInt(m[2], 10) - HERO_Y_BIAS) + '%';
-      }
-      img.style.objectPosition = pos;
-    }
+    if (pos) img.style.objectPosition = pos;
     img.__focalDone = true; // marcar aunque no haya entry, para no reprocesar
   }
 

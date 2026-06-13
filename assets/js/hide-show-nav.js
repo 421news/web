@@ -2,6 +2,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const header = document.querySelector(".site-header");
     const mobileSubButton = document.querySelector(".hero-mobile-suscribite-button");
 
+    // Medir el alto REAL de la barra fija y exponerlo en --nav-h, para que los
+    // heros arranquen exactamente donde termina la nav (sin hueco ni tapar).
+    function setNavH() {
+        if (!header) return;
+        const h = header.getBoundingClientRect().height;
+        if (h) document.documentElement.style.setProperty("--nav-h", Math.round(h) + "px");
+    }
+    setNavH();
+    window.addEventListener("resize", setNavH, { passive: true });
+    window.addEventListener("load", setNavH);
+
     let lastScrollY = window.scrollY;
     let scrollThreshold = 50;
     let isScrolling = false;
