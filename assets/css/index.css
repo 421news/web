@@ -3240,17 +3240,18 @@ footer {
 
 @media (max-width: 900px) {
   .featured-post-header {
+    /* El header entra EXACTO en el viewport: imagen flexible (fila minmax 0 1fr,
+       se achica lo que haga falta) + texto natural abajo → los 3 botones siempre
+       quedan visibles. minmax(0,1fr)+min-height:0 evita el bug de overflow. */
+    display: grid;
     grid-template-columns: 1fr;
-    display: flex;
-    flex-direction: column;
-    /* Se adapta al viewport: imagen + texto + los 3 botones entran sin cortarse */
-    min-height: calc(100dvh - var(--nav-h));
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: calc(100dvh - var(--nav-h));
   }
   .featured-post-image {
-    order: -1; /* image on top in mobile */
-    flex: 1 1 auto;       /* la imagen se achica/agranda para dejar lugar al texto+botones */
+    grid-row: 1;          /* imagen arriba (el DOM la tiene después del texto) */
     aspect-ratio: auto;   /* anula el 16/10 fijo que empujaba los botones fuera */
-    min-height: 30vh;
+    min-height: 0;        /* clave: deja que la fila 1fr achique la imagen */
     height: auto;
   }
   .featured-post-image img {
@@ -3259,13 +3260,16 @@ footer {
     object-fit: cover;
   }
   .featured-post-text {
-    flex: 0 0 auto;       /* altura natural; los botones quedan siempre visibles */
-    padding: 1.25rem 1.25rem 1.5rem;
+    grid-row: 2;          /* texto + botones abajo, altura natural */
+    justify-content: flex-start;
+    padding: 1.1rem 1.25rem 1.4rem;
   }
-  .featured-post-title { font-size: 2rem; }
-  .featured-post-byline { font-size: 0.85rem; }
+  .featured-post-footer { margin-top: 0.9rem; } /* anula el margin-top:auto del desktop */
+  .featured-post-title { font-size: 1.9rem; }
+  .featured-post-byline { font-size: 0.85rem; margin-bottom: 1rem; }
   .featured-post-excerpt {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
+    margin-bottom: 0;
     display: -webkit-box;
     -webkit-line-clamp: 3;   /* un excerpt largo no empuja los botones fuera de pantalla */
     -webkit-box-orient: vertical;
