@@ -3074,15 +3074,16 @@ footer {
 .featured-post-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* Arranca debajo de la nav fija para que la barra no tape la imagen.
-     Cap al viewport (menos la nav): el pill footer queda above the fold. */
-  margin-top: var(--nav-h);
-  min-height: clamp(576px, calc(100vh - var(--nav-h)), 996px);
+  /* Imagen full-bleed hasta arriba (la nav flota transparente encima). El texto
+     compensa con padding-top para no quedar bajo el logo/menú. */
+  min-height: clamp(576px, 100vh, 996px);
   background: var(--crema);
   color: var(--negro);
+  margin-top: 0;
 }
 .featured-post-text {
-  padding: clamp(2.5rem, 3.5vw, 5rem) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
+  /* offset = alto de la nav, para que el título no choque con el logo/menú */
+  padding: calc(var(--nav-h) + clamp(2rem, 3vw, 3.5rem)) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3277,10 +3278,9 @@ footer {
 .home-featured-post {
   position: relative;
   width: 100%;
-  /* Arranca debajo de la nav fija para que la barra no tape el enfoque de la foto */
-  margin-top: var(--nav-h);
-  height: calc(100vh - var(--nav-h)); /* fallback */
-  height: calc(100dvh - var(--nav-h)); /* dynamic viewport: ignora la barra de URL en mobile */
+  /* Full-bleed hasta arriba; la nav flota transparente encima (sin franja) */
+  height: 100vh; /* fallback */
+  height: 100dvh; /* dynamic viewport: ignora la barra de URL en mobile */
   min-height: 540px;
   overflow: hidden;
   background: var(--negro);
@@ -3451,8 +3451,6 @@ footer {
 .post-mhero {
   background: var(--negro);
   color: var(--crema);
-  /* Offset bajo la nav fija (banda negra continua con la barra) */
-  padding-top: var(--nav-h);
 }
 .post-mhero-image img {
   width: 100%;

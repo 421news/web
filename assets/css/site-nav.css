@@ -22,6 +22,31 @@ body.light-mode .site-header {
     border-bottom-color: rgba(26, 26, 26, 0.1);
 }
 
+/* --- Nav flotante sobre el hero ---
+   En páginas con hero a sangre (home / posts), al tope de la página la nav es
+   transparente con un degradado de legibilidad → la imagen llega hasta arriba
+   SIN franja negra y SIN que un bloque opaco tape el enfoque. Apenas se scrollea
+   (JS quita .nav-atop) vuelve a ser sólida. El degradado hace fade suave. */
+.site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+body:has(.home-featured-post) .site-header.nav-atop,
+body:has(.featured-post-header) .site-header.nav-atop {
+    background-color: transparent;
+    border-bottom-color: transparent;
+}
+body:has(.home-featured-post) .site-header.nav-atop::before,
+body:has(.featured-post-header) .site-header.nav-atop::before {
+    opacity: 1;
+}
+
 /* --- Desktop nav layout --- */
 .site-nav {
     display: flex;
