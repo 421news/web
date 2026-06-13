@@ -117,7 +117,7 @@
 <script>
 (function() {
   var COOLDOWN_DAYS = 3;
-  var SCROLL_TRIGGER = 0.35;
+  var SCROLL_TRIGGER_PX = 500; // dispara apenas el lector hace el primer/segundo scroll de la nota
   var KEY = 'sub_popup_dismissed';
 
   var dismissed = localStorage.getItem(KEY);
@@ -165,9 +165,7 @@
       var triggered = false;
       function onScroll() {
         if (triggered) return;
-        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        if (docHeight <= 0) return;
-        if (window.scrollY / docHeight >= SCROLL_TRIGGER) {
+        if (window.scrollY >= SCROLL_TRIGGER_PX) {
           triggered = true;
           window.removeEventListener('scroll', onScroll);
           var popup = document.getElementById('sub-popup');
