@@ -3074,16 +3074,18 @@ footer {
 .featured-post-header {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* Imagen full-bleed hasta arriba (la nav flota transparente encima). El texto
-     compensa con padding-top para no quedar bajo el logo/menú. */
+  /* Hero llega hasta arriba (pasa bajo el nav fijo) — sin franja negra al
+     scrollear. El texto compensa con padding-top para que el nav no lo pise.
+     Cap al viewport: el pill footer (Suscribite/EN/Share) queda above the fold.
+     Si el contenido necesita más alto, crece (no hay max-height a propósito) */
   min-height: clamp(576px, 100vh, 996px);
   background: var(--crema);
   color: var(--negro);
   margin-top: 0;
 }
 .featured-post-text {
-  /* offset = alto de la nav, para que el título no choque con el logo/menú */
-  padding: calc(var(--nav-h) + clamp(2rem, 3vw, 3.5rem)) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
+  /* 96px extra arriba = altura del nav fijo (el hero pasa por debajo) */
+  padding: calc(96px + clamp(2.5rem, 3.5vw, 5rem)) clamp(3rem, 4vw, 6rem) clamp(2rem, 3vw, 4rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3278,7 +3280,6 @@ footer {
 .home-featured-post {
   position: relative;
   width: 100%;
-  /* Full-bleed hasta arriba; la nav flota transparente encima (sin franja) */
   height: 100vh; /* fallback */
   height: 100dvh; /* dynamic viewport: ignora la barra de URL en mobile */
   min-height: 540px;

@@ -4,16 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let lastScrollY = window.scrollY;
     let scrollThreshold = 50;
-    let atopThreshold = 20;
     let isScrolling = false;
-
-    // Nav transparente sobre el hero al tope de la página (sólida al scrollear)
-    function updateAtop() {
-        if (!header) return;
-        if (window.scrollY <= atopThreshold) header.classList.add("nav-atop");
-        else header.classList.remove("nav-atop");
-    }
-    updateAtop();
 
     // Use matchMedia instead of window.innerWidth to avoid reflow on every scroll
     var mobileQuery = window.matchMedia("(max-width: 768px)");
@@ -23,9 +14,6 @@ document.addEventListener("DOMContentLoaded", function() {
     // auto-hide nav scroll
     function handleScroll() {
         const currentScrollY = window.scrollY;
-
-        // transparente arriba / sólida apenas se scrollea (independiente del guard de 3px)
-        updateAtop();
 
         // only process scroll if the user moved more than a few pxs
         if (Math.abs(currentScrollY - lastScrollY) < 3) return;

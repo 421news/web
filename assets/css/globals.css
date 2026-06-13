@@ -6,7 +6,6 @@
   --verde: #17a583;
   --radius: 8px;
   --border-width: 2px;
-  --nav-h: 96px; /* alto real de la nav fija (logo 66 + padding); mobile abajo */
   /* Manual specifies -45° (verde→amarillo, top-left to bottom-right); CSS equivalent: 135deg */
   --gradient-main: linear-gradient(135deg, var(--verde), var(--amarillo));
 
@@ -22,10 +21,6 @@
   --fs-2xl: 1.5rem;    /* 24px */
   --fs-3xl: 2rem;      /* 32px */
   --fs-4xl: 3rem;      /* 48px */
-}
-
-@media (max-width: 767px) {
-  :root { --nav-h: 80px; } /* nav mobile más baja */
 }
 
 * {
