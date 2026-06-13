@@ -58,43 +58,31 @@
 .hero-mobile-suscribite-button {
   display: none; /* se muestra como flex en mobile (≤991px) */
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  width: 100%;
-  /* glass integrada con el sistema de diseño */
-  background: rgba(20, 20, 20, 0.74);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid rgba(234, 230, 225, 0.14);
-  color: var(--crema);
-  padding: 0.6rem 1rem;
-  text-decoration: none;
-  transition: transform 0.2s ease;
+  justify-content: center;
+  /* pill flotante de marca (transitoria: aparece al scrollear) */
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
   z-index: 10;
-}
-.hmsb-text {
+  background: var(--gradient-main);
+  color: var(--negro);
   font-weight: 800;
   font-style: italic;
   font-size: var(--fs-body);
   letter-spacing: -0.01em;
-}
-.hmsb-go {
-  flex-shrink: 0;
-  background: var(--gradient-main);
-  color: var(--negro);
-  font-weight: 800;
-  font-size: var(--fs-sm);
-  letter-spacing: 0.04em;
-  padding: 0.55rem 1.15rem;
+  text-align: center;
+  text-decoration: none;
+  padding: 0.85rem 1.2rem;
   border-radius: 999px;
-  white-space: nowrap;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 .hero-mobile-suscribite-button.nav-hidden {
-  transform: translateY(100px);
+  /* se esconde deslizándose fuera de pantalla (full alto + gap + sombra) */
+  transform: translateY(calc(100% + 24px));
+  opacity: 0;
+  pointer-events: none;
 }
 
 

@@ -22,6 +22,23 @@ document.addEventListener("DOMContentLoaded", function() {
     var isMobile = mobileQuery.matches;
     mobileQuery.addEventListener("change", function(e) { isMobile = e.matches; });
 
+    // Sticky pill transitoria: oculta arriba (no ensucia el hero), aparece mientras
+    // se scrollea y se esconde sola ~4s después de que el usuario para de scrollear.
+    var STICKY_SHOW_AT = 200;
+    var stickyTimer = null;
+    function showStickyWhileScrolling() {
+        if (!mobileSubButton) return;
+        mobileSubButton.classList.remove("nav-hidden");
+        clearTimeout(stickyTimer);
+        stickyTimer = setTimeout(function() { mobileSubButton.classList.add("nav-hidden"); }, 4000);
+    }
+    function hideSticky() {
+        if (!mobileSubButton) return;
+        clearTimeout(stickyTimer);
+        mobileSubButton.classList.add("nav-hidden");
+    }
+    hideSticky(); // estado inicial: oculta
+
     // auto-hide nav scroll
     function handleScroll() {
         const currentScrollY = window.scrollY;
@@ -33,20 +50,19 @@ document.addEventListener("DOMContentLoaded", function() {
         const scrollingDown = currentScrollY > lastScrollY;
         const scrollingUp = currentScrollY < lastScrollY;
 
-        // hide nav when scrolling down past threshold
+        // --- nav fija: se esconde al bajar, vuelve al subir / arriba ---
         if (scrollingDown && currentScrollY > scrollThreshold) {
             if (header) header.classList.add("nav-hidden");
-            if (mobileSubButton) mobileSubButton.classList.add("nav-hidden");
         }
-
-        // show nav when scrolling up (desktop only) or at top of page
         if (currentScrollY <= scrollThreshold) {
             if (header) header.classList.remove("nav-hidden");
-            if (mobileSubButton) mobileSubButton.classList.remove("nav-hidden");
         } else if (scrollingUp && !isMobile) {
             if (header) header.classList.remove("nav-hidden");
-            if (mobileSubButton) mobileSubButton.classList.remove("nav-hidden");
         }
+
+        // --- sticky pill: visible mientras se scrollea, oculta arriba ---
+        if (currentScrollY <= STICKY_SHOW_AT) hideSticky();
+        else showStickyWhileScrolling();
 
         lastScrollY = currentScrollY;
     }
