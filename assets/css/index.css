@@ -3241,13 +3241,17 @@ footer {
 @media (max-width: 900px) {
   .featured-post-header {
     grid-template-columns: 1fr;
-    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    /* Se adapta al viewport: imagen + texto + los 3 botones entran sin cortarse */
+    min-height: calc(100dvh - var(--nav-h));
   }
   .featured-post-image {
-    aspect-ratio: 16 / 10;     /* en mobile fijamos un ratio sensato */
-    min-height: 0;
-    height: auto;
     order: -1; /* image on top in mobile */
+    flex: 1 1 auto;       /* la imagen se achica/agranda para dejar lugar al texto+botones */
+    aspect-ratio: auto;   /* anula el 16/10 fijo que empujaba los botones fuera */
+    min-height: 30vh;
+    height: auto;
   }
   .featured-post-image img {
     width: 100%;
@@ -3255,11 +3259,18 @@ footer {
     object-fit: cover;
   }
   .featured-post-text {
-    padding: 1.5rem 1.25rem;
+    flex: 0 0 auto;       /* altura natural; los botones quedan siempre visibles */
+    padding: 1.25rem 1.25rem 1.5rem;
   }
   .featured-post-title { font-size: 2rem; }
   .featured-post-byline { font-size: 0.85rem; }
-  .featured-post-excerpt { font-size: 0.95rem; }
+  .featured-post-excerpt {
+    font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;   /* un excerpt largo no empuja los botones fuera de pantalla */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
   .featured-post-pill-item,
   .featured-post-pill-translation .btn-translate {
     padding: 0.6rem 0.65rem;
