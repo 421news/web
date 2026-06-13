@@ -3240,18 +3240,19 @@ footer {
 
 @media (max-width: 900px) {
   .featured-post-header {
-    /* El header entra EXACTO en el viewport: imagen flexible (fila minmax 0 1fr,
-       se achica lo que haga falta) + texto natural abajo → los 3 botones siempre
-       quedan visibles. minmax(0,1fr)+min-height:0 evita el bug de overflow. */
-    display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(0, 1fr) auto;
-    min-height: calc(100dvh - var(--nav-h));
+    /* Alto natural (nada se corta). La imagen tiene altura ACOTADA (abajo) así
+       no se come la pantalla y el texto completo + los 3 botones entran. */
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
   }
   .featured-post-image {
-    grid-row: 1;          /* imagen arriba (el DOM la tiene después del texto) */
-    aspect-ratio: auto;   /* anula el 16/10 fijo que empujaba los botones fuera */
-    min-height: 0;        /* clave: deja que la fila 1fr achique la imagen */
+    order: -1;            /* imagen arriba (el DOM la tiene después del texto) */
+    flex: 0 0 auto;       /* tamaño definido por aspect-ratio/max-height, sin estirar */
+    aspect-ratio: 16 / 10;
+    max-height: 42vh;     /* clave: no domina en pantallas altas → deja lugar a texto+botones */
+    min-height: 0;
     height: auto;
   }
   .featured-post-image img {
@@ -3260,7 +3261,7 @@ footer {
     object-fit: cover;
   }
   .featured-post-text {
-    grid-row: 2;          /* texto + botones abajo, altura natural */
+    flex: 0 0 auto;       /* texto + botones abajo, altura natural */
     justify-content: flex-start;
     padding: 1.1rem 1.25rem 1.4rem;
   }
