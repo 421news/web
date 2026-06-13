@@ -3246,7 +3246,7 @@ footer {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: minmax(0, 1fr) auto;
-    height: calc(100dvh - var(--nav-h));
+    min-height: calc(100dvh - var(--nav-h));
   }
   .featured-post-image {
     grid-row: 1;          /* imagen arriba (el DOM la tiene después del texto) */
@@ -3270,10 +3270,7 @@ footer {
   .featured-post-excerpt {
     font-size: 0.92rem;
     margin-bottom: 0;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;   /* un excerpt largo no empuja los botones fuera de pantalla */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    /* sin line-clamp: la bajada va completa; la imagen se achica para dar lugar */
   }
   .featured-post-pill-item,
   .featured-post-pill-translation .btn-translate {
