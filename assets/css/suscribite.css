@@ -453,6 +453,34 @@
 .light-mode .form-note {
   color: var(--negro);
 }
+.light-mode .sub-faq-item {
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+.light-mode .sub-faq-item summary {
+  color: var(--negro);
+}
+.light-mode .sub-faq-item p {
+  color: var(--negro);
+}
+.light-mode .sub-faq-item p strong {
+  color: var(--negro);
+}
+.light-mode .sub-faq-item p a {
+  color: var(--verde);
+}
+.light-mode .tier {
+  background: rgba(0, 0, 0, 0.025);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+.light-mode .tier.featured {
+  background: rgba(23, 165, 131, 0.04);
+}
+.light-mode .tier-name,
+.light-mode .tier-tagline,
+.light-mode .tier-price-period,
+.light-mode .tier-fine {
+  color: var(--negro);
+}
 
 /* ===== ACCOUNT PAGE ===== */
 .account-info {
