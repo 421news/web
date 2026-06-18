@@ -818,9 +818,9 @@ body {
 .share-icon-header {
   width: 2rem;
   height: 2rem;
-  color: var(--negro);
+  color: var(--crema);
 }
-.light-mode .share-icon-header { color: var(--crema); }
+.light-mode .share-icon-header { color: var(--negro); }
 
 .share-icon:hover {
   color: var(--amarillo);
@@ -2946,8 +2946,8 @@ footer {
   cursor: pointer;
   padding: 6px 12px;
 }
-.c421-cancel-btn:hover, .c421-cancel-edit:hover { opacity: 0.8; }
-.light-mode .c421-cancel-btn, .light-mode .c421-cancel-edit { color: var(--negro); }
+.c421-btn-cancel:hover, .c421-btn-cancel-edit:hover { opacity: 0.8; }
+.light-mode .c421-btn-cancel, .light-mode .c421-btn-cancel-edit { color: var(--negro); }
 
 .c421-btn-submit, .c421-btn-save-edit {
   background: var(--gradient-main);
@@ -2961,8 +2961,8 @@ footer {
   cursor: pointer;
   transition: opacity 0.2s;
 }
-.c421-submit-btn:hover, .c421-save-edit:hover { opacity: 0.85; }
-.c421-submit-btn:disabled, .c421-save-edit:disabled { opacity: 0.5; cursor: default; }
+.c421-btn-submit:hover, .c421-btn-save-edit:hover { opacity: 0.85; }
+.c421-btn-submit:disabled, .c421-btn-save-edit:disabled { opacity: 0.5; cursor: default; }
 
 /* Avatar */
 .c421-avatar {
