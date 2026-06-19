@@ -13,6 +13,8 @@ const GHOST_URL = process.env.GHOST_URL; // e.g. https://421bn.ghost.io
 const PORT = process.env.PORT || 10000;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const AUTO_TRANSLATE_ENABLED = !!ANTHROPIC_API_KEY;
+const MP_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
+const REVENUE_ENABLED = !!(MP_TOKEN && GHOST_ADMIN_KEY);
 
 // --- Ghost API helpers ---
 
@@ -1014,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.0.0', ga4: ga4Data ? 'ready' : 'not loaded', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.0', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1833,6 +1835,173 @@ setInterval(() => {
   });
 }, 14 * 60 * 1000); // every 14 minutes
 
+// ============================================================
+// REVENUE & SUBSCRIBERS (MercadoPago + Ghost/Stripe → revenue-data.json)
+// Mirrors suscriptores/reporte-suscriptores.js. Weekly snapshot appended to
+// history (deduped by ISO week). History seeded from the theme asset on boot.
+// ============================================================
+
+let revenueData = null;
+let revenueLastUpdate = null;
+let revenueLastError = null;
+
+function httpsGetJson(hostname, path, headers) {
+  return new Promise((resolve, reject) => {
+    https.get({ hostname, path, headers: headers || {} }, (res) => {
+      let d = '';
+      res.on('data', (c) => { d += c; });
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, json: JSON.parse(d) }); }
+        catch (e) { reject(new Error(`Bad JSON from ${hostname}${path}: ${d.slice(0, 150)}`)); }
+      });
+    }).on('error', reject);
+  });
+}
+
+// MercadoPago: paginate /preapproval/search, dedup by id, split into 4 tiers
+async function getMPSnapshot() {
+  const seen = new Set();
+  const active = [];
+  let offset = 0, hasMore = true;
+  while (hasMore) {
+    const res = await httpsGetJson('api.mercadopago.com',
+      '/preapproval/search?status=authorized&limit=100&offset=' + offset,
+      { Authorization: 'Bearer ' + MP_TOKEN });
+    const results = (res.json && res.json.results) || [];
+    for (const s of results) {
+      if (s.status === 'authorized' && !seen.has(s.id)) { seen.add(s.id); active.push(s); }
+    }
+    offset += results.length;
+    hasMore = results.length === 100;
+    if (offset > 5000) break; // safety
+  }
+  let m5 = 0, a50 = 0, m10 = 0, a100 = 0, revM5 = 0, revA50 = 0, revM10 = 0, revA100 = 0;
+  for (const s of active) {
+    const ar = s.auto_recurring;
+    if (!ar) continue;
+    const amt = ar.transaction_amount;
+    if (ar.frequency === 1 && ar.frequency_type === 'months') {
+      if (amt >= 10000) { m10++; revM10 += amt; } else { m5++; revM5 += amt; }
+    } else if (ar.frequency === 12 && ar.frequency_type === 'months') {
+      if (amt >= 100000) { a100++; revA100 += amt; } else { a50++; revA50 += amt; }
+    }
+  }
+  return { total: active.length, m5, a50, m10, a100, revMensual: revM5 + revM10, revAnual: revA50 + revA100 };
+}
+
+// Ghost member counts + active Stripe subscriptions
+async function getGhostRevenue() {
+  const free = await ghostRequest('GET', '/ghost/api/admin/members/?filter=status:free&limit=1');
+  const comped = await ghostRequest('GET', '/ghost/api/admin/members/?filter=status:comped&limit=1');
+  const paid = await ghostRequest('GET', '/ghost/api/admin/members/?filter=status:paid&limit=1');
+  const f = free.meta.pagination.total, c = comped.meta.pagination.total, p = paid.meta.pagination.total;
+
+  const paidAll = await ghostRequest('GET', '/ghost/api/admin/members/?filter=status:paid&limit=all&include=subscriptions');
+  const members = paidAll.members || [];
+  let stripeMonthly = 0, stripeAnnual = 0, stripeRevM = 0, stripeRevA = 0;
+  for (const m of members) {
+    for (const s of (m.subscriptions || [])) {
+      if (s.status !== 'active' && s.status !== 'trialing') continue;
+      const amt = s.price && s.price.amount ? s.price.amount / 100 : 0;
+      const interval = (s.price && s.price.interval) || s.cadence || '';
+      if (interval === 'month' || interval === 'monthly') { stripeMonthly++; stripeRevM += amt; }
+      else if (interval === 'year' || interval === 'yearly') { stripeAnnual++; stripeRevA += amt; }
+      else { if (amt >= 50) { stripeAnnual++; stripeRevA += amt; } else if (amt > 0) { stripeMonthly++; stripeRevM += amt; } }
+    }
+  }
+  return { total: f + c + p, free: f, comped: c, paid: p, stripeMonthly, stripeAnnual, stripeRevM, stripeRevA };
+}
+
+// Live blue rate (bluelytics), fallback to env/default
+async function getBlueRate() {
+  try {
+    const res = await httpsGetJson('api.bluelytics.com.ar', '/v2/latest', {});
+    const v = res.json && res.json.blue && res.json.blue.value_avg;
+    if (v && v > 0) return Math.round(v);
+  } catch (e) { /* fall through */ }
+  return parseInt(process.env.USD_BLUE_RATE, 10) || 1395;
+}
+
+function isoWeekKey(d) {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const week = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
+  return date.getUTCFullYear() + '-W' + String(week).padStart(2, '0');
+}
+function parseDDMMYY(s) { const p = s.split('-').map(Number); return new Date(2000 + p[2], p[1] - 1, p[0]); }
+
+async function refreshRevenueData() {
+  if (!REVENUE_ENABLED) throw new Error('Revenue disabled (missing MERCADOPAGO_ACCESS_TOKEN)');
+  const start = Date.now();
+  const [ghost, mp, blue] = await Promise.all([getGhostRevenue(), getMPSnapshot(), getBlueRate()]);
+
+  const totalPagos = mp.m5 + mp.a50 + mp.m10 + mp.a100 + ghost.stripeMonthly + ghost.stripeAnnual;
+  const ratio = ghost.total ? parseFloat((totalPagos / ghost.total * 100).toFixed(2)) : 0;
+  const revUsdM = Math.round(mp.revMensual / blue) + Math.round(ghost.stripeRevM);
+  const revUsdA = Math.round(mp.revAnual / blue) + Math.round(ghost.stripeRevA);
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: '2-digit' }).replace(/\//g, '-');
+
+  const snapshot = {
+    date: dateStr, total: ghost.total, pagos: totalPagos, ratio,
+    mp_m5: mp.m5, mp_a50: mp.a50, mp_m10: mp.m10, mp_a100: mp.a100,
+    stripe_m: ghost.stripeMonthly, stripe_a: ghost.stripeAnnual,
+    rev_mens_ars: Math.round(mp.revMensual), rev_anual_ars: Math.round(mp.revAnual),
+    stripe_rev_m: parseFloat(ghost.stripeRevM.toFixed(2)), stripe_rev_a: parseFloat(ghost.stripeRevA.toFixed(2)),
+    rev_usd_m: revUsdM, rev_usd_a: revUsdA, blue_ref: blue
+  };
+
+  // Merge into history, deduped by ISO week (replace same-week, else append)
+  const history = (revenueData && Array.isArray(revenueData.history)) ? revenueData.history.slice() : [];
+  const wk = isoWeekKey(now);
+  if (history.length && isoWeekKey(parseDDMMYY(history[history.length - 1].date)) === wk) {
+    history[history.length - 1] = snapshot;
+  } else {
+    history.push(snapshot);
+  }
+
+  revenueData = {
+    generated: now.toISOString().split('T')[0],
+    source: 'live (MercadoPago + Ghost/Stripe)',
+    blue_ref: blue,
+    current: snapshot,
+    history
+  };
+  revenueLastUpdate = new Date().toISOString();
+  console.log(`[revenue] Refresh done in ${((Date.now() - start) / 1000).toFixed(1)}s: pagos=${totalPagos}, total=${ghost.total}, MRR USD=${revUsdM}, blue=${blue}, weeks=${history.length}`);
+}
+
+app.get('/api/revenue-data.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Cache-Control', 'public, max-age=300');
+  if (!revenueData) { res.status(503).json({ error: 'Revenue data not ready yet' }); return; }
+  res.json(revenueData);
+});
+
+app.post('/api/revenue-refresh', async (req, res) => {
+  try {
+    await refreshRevenueData();
+    res.json({ ok: true, pagos: revenueData.current.pagos, total: revenueData.current.total, weeks: revenueData.history.length, blue: revenueData.blue_ref });
+  } catch (e) {
+    revenueLastError = e.message;
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+function scheduleRevenueCron() {
+  // Check every 6h; refresh if it's been >= 7 days since the last one (weekly)
+  setInterval(() => {
+    if (revenueLastUpdate && (Date.now() - new Date(revenueLastUpdate).getTime()) < 7 * 24 * 3600 * 1000) return;
+    refreshRevenueData().then(() => { revenueLastError = null; }).catch(err => {
+      revenueLastError = err.message;
+      console.error('[revenue-cron] Refresh error:', err.message);
+    });
+  }, 6 * 60 * 60 * 1000);
+}
+
 // --- Start ---
 
 app.listen(PORT, () => {
@@ -1885,5 +2054,28 @@ app.listen(PORT, () => {
     scheduleGA4Cron();
   } else {
     console.log('[ga4] GA4 credentials not set, GA4 endpoint disabled');
+  }
+
+  // Bootstrap revenue data: seed history from theme asset, then refresh live
+  if (REVENUE_ENABLED) {
+    (async () => {
+      try {
+        const existing = await httpsGetJson('www.421.news', '/assets/data/revenue-data.json', {});
+        if (existing.status === 200 && existing.json && Array.isArray(existing.json.history)) {
+          revenueData = existing.json;
+          console.log(`[revenue] Bootstrap loaded from theme (${existing.json.history.length} weeks)`);
+        }
+      } catch (e) {
+        console.log(`[revenue] Bootstrap from theme failed: ${e.message}`);
+      }
+      // Refresh live snapshot 45s after startup
+      setTimeout(() => {
+        refreshRevenueData().then(() => { revenueLastError = null; })
+          .catch(err => { revenueLastError = err.message; console.error('[revenue] Initial refresh error:', err.message); });
+      }, 45000);
+    })();
+    scheduleRevenueCron();
+  } else {
+    console.log('[revenue] Disabled (set MERCADOPAGO_ACCESS_TOKEN to enable)');
   }
 });
