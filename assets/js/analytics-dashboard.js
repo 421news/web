@@ -3,8 +3,34 @@
 
   var chartMonthly = null;
   var chartChannel = null;
+  var chartDevice = null;
   var DATA = null;
   var ALL_MONTHS = [];
+  var EVENT_MAP = {};
+
+  // Subscribe CTA entry points (GA4 event → label)
+  var CTA_EVENTS = [
+    { ev: 'popup_cta_click', label: 'Popup' },
+    { ev: 'sticky_subscribe_click', label: 'Barra fija (mobile)' },
+    { ev: 'nav_subscribe_click', label: 'Nav' },
+    { ev: 'post_subscribe_click', label: 'Post (header)' },
+    { ev: 'revista_wizard_cta_click', label: 'Revista' }
+  ];
+  // Conversion funnel (ordered steps)
+  var FUNNEL_STEPS = [
+    { ev: 'sign_up_intent', label: 'Intención de registro' },
+    { ev: 'begin_checkout', label: 'Checkout iniciado' },
+    { ev: 'payment_method_selected', label: 'Método de pago' },
+    { ev: 'purchase_initiated', label: 'Compra iniciada' },
+    { ev: 'sign_up', label: 'Registro completado' }
+  ];
+  // Device category → { label, color }
+  var DEVICE_META = {
+    'mobile': { label: 'Mobile', color: '#17a583' },
+    'desktop': { label: 'Desktop', color: '#fcd221' },
+    'tablet': { label: 'Tablet', color: '#e07c24' },
+    'smart tv': { label: 'Smart TV', color: '#6c5ce7' }
+  };
 
   // Central state
   var state = {
@@ -121,6 +147,16 @@
     return { s: s, u: u };
   }
 
+  function eventTotal(name) {
+    var e = EVENT_MAP[name];
+    if (!e) return 0;
+    var from = ALL_MONTHS[state.monthFrom];
+    var to = ALL_MONTHS[state.monthTo];
+    var t = 0;
+    for (var ym in e.m) { if (ym >= from && ym <= to) t += e.m[ym].c; }
+    return t;
+  }
+
   function sumMonthlyRange(key) {
     var total = 0;
     for (var i = state.monthFrom; i <= state.monthTo; i++) total += DATA.monthly[i][key];
@@ -168,6 +204,12 @@
     document.getElementById('analytics-range').textContent =
       DATA.range.start + ' al ' + DATA.range.end;
     document.getElementById('analytics-generated').textContent = DATA.generated;
+
+    // Build event lookup; hide Part-2 sections if their data isn't in the payload yet
+    EVENT_MAP = {};
+    (DATA.events || []).forEach(function(e) { EVENT_MAP[e.name] = e; });
+    hideIfMissing('conversions-section', DATA.events);
+    hideIfMissing('geo-section', DATA.devices || DATA.geo);
 
     renderMonthFilters();
     setupGranularity();
@@ -220,7 +262,15 @@
     renderMonthlyTable();
     renderChannelDonut();
     renderChannelLegend();
+    renderConversions();
+    renderDevices();
+    renderGeo();
     renderContentTable();
+  }
+
+  function hideIfMissing(sectionId, data) {
+    var el = document.getElementById(sectionId);
+    if (el && (!data || (data.length === 0))) el.style.display = 'none';
   }
 
   // === Cards ===
@@ -469,6 +519,120 @@
           '<div class="analytics-channel-name">' + c.name + '</div>' +
           '<div class="analytics-channel-stats">' + fmt(c.s) + ' sesiones \u00b7 ' + fmt(c.u) + ' usuarios \u00b7 ' + pct + '%</div>' +
         '</div></div>';
+    }).join('');
+  }
+
+  // === Conversions: CTA breakdown + funnel ===
+  function renderConversions() {
+    if (!DATA.events) return;
+
+    // CTA entry points
+    var ctas = CTA_EVENTS.map(function(c) { return { label: c.label, n: eventTotal(c.ev) }; })
+      .sort(function(a, b) { return b.n - a.n; });
+    var ctaTotal = ctas.reduce(function(s, c) { return s + c.n; }, 0);
+    var maxCta = ctas.length ? Math.max.apply(null, ctas.map(function(c) { return c.n; })) : 0;
+    document.getElementById('cta-breakdown').innerHTML = ctaTotal === 0
+      ? '<div class="analytics-empty">Sin clicks en el rango</div>'
+      : ctas.map(function(c) {
+          var pct = ctaTotal ? ((c.n / ctaTotal) * 100).toFixed(1) : '0.0';
+          var w = maxCta ? Math.round((c.n / maxCta) * 100) : 0;
+          return '<div class="analytics-cta-item">' +
+            '<div class="analytics-cta-row"><span class="analytics-cta-label">' + c.label + '</span>' +
+            '<span class="analytics-cta-val">' + fmt(c.n) + ' <span class="analytics-cta-pct">' + pct + '%</span></span></div>' +
+            '<div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:' + w + '%"></div></div>' +
+            '</div>';
+        }).join('');
+
+    // Funnel steps (count + conversion vs previous step)
+    var steps = FUNNEL_STEPS.map(function(s) { return { label: s.label, n: eventTotal(s.ev) }; });
+    var first = steps.length ? steps[0].n : 0;
+    document.getElementById('funnel-steps').innerHTML = steps.map(function(s, i) {
+      var w = first ? Math.round((s.n / first) * 100) : 0;
+      var stepPct = '';
+      if (i > 0 && steps[i - 1].n > 0) {
+        stepPct = '<span class="analytics-funnel-step-pct">' + ((s.n / steps[i - 1].n) * 100).toFixed(0) + '%</span>';
+      }
+      return '<div class="analytics-funnel-step">' +
+        '<div class="analytics-funnel-step-head"><span class="analytics-funnel-step-label">' + s.label + '</span>' +
+        '<span class="analytics-funnel-step-n">' + fmt(s.n) + stepPct + '</span></div>' +
+        '<div class="analytics-funnel-bar"><div class="analytics-funnel-bar-fill" style="width:' + Math.max(w, 1) + '%"></div></div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // === Devices donut ===
+  function renderDevices() {
+    if (!DATA.devices) return;
+    var data = DATA.devices.map(function(d) {
+      var agg = aggregateChannel(d);
+      var meta = DEVICE_META[d.name] || { label: d.name, color: '#888' };
+      return { name: meta.label, color: meta.color, s: agg.s, u: agg.u };
+    }).filter(function(d) { return d.s > 0; });
+    var total = data.reduce(function(s, d) { return s + d.s; }, 0);
+
+    if (chartDevice) {
+      chartDevice.data.labels = data.map(function(d) { return d.name; });
+      chartDevice.data.datasets[0].data = data.map(function(d) { return d.s; });
+      chartDevice.data.datasets[0].backgroundColor = data.map(function(d) { return d.color; });
+      chartDevice.update();
+    } else {
+      chartDevice = new Chart(document.getElementById('device-chart'), {
+        type: 'doughnut',
+        data: {
+          labels: data.map(function(d) { return d.name; }),
+          datasets: [{
+            data: data.map(function(d) { return d.s; }),
+            backgroundColor: data.map(function(d) { return d.color; }),
+            borderColor: '#121212', borderWidth: 2, hoverBorderColor: '#eae6e1'
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false, cutout: '60%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#1a1a1a', titleColor: '#eae6e1', bodyColor: '#eae6e1',
+              borderColor: 'rgba(234,230,225,0.2)', borderWidth: 1,
+              callbacks: {
+                label: function(item) {
+                  var t = item.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                  return item.label + ': ' + item.parsed.toLocaleString('es-AR') + ' (' + ((item.parsed / t) * 100).toFixed(1) + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    document.getElementById('device-legend').innerHTML = data.map(function(d) {
+      var pct = total ? ((d.s / total) * 100).toFixed(1) : '0.0';
+      return '<div class="analytics-channel-item">' +
+        '<div class="analytics-channel-dot" style="background:' + d.color + '"></div>' +
+        '<div class="analytics-channel-info">' +
+          '<div class="analytics-channel-name">' + d.name + '</div>' +
+          '<div class="analytics-channel-stats">' + fmt(d.s) + ' sesiones · ' + pct + '%</div>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  // === Top countries ===
+  function renderGeo() {
+    if (!DATA.geo) return;
+    var data = DATA.geo.map(function(g) {
+      var agg = aggregateChannel(g);
+      return { name: g.name, s: agg.s, u: agg.u };
+    }).filter(function(g) { return g.s > 0; }).sort(function(a, b) { return b.s - a.s; }).slice(0, 20);
+    var total = data.reduce(function(s, g) { return s + g.s; }, 0);
+    var max = data.length ? data[0].s : 1;
+    document.getElementById('country-list').innerHTML = data.map(function(g) {
+      var pct = total ? ((g.s / total) * 100).toFixed(1) : '0.0';
+      var w = max ? Math.round((g.s / max) * 100) : 0;
+      return '<div class="analytics-cta-item">' +
+        '<div class="analytics-cta-row"><span class="analytics-cta-label">' + escHtml(g.name) + '</span>' +
+        '<span class="analytics-cta-val">' + fmt(g.s) + ' <span class="analytics-cta-pct">' + pct + '%</span></span></div>' +
+        '<div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:' + w + '%"></div></div>' +
+        '</div>';
     }).join('');
   }
 

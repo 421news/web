@@ -1014,7 +1014,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '1.9.0', ga4: ga4Data ? 'ready' : 'not loaded', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.0.0', ga4: ga4Data ? 'ready' : 'not loaded', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1356,6 +1356,13 @@ const GA4_CHANNEL_COLORS = {
   'Email': '#00b894', 'Organic Shopping': '#fdcb6e'
 };
 
+// Conversion-related events kept in the analytics payload (whitelist keeps the JSON lean).
+const GA4_CONVERSION_EVENTS = [
+  'popup_cta_click', 'sticky_subscribe_click', 'nav_subscribe_click', 'post_subscribe_click',
+  'revista_wizard_cta_click', 'sign_up_intent', 'begin_checkout', 'payment_method_selected',
+  'purchase_initiated', 'sign_up', 'popup_shown', 'popup_dismissed'
+];
+
 const GA4_MONTH_LABELS = {
   '202409': 'Sep 2024', '202410': 'Oct 2024', '202411': 'Nov 2024', '202412': 'Dic 2024',
   '202501': 'Ene 2025', '202502': 'Feb 2025', '202503': 'Mar 2025', '202504': 'Abr 2025',
@@ -1385,7 +1392,7 @@ function classifyGA4Page(path) {
   return { type: 'other', title: path };
 }
 
-function processGA4Results(pageRows, channelRows, monthlyRows, dailyRows) {
+function processGA4Results(pageRows, channelRows, monthlyRows, dailyRows, eventRows, deviceRows, geoRows) {
   // 1. Build path data
   const pathData = {};
   for (const row of pageRows) {
@@ -1553,6 +1560,31 @@ function processGA4Results(pageRows, channelRows, monthlyRows, dailyRows) {
     b: parseFloat(parseFloat(row.metricValues[4].value).toFixed(3))
   })).sort((a, b) => a.date.localeCompare(b.date));
 
+  // Conversion events: { name, m: { ym: { c } } }
+  const eventMap = {};
+  for (const row of (eventRows || [])) {
+    const name = row.dimensionValues[0].value;
+    const ym = row.dimensionValues[1].value;
+    if (!eventMap[name]) eventMap[name] = { name, m: {} };
+    eventMap[name].m[ym] = { c: parseInt(row.metricValues[0].value) };
+  }
+  const events = Object.values(eventMap);
+
+  // Devices & geo share the channel shape: { name, m: { ym: { s, u } } }
+  const totalSessions = (o) => Object.values(o.m).reduce((sum, m) => sum + m.s, 0);
+  function buildSessionMap(rows) {
+    const map = {};
+    for (const row of (rows || [])) {
+      const name = row.dimensionValues[0].value;
+      const ym = row.dimensionValues[1].value;
+      if (!map[name]) map[name] = { name, m: {} };
+      map[name].m[ym] = { s: parseInt(row.metricValues[0].value), u: parseInt(row.metricValues[1].value) };
+    }
+    return map;
+  }
+  const devices = Object.values(buildSessionMap(deviceRows)).sort((a, b) => totalSessions(b) - totalSessions(a));
+  const geo = Object.values(buildSessionMap(geoRows)).sort((a, b) => totalSessions(b) - totalSessions(a)).slice(0, 30);
+
   const today = new Date();
   const generated = today.toISOString().split('T')[0];
 
@@ -1560,7 +1592,7 @@ function processGA4Results(pageRows, channelRows, monthlyRows, dailyRows) {
     team: [], // filled by getTeamHashes() in refreshGA4Data
     generated,
     range: { start: '2024-09-18', end: generated },
-    monthly, daily, articles, pages, channels
+    monthly, daily, articles, pages, channels, events, devices, geo
   };
 }
 
@@ -1633,8 +1665,8 @@ async function refreshGA4Data() {
   const accessToken = await getGA4AccessToken();
   const endDate = new Date().toISOString().split('T')[0];
 
-  // Run 4 queries in parallel
-  const [pageResult, channelResult, monthlyResult, dailyResult] = await Promise.all([
+  // Run queries in parallel
+  const [pageResult, channelResult, monthlyResult, dailyResult, eventResult, deviceResult, geoResult] = await Promise.all([
     ga4RunReport(accessToken, {
       dateRanges: [{ startDate: '2024-09-18', endDate }],
       dimensions: [{ name: 'pagePath' }, { name: 'yearMonth' }],
@@ -1659,16 +1691,38 @@ async function refreshGA4Data() {
       dimensions: [{ name: 'date' }],
       metrics: [{ name: 'screenPageViews' }, { name: 'sessions' }, { name: 'totalUsers' }, { name: 'averageSessionDuration' }, { name: 'bounceRate' }],
       orderBys: [{ dimension: { dimensionName: 'date', orderType: 'ALPHANUMERIC' }, desc: false }]
+    }),
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'eventName' }, { name: 'yearMonth' }],
+      metrics: [{ name: 'eventCount' }],
+      dimensionFilter: { filter: { fieldName: 'eventName', inListFilter: { values: GA4_CONVERSION_EVENTS } } },
+      limit: 5000
+    }),
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'deviceCategory' }, { name: 'yearMonth' }],
+      metrics: [{ name: 'sessions' }, { name: 'totalUsers' }]
+    }),
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'country' }, { name: 'yearMonth' }],
+      metrics: [{ name: 'sessions' }, { name: 'totalUsers' }],
+      limit: 5000,
+      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }]
     })
   ]);
 
-  console.log(`[ga4] Queries done: pages=${pageResult.rowCount}, channels=${channelResult.rowCount}, monthly=${monthlyResult.rowCount}, daily=${dailyResult.rowCount}`);
+  console.log(`[ga4] Queries done: pages=${pageResult.rowCount}, channels=${channelResult.rowCount}, monthly=${monthlyResult.rowCount}, daily=${dailyResult.rowCount}, events=${eventResult.rowCount}, devices=${deviceResult.rowCount}, geo=${geoResult.rowCount}`);
 
   ga4Data = processGA4Results(
     pageResult.rows || [],
     channelResult.rows || [],
     monthlyResult.rows || [],
-    dailyResult.rows || []
+    dailyResult.rows || [],
+    eventResult.rows || [],
+    deviceResult.rows || [],
+    geoResult.rows || []
   );
 
   ga4Data.team = await getTeamHashes();

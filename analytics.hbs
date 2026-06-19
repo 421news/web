@@ -83,6 +83,49 @@ document.documentElement.classList.add('is-analytics');
           </div>
         </div>
 
+        <!-- Conversions / subscribe funnel -->
+        <div class="analytics-section" id="conversions-section">
+          <div class="analytics-section-header">
+            <div class="analytics-section-titlerow">
+              <h2>Conversiones</h2>
+              <button class="analytics-collapse-btn" data-collapse="funnel-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+            </div>
+          </div>
+          <div id="funnel-body" class="analytics-funnel-grid">
+            <div>
+              <h3 class="analytics-subhead">Puntos de suscripci&oacute;n &middot; clicks</h3>
+              <div id="cta-breakdown" class="analytics-cta-list"></div>
+            </div>
+            <div>
+              <h3 class="analytics-subhead">Embudo</h3>
+              <div id="funnel-steps" class="analytics-funnel"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Devices & countries -->
+        <div class="analytics-section" id="geo-section">
+          <div class="analytics-section-header">
+            <div class="analytics-section-titlerow">
+              <h2>Dispositivos y pa&iacute;ses</h2>
+              <button class="analytics-collapse-btn" data-collapse="geo-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+            </div>
+          </div>
+          <div id="geo-body" class="analytics-geo-grid">
+            <div class="analytics-devices-col">
+              <h3 class="analytics-subhead">Dispositivos</h3>
+              <div class="analytics-donut-container analytics-donut-sm">
+                <canvas id="device-chart"></canvas>
+              </div>
+              <div id="device-legend" class="analytics-channel-legend"></div>
+            </div>
+            <div class="analytics-countries-col">
+              <h3 class="analytics-subhead">Top pa&iacute;ses</h3>
+              <div id="country-list" class="analytics-country-list"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Content: tabs + lang + search -->
         <div class="analytics-section">
           <div class="analytics-section-header">
