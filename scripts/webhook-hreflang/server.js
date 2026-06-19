@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.0', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.1', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1858,23 +1858,36 @@ function httpsGetJson(hostname, path, headers) {
   });
 }
 
-// MercadoPago: paginate /preapproval/search, dedup by id, split into 4 tiers
-async function getMPSnapshot() {
-  const seen = new Set();
-  const active = [];
-  let offset = 0, hasMore = true;
-  while (hasMore) {
-    const res = await httpsGetJson('api.mercadopago.com',
-      '/preapproval/search?status=authorized&limit=100&offset=' + offset,
-      { Authorization: 'Bearer ' + MP_TOKEN });
-    const results = (res.json && res.json.results) || [];
-    for (const s of results) {
-      if (s.status === 'authorized' && !seen.has(s.id)) { seen.add(s.id); active.push(s); }
-    }
-    offset += results.length;
-    hasMore = results.length === 100;
-    if (offset > 5000) break; // safety
+// One /preapproval/search page, retried (MP throttles → short/empty pages)
+async function mpSearchPage(offset) {
+  let lastErr;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const res = await httpsGetJson('api.mercadopago.com',
+        '/preapproval/search?status=authorized&limit=100&offset=' + offset,
+        { Authorization: 'Bearer ' + MP_TOKEN });
+      if (res.status === 200 && res.json) return res.json;
+      lastErr = new Error('MP HTTP ' + res.status);
+    } catch (e) { lastErr = e; }
+    await new Promise(r => setTimeout(r, 800));
   }
+  throw lastErr;
+}
+
+// MercadoPago: loop ALL offsets up to paging.total (not "stop on short page",
+// which under-counts when MP throttles), dedup by id, split into 4 tiers.
+async function getMPSnapshot() {
+  const byId = new Map();
+  const collect = (results) => {
+    for (const s of (results || [])) if (s.status === 'authorized') byId.set(s.id, s);
+  };
+  const first = await mpSearchPage(0);
+  const total = (first.paging && first.paging.total) || (first.results || []).length;
+  collect(first.results);
+  for (let offset = 100; offset < total && offset <= 10000; offset += 100) {
+    collect((await mpSearchPage(offset)).results);
+  }
+  const active = Array.from(byId.values());
   let m5 = 0, a50 = 0, m10 = 0, a100 = 0, revM5 = 0, revA50 = 0, revM10 = 0, revA100 = 0;
   for (const s of active) {
     const ar = s.auto_recurring;
