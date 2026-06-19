@@ -44,21 +44,38 @@ document.documentElement.classList.add('is-analytics');
         <!-- Summary cards -->
         <div class="analytics-cards" id="analytics-cards"></div>
 
-        <!-- Monthly traffic -->
+        <!-- Traffic -->
         <div class="analytics-section">
           <div class="analytics-section-header">
-            <h2>Tr&aacute;fico mensual</h2>
+            <div class="analytics-section-titlerow">
+              <h2>Tr&aacute;fico</h2>
+              <button class="analytics-collapse-btn" data-collapse="traffic-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+            </div>
+            <div class="analytics-granularity" id="granularity-toggle"></div>
           </div>
-          <div class="analytics-chart-container">
-            <canvas id="monthly-chart"></canvas>
+          <div id="traffic-body">
+            <div class="analytics-chart-container">
+              <canvas id="monthly-chart"></canvas>
+            </div>
+            <div class="analytics-subsection">
+              <button class="analytics-collapse-bar is-collapsed" data-collapse="monthly-table-wrap">
+                <span class="analytics-collapse-chevron">&#x25BE;</span>
+                <span>Tabla detallada</span>
+              </button>
+              <div id="monthly-table-wrap" class="analytics-collapsed"></div>
+            </div>
           </div>
-          <div id="monthly-table-wrap"></div>
         </div>
 
         <!-- Channels -->
         <div class="analytics-section">
-          <h2>Canales de adquisici&oacute;n</h2>
-          <div class="analytics-channels-grid">
+          <div class="analytics-section-header">
+            <div class="analytics-section-titlerow">
+              <h2>Canales de adquisici&oacute;n</h2>
+              <button class="analytics-collapse-btn" data-collapse="channels-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+            </div>
+          </div>
+          <div id="channels-body" class="analytics-channels-grid">
             <div class="analytics-donut-container">
               <canvas id="channel-chart"></canvas>
             </div>
@@ -69,6 +86,10 @@ document.documentElement.classList.add('is-analytics');
         <!-- Content: tabs + lang + search -->
         <div class="analytics-section">
           <div class="analytics-section-header">
+            <div class="analytics-section-titlerow">
+              <h2>Contenido</h2>
+              <button class="analytics-collapse-btn" data-collapse="content-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+            </div>
             <div class="analytics-toolbar">
               <div class="analytics-tabs">
                 <button class="analytics-tab active" data-tab="articles">Art&iacute;culos</button>
@@ -82,21 +103,23 @@ document.documentElement.classList.add('is-analytics');
             </div>
             <input type="text" id="content-search" placeholder="Buscar..." class="analytics-search-input">
           </div>
-          <div class="analytics-table-scroll">
-            <table class="analytics-table" id="content-table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th id="col-title">Art&iacute;culo</th>
-                  <th class="analytics-num analytics-sortable" data-sort="pv">Pageviews <span class="analytics-sort-arrow">&#x25BC;</span></th>
-                  <th class="analytics-num analytics-sortable" data-sort="u">Usuarios</th>
-                  <th class="analytics-num analytics-sortable" data-sort="d">Duraci&oacute;n</th>
-                </tr>
-              </thead>
-              <tbody id="content-tbody"></tbody>
-            </table>
+          <div id="content-body">
+            <div class="analytics-table-scroll">
+              <table class="analytics-table" id="content-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th id="col-title">Art&iacute;culo</th>
+                    <th class="analytics-num analytics-sortable" data-sort="pv">Pageviews <span class="analytics-sort-arrow">&#x25BC;</span></th>
+                    <th class="analytics-num analytics-sortable" data-sort="u">Usuarios</th>
+                    <th class="analytics-num analytics-sortable" data-sort="d">Duraci&oacute;n</th>
+                  </tr>
+                </thead>
+                <tbody id="content-tbody"></tbody>
+              </table>
+            </div>
+            <div id="content-pagination" class="analytics-pagination"></div>
           </div>
-          <div id="content-pagination" class="analytics-pagination"></div>
         </div>
       </div>
 

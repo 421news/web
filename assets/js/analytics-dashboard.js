@@ -10,6 +10,7 @@
   var state = {
     monthFrom: null,
     monthTo: null,
+    granularity: 'month', // 'day' | 'week' | 'month'
     tab: 'articles',
     lang: 'all',
     search: '',
@@ -18,6 +19,8 @@
     page: 1,
     perPage: 25
   };
+
+  var MES_ABBR = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 
   Promise.all([
     window.__ga4Data,
@@ -42,6 +45,52 @@
     return m + 'm ' + (s < 10 ? '0' : '') + s + 's';
   }
   function fmtPct(decimal) { return (decimal * 100).toFixed(1) + '%'; }
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+  function parseYMD(s) { return new Date(parseInt(s.slice(0, 4)), parseInt(s.slice(4, 6)) - 1, parseInt(s.slice(6, 8))); }
+  function fmtDayLabel(s) { var d = parseYMD(s); return d.getDate() + ' ' + MES_ABBR[d.getMonth()]; }
+  function hasDaily() { return DATA && DATA.daily && DATA.daily.length > 0; }
+
+  // === Traffic series by granularity (day / week / month) ===
+  // Returns array of { label, pv, s, u, d, b } bounded by the selected month range.
+  function getTrafficSeries() {
+    if (state.granularity === 'month' || !hasDaily()) {
+      return DATA.monthly.slice(state.monthFrom, state.monthTo + 1).map(function(m) {
+        return { label: m.label, pv: m.pv, s: m.s, u: m.u, d: m.d, b: m.b };
+      });
+    }
+    var fromYM = ALL_MONTHS[state.monthFrom];
+    var toYM = ALL_MONTHS[state.monthTo];
+    var days = DATA.daily.filter(function(d) { var ym = d.date.slice(0, 6); return ym >= fromYM && ym <= toYM; });
+
+    if (state.granularity === 'day') {
+      return days.map(function(d) {
+        return { label: fmtDayLabel(d.date), pv: d.pv, s: d.s, u: d.u, d: d.d, b: d.b };
+      });
+    }
+
+    // Weekly: bucket by ISO Monday. Duration weighted by pv, bounce weighted by sessions.
+    var buckets = {};
+    days.forEach(function(d) {
+      var dt = parseYMD(d.date);
+      var dow = (dt.getDay() + 6) % 7; // Monday = 0
+      var monday = new Date(dt);
+      monday.setDate(dt.getDate() - dow);
+      var key = monday.getFullYear() + pad2(monday.getMonth() + 1) + pad2(monday.getDate());
+      if (!buckets[key]) buckets[key] = { date: key, pv: 0, s: 0, u: 0, dw: 0, bw: 0 };
+      var bk = buckets[key];
+      bk.pv += d.pv; bk.s += d.s; bk.u += d.u;
+      bk.dw += (d.d || 0) * d.pv; bk.bw += (d.b || 0) * d.s;
+    });
+    return Object.keys(buckets).sort().map(function(k) {
+      var bk = buckets[k];
+      return {
+        label: 'Sem ' + fmtDayLabel(bk.date),
+        pv: bk.pv, s: bk.s, u: bk.u,
+        d: bk.pv ? Math.round(bk.dw / bk.pv) : 0,
+        b: bk.s ? bk.bw / bk.s : 0
+      };
+    });
+  }
 
   // === Aggregation ===
   function aggregateItem(item) {
@@ -121,11 +170,47 @@
     document.getElementById('analytics-generated').textContent = DATA.generated;
 
     renderMonthFilters();
+    setupGranularity();
+    setupCollapsibles();
     setupTabs();
     setupLangSelector();
     setupSearch();
     setupSortHeaders();
     onFilterChange();
+  }
+
+  // === Granularity toggle (día / semana / mes) ===
+  function setupGranularity() {
+    var el = document.getElementById('granularity-toggle');
+    if (!el) return;
+    // Daily/weekly only offered when the JSON includes daily data
+    var grans = hasDaily() ? [['day', 'Día'], ['week', 'Semana'], ['month', 'Mes']] : [['month', 'Mes']];
+    el.innerHTML = grans.map(function(g) {
+      return '<button class="analytics-gran' + (g[0] === state.granularity ? ' active' : '') + '" data-gran="' + g[0] + '">' + g[1] + '</button>';
+    }).join('');
+    var btns = el.querySelectorAll('.analytics-gran');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener('click', function() {
+        state.granularity = this.getAttribute('data-gran');
+        for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+        this.classList.add('active');
+        renderMonthlyChart();
+        renderMonthlyTable();
+      });
+    }
+  }
+
+  // === Collapsible sections (generic) ===
+  function setupCollapsibles() {
+    var toggles = document.querySelectorAll('[data-collapse]');
+    for (var i = 0; i < toggles.length; i++) {
+      toggles[i].addEventListener('click', function() {
+        var target = document.getElementById(this.getAttribute('data-collapse'));
+        if (!target) return;
+        var collapsed = target.classList.toggle('analytics-collapsed');
+        this.classList.toggle('is-collapsed', collapsed);
+      });
+    }
   }
 
   // === Render all ===
@@ -253,11 +338,11 @@
 
   // === Monthly Chart ===
   function renderMonthlyChart() {
-    var months = DATA.monthly.slice(state.monthFrom, state.monthTo + 1);
-    var labels = months.map(function(m) { return m.label; });
-    var pvData = months.map(function(m) { return m.pv; });
-    var sessData = months.map(function(m) { return m.s; });
-    var userData = months.map(function(m) { return m.u; });
+    var series = getTrafficSeries();
+    var labels = series.map(function(m) { return m.label; });
+    var pvData = series.map(function(m) { return m.pv; });
+    var sessData = series.map(function(m) { return m.s; });
+    var userData = series.map(function(m) { return m.u; });
 
     if (chartMonthly) {
       chartMonthly.data.labels = labels;
@@ -300,11 +385,12 @@
 
   // === Monthly Table ===
   function renderMonthlyTable() {
-    var months = DATA.monthly.slice(state.monthFrom, state.monthTo + 1);
+    var months = getTrafficSeries();
     var wrap = document.getElementById('monthly-table-wrap');
+    var firstCol = state.granularity === 'day' ? 'Día' : (state.granularity === 'week' ? 'Semana' : 'Mes');
     var totalPV = 0, totalSess = 0, totalUsers = 0, totalDur = 0;
     months.forEach(function(m) { totalPV += m.pv; totalSess += m.s; totalUsers += m.u; totalDur += m.d; });
-    var avgDur = totalDur / months.length;
+    var avgDur = months.length ? totalDur / months.length : 0;
     var rows = months.map(function(m) {
       return '<tr><td>' + m.label + '</td>' +
         '<td class="analytics-num">' + fmt(m.pv) + '</td>' +
@@ -314,7 +400,7 @@
         '<td class="analytics-num">' + fmtPct(m.b) + '</td></tr>';
     }).join('');
     wrap.innerHTML = '<div class="analytics-table-scroll"><table class="analytics-table">' +
-      '<thead><tr><th>Mes</th><th class="analytics-num">Pageviews</th><th class="analytics-num">Sesiones</th><th class="analytics-num">Usuarios</th><th class="analytics-num">Duraci\u00f3n</th><th class="analytics-num">Bounce</th></tr></thead>' +
+      '<thead><tr><th>' + firstCol + '</th><th class="analytics-num">Pageviews</th><th class="analytics-num">Sesiones</th><th class="analytics-num">Usuarios</th><th class="analytics-num">Duraci\u00f3n</th><th class="analytics-num">Bounce</th></tr></thead>' +
       '<tbody>' + rows + '</tbody>' +
       '<tfoot><tr class="analytics-total-row"><td><strong>Total / Prom.</strong></td>' +
         '<td class="analytics-num"><strong>' + fmt(totalPV) + '</strong></td>' +

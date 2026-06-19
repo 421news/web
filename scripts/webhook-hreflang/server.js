@@ -1385,7 +1385,7 @@ function classifyGA4Page(path) {
   return { type: 'other', title: path };
 }
 
-function processGA4Results(pageRows, channelRows, monthlyRows) {
+function processGA4Results(pageRows, channelRows, monthlyRows, dailyRows) {
   // 1. Build path data
   const pathData = {};
   for (const row of pageRows) {
@@ -1542,6 +1542,17 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
     };
   }).sort((a, b) => a.month.localeCompare(b.month));
 
+  // Daily (site-wide totals, date = 'YYYYMMDD'). Same shape as monthly rows
+  // (pv/s/u/d/b) so the dashboard can reuse its rendering logic.
+  const daily = (dailyRows || []).map(row => ({
+    date: row.dimensionValues[0].value,
+    pv: parseInt(row.metricValues[0].value),
+    s: parseInt(row.metricValues[1].value),
+    u: parseInt(row.metricValues[2].value),
+    d: Math.round(parseFloat(row.metricValues[3].value)),
+    b: parseFloat(parseFloat(row.metricValues[4].value).toFixed(3))
+  })).sort((a, b) => a.date.localeCompare(b.date));
+
   const today = new Date();
   const generated = today.toISOString().split('T')[0];
 
@@ -1549,7 +1560,7 @@ function processGA4Results(pageRows, channelRows, monthlyRows) {
     team: [], // filled by getTeamHashes() in refreshGA4Data
     generated,
     range: { start: '2024-09-18', end: generated },
-    monthly, articles, pages, channels
+    monthly, daily, articles, pages, channels
   };
 }
 
@@ -1622,8 +1633,8 @@ async function refreshGA4Data() {
   const accessToken = await getGA4AccessToken();
   const endDate = new Date().toISOString().split('T')[0];
 
-  // Run 3 queries in parallel
-  const [pageResult, channelResult, monthlyResult] = await Promise.all([
+  // Run 4 queries in parallel
+  const [pageResult, channelResult, monthlyResult, dailyResult] = await Promise.all([
     ga4RunReport(accessToken, {
       dateRanges: [{ startDate: '2024-09-18', endDate }],
       dimensions: [{ name: 'pagePath' }, { name: 'yearMonth' }],
@@ -1642,15 +1653,22 @@ async function refreshGA4Data() {
       dimensions: [{ name: 'yearMonth' }],
       metrics: [{ name: 'screenPageViews' }, { name: 'sessions' }, { name: 'totalUsers' }, { name: 'averageSessionDuration' }, { name: 'bounceRate' }],
       orderBys: [{ dimension: { dimensionName: 'yearMonth', orderType: 'ALPHANUMERIC' }, desc: false }]
+    }),
+    ga4RunReport(accessToken, {
+      dateRanges: [{ startDate: '2024-09-18', endDate }],
+      dimensions: [{ name: 'date' }],
+      metrics: [{ name: 'screenPageViews' }, { name: 'sessions' }, { name: 'totalUsers' }, { name: 'averageSessionDuration' }, { name: 'bounceRate' }],
+      orderBys: [{ dimension: { dimensionName: 'date', orderType: 'ALPHANUMERIC' }, desc: false }]
     })
   ]);
 
-  console.log(`[ga4] Queries done: pages=${pageResult.rowCount}, channels=${channelResult.rowCount}, monthly=${monthlyResult.rowCount}`);
+  console.log(`[ga4] Queries done: pages=${pageResult.rowCount}, channels=${channelResult.rowCount}, monthly=${monthlyResult.rowCount}, daily=${dailyResult.rowCount}`);
 
   ga4Data = processGA4Results(
     pageResult.rows || [],
     channelResult.rows || [],
-    monthlyResult.rows || []
+    monthlyResult.rows || [],
+    dailyResult.rows || []
   );
 
   ga4Data.team = await getTeamHashes();
