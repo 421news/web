@@ -30,6 +30,15 @@ document.documentElement.classList.add('is-analytics');
 
       <!-- Dashboard -->
       <div id="dashboard" style="display:none;">
+
+        <!-- View tabs: Analytics | Revenue -->
+        <div class="analytics-toptabs">
+          <button class="analytics-toptab active" data-view="analytics">Analytics</button>
+          <button class="analytics-toptab" data-view="revenue">Revenue</button>
+        </div>
+
+        <!-- ===== ANALYTICS VIEW ===== -->
+        <div id="analytics-view">
         <div class="analytics-hero">
           <h1 class="analytics-title">Analytics</h1>
           <p class="analytics-subtitle">Datos del <span id="analytics-range"></span> &middot; Actualizado <span id="analytics-generated"></span></p>
@@ -164,6 +173,92 @@ document.documentElement.classList.add('is-analytics');
             <div id="content-pagination" class="analytics-pagination"></div>
           </div>
         </div>
+        </div><!-- /#analytics-view -->
+
+        <!-- ===== REVENUE VIEW ===== -->
+        <div id="revenue-view" style="display:none;">
+          <div class="analytics-hero">
+            <h1 class="analytics-title">Revenue &amp; Suscriptores</h1>
+            <p class="analytics-subtitle">Snapshot <span id="revenue-date"></span> &middot; Blue ref <span id="revenue-blue"></span> &middot; <span id="revenue-source"></span></p>
+          </div>
+          <hr class="analytics-gradient-divider">
+
+          <!-- Summary cards -->
+          <div class="analytics-cards" id="revenue-cards"></div>
+
+          <!-- Growth -->
+          <div class="analytics-section">
+            <div class="analytics-section-header">
+              <div class="analytics-section-titlerow">
+                <h2>Crecimiento de suscriptores pagos</h2>
+                <button class="analytics-collapse-btn" data-collapse="revenue-growth-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+              </div>
+            </div>
+            <div id="revenue-growth-body" class="analytics-chart-container">
+              <canvas id="revenue-growth-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Revenue cobrado -->
+          <div class="analytics-section">
+            <div class="analytics-section-header">
+              <div class="analytics-section-titlerow">
+                <h2>Revenue cobrado</h2>
+                <button class="analytics-collapse-btn" data-collapse="revenue-rev-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+              </div>
+            </div>
+            <div id="revenue-rev-body" class="analytics-chart-container">
+              <canvas id="revenue-rev-chart"></canvas>
+            </div>
+          </div>
+
+          <!-- Desglose por plan -->
+          <div class="analytics-section">
+            <div class="analytics-section-header">
+              <div class="analytics-section-titlerow">
+                <h2>Desglose por plan</h2>
+                <button class="analytics-collapse-btn" data-collapse="revenue-tier-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+              </div>
+            </div>
+            <div id="revenue-tier-body" class="analytics-channels-grid">
+              <div class="analytics-donut-container">
+                <canvas id="revenue-tier-chart"></canvas>
+              </div>
+              <div id="revenue-tier-legend" class="analytics-channel-legend"></div>
+            </div>
+          </div>
+
+          <!-- Histórico semanal -->
+          <div class="analytics-section">
+            <div class="analytics-section-header">
+              <div class="analytics-section-titlerow">
+                <h2>Hist&oacute;rico semanal</h2>
+                <button class="analytics-collapse-btn is-collapsed" data-collapse="revenue-hist-body" aria-label="Contraer secci&oacute;n">&#x25BE;</button>
+              </div>
+            </div>
+            <div id="revenue-hist-body" class="analytics-table-scroll analytics-collapsed">
+              <table class="analytics-table" id="revenue-hist-table">
+                <thead>
+                  <tr>
+                    <th>Semana</th>
+                    <th class="analytics-num">Total</th>
+                    <th class="analytics-num">Pagos</th>
+                    <th class="analytics-num">Ratio</th>
+                    <th class="analytics-num">MP $5</th>
+                    <th class="analytics-num">MP $50</th>
+                    <th class="analytics-num">MP $10</th>
+                    <th class="analytics-num">MP $100</th>
+                    <th class="analytics-num">Stripe m.</th>
+                    <th class="analytics-num">Stripe a.</th>
+                    <th class="analytics-num">Rev. mens. (ARS)</th>
+                    <th class="analytics-num">Rev. mens. (USD)</th>
+                  </tr>
+                </thead>
+                <tbody id="revenue-hist-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- /#revenue-view -->
       </div>
 
     </div>
@@ -176,6 +271,15 @@ window.__ga4Data = (function() {
   var themeUrl = '{{asset "data/ga4-data.json"}}';
   var renderUrl = 'https://webhook-hreflang.onrender.com/api/ga4-data.json';
   // Try Render first (5s timeout), fallback to theme asset
+  var controller = new AbortController();
+  var timer = setTimeout(function() { controller.abort(); }, 5000);
+  return fetch(renderUrl, { signal: controller.signal })
+    .then(function(r) { clearTimeout(timer); if (!r.ok) throw new Error(r.status); return r.json(); })
+    .catch(function() { clearTimeout(timer); return fetch(themeUrl).then(function(r) { return r.json(); }); });
+})();
+window.__revenueData = (function() {
+  var themeUrl = '{{asset "data/revenue-data.json"}}';
+  var renderUrl = 'https://webhook-hreflang.onrender.com/api/revenue-data.json';
   var controller = new AbortController();
   var timer = setTimeout(function() { controller.abort(); }, 5000);
   return fetch(renderUrl, { signal: controller.signal })
@@ -207,6 +311,21 @@ window.__ga4Data = (function() {
     document.getElementById('auth-denied').style.display = '';
   });
 })();
+// View toggle: Analytics | Revenue (lazy-init revenue dashboard on first show)
+(function() {
+  var tabs = document.querySelectorAll('.analytics-toptab');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', function() {
+      var view = this.getAttribute('data-view');
+      for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
+      this.classList.add('active');
+      document.getElementById('analytics-view').style.display = view === 'analytics' ? '' : 'none';
+      document.getElementById('revenue-view').style.display = view === 'revenue' ? '' : 'none';
+      if (view === 'revenue' && window.initRevenueDashboard) window.initRevenueDashboard();
+    });
+  }
+})();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="{{asset "js/analytics-dashboard.js"}}" defer></script>
+<script src="{{asset "js/revenue-dashboard.js"}}" defer></script>
