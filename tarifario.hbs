@@ -158,11 +158,25 @@
   .conds li{display:flex;gap:.7rem;font-size:.9rem;color:var(--crema);line-height:1.4;border-top:1px solid var(--line);padding-top:.9rem}
   .conds li b{color:var(--amarillo);font-family:'Space Grotesk',sans-serif;font-weight:600;flex:none}
 
-  .cta-line{font-size:clamp(1.3rem,3vw,2.2rem);font-weight:600;line-height:1.25;max-width:26ch;margin-bottom:1.6rem}
+  /* FINAL CTA (centered, highlighted panel) */
+  .cta-final{
+    text-align:center;width:100%;max-width:680px;margin:0 auto;
+    padding:2.8rem 2.2rem;border:1px solid var(--line);border-radius:22px;
+    background:radial-gradient(circle at 50% 0%,rgba(252,210,33,.12),transparent 65%),var(--negro-2);
+  }
+  .cta-line{font-size:clamp(1.5rem,3vw,2.4rem);font-weight:700;line-height:1.2;margin-bottom:1.9rem}
   .cta-line .gradient-text{font-weight:700}
-  .contact-row{display:flex;gap:2.4rem;flex-wrap:wrap;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-top:.4rem}
-  .contact-row a{text-decoration:none;color:var(--crema);transition:color .18s}
+  .cta-mail{
+    display:inline-block;border:1.5px solid var(--amarillo);background:transparent;color:var(--amarillo);
+    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;text-transform:uppercase;letter-spacing:.04em;
+    padding:.85rem 2.1rem;border-radius:999px;text-decoration:none;transition:all .18s;
+  }
+  .cta-mail:hover{background:var(--amarillo);color:var(--negro)}
+  .contact-row{display:flex;gap:2rem;flex-wrap:wrap;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.95rem;margin-top:1.5rem}
+  .contact-row a{text-decoration:none;color:var(--dim);transition:color .18s}
   .contact-row a:hover{color:var(--amarillo)}
+
+  .print-footer{display:none}
 
   @media (max-width:760px){
     .stat-grid{grid-template-columns:1fr 1fr}
@@ -172,12 +186,34 @@
     .dl-btn{bottom:1rem;left:1rem}
   }
 
-  /* PRINT → slides as landscape PDF pages */
+  /* PRINT → branded landscape rate-card deck (a la La Nacion, con look 421) */
   @page{size:1280px 720px;margin:0}
   @media print{
-    body{background:var(--negro)}
-    .slide{min-height:720px;height:auto;page-break-after:always;border:none}
-    .lang-switch,.dl-btn,.team-badge{display:none}
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
+    html,body{background:var(--negro)}
+    .lang-switch,.dl-btn,.team-badge{display:none !important}
+    .slide{
+      min-height:0;height:720px;width:1280px;overflow:hidden;border:none;
+      padding:58px 72px 78px;justify-content:flex-start;
+      page-break-after:always;break-after:page;page-break-inside:avoid;
+    }
+    .slide:last-child{page-break-after:auto;break-after:auto}
+    .slide.cover{justify-content:space-between;padding:72px}
+    .slide-num{top:34px;right:72px}
+    h2.title{margin-top:.1rem}
+    .subtitle{margin-bottom:1.3rem}
+    .stat-grid{margin-top:1.3rem}
+    .note{margin-top:1.3rem;padding-top:.9rem}
+    .cta-final{margin-top:1.4rem}
+    /* repeating branded footer on every printed page */
+    .print-footer{
+      display:flex !important;position:fixed;left:72px;right:72px;bottom:30px;
+      justify-content:space-between;align-items:center;
+      font-family:'Space Grotesk',sans-serif;font-size:10px;letter-spacing:.04em;
+      border-top:1px solid var(--line);padding-top:9px;
+    }
+    .print-footer .ft-tax{color:var(--dim)}
+    .print-footer .ft-brand{color:var(--amarillo);font-weight:600}
   }
 </style>
 </head>
@@ -190,6 +226,10 @@
 </div>
 <button class="dl-btn" type="button" onclick="window.print()" data-i18n="dl">Descargar PDF</button>
 <div class="team-badge" data-i18n="team_badge">✓ Vista equipo · con precios</div>
+<div class="print-footer">
+  <span class="ft-tax" data-i18n="ft_tax">Los valores no incluyen impuestos · precios de lista</span>
+  <span class="ft-brand">www.421.news · admin@421.news</span>
+</div>
 
 <!-- 1 · COVER -->
 <section class="slide cover">
@@ -227,7 +267,7 @@
   </div>
   <div class="cover-bottom">
     <div>www.421.news</div>
-    <div data-i18n="cover_cur">Valores en USD · referencia ARS al dólar blue del día</div>
+    <div data-i18n="cover_cur">Valores en USD · referencia ARS al dólar oficial del día</div>
   </div>
 </section>
 
@@ -235,8 +275,8 @@
 <section class="slide">
   <div class="slide-num">02</div>
   <div class="eyebrow" data-i18n="why_eye">Qué estás comprando</div>
-  <h2 class="title" data-i18n="why_title">No vendemos volumen. Vendemos atención.</h2>
-  <p class="subtitle" data-i18n="why_sub">421 no compite por cantidad de impresiones: compite por calidad de contacto. Una audiencia que lee long-form hasta el final, vuelve y confía. Por eso los formatos de contenido se cobran por valor, no por CPM.</p>
+  <h2 class="title" data-i18n="why_title">Una comunidad que lee, vuelve y confía.</h2>
+  <p class="subtitle" data-i18n="why_sub">En 421 lo que vale es la calidad del contacto: una audiencia que lee long-form hasta el final y vuelve por más. Por eso el contenido se cobra por su valor editorial, y el CPM queda reservado al display.</p>
   <div class="stat-grid">
     <div class="stat"><div class="num">93%</div><div class="lbl" data-i18n="why_l1">tasa de engagement (sesiones con interacción)</div></div>
     <div class="stat green"><div class="num">5:53</div><div class="lbl" data-i18n="why_l2">duración promedio de sesión</div></div>
@@ -337,7 +377,7 @@
         <h3 data-i18n="conds_title">Condiciones</h3>
         <ul class="conds">
           <li><b>+</b><span data-i18n="cond_1">Los valores no incluyen impuestos.</span></li>
-          <li><b>$</b><span data-i18n="cond_2">Precios en USD. Referencia en ARS al dólar blue del día.</span></li>
+          <li><b>$</b><span data-i18n="cond_2">Precios en USD. Referencia en ARS al dólar oficial del día.</span></li>
           <li><b>★</b><span data-i18n="cond_3">Precios de lista. Consultá por volumen y acuerdos anuales.</span></li>
           <li><b>✎</b><span data-i18n="cond_4">Todo formato de contenido respeta la línea editorial de 421.</span></li>
         </ul>
@@ -345,10 +385,10 @@
     </div>
   </div>
 
-  <div>
+  <div class="cta-final">
     <div class="cta-line" data-i18n="contact_line">¿Armamos una propuesta <span class="gradient-text">a tu medida</span>?</div>
+    <a class="cta-mail" href="mailto:admin@421.news?subject=Consulta%20tarifario%20421" data-i18n="contact_mail">Escribinos a admin@421.news</a>
     <div class="contact-row">
-      <a href="mailto:admin@421.news">admin@421.news</a>
       <a href="https://instagram.com/421net" target="_blank" rel="noopener">@421net</a>
       <a href="https://www.421.news/" target="_blank" rel="noopener">www.421.news</a>
     </div>
@@ -370,11 +410,11 @@
       cover_h1: 'Tarifario<br><span class="gradient-text">comercial</span>.',
       cover_p: "Formatos publicitarios y de contenido de marca en 421. Pensados para una audiencia chica, premium e hiper-comprometida.",
       cover_vig: "Vigencia desde junio 2026",
-      cover_cur: "Valores en USD · referencia ARS al dólar blue del día",
+      cover_cur: "Valores en USD · referencia ARS al dólar oficial del día",
 
       why_eye: "Qué estás comprando",
-      why_title: "No vendemos volumen. Vendemos atención.",
-      why_sub: "421 no compite por cantidad de impresiones: compite por calidad de contacto. Una audiencia que lee long-form hasta el final, vuelve y confía. Por eso los formatos de contenido se cobran por valor, no por CPM.",
+      why_title: "Una comunidad que lee, vuelve y confía.",
+      why_sub: "En 421 lo que vale es la calidad del contacto: una audiencia que lee long-form hasta el final y vuelve por más. Por eso el contenido se cobra por su valor editorial, y el CPM queda reservado al display.",
       why_l1: "tasa de engagement (sesiones con interacción)",
       why_l2: "duración promedio de sesión",
       why_l3: "lectores únicos por mes",
@@ -419,10 +459,12 @@
       pk_2: 'Always-on<span class="d">Display mes + 1 nota + 1 newsletter + 4 redes</span>',
       conds_title: "Condiciones",
       cond_1: "Los valores no incluyen impuestos.",
-      cond_2: "Precios en USD. Referencia en ARS al dólar blue del día.",
+      cond_2: "Precios en USD. Referencia en ARS al dólar oficial del día.",
       cond_3: "Precios de lista. Consultá por volumen y acuerdos anuales.",
       cond_4: "Todo formato de contenido respeta la línea editorial de 421.",
       contact_line: '¿Armamos una propuesta <span class="gradient-text">a tu medida</span>?',
+      contact_mail: "Escribinos a admin@421.news",
+      ft_tax: "Los valores no incluyen impuestos · precios de lista",
       contact_note: "Tarifario sujeto a actualización. Para campañas internacionales o formatos no listados, escribinos."
     },
     en: {
@@ -436,11 +478,11 @@
       cover_h1: 'Rate<br><span class="gradient-text">card</span>.',
       cover_p: "Advertising and branded-content formats on 421. Built around a small, premium, hyper-engaged audience.",
       cover_vig: "Effective from June 2026",
-      cover_cur: "Prices in USD · ARS reference at the day's blue rate",
+      cover_cur: "Prices in USD · ARS reference at the day's official rate",
 
       why_eye: "What you're buying",
-      why_title: "We don't sell volume. We sell attention.",
-      why_sub: "421 doesn't compete on impressions: it competes on quality of contact. An audience that reads long-form to the end, comes back and trusts. That's why content formats are priced by value, not CPM.",
+      why_title: "A community that reads, comes back and trusts.",
+      why_sub: "At 421 what counts is the quality of the contact: an audience that reads long-form to the end and comes back for more. That's why content is priced by its editorial value, with CPM kept for display.",
       why_l1: "engagement rate (sessions with interaction)",
       why_l2: "average session duration",
       why_l3: "unique readers per month",
@@ -485,10 +527,12 @@
       pk_2: 'Always-on<span class="d">Display month + 1 article + 1 newsletter + 4 social</span>',
       conds_title: "Terms",
       cond_1: "Prices do not include taxes.",
-      cond_2: "Prices in USD. ARS reference at the day's blue rate.",
+      cond_2: "Prices in USD. ARS reference at the day's official rate.",
       cond_3: "List prices. Ask about volume and annual deals.",
       cond_4: "Every content format respects 421's editorial line.",
       contact_line: 'Shall we build a <span class="gradient-text">custom proposal</span>?',
+      contact_mail: "Write to us at admin@421.news",
+      ft_tax: "Prices do not include taxes · list prices",
       contact_note: "Rate card subject to update. For international campaigns or formats not listed, get in touch."
     }
   };
@@ -497,7 +541,7 @@
   var buttons = document.querySelectorAll('.lang-switch button');
   var priceCells = document.querySelectorAll('.pr');
   var L = I18N.es;        // current dictionary
-  var blueRate = null;    // ARS per USD (blue, venta)
+  var usdRate = null;    // ARS per USD (official, venta)
   var unlocked = false;   // true once a team member is verified
 
   function fmtN(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
@@ -511,7 +555,7 @@
     var unit = cell.getAttribute('data-unit');
     if(unit === 'month') html += '<span class="unit">' + L.per_month + '</span>';
     else if(unit === 'cpm') html += '<span class="unit">CPM</span>';
-    if(blueRate) html += '<span class="ars">≈ AR$ ' + fmtN(usd * blueRate) + '</span>';
+    if(usdRate) html += '<span class="ars">≈ AR$ ' + fmtN(usd * usdRate) + '</span>';
     cell.innerHTML = html;
   }
 
@@ -577,13 +621,13 @@
   }catch(e){}
   setLang(init);
 
-  // ARS reference at the day's blue rate (dolarapi.com). On failure prices stay USD-only.
-  (function loadBlue(){
+  // ARS reference at the day's official rate (dolarapi.com). On failure prices stay USD-only.
+  (function loadRate(){
     var controller = new AbortController();
     var timer = setTimeout(function(){ controller.abort(); }, 5000);
-    fetch('https://dolarapi.com/v1/dolares/blue', { signal: controller.signal })
+    fetch('https://dolarapi.com/v1/dolares/oficial', { signal: controller.signal })
       .then(function(r){ clearTimeout(timer); if(!r.ok) throw new Error(r.status); return r.json(); })
-      .then(function(d){ if(d && d.venta > 0){ blueRate = d.venta; renderPrices(); } })
+      .then(function(d){ if(d && d.venta > 0){ usdRate = d.venta; renderPrices(); } })
       .catch(function(){ clearTimeout(timer); });
   })();
 
