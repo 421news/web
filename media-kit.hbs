@@ -147,6 +147,8 @@
 
   .pillrow{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.6rem}
   .pill{border:1.5px solid var(--amarillo);border-radius:999px;padding:.5rem 1.1rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+  .kit-cta{display:inline-block;margin-top:1.6rem;border:1.5px solid var(--amarillo);border-radius:999px;padding:.6rem 1.4rem;font-family:'Space Grotesk',sans-serif;font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600;color:var(--amarillo);text-decoration:none;transition:all .18s}
+  .kit-cta:hover{background:var(--amarillo);color:var(--negro)}
 
   .note{color:var(--dim);font-size:.78rem;margin-top:auto;padding-top:2rem;line-height:1.5}
   .big-callout{font-size:clamp(1.4rem,3vw,2.4rem);font-weight:600;line-height:1.25;max-width:24ch}
@@ -258,7 +260,7 @@
   <div class="slide-num">04</div>
   <div class="eyebrow" data-i18n="s4_eye">Crecimiento</div>
   <h2 class="title" data-i18n="s4_title">~20× en 18 meses</h2>
-  <p class="subtitle" data-i18n="s4_sub">Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong>~150K páginas vistas mensuales</strong>.</p>
+  <p class="subtitle" data-i18n="s4_sub">Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong><span id="mk-mpv">~150K</span> páginas vistas mensuales</strong>.</p>
   <div class="chart">
     <span class="gl" style="bottom:100%"><i>200K</i></span>
     <span class="gl" style="bottom:75%"><i>150K</i></span>
@@ -286,7 +288,7 @@
     <div class="bar-wrap"><div class="bar" style="height:66.0%"></div></div>
     <div class="bar-wrap"><div class="bar" style="height:59.9%"></div></div>
     <div class="bar-wrap"><div class="bar" style="height:73.7%"></div></div>
-    <div class="bar-wrap"><div class="bar partial" style="height:31.4%"></div></div>
+    <div class="bar-wrap"><div class="bar partial" id="mk-mbar" style="height:31.4%"></div></div>
   </div>
   <div class="xaxis">
     <span>S'24</span><span>O</span><span>N</span><span>D</span><span>E'25</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J</span><span>J</span><span>A</span><span>S</span><span>O</span><span>N</span><span>D</span><span>E'26</span><span>F</span><span>M</span><span>A</span><span>M</span><span>J*</span>
@@ -484,6 +486,7 @@
       <div class="fmt"><h3 data-i18n="s14_f4h">Display & integraciones</h3><p data-i18n="s14_f4p">Banners y formatos a medida en sitio, con foco mobile (71% de la audiencia).</p></div>
       <div class="fmt"><h3 data-i18n="s14_f5h">Sponsorship en el podcast</h3><p data-i18n="s14_f5p">Menciones y segmentos patrocinados en Random, el podcast de 421. Audio nativo con audiencia fiel.</p></div>
     </div>
+    <a class="kit-cta" href="/es/tarifario/" data-i18n="s14_rate">Ver tarifario y precios →</a>
   </div>
   <div class="social-row">
     <span class="eyebrow" style="margin:0" data-i18n="s14_follow">Seguinos</span>
@@ -556,7 +559,7 @@
 
       s4_eye: "Crecimiento",
       s4_title: "~20× en 18 meses",
-      s4_sub: "Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong>~150K páginas vistas mensuales</strong>.",
+      s4_sub: "Páginas vistas por mes. De ~7K en el debut a un run-rate estable de <strong><span id=\"mk-mpv\">~150K</span> páginas vistas mensuales</strong>.",
       s4_note: "Pico de 172K páginas vistas en oct 2025. *Junio 2026 parcial (mes en curso).",
 
       s5_eye: "Calidad de audiencia",
@@ -644,6 +647,7 @@
       s14_f4h: "Display & integraciones", s14_f4p: "Banners y formatos a medida en sitio, con foco mobile (71% de la audiencia).",
       s14_f5h: "Sponsorship en el podcast", s14_f5p: "Menciones y segmentos patrocinados en Random, el podcast de 421. Audio nativo con audiencia fiel.",
       s14_follow: "Seguinos",
+      s14_rate: "Ver tarifario y precios →",
       s14_note: "Datos: Google Analytics 4 y Google Search Console, sept 2024 – jun 2026. Métricas de engagement según reporte estándar de GA4."
     },
     en: {
@@ -674,7 +678,7 @@
 
       s4_eye: "Growth",
       s4_title: "~20× in 18 months",
-      s4_sub: "Page views per month. From ~7K at launch to a steady run-rate of <strong>~150K monthly page views</strong>.",
+      s4_sub: "Page views per month. From ~7K at launch to a steady run-rate of <strong><span id=\"mk-mpv\">~150K</span> monthly page views</strong>.",
       s4_note: "Peak of 172K page views in Oct 2025. *June 2026 partial (month in progress).",
 
       s5_eye: "Audience quality",
@@ -762,12 +766,23 @@
       s14_f4h: "Display & integrations", s14_f4p: "Banners and custom formats on site, mobile-first (71% of the audience).",
       s14_f5h: "Podcast sponsorship", s14_f5p: "Mentions and sponsored segments on Random, the 421 podcast. Native audio with a loyal audience.",
       s14_follow: "Follow us",
+      s14_rate: "See rate card &amp; pricing →",
       s14_note: "Data: Google Analytics 4 and Google Search Console, Sept 2024 – Jun 2026. Engagement metrics per GA4 standard reporting."
     }
   };
 
   var nodes = document.querySelectorAll('[data-i18n]');
   var buttons = document.querySelectorAll('.lang-switch button');
+
+  // Live current-month page views (GA4 via webhook). null until fetched.
+  var liveMPV = null;
+  function applyLive(){
+    if(liveMPV == null) return;
+    var el = document.getElementById('mk-mpv');
+    if(el) el.textContent = '~' + Math.round(liveMPV / 1000) + 'K';
+    var bar = document.getElementById('mk-mbar'); // chart top gridline = 200K
+    if(bar) bar.style.height = Math.min(100, liveMPV / 200000 * 100).toFixed(1) + '%';
+  }
 
   function setLang(lang){
     var dict = I18N[lang] || I18N.es;
@@ -780,6 +795,7 @@
     for(var b=0;b<buttons.length;b++){
       buttons[b].classList.toggle('active', buttons[b].getAttribute('data-setlang') === lang);
     }
+    applyLive(); // re-apply live number: setLang just overwrote #mk-mpv with the default
     try{ localStorage.setItem('mk421lang', lang); }catch(e){}
   }
 
@@ -796,6 +812,28 @@
     else if((navigator.language||'').toLowerCase().indexOf('en') === 0) init = 'en';
   }catch(e){}
   setLang(init);
+
+  // Fetch live current-month page views: Render webhook first (5s timeout),
+  // fallback to theme asset. On any failure the hardcoded ~150K stays.
+  (function loadLive(){
+    function pick(d){
+      var m = d && d.monthly;
+      if(!m || !m.length) return;
+      var last = m[m.length - 1];
+      if(last && typeof last.pv === 'number' && last.pv > 0){ liveMPV = last.pv; applyLive(); }
+    }
+    var themeUrl = '{{asset "data/ga4-data.json"}}';
+    var renderUrl = 'https://webhook-hreflang.onrender.com/api/ga4-data.json';
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, 5000);
+    fetch(renderUrl, { signal: controller.signal })
+      .then(function(r){ clearTimeout(timer); if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(pick)
+      .catch(function(){
+        clearTimeout(timer);
+        fetch(themeUrl).then(function(r){ return r.json(); }).then(pick).catch(function(){});
+      });
+  })();
 })();
 </script>
 

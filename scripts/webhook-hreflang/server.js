@@ -1739,7 +1739,10 @@ async function refreshGA4Data() {
 // --- GA4 endpoint ---
 
 app.get('/api/ga4-data.json', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  // Public, non-sensitive aggregate analytics (same data is world-readable in the
+  // public GitHub repo + /assets/). '*' lets the media kit fetch it from any origin,
+  // incl. the standalone deck opened as a local file.
+  res.set('Access-Control-Allow-Origin', '*');
   res.set('Cache-Control', 'public, max-age=300');
   if (!ga4Data) {
     res.status(503).json({ error: 'GA4 data not ready yet' });
@@ -1749,7 +1752,7 @@ app.get('/api/ga4-data.json', (req, res) => {
 });
 
 app.options('/api/ga4-data.json', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Origin', '*');
   res.set('Access-Control-Allow-Methods', 'GET');
   res.set('Access-Control-Allow-Headers', 'Content-Type');
   res.status(204).end();

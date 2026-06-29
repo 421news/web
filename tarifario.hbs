@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow">
+<title>421 · Tarifario Comercial 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --negro:#121212;
+    --negro-2:#1b1b1b;
+    --crema:#eae6e1;
+    --amarillo:#fcd221;
+    --verde:#17a583;
+    --gradient:linear-gradient(280deg,var(--verde),var(--amarillo));
+    --dim:rgba(234,230,225,.6);
+    --line:rgba(234,230,225,.14);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--negro);
+    color:var(--crema);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;line-height:1.02}
+  a{color:inherit}
+
+  .slide{
+    min-height:100vh;
+    width:100%;
+    padding:6vh 7vw;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .eyebrow{
+    font-family:'Space Grotesk',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    font-size:.72rem;
+    font-weight:600;
+    color:var(--amarillo);
+    margin-bottom:1.4rem;
+  }
+  .slide-num{
+    position:absolute;top:5vh;right:7vw;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:.78rem;color:var(--dim);letter-spacing:.1em;
+  }
+  .gradient-text{
+    background:var(--gradient);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+
+  /* LANGUAGE SWITCH */
+  .lang-switch{
+    position:fixed;bottom:1.4rem;right:1.4rem;z-index:999;
+    display:flex;gap:2px;padding:3px;border-radius:999px;
+    background:rgba(27,27,27,.82);border:1px solid var(--line);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    box-shadow:0 6px 24px rgba(0,0,0,.35);
+  }
+  .lang-switch button{
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.78rem;
+    letter-spacing:.06em;color:var(--dim);background:none;border:none;cursor:pointer;
+    padding:.45rem .9rem;border-radius:999px;transition:all .18s;
+  }
+  .lang-switch button:hover{color:var(--crema)}
+  .lang-switch button.active{background:var(--gradient);color:var(--negro)}
+
+  /* DOWNLOAD PDF BUTTON */
+  .dl-btn{
+    position:fixed;bottom:1.4rem;left:1.4rem;z-index:999;
+    font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.78rem;
+    letter-spacing:.05em;text-transform:uppercase;cursor:pointer;
+    padding:.6rem 1.2rem;border-radius:999px;
+    border:1.5px solid var(--amarillo);background:rgba(27,27,27,.82);color:var(--amarillo);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    box-shadow:0 6px 24px rgba(0,0,0,.35);transition:all .18s;
+  }
+  .dl-btn:hover{background:var(--amarillo);color:var(--negro)}
+
+  .logo-link{display:inline-block;line-height:0;transition:opacity .18s}
+  .logo-link:hover{opacity:.82}
+
+  /* COVER */
+  .cover{justify-content:space-between;background:
+    radial-gradient(circle at 80% 15%,rgba(23,165,131,.18),transparent 45%),
+    radial-gradient(circle at 15% 90%,rgba(252,210,33,.12),transparent 45%),var(--negro);}
+  .cover-top{display:flex;justify-content:space-between;align-items:flex-start}
+  .brand-logo{height:88px;width:auto;display:block}
+  .brand-logo--sm{height:54px;width:auto;display:block}
+  .cover-mid h1{font-size:clamp(3rem,8vw,7rem);font-weight:700}
+  .cover-mid p{font-size:clamp(1.1rem,2vw,1.5rem);color:var(--dim);max-width:42ch;margin-top:1.6rem;line-height:1.4}
+  .cover-bottom{display:flex;justify-content:space-between;align-items:flex-end;color:var(--dim);font-size:.9rem}
+  .vig-pill{display:inline-block;background:rgba(27,27,27,.7);border:1px solid var(--line);border-radius:999px;padding:.45rem 1.1rem;font-family:'Space Grotesk',sans-serif;font-size:.85rem;color:var(--crema);margin-top:1.8rem}
+
+  /* STAT GRID */
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6rem;margin-top:1rem}
+  .stat{border-top:2px solid var(--amarillo);padding-top:1.1rem}
+  .stat .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2.4rem,5vw,4rem);line-height:.95}
+  .stat .lbl{color:var(--dim);font-size:.92rem;margin-top:.6rem;line-height:1.35}
+  .stat.green{border-color:var(--verde)}
+
+  h2.title{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:700;margin-bottom:.4rem}
+  .subtitle{color:var(--dim);font-size:1.05rem;max-width:64ch;margin-bottom:2.2rem;line-height:1.45}
+
+  /* RATE TABLES */
+  .rate-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem 4vw;margin-top:.6rem}
+  .rate-grid.one{grid-template-columns:1fr;max-width:760px}
+  .rate-cat{break-inside:avoid}
+  .rate-cat h3{
+    font-family:'Space Grotesk',sans-serif;text-transform:uppercase;letter-spacing:.12em;
+    font-size:.82rem;font-weight:600;color:var(--amarillo);margin-bottom:.2rem;
+    display:flex;align-items:baseline;gap:.6rem;
+  }
+  .rate-cat h3 .meta{font-family:'Inter',sans-serif;text-transform:none;letter-spacing:0;font-weight:400;font-size:.72rem;color:var(--dim)}
+  .rate{width:100%;border-collapse:collapse}
+  .rate tr{border-bottom:1px solid var(--line)}
+  .rate td{padding:.7rem 0;vertical-align:top}
+  .rate .it{font-weight:600;font-size:.95rem;padding-right:1rem}
+  .rate .it .d{display:block;color:var(--dim);font-weight:400;font-size:.8rem;margin-top:.2rem;line-height:1.35}
+  .rate .pr{text-align:right;white-space:nowrap;padding-left:1.4rem}
+  .rate .pr .usd{font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--amarillo);font-size:1.05rem}
+  .rate .pr .unit{display:block;color:var(--dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;margin-top:.15rem;font-family:'Space Grotesk',sans-serif}
+  .rate .pr .ars{display:block;color:var(--dim);font-size:.72rem;margin-top:.25rem}
+  .rate .pr .pre{color:var(--dim);font-size:.8rem;margin-right:.25rem}
+  .rate .pr.quote-cell{vertical-align:middle;text-align:right}
+  .rate .pr .quote{
+    display:inline-block;border:1.5px solid var(--amarillo);border-radius:999px;
+    padding:.5rem 1.2rem;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.8rem;
+    text-transform:uppercase;letter-spacing:.05em;color:var(--amarillo);text-decoration:none;
+    white-space:nowrap;transition:all .18s;
+  }
+  .rate .pr .quote:hover{background:var(--amarillo);color:var(--negro)}
+
+  /* TEAM BADGE (shown only to verified team members) */
+  .team-badge{
+    display:none;position:fixed;top:1.2rem;left:1.2rem;z-index:999;
+    font-family:'Space Grotesk',sans-serif;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--verde);background:rgba(27,27,27,.82);border:1px solid var(--line);border-radius:999px;
+    padding:.4rem .9rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  }
+  body.team .team-badge{display:block}
+
+  .note{color:var(--dim);font-size:.78rem;margin-top:auto;padding-top:2rem;line-height:1.5}
+  .conds{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem 3vw;margin-top:1rem;list-style:none}
+  .conds li{display:flex;gap:.7rem;font-size:.9rem;color:var(--crema);line-height:1.4;border-top:1px solid var(--line);padding-top:.9rem}
+  .conds li b{color:var(--amarillo);font-family:'Space Grotesk',sans-serif;font-weight:600;flex:none}
+
+  .cta-line{font-size:clamp(1.3rem,3vw,2.2rem);font-weight:600;line-height:1.25;max-width:26ch;margin-bottom:1.6rem}
+  .cta-line .gradient-text{font-weight:700}
+  .contact-row{display:flex;gap:2.4rem;flex-wrap:wrap;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.1rem;margin-top:.4rem}
+  .contact-row a{text-decoration:none;color:var(--crema);transition:color .18s}
+  .contact-row a:hover{color:var(--amarillo)}
+
+  @media (max-width:760px){
+    .stat-grid{grid-template-columns:1fr 1fr}
+    .rate-grid{grid-template-columns:1fr}
+    .conds{grid-template-columns:1fr}
+    .lang-switch{bottom:1rem;right:1rem}
+    .dl-btn{bottom:1rem;left:1rem}
+  }
+
+  /* PRINT → slides as landscape PDF pages */
+  @page{size:1280px 720px;margin:0}
+  @media print{
+    body{background:var(--negro)}
+    .slide{min-height:720px;height:auto;page-break-after:always;border:none}
+    .lang-switch,.dl-btn,.team-badge{display:none}
+  }
+</style>
+</head>
+<body>
+
+<!-- LANGUAGE SWITCH -->
+<div class="lang-switch" role="group" aria-label="Idioma / Language">
+  <button type="button" data-setlang="es" class="active">ES</button>
+  <button type="button" data-setlang="en">EN</button>
+</div>
+<button class="dl-btn" type="button" onclick="window.print()" data-i18n="dl">Descargar PDF</button>
+<div class="team-badge" data-i18n="team_badge">✓ Vista equipo · con precios</div>
+
+<!-- 1 · COVER -->
+<section class="slide cover">
+  <div class="cover-top">
+    <a class="logo-link" href="https://www.421.news/" target="_blank" rel="noopener" aria-label="421">
+    <svg class="brand-logo" viewBox="0 0 167 80" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="421">
+      <g clip-path="url(#clip_t)">
+        <path d="M87.3617 0.991943C59.5368 0.991943 35.0847 7.46992 21.0952 17.247C17.6134 19.6801 14.7791 22.3177 12.7032 25.1117C12.6842 25.1374 12.6669 25.1632 12.6478 25.1873C12.6478 25.1873 12.6478 25.1873 12.6461 25.189C10.4542 26.7818 8.53582 28.4589 6.92218 30.2081C5.56825 31.6738 4.42901 33.1911 3.52177 34.7496C1.85619 37.6071 0.969727 40.6055 0.969727 43.6967C0.969727 63.1856 36.1962 78.9854 79.6502 78.9854C106.706 78.9854 130.573 72.8596 144.732 63.5327C148.793 60.8573 152.056 57.9191 154.366 54.7866C158.253 51.9617 161.276 48.874 163.272 45.5937C165.078 42.6262 166.042 39.5041 166.042 36.2806C166.042 16.7917 130.816 0.991943 87.3617 0.991943Z" fill="#EAE6E1"/>
+        <path d="M166.042 36.2806C166.042 39.5041 165.078 42.6279 163.272 45.5937C161.278 48.8705 158.255 51.9617 154.366 54.7849C156.939 51.2985 158.331 47.5698 158.331 43.695C158.331 24.2061 123.104 8.4081 79.6504 8.4081C58.1017 8.4081 38.5753 12.2932 24.3642 18.5873C19.899 20.565 15.9601 22.7799 12.6445 25.1873C12.6618 25.1615 12.6826 25.1357 12.7017 25.1099C14.7793 22.316 17.6136 19.6801 21.0936 17.2453C35.0866 7.46992 59.537 0.991943 87.3619 0.991943C130.816 0.991943 166.042 16.7917 166.042 36.2806Z" fill="url(#paint0_t)"/>
+        <path d="M0.969727 43.696C0.969727 40.4724 1.9341 37.3486 3.73992 34.3828C5.73446 31.106 8.75744 28.0148 12.6461 25.1917C10.0733 28.6781 8.68126 32.4068 8.68126 36.2815C8.68126 55.7704 43.9077 71.5684 87.3617 71.5684C108.91 71.5684 128.437 67.6834 142.648 61.3892C147.113 59.4115 151.052 57.1966 154.368 54.7893C154.35 54.8151 154.329 54.8408 154.31 54.8666C152.233 57.6605 149.398 60.2964 145.918 62.7312C131.927 72.5083 107.477 78.9863 79.6519 78.9863C36.1962 78.9846 0.969727 63.1849 0.969727 43.696Z" fill="url(#paint1_t)"/>
+        <path d="M60.077 59.8132H51.9067C51.3682 59.8132 50.8574 59.5795 50.506 59.1723C50.1545 58.7668 50.0021 58.229 50.0853 57.6997L51.0392 51.653H37.6679C37.1277 51.653 36.6152 51.4194 36.2654 51.0104C35.9157 50.6032 35.7633 50.0653 35.8482 49.5344L36.9632 42.6543C37.0134 42.345 37.1433 42.0529 37.3389 41.8089L53.78 21.2169C54.1315 20.777 54.6578 20.5244 55.224 20.5244H65.7715C66.3117 20.5244 66.8224 20.7581 67.1739 21.1671C67.5254 21.576 67.6777 22.1138 67.5912 22.6431L64.6149 41.1182H67.1826C67.721 41.1182 68.23 41.3501 68.5815 41.7557C68.933 42.1629 69.0871 42.6973 69.004 43.2248L67.9392 50.1049C67.8006 51.0035 67.0337 51.6565 66.1178 51.6565H62.9199L61.8967 58.265C61.7582 59.1637 60.9912 59.8167 60.0753 59.8167L60.077 59.8132ZM52.0486 57.863H59.9731L61.2353 49.7045H66.0139L67.0406 43.065H62.3105L65.6278 22.473H55.2811L38.8971 42.9946L37.8098 49.7045H53.3333L52.0469 57.863H52.0486ZM54.4085 43.065H45.6391L54.457 31.9373C54.5262 31.8514 54.592 31.7672 54.6578 31.683L57.1371 28.5231L54.4085 43.0633V43.065ZM49.6836 41.1147H52.7775L53.7367 36.0011L49.6836 41.1147Z" fill="#121212"/>
+        <path d="M96.972 59.8137H70.5028C69.7808 59.8137 69.1229 59.3927 68.8251 58.7415C68.5273 58.0885 68.6416 57.3204 69.116 56.7809L84.2187 39.6289C85.9103 37.6855 87.0841 36.1493 87.7057 35.0634C88.2199 34.1647 88.4935 33.3554 88.4935 32.723C88.4935 31.9223 88.2147 31.5615 88.0052 31.3604C87.7836 31.1474 87.3819 30.8656 86.4747 30.8656C85.5674 30.8656 84.9459 31.1336 84.4698 31.7092C83.9105 32.3862 83.6127 33.4155 83.5885 34.7712C83.5694 35.761 82.7436 36.5669 81.7463 36.5669H73.2037C72.6947 36.5669 72.203 36.3555 71.855 35.9844C71.507 35.6132 71.3286 35.1115 71.365 34.608C71.694 30.0322 73.2539 26.3877 75.9999 23.7724C78.7632 21.1434 82.4441 19.8118 86.9439 19.8118C91.12 19.8118 94.5671 20.9785 97.1901 23.281C99.879 25.6402 101.242 28.7349 101.242 32.4773C101.242 35.0307 100.566 37.5119 99.2332 39.8522C97.9658 42.0757 95.8224 44.5999 92.86 47.3526L91.7588 48.3664H98.2359C98.7778 48.3664 99.2886 48.6001 99.6383 49.009C99.988 49.418 100.14 49.9558 100.054 50.485L98.7917 58.2758C98.6462 59.1676 97.881 59.8137 96.972 59.8137ZM70.7711 57.8634H96.8681L98.0922 50.3149H90.5347C90.3079 50.3149 89.8872 50.3287 89.2501 50.3596L86.563 50.485L91.5199 45.9247C94.3334 43.3112 96.3539 40.9434 97.5226 38.8917C98.6878 36.8469 99.2782 34.687 99.2782 32.4756C99.2782 29.3157 98.1389 26.7142 95.8899 24.7398C93.6374 22.7621 90.6282 21.7603 86.9456 21.7603C82.9704 21.7603 79.7448 22.9099 77.3607 25.1797C75.0009 27.4255 73.647 30.6009 73.3353 34.6166H81.6286C81.6788 32.8674 82.1237 31.4721 82.9531 30.4721C83.8066 29.4394 84.9926 28.917 86.4764 28.917C87.6745 28.917 88.6493 29.2675 89.3713 29.9583C90.095 30.6508 90.4603 31.5804 90.4603 32.723C90.4603 33.7059 90.1088 34.8176 89.4163 36.0256C88.7324 37.2215 87.4823 38.8642 85.7042 40.9056L70.7729 57.8617L70.7711 57.8634Z" fill="#121212"/>
+        <path d="M116.62 59.8135H107.385C106.845 59.8135 106.334 59.5798 105.983 59.1708C105.631 58.7619 105.481 58.2241 105.565 57.6948L109.754 31.7743H106.469C105.894 31.7743 105.344 31.5011 104.997 31.0458C104.651 30.5887 104.539 29.989 104.698 29.4392L106.902 21.846C107.129 21.0676 107.856 20.5229 108.673 20.5229H122.292C122.832 20.5229 123.343 20.7566 123.693 21.1639C124.043 21.5711 124.197 22.1072 124.112 22.6365L118.442 58.2687C118.3 59.164 117.534 59.8118 116.622 59.8118L116.62 59.8135ZM107.527 57.8632H116.516L122.148 22.4732H108.765L106.632 29.8258H112.06L107.529 57.8632H107.527Z" fill="#121212"/>
+        <path d="M159.304 43.6966C159.285 49.824 155.457 55.1026 151.357 59.3365C149.279 61.4345 146.975 63.3195 144.447 64.8556C143.675 65.3196 142.701 65.9708 141.924 66.3798C139.943 67.4898 137.455 68.7751 135.36 69.6772C134.516 70.026 133.487 70.502 132.663 70.8353C131.977 71.1051 130.61 71.6154 129.924 71.8835C105.699 80.7121 75.8809 81.9269 50.5648 77.5126C35.7148 74.7547 19.1093 69.8525 7.81032 59.4757C-0.335785 51.8293 -2.86705 41.9319 3.87145 32.3971C6.09799 29.0601 9.35297 26.7061 12.5681 24.4053C15.7539 22.1354 19.0764 20.0305 22.6101 18.338C26.1611 16.6901 29.8178 15.2897 33.5333 14.0886C65.8424 3.55375 118.353 4.40946 146.916 24.151C153.33 28.6993 159.317 35.4573 159.3 43.6983L159.304 43.6966ZM157.359 43.6966C157.323 36.0828 151.658 29.9639 145.742 25.7696C117.846 6.61404 65.7126 5.66726 34.141 15.9427C31.4332 16.7967 28.6751 17.8173 26.0572 18.9239C21.689 20.802 17.2584 22.7574 13.3715 25.5136C10.2948 27.6992 7.75492 30.5739 5.48336 33.5277C0.768829 39.9747 0.799994 47.4046 5.48336 53.8671C11.9673 62.749 23.8705 68.0878 34.1427 71.4419C60.7574 79.865 94.1227 80.0282 121.023 72.6808C122.273 72.2924 123.914 71.8508 125.156 71.4384L127.881 70.5209C128.108 70.4435 128.336 70.3714 128.561 70.2889C129.252 70.0312 129.943 69.7579 130.575 69.5225C135.918 67.5087 141.095 64.8935 145.771 61.6613C152.191 57.3519 157.396 51.8378 157.361 43.6983L157.359 43.6966Z" fill="#121212"/>
+        <path d="M166.999 36.2799C167.054 46.8319 157.727 53.7463 149.54 58.7964C146.209 60.8567 142.652 62.52 138.999 63.9221C133.557 66.0184 127.868 67.6731 122.177 68.9206C103.142 73.0497 83.3477 73.6098 64.0498 71.0393C47.1101 68.6611 24.4291 62.666 12.9536 49.3595C9.1861 44.9487 6.81066 39.0618 8.01569 33.2471C8.84502 29.307 11.1166 25.8619 13.6634 22.8239C18.6671 16.6862 25.8211 12.7977 32.9942 9.69786C41.9887 5.91246 51.532 3.50169 61.1636 1.97241C89.7347 -2.52609 130.33 -0.0242577 154.611 16.7601C161.024 21.2998 167.009 28.0458 167.001 36.2799H166.999ZM165.087 36.2799C165.056 28.6592 159.393 22.5284 153.473 18.3254C130.254 2.34012 91.7448 -0.227015 64.3355 3.55496C53.8867 5.00863 43.5123 7.44002 33.7733 11.5158C27.6252 14.0933 21.8165 17.4697 16.7591 21.7843C11.6931 26.0131 8.74807 32.4017 9.91155 38.9759C11.8178 48.9643 22.4952 55.8083 31.1693 59.8497C56.875 71.474 91.4124 72.9156 118.931 67.6044C127.39 65.9566 135.749 63.4856 143.601 59.9356C150.521 56.9699 157.386 52.8185 161.578 46.4797C163.65 43.452 165.089 39.9605 165.089 36.2764L165.087 36.2799Z" fill="#121212"/>
+      </g>
+      <defs>
+        <linearGradient id="paint0_t" x1="49.8863" y1="-12.2372" x2="135.594" y2="74.1229" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#17A583"/><stop offset="0.1" stop-color="#36AB75"/><stop offset="0.35" stop-color="#7BB857"/><stop offset="0.57" stop-color="#B2C340"/><stop offset="0.76" stop-color="#DACB2F"/><stop offset="0.91" stop-color="#F3D024"/><stop offset="1" stop-color="#FCD221"/>
+        </linearGradient>
+        <linearGradient id="paint1_t" x1="117.127" y1="92.2137" x2="31.4179" y2="5.85366" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#17A583"/><stop offset="0.1" stop-color="#36AB75"/><stop offset="0.35" stop-color="#7BB857"/><stop offset="0.57" stop-color="#B2C340"/><stop offset="0.76" stop-color="#DACB2F"/><stop offset="0.91" stop-color="#F3D024"/><stop offset="1" stop-color="#FCD221"/>
+        </linearGradient>
+        <clipPath id="clip_t"><rect width="167" height="80" fill="white"/></clipPath>
+      </defs>
+    </svg>
+    </a>
+    <div style="text-align:right;color:var(--dim);font-size:.85rem" data-i18n="cover_kit">Tarifario Comercial<br>2026</div>
+  </div>
+  <div class="cover-mid">
+    <div class="eyebrow" data-i18n="cover_eyebrow">Pauta · Contenido · Comunidad</div>
+    <h1 data-i18n="cover_h1">Tarifario<br><span class="gradient-text">comercial</span>.</h1>
+    <p data-i18n="cover_p">Formatos publicitarios y de contenido de marca en 421. Pensados para una audiencia chica, premium e hiper-comprometida.</p>
+    <span class="vig-pill" data-i18n="cover_vig">Vigencia desde junio 2026</span>
+  </div>
+  <div class="cover-bottom">
+    <div>www.421.news</div>
+    <div data-i18n="cover_cur">Valores en USD · referencia ARS al dólar blue del día</div>
+  </div>
+</section>
+
+<!-- 2 · POR QUÉ 421 -->
+<section class="slide">
+  <div class="slide-num">02</div>
+  <div class="eyebrow" data-i18n="why_eye">Qué estás comprando</div>
+  <h2 class="title" data-i18n="why_title">No vendemos volumen. Vendemos atención.</h2>
+  <p class="subtitle" data-i18n="why_sub">421 no compite por cantidad de impresiones: compite por calidad de contacto. Una audiencia que lee long-form hasta el final, vuelve y confía. Por eso los formatos de contenido se cobran por valor, no por CPM.</p>
+  <div class="stat-grid">
+    <div class="stat"><div class="num">93%</div><div class="lbl" data-i18n="why_l1">tasa de engagement (sesiones con interacción)</div></div>
+    <div class="stat green"><div class="num">5:53</div><div class="lbl" data-i18n="why_l2">duración promedio de sesión</div></div>
+    <div class="stat"><div class="num">~26K</div><div class="lbl" data-i18n="why_l3">lectores únicos por mes</div></div>
+    <div class="stat green"><div class="num">~5.400</div><div class="lbl" data-i18n="why_l4">suscriptores en la comunidad (newsletter)</div></div>
+  </div>
+  <div class="note" data-i18n="why_note">Fuente: Google Analytics 4 (sept 2024 – jun 2026). Audiencia internacional en 8 idiomas, con núcleo fuerte en Argentina e Hispanoamérica.</div>
+</section>
+
+<!-- 3 · DIGITAL -->
+<section class="slide">
+  <div class="slide-num">03</div>
+  <div class="eyebrow" data-i18n="d_eye">Tarifas · Digital</div>
+  <h2 class="title" data-i18n="d_title">Contenido, newsletter y display</h2>
+  <p class="subtitle" data-i18n="d_sub">El corazón de la propuesta. El contenido patrocinado es donde la calidad editorial de 421 vale de verdad.</p>
+  <div class="rate-grid">
+
+    <div class="rate-cat">
+      <h3 data-i18n="cat_content">Contenido patrocinado</h3>
+      <table class="rate"><tbody>
+        <tr><td class="it" data-i18n="ct_1">Estándar<span class="d" data-i18n="ct_1d">Nota de marca + 1 posteo en redes</span></td><td class="pr" data-usd="1000"></td></tr>
+        <tr><td class="it" data-i18n="ct_2">Premium<span class="d" data-i18n="ct_2d">Nota + newsletter + 2 redes + destacado en home</span></td><td class="pr" data-usd="2200"></td></tr>
+        <tr><td class="it" data-i18n="ct_3">Proyecto especial<span class="d" data-i18n="ct_3d">A medida: serie, multicanal o revista</span></td><td class="pr" data-usd="6000" data-from="1"></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="rate-cat">
+      <h3 data-i18n="cat_news">Newsletter <span class="meta" data-i18n="news_meta">~5.400 suscriptores</span></h3>
+      <table class="rate"><tbody>
+        <tr><td class="it" data-i18n="nw_1">Mención integrada<span class="d" data-i18n="nw_1d">Bloque de marca dentro del envío</span></td><td class="pr" data-usd="400"></td></tr>
+        <tr><td class="it" data-i18n="nw_2">Envío dedicado<span class="d" data-i18n="nw_2d">Un envío completo solo para tu marca</span></td><td class="pr" data-usd="900"></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="rate-cat">
+      <h3 data-i18n="cat_display">Display &amp; integraciones</h3>
+      <table class="rate"><tbody>
+        <tr><td class="it" data-i18n="dp_1">Paquete mensual<span class="d" data-i18n="dp_1d">Banner en home + notas, ~50% del inventario</span></td><td class="pr" data-usd="1800" data-unit="month"></td></tr>
+        <tr><td class="it" data-i18n="dp_2">CPM<span class="d" data-i18n="dp_2d">Por volumen de impresiones · mín. 20.000</span></td><td class="pr" data-usd="18" data-unit="cpm"></td></tr>
+        <tr><td class="it" data-i18n="dp_3">Takeover / parallax<span class="d" data-i18n="dp_3d">Formato a medida, alto impacto · 24–48 hs</span></td><td class="pr" data-usd="1200"></td></tr>
+      </tbody></table>
+    </div>
+
+  </div>
+</section>
+
+<!-- 4 · CONTENIDO & COMUNIDAD -->
+<section class="slide">
+  <div class="slide-num">04</div>
+  <div class="eyebrow" data-i18n="o_eye">Tarifas · Revista, audio y redes</div>
+  <h2 class="title" data-i18n="o_title">Revista, podcast y redes</h2>
+  <p class="subtitle" data-i18n="o_sub">Más superficies de la marca 421: la revista temática, el podcast Random y la comunidad en redes.</p>
+  <div class="rate-grid">
+
+    <div class="rate-cat">
+      <h3 data-i18n="cat_revista">Revista 421 <span class="meta" data-i18n="rev_meta">PDF + web</span></h3>
+      <table class="rate"><tbody>
+        <tr><td class="it" data-i18n="rv_1">Aviso página completa<span class="d" data-i18n="rv_1d">En un número temático</span></td><td class="pr" data-usd="900"></td></tr>
+        <tr><td class="it" data-i18n="rv_2">Contenido de marca<span class="d" data-i18n="rv_2d">Pieza editorial dentro de un número</span></td><td class="pr" data-usd="1800"></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="rate-cat">
+      <h3 data-i18n="cat_podcast">Podcast Random</h3>
+      <table class="rate"><tbody>
+        <tr><td class="it" data-i18n="pd_1">Mención / PNT leída<span class="d" data-i18n="pd_1d">Por episodio</span></td><td class="pr" data-usd="350"></td></tr>
+        <tr><td class="it" data-i18n="pd_2">Segmento patrocinado<span class="d" data-i18n="pd_2d">60–90 s, por episodio</span></td><td class="pr" data-usd="700"></td></tr>
+      </tbody></table>
+    </div>
+
+    <div class="rate-cat">
+      <h3 data-i18n="cat_redes">Redes @421net</h3>
+      <table class="rate"><tbody>
+        <tr><td class="it" data-i18n="rd_1">Posteo / story<span class="d" data-i18n="rd_1d">Con mención de marca, por pieza</span></td><td class="pr" data-usd="300"></td></tr>
+        <tr><td class="it" data-i18n="rd_2">Reel / colaborativa<span class="d" data-i18n="rd_2d">Pieza producida, por unidad</span></td><td class="pr" data-usd="600"></td></tr>
+      </tbody></table>
+    </div>
+
+  </div>
+</section>
+
+<!-- 5 · PAQUETES + CONDICIONES + CONTACTO -->
+<section class="slide" style="justify-content:space-between">
+  <div class="slide-num">05</div>
+  <div>
+    <div class="eyebrow" data-i18n="pk_eye">Paquetes &amp; condiciones</div>
+    <h2 class="title" data-i18n="pk_title">Combiná y ahorrá</h2>
+    <p class="subtitle" data-i18n="pk_sub">Paquetes que cruzan formatos, con un ahorro de ~15–20% sobre la suma de las piezas sueltas.</p>
+    <div class="rate-grid">
+      <div class="rate-cat">
+        <h3 data-i18n="cat_packs">Paquetes</h3>
+        <table class="rate"><tbody>
+          <tr><td class="it" data-i18n="pk_1">Lanzamiento<span class="d" data-i18n="pk_1d">Nota premium + newsletter dedicado + 3 redes</span></td><td class="pr" data-usd="3000"></td></tr>
+          <tr><td class="it" data-i18n="pk_2">Always-on<span class="d" data-i18n="pk_2d">Display mes + 1 nota + 1 newsletter + 4 redes</span></td><td class="pr" data-usd="3800" data-unit="month"></td></tr>
+        </tbody></table>
+      </div>
+      <div class="rate-cat">
+        <h3 data-i18n="conds_title">Condiciones</h3>
+        <ul class="conds">
+          <li><b>+</b><span data-i18n="cond_1">Los valores no incluyen impuestos.</span></li>
+          <li><b>$</b><span data-i18n="cond_2">Precios en USD. Referencia en ARS al dólar blue del día.</span></li>
+          <li><b>★</b><span data-i18n="cond_3">Precios de lista. Consultá por volumen y acuerdos anuales.</span></li>
+          <li><b>✎</b><span data-i18n="cond_4">Todo formato de contenido respeta la línea editorial de 421.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="cta-line" data-i18n="contact_line">¿Armamos una propuesta <span class="gradient-text">a tu medida</span>?</div>
+    <div class="contact-row">
+      <a href="mailto:admin@421.news">admin@421.news</a>
+      <a href="https://instagram.com/421net" target="_blank" rel="noopener">@421net</a>
+      <a href="https://www.421.news/" target="_blank" rel="noopener">www.421.news</a>
+    </div>
+  </div>
+  <div class="note" data-i18n="contact_note">Tarifario sujeto a actualización. Para campañas internacionales o formatos no listados, escribinos.</div>
+</section>
+
+<script>
+(function(){
+  var I18N = {
+    es: {
+      __title: "421 · Tarifario Comercial 2026",
+      dl: "Descargar PDF",
+      quote: "Cotizar",
+      quote_subj: "Cotización 421",
+      team_badge: "✓ Vista equipo · con precios",
+      cover_kit: "Tarifario Comercial<br>2026",
+      cover_eyebrow: "Pauta · Contenido · Comunidad",
+      cover_h1: 'Tarifario<br><span class="gradient-text">comercial</span>.',
+      cover_p: "Formatos publicitarios y de contenido de marca en 421. Pensados para una audiencia chica, premium e hiper-comprometida.",
+      cover_vig: "Vigencia desde junio 2026",
+      cover_cur: "Valores en USD · referencia ARS al dólar blue del día",
+
+      why_eye: "Qué estás comprando",
+      why_title: "No vendemos volumen. Vendemos atención.",
+      why_sub: "421 no compite por cantidad de impresiones: compite por calidad de contacto. Una audiencia que lee long-form hasta el final, vuelve y confía. Por eso los formatos de contenido se cobran por valor, no por CPM.",
+      why_l1: "tasa de engagement (sesiones con interacción)",
+      why_l2: "duración promedio de sesión",
+      why_l3: "lectores únicos por mes",
+      why_l4: "suscriptores en la comunidad (newsletter)",
+      why_note: "Fuente: Google Analytics 4 (sept 2024 – jun 2026). Audiencia internacional en 8 idiomas, con núcleo fuerte en Argentina e Hispanoamérica.",
+
+      d_eye: "Tarifas · Digital",
+      d_title: "Contenido, newsletter y display",
+      d_sub: "El corazón de la propuesta. El contenido patrocinado es donde la calidad editorial de 421 vale de verdad.",
+      cat_content: "Contenido patrocinado",
+      ct_1: 'Estándar<span class="d">Nota de marca + 1 posteo en redes</span>',
+      ct_2: 'Premium<span class="d">Nota + newsletter + 2 redes + destacado en home</span>',
+      ct_3: 'Proyecto especial<span class="d">A medida: serie, multicanal o revista</span>',
+      from: "desde",
+      cat_news: 'Newsletter <span class="meta">~5.400 suscriptores</span>',
+      nw_1: 'Mención integrada<span class="d">Bloque de marca dentro del envío</span>',
+      nw_2: 'Envío dedicado<span class="d">Un envío completo solo para tu marca</span>',
+      cat_display: "Display &amp; integraciones",
+      dp_1: 'Paquete mensual<span class="d">Banner en home + notas, ~50% del inventario</span>',
+      dp_2: 'CPM<span class="d">Por volumen de impresiones · mín. 20.000</span>',
+      dp_3: 'Takeover / parallax<span class="d">Formato a medida, alto impacto · 24–48 hs</span>',
+      per_month: "por mes",
+
+      o_eye: "Tarifas · Revista, audio y redes",
+      o_title: "Revista, podcast y redes",
+      o_sub: "Más superficies de la marca 421: la revista temática, el podcast Random y la comunidad en redes.",
+      cat_revista: 'Revista 421 <span class="meta">PDF + web</span>',
+      rv_1: 'Aviso página completa<span class="d">En un número temático</span>',
+      rv_2: 'Contenido de marca<span class="d">Pieza editorial dentro de un número</span>',
+      cat_podcast: "Podcast Random",
+      pd_1: 'Mención / PNT leída<span class="d">Por episodio</span>',
+      pd_2: 'Segmento patrocinado<span class="d">60–90 s, por episodio</span>',
+      cat_redes: "Redes @421net",
+      rd_1: 'Posteo / story<span class="d">Con mención de marca, por pieza</span>',
+      rd_2: 'Reel / colaborativa<span class="d">Pieza producida, por unidad</span>',
+
+      pk_eye: "Paquetes & condiciones",
+      pk_title: "Combiná y ahorrá",
+      pk_sub: "Paquetes que cruzan formatos, con un ahorro de ~15–20% sobre la suma de las piezas sueltas.",
+      cat_packs: "Paquetes",
+      pk_1: 'Lanzamiento<span class="d">Nota premium + newsletter dedicado + 3 redes</span>',
+      pk_2: 'Always-on<span class="d">Display mes + 1 nota + 1 newsletter + 4 redes</span>',
+      conds_title: "Condiciones",
+      cond_1: "Los valores no incluyen impuestos.",
+      cond_2: "Precios en USD. Referencia en ARS al dólar blue del día.",
+      cond_3: "Precios de lista. Consultá por volumen y acuerdos anuales.",
+      cond_4: "Todo formato de contenido respeta la línea editorial de 421.",
+      contact_line: '¿Armamos una propuesta <span class="gradient-text">a tu medida</span>?',
+      contact_note: "Tarifario sujeto a actualización. Para campañas internacionales o formatos no listados, escribinos."
+    },
+    en: {
+      __title: "421 · Commercial Rate Card 2026",
+      dl: "Download PDF",
+      quote: "Get a quote",
+      quote_subj: "421 quote",
+      team_badge: "✓ Team view · with prices",
+      cover_kit: "Commercial Rate Card<br>2026",
+      cover_eyebrow: "Ads · Content · Community",
+      cover_h1: 'Rate<br><span class="gradient-text">card</span>.',
+      cover_p: "Advertising and branded-content formats on 421. Built around a small, premium, hyper-engaged audience.",
+      cover_vig: "Effective from June 2026",
+      cover_cur: "Prices in USD · ARS reference at the day's blue rate",
+
+      why_eye: "What you're buying",
+      why_title: "We don't sell volume. We sell attention.",
+      why_sub: "421 doesn't compete on impressions: it competes on quality of contact. An audience that reads long-form to the end, comes back and trusts. That's why content formats are priced by value, not CPM.",
+      why_l1: "engagement rate (sessions with interaction)",
+      why_l2: "average session duration",
+      why_l3: "unique readers per month",
+      why_l4: "community subscribers (newsletter)",
+      why_note: "Source: Google Analytics 4 (Sept 2024 – Jun 2026). International audience across 8 languages, with a strong core in Argentina and Latin America.",
+
+      d_eye: "Rates · Digital",
+      d_title: "Content, newsletter and display",
+      d_sub: "The core of the offer. Sponsored content is where 421's editorial quality really pays off.",
+      cat_content: "Sponsored content",
+      ct_1: 'Standard<span class="d">Branded article + 1 social post</span>',
+      ct_2: 'Premium<span class="d">Article + newsletter + 2 social + home feature</span>',
+      ct_3: 'Special project<span class="d">Custom: series, multichannel or magazine</span>',
+      from: "from",
+      cat_news: 'Newsletter <span class="meta">~5,400 subscribers</span>',
+      nw_1: 'Integrated mention<span class="d">Branded block inside the send</span>',
+      nw_2: 'Dedicated send<span class="d">A full send just for your brand</span>',
+      cat_display: "Display &amp; integrations",
+      dp_1: 'Monthly package<span class="d">Home + article banner, ~50% of inventory</span>',
+      dp_2: 'CPM<span class="d">By impression volume · min. 20,000</span>',
+      dp_3: 'Takeover / parallax<span class="d">High-impact custom format · 24–48 h</span>',
+      per_month: "per month",
+
+      o_eye: "Rates · Magazine, audio and social",
+      o_title: "Magazine, podcast and social",
+      o_sub: "More 421 brand surfaces: the themed magazine, the Random podcast and the social community.",
+      cat_revista: 'Magazine 421 <span class="meta">PDF + web</span>',
+      rv_1: 'Full-page ad<span class="d">In a themed issue</span>',
+      rv_2: 'Branded content<span class="d">Editorial piece inside an issue</span>',
+      cat_podcast: "Random podcast",
+      pd_1: 'Host-read mention<span class="d">Per episode</span>',
+      pd_2: 'Sponsored segment<span class="d">60–90 s, per episode</span>',
+      cat_redes: "Social @421net",
+      rd_1: 'Post / story<span class="d">With brand mention, per piece</span>',
+      rd_2: 'Reel / collab<span class="d">Produced piece, per unit</span>',
+
+      pk_eye: "Packages & terms",
+      pk_title: "Bundle and save",
+      pk_sub: "Cross-format packages, with ~15–20% savings over the sum of individual pieces.",
+      cat_packs: "Packages",
+      pk_1: 'Launch<span class="d">Premium article + dedicated newsletter + 3 social</span>',
+      pk_2: 'Always-on<span class="d">Display month + 1 article + 1 newsletter + 4 social</span>',
+      conds_title: "Terms",
+      cond_1: "Prices do not include taxes.",
+      cond_2: "Prices in USD. ARS reference at the day's blue rate.",
+      cond_3: "List prices. Ask about volume and annual deals.",
+      cond_4: "Every content format respects 421's editorial line.",
+      contact_line: 'Shall we build a <span class="gradient-text">custom proposal</span>?',
+      contact_note: "Rate card subject to update. For international campaigns or formats not listed, get in touch."
+    }
+  };
+
+  var nodes = document.querySelectorAll('[data-i18n]');
+  var buttons = document.querySelectorAll('.lang-switch button');
+  var priceCells = document.querySelectorAll('.pr');
+  var L = I18N.es;        // current dictionary
+  var blueRate = null;    // ARS per USD (blue, venta)
+  var unlocked = false;   // true once a team member is verified
+
+  function fmtN(n){ return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+
+  // Unlocked: render one price cell from its data-usd (single source of truth).
+  function renderPriceCell(cell){
+    var usd = parseFloat(cell.getAttribute('data-usd'));
+    var html = '';
+    if(cell.getAttribute('data-from')) html += '<span class="pre">' + L.from + '</span>';
+    html += '<span class="usd">US$ ' + fmtN(usd) + '</span>';
+    var unit = cell.getAttribute('data-unit');
+    if(unit === 'month') html += '<span class="unit">' + L.per_month + '</span>';
+    else if(unit === 'cpm') html += '<span class="unit">CPM</span>';
+    if(blueRate) html += '<span class="ars">≈ AR$ ' + fmtN(usd * blueRate) + '</span>';
+    cell.innerHTML = html;
+  }
+
+  // Locked (public): merge each table's price column into a single cell (rowspan)
+  // with one "Cotizar" mailto link. Unlocked (team): each row shows its own price.
+  function renderPrices(){
+    var tables = document.querySelectorAll('table.rate');
+    for(var t=0;t<tables.length;t++){
+      var cells = tables[t].querySelectorAll('.pr');
+      var i;
+      if(unlocked){
+        for(i=0;i<cells.length;i++){
+          cells[i].style.display = '';
+          cells[i].removeAttribute('rowspan');
+          cells[i].classList.remove('quote-cell');
+          renderPriceCell(cells[i]);
+        }
+      } else {
+        var cat = '';
+        var catEl = tables[t].closest ? tables[t].closest('.rate-cat') : null;
+        if(catEl){ var h = catEl.querySelector('h3'); if(h) cat = h.textContent.replace(/\s+/g,' ').trim(); }
+        var subj = encodeURIComponent((L.quote_subj || 'Cotización 421') + (cat ? ' — ' + cat : ''));
+        for(i=0;i<cells.length;i++){
+          if(i === 0){
+            cells[i].style.display = '';
+            cells[i].setAttribute('rowspan', cells.length);
+            cells[i].classList.add('quote-cell');
+            cells[i].innerHTML = '<a class="quote" href="mailto:admin@421.news?subject=' + subj + '">' + L.quote + '</a>';
+          } else {
+            cells[i].style.display = 'none';
+            cells[i].removeAttribute('rowspan');
+            cells[i].classList.remove('quote-cell');
+          }
+        }
+      }
+    }
+  }
+
+  function setLang(lang){
+    L = I18N[lang] || I18N.es;
+    document.documentElement.lang = lang;
+    for(var i=0;i<nodes.length;i++){
+      var key = nodes[i].getAttribute('data-i18n');
+      if(L[key] != null) nodes[i].innerHTML = L[key];
+    }
+    if(L.__title) document.title = L.__title;
+    for(var b=0;b<buttons.length;b++){
+      buttons[b].classList.toggle('active', buttons[b].getAttribute('data-setlang') === lang);
+    }
+    renderPrices(); // labels (lock / desde / por mes) depend on language
+    try{ localStorage.setItem('mk421lang', lang); }catch(e){}
+  }
+
+  for(var b=0;b<buttons.length;b++){
+    buttons[b].addEventListener('click', function(){ setLang(this.getAttribute('data-setlang')); });
+  }
+
+  var init = 'es';
+  try{
+    var saved = localStorage.getItem('mk421lang');
+    if(saved === 'es' || saved === 'en') init = saved;
+    else if((navigator.language||'').toLowerCase().indexOf('en') === 0) init = 'en';
+  }catch(e){}
+  setLang(init);
+
+  // ARS reference at the day's blue rate (dolarapi.com). On failure prices stay USD-only.
+  (function loadBlue(){
+    var controller = new AbortController();
+    var timer = setTimeout(function(){ controller.abort(); }, 5000);
+    fetch('https://dolarapi.com/v1/dolares/blue', { signal: controller.signal })
+      .then(function(r){ clearTimeout(timer); if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(d){ if(d && d.venta > 0){ blueRate = d.venta; renderPrices(); } })
+      .catch(function(){ clearTimeout(timer); });
+  })();
+
+  // Team gate: reveal prices only for logged-in members with the `equipo` label —
+  // same mechanism as /analytics (SHA-256 of email vs the `team` array in ga4-data.json).
+  (function gate(){
+    if(!(window.crypto && crypto.subtle)) return; // no subtle crypto -> stays locked (public)
+    function sha256(str){
+      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.toLowerCase().trim()))
+        .then(function(buf){ return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join(''); });
+    }
+    function getTeamData(){
+      var c = new AbortController();
+      var t = setTimeout(function(){ c.abort(); }, 5000);
+      return fetch('https://webhook-hreflang.onrender.com/api/ga4-data.json', { signal: c.signal })
+        .then(function(r){ clearTimeout(t); if(!r.ok) throw new Error(r.status); return r.json(); })
+        .catch(function(){ clearTimeout(t); return fetch('https://www.421.news/assets/data/ga4-data.json').then(function(r){ return r.json(); }); });
+    }
+    Promise.all([
+      fetch('/members/api/member/', { credentials: 'same-origin' }).then(function(r){ if(!r.ok) throw new Error('no'); return r.json(); }),
+      getTeamData()
+    ]).then(function(res){
+      var member = res[0], data = res[1];
+      var team = (data && data.team) ? data.team : [];
+      if(!member || !member.email) return;
+      return sha256(member.email).then(function(hash){
+        if(team.indexOf(hash) !== -1){ unlocked = true; document.body.classList.add('team'); renderPrices(); }
+      });
+    }).catch(function(){ /* not logged in / no access -> stays locked */ });
+  })();
+})();
+</script>
+
+</body>
+</html>
