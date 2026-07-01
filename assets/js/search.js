@@ -23,6 +23,7 @@
   var modal = null;
   var input = null;
   var results = null;
+  var selIndex = -1; // keyboard-selected result (-1 = none)
 
   function createModal() {
     modal = document.createElement('div');
@@ -42,6 +43,24 @@
     modal.querySelector('.search-overlay').addEventListener('click', closeSearch);
     modal.querySelector('.search-close').addEventListener('click', closeSearch);
     input.addEventListener('input', debounce(doSearch, 150));
+
+    // ↑/↓ navigate results, Enter opens the selected one
+    input.addEventListener('keydown', function (e) {
+      var list = results.querySelectorAll('.search-result, .search-author');
+      if (!list.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        selIndex = selIndex + 1 >= list.length ? 0 : selIndex + 1;
+        highlightSel(list);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        selIndex = selIndex <= 0 ? list.length - 1 : selIndex - 1;
+        highlightSel(list);
+      } else if (e.key === 'Enter') {
+        var pick = selIndex >= 0 ? list[selIndex] : list[0]; // Enter opens selected, or the top result
+        if (pick) { e.preventDefault(); pick.click(); }
+      }
+    });
 
     var style = document.createElement('style');
     style.textContent =
@@ -64,6 +83,7 @@
       '.search-close:hover { color:var(--crema,#eae6e1); }' +
       '.search-author { display:flex; gap:14px; padding:14px 20px; text-decoration:none; color:var(--crema,#eae6e1); border-bottom:1px solid rgba(255,255,255,0.05); transition:background 0.15s; align-items:center; }' +
       '.search-author:hover { background:rgba(255,255,255,0.06); }' +
+      '.search-result.is-selected, .search-author.is-selected { background:rgba(252,210,33,0.13); box-shadow:inset 3px 0 0 var(--amarillo,#fcd221); }' +
       '.search-author-img { width:40px; height:40px; border-radius:50%; object-fit:cover; flex-shrink:0; }' +
       '.search-author-text { flex:1; min-width:0; }' +
       '.search-author-name { font-weight:700; font-size:15px; margin:0 0 2px; }' +
@@ -130,7 +150,13 @@
     });
   }
 
+  function highlightSel(list) {
+    for (var i = 0; i < list.length; i++) list[i].classList.toggle('is-selected', i === selIndex);
+    if (selIndex >= 0 && list[selIndex]) list[selIndex].scrollIntoView({ block: 'nearest' });
+  }
+
   function doSearch() {
+    selIndex = -1; // reset selection on every new query
     var q = input.value.trim().toLowerCase();
     if (q.length < 2) { results.innerHTML = ''; return; }
 
@@ -198,6 +224,7 @@
     modal.classList.add('open');
     input.value = '';
     results.innerHTML = '';
+    selIndex = -1;
     input.focus();
     fetchPosts(); fetchAuthors(); // pre-fetch
   }
