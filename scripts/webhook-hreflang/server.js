@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.1', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.2', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1884,11 +1884,21 @@ async function getMPSnapshot() {
   const collect = (results) => {
     for (const s of (results || [])) if (s.status === 'authorized') byId.set(s.id, s);
   };
-  const first = await mpSearchPage(0);
-  const total = (first.paging && first.paging.total) || (first.results || []).length;
-  collect(first.results);
-  for (let offset = 100; offset < total && offset <= 10000; offset += 100) {
-    collect((await mpSearchPage(offset)).results);
+  const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+  // MP throttles under fast paging → returns short/empty pages that under-count.
+  // Fix: pause between pages AND run several full passes, unioning by id across
+  // passes. A single throttled pass misses subs (mostly the $5 tier); the union
+  // recovers the full set. Verified: with these delays every pass returns the full total.
+  const PASSES = 3;
+  for (let pass = 0; pass < PASSES; pass++) {
+    const first = await mpSearchPage(0);
+    const total = (first.paging && first.paging.total) || (first.results || []).length;
+    collect(first.results);
+    for (let offset = 100; offset < total && offset <= 10000; offset += 100) {
+      collect((await mpSearchPage(offset)).results);
+      await sleep(140);
+    }
+    await sleep(400);
   }
   const active = Array.from(byId.values());
   let m5 = 0, a50 = 0, m10 = 0, a100 = 0, revM5 = 0, revA50 = 0, revM10 = 0, revA100 = 0;
