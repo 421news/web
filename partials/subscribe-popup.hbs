@@ -3,17 +3,11 @@
   <div class="sub-popup-backdrop"></div>
   <div class="sub-popup-card">
     <button class="sub-popup-close" aria-label="Cerrar">&times;</button>
-    <div class="sub-popup-header">
-      <img class="sub-popup-cover" id="sub-popup-cover" src="" alt="" width="90" height="127" loading="lazy">
-      <div class="sub-popup-header-text">
-        <span class="sub-popup-badge">{{#has tag="#en"}}NEW ISSUE{{else}}NUEVO N&Uacute;MERO{{/has}}</span>
-        <h3 class="sub-popup-title" id="sub-popup-title"></h3>
-        <p class="sub-popup-subtitle" id="sub-popup-subtitle"></p>
-      </div>
-    </div>
-    <p class="sub-popup-text">{{#has tag="#en"}}5,000+ readers can&rsquo;t be wrong. Essays, guides and analysis you won&rsquo;t find anywhere else &mdash; plus every issue of the digital magazine.{{else}}5.000+ lectores no pueden estar equivocados. Ensayos, gu&iacute;as y an&aacute;lisis que no vas a encontrar en otro lado &mdash; m&aacute;s todos los n&uacute;meros de la revista digital.{{/has}}</p>
-    <a href="{{#has tag="#en"}}/en/subscribe/{{else}}/es/suscribite/{{/has}}" class="sub-popup-btn sub-popup-btn-primary" data-popup-action="subscribe">{{#has tag="#en"}}Join 421 &rarr;{{else}}Sumate a 421 &rarr;{{/has}}</a>
-    <a href="/es/revista-421/" class="sub-popup-btn sub-popup-btn-secondary" data-popup-action="revista">{{#has tag="#en"}}Browse the magazine{{else}}Hojear la revista{{/has}}</a>
+    <div class="sub-popup-emoji" aria-hidden="true">🧙</div>
+    <span class="sub-popup-badge">{{#has tag="#en"}}BECOME A WIZARD{{else}}HACETE WIZARD{{/has}}</span>
+    <h3 class="sub-popup-title">{{#has tag="#en"}}Join the 421 wizards{{else}}Suma&shy;te a los wizards de 421{{/has}}</h3>
+    <p class="sub-popup-text">{{#has tag="#en"}}Back the project and unlock everything: Magazine 421 a month early, comments on every piece, the monthly council with the newsroom and the exclusive Magic app.{{else}}Banc&aacute; el proyecto y desbloque&aacute; todo: le&eacute; la Revista 421 un mes antes, coment&aacute; en cada nota, sum&aacute;te al concilio mensual con la redacci&oacute;n y us&aacute; la app de Magic exclusiva.{{/has}}</p>
+    <a href="{{#has tag="#en"}}/en/subscribe/{{else}}/es/suscribite/{{/has}}" class="sub-popup-btn sub-popup-btn-primary" data-popup-action="subscribe">{{#has tag="#en"}}Become a wizard &rarr;{{else}}Hacete wizard &rarr;{{/has}}</a>
     <button class="sub-popup-later">{{#has tag="#en"}}Maybe later{{else}}Ahora no{{/has}}</button>
   </div>
 </div>
@@ -23,14 +17,14 @@
 .sub-popup-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
 .sub-popup-card {
   position: relative;
-  max-width: 420px;
+  max-width: 400px;
   width: 90%;
-  background: rgba(26, 26, 26, 0.92);
+  background: rgba(26, 26, 26, 0.94);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(234,230,225,0.12);
   border-radius: var(--radius);
-  padding: 2rem 1.8rem 1.5rem;
+  padding: 2.2rem 1.8rem 1.6rem;
   text-align: center;
   animation: subPopupIn 0.35s ease;
 }
@@ -44,42 +38,31 @@
   font-size: 24px; cursor: pointer; line-height: 1; transition: opacity 0.2s;
 }
 .sub-popup-close:hover { opacity: 1; }
-.sub-popup-header {
-  display: flex; align-items: center; gap: 1rem;
-  margin-bottom: 1rem; text-align: left;
+.sub-popup-emoji {
+  font-size: 2.6rem; line-height: 1; margin: 0 0 0.7rem;
+  filter: drop-shadow(0 3px 10px rgba(252,210,33,0.35));
 }
-.sub-popup-cover {
-  width: 90px; height: auto; border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  flex-shrink: 0;
-}
-.sub-popup-header-text { flex: 1; }
 .sub-popup-badge {
   display: inline-block;
   font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.08em;
   background: linear-gradient(135deg, var(--verde), var(--amarillo));
   color: var(--negro);
-  padding: 3px 8px; border-radius: 3px;
-  margin-bottom: 6px;
+  padding: 3px 9px; border-radius: 3px;
+  margin-bottom: 0.7rem;
 }
 .sub-popup-title {
-  font-size: var(--fs-xl); font-weight: 800; font-style: italic;
+  font-size: var(--fs-2xl); font-weight: 800; font-style: italic;
   background: linear-gradient(135deg, var(--verde), var(--amarillo));
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  margin: 0 0 2px; line-height: 1.2;
-}
-.sub-popup-subtitle {
-  font-family: 'Lora', serif; font-style: italic;
-  font-size: var(--fs-base); color: var(--crema); opacity: 0.6;
-  margin: 0;
+  margin: 0 0 0.6rem; line-height: 1.15;
 }
 .sub-popup-text {
   font-family: 'Lora', serif; font-style: italic;
-  font-size: var(--fs-base); color: var(--crema); opacity: 0.7;
-  line-height: 1.55; margin: 0 0 1.2rem;
+  font-size: var(--fs-base); color: var(--crema); opacity: 0.72;
+  line-height: 1.55; margin: 0 0 1.3rem;
 }
 .sub-popup-btn {
-  display: block; width: 100%; padding: 12px;
+  display: block; width: 100%; padding: 13px;
   border: none; border-radius: 6px;
   font-weight: 700; font-size: var(--fs-base);
   text-decoration: none; text-align: center;
@@ -89,95 +72,30 @@
 .sub-popup-btn-primary {
   background: linear-gradient(135deg, var(--verde), var(--amarillo));
   color: var(--negro);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 }
-.sub-popup-btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(234,230,225,0.2);
-  color: var(--crema);
-}
-.sub-popup-btn-secondary:hover { border-color: rgba(234,230,225,0.4); }
 .sub-popup-later {
-  display: block; margin: 0.8rem auto 0;
+  display: block; margin: 0.9rem auto 0;
   background: none; border: none; color: var(--crema); opacity: 0.35;
   font-size: var(--fs-xs); font-family: inherit; cursor: pointer; transition: opacity 0.2s;
 }
 .sub-popup-later:hover { opacity: 0.7; }
 
 /* Light mode */
-.light-mode .sub-popup-card { background: rgba(234, 230, 225, 0.92); border-color: rgba(0,0,0,0.1); }
+.light-mode .sub-popup-card { background: rgba(234, 230, 225, 0.94); border-color: rgba(0,0,0,0.1); }
 .light-mode .sub-popup-close { color: var(--negro); }
 .light-mode .sub-popup-text { color: var(--negro); }
-.light-mode .sub-popup-subtitle { color: var(--negro); }
-.light-mode .sub-popup-btn-secondary { color: var(--negro); border-color: rgba(0,0,0,0.2); }
-.light-mode .sub-popup-btn-secondary:hover { border-color: rgba(0,0,0,0.4); }
 .light-mode .sub-popup-later { color: var(--negro); }
 </style>
 
 <script>
 (function() {
   var COOLDOWN_DAYS = 3;
-  var SCROLL_TRIGGER_PX = 500; // dispara apenas el lector hace el primer/segundo scroll de la nota
+  var SCROLL_TRIGGER_PX = 500; // dispara apenas el lector hace el primer/segundo scroll
   var KEY = 'sub_popup_dismissed';
 
   var dismissed = localStorage.getItem(KEY);
   if (dismissed && (Date.now() - parseInt(dismissed, 10)) < COOLDOWN_DAYS * 86400000) return;
-
-  // Fetch latest issue from Ghost Content API (same source as revista.js)
-  fetch('/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33&formats=html', { headers: { 'Accept-Version': 'v5.0' } })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var page = data.pages && data.pages[0];
-      if (!page || !page.html) return;
-
-      // Parse first h2 to get latest issue
-      var doc = new DOMParser().parseFromString(page.html, 'text/html');
-      var h2 = doc.querySelector('h2');
-      if (!h2) return;
-
-      var text = h2.textContent.trim();
-      var match = text.match(/#(\d+)\s*-\s*([^-]+?)(?:\s*-\s*(.+))?$/);
-      if (!match) return;
-
-      var numero = match[1];
-      var titulo = match[3] ? match[3].trim() : '';
-
-      // Get cover image from next figure
-      var cover = '';
-      var el = h2.nextElementSibling;
-      while (el && !el.matches('figure.kg-image-card') && !el.matches('h2')) {
-        el = el.nextElementSibling;
-      }
-      if (el && el.matches('figure.kg-image-card')) {
-        var img = el.querySelector('img.kg-image');
-        if (img) cover = img.src;
-      }
-
-      if (!cover) return;
-
-      // Populate popup
-      document.getElementById('sub-popup-cover').src = cover;
-      document.getElementById('sub-popup-cover').alt = 'Revista 421 #' + numero;
-      document.getElementById('sub-popup-title').textContent = 'Revista 421 #' + numero;
-      document.getElementById('sub-popup-subtitle').textContent = titulo;
-
-      // Set up scroll trigger
-      var triggered = false;
-      function onScroll() {
-        if (triggered) return;
-        if (window.scrollY >= SCROLL_TRIGGER_PX) {
-          triggered = true;
-          window.removeEventListener('scroll', onScroll);
-          var popup = document.getElementById('sub-popup');
-          if (popup) {
-            popup.style.display = 'flex';
-            if (typeof gtag === 'function') gtag('event', 'popup_shown', { event_category: 'engagement' });
-          }
-        }
-      }
-      window.addEventListener('scroll', onScroll, { passive: true });
-    })
-    .catch(function() {});
 
   function dismiss() {
     var popup = document.getElementById('sub-popup');
@@ -189,6 +107,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     var popup = document.getElementById('sub-popup');
     if (!popup) return;
+
     popup.querySelector('.sub-popup-close').addEventListener('click', dismiss);
     popup.querySelector('.sub-popup-later').addEventListener('click', dismiss);
     popup.querySelector('.sub-popup-backdrop').addEventListener('click', dismiss);
@@ -201,6 +120,19 @@
         localStorage.setItem(KEY, Date.now().toString());
       });
     }
+
+    // Scroll trigger — no external fetch, so the popup always fires (robust)
+    var triggered = false;
+    function onScroll() {
+      if (triggered) return;
+      if (window.scrollY >= SCROLL_TRIGGER_PX) {
+        triggered = true;
+        window.removeEventListener('scroll', onScroll);
+        popup.style.display = 'flex';
+        if (typeof gtag === 'function') gtag('event', 'popup_shown', { event_category: 'engagement' });
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
   });
 })();
 </script>

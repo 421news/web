@@ -1,0 +1,64 @@
+{{#unless @member}}
+<section class="wizband" aria-label="{{#if en}}Become a wizard{{else}}Hacete wizard{{/if}}">
+  <div class="global-container">
+    <div class="home-wizard-cta">
+      <div class="hwc-inner">
+        <div class="hwc-copy">
+          <span class="hwc-eyebrow">🧙 {{#if en}}Become a wizard{{else}}Hacete wizard{{/if}}</span>
+          <h2 class="hwc-title">{{#if en}}Back the outlet <span class="hwc-grad">you love to read</span>{{else}}Banc&aacute; el medio que <span class="hwc-grad">te gusta leer</span>{{/if}}</h2>
+          <p class="hwc-text">{{#if en}}Join the wizards who sustain 421. Read the magazine a month early, comment on every piece, join the monthly council with the newsroom and use the exclusive Magic app.{{else}}Sumate a los Wizards que sostienen 421. Le&eacute; la revista un mes antes, coment&aacute; en cada nota, sumate al concilio mensual con la redacci&oacute;n y us&aacute; la app de Magic exclusiva.{{/if}}</p>
+        </div>
+        <div class="hwc-action">
+          <a href="{{#if en}}/en/subscribe/{{else}}/es/suscribite/{{/if}}" class="hwc-btn" data-hwc-track>{{#if en}}Become a wizard &rarr;{{else}}Hacete wizard &rarr;{{/if}}</a>
+          <span class="hwc-price">{{#if en}}US$10/mo &middot; cancel anytime{{else}}US$10/mes &middot; cancel&aacute;s cuando quieras{{/if}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+/* Full-width band: darkened magazine image + card texture on top */
+.wizband { position: relative; overflow: hidden; padding: 3rem 0; margin: 1.5rem 0; background: #141414; }
+.wizband::before {
+  content: ""; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(15,15,15,0.74), rgba(15,15,15,0.86)), url(/content/images/size/w1600/2026/05/revista-10-trimmed.jpg);
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+.wizband::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: url({{asset "images/textura.webp"}});
+  background-size: cover; background-position: center;
+  mix-blend-mode: soft-light; opacity: 0.55; pointer-events: none;
+}
+.wizband > * { position: relative; z-index: 2; }
+
+/* Banner panel */
+.home-wizard-cta { border-radius: 16px; background: var(--gradient-main, linear-gradient(135deg, var(--verde,#17a583), var(--amarillo,#fcd221))); padding: 1.5px; box-shadow: 0 10px 34px rgba(0,0,0,0.45); }
+.hwc-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; border-radius: 14.5px; padding: 1.8rem 2rem; background: rgba(24,24,24,0.94); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.hwc-copy { flex: 1 1 340px; min-width: 0; }
+.hwc-action { flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 0.55rem; }
+.hwc-eyebrow { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.72rem; color: var(--amarillo, #fcd221); }
+.hwc-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; line-height: 1.15; margin: 0.5rem 0 0.6rem; color: var(--crema, #eae6e1); }
+.hwc-grad { background: var(--gradient-main, linear-gradient(135deg, var(--verde,#17a583), var(--amarillo,#fcd221))); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hwc-text { font-size: 0.95rem; line-height: 1.5; margin: 0; max-width: 54ch; color: var(--crema, #eae6e1); opacity: 0.8; }
+.hwc-btn { display: inline-block; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.9rem; padding: 0.85rem 1.8rem; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: transform 0.18s, box-shadow 0.18s; background: var(--gradient-main, linear-gradient(135deg, var(--verde,#17a583), var(--amarillo,#fcd221))); color: var(--negro, #1a1a1a); }
+.hwc-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(252,210,33,0.22); }
+.hwc-price { font-size: 0.72rem; color: var(--crema, #eae6e1); opacity: 0.5; }
+@media (max-width: 640px) {
+  .wizband { padding: 2rem 0; }
+  .hwc-inner { padding: 1.5rem 1.3rem; }
+  .hwc-action { align-items: stretch; width: 100%; }
+  .hwc-btn { text-align: center; }
+}
+</style>
+
+<script>
+(function () {
+  var btn = document.querySelector('.home-wizard-cta .hwc-btn[data-hwc-track]');
+  if (btn) btn.addEventListener('click', function () {
+    if (typeof gtag === 'function') gtag('event', 'home_banner_subscribe_click', { event_category: 'engagement', event_label: 'home_wizard_banner' });
+  });
+})();
+</script>
+{{/unless}}
