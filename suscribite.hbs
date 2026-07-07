@@ -76,7 +76,7 @@
                 <div id="plan-price" class="tier-price">
                   <span class="tier-price-amount" id="price-amount">$9.99</span>
                   <span class="tier-price-period" id="price-period">USD / mes</span>
-                  <div class="plan-price-detail" id="price-detail">🎁 <strong>Primer mes gratis</strong> · cancelás cuando quieras</div>
+                  <div class="plan-price-detail" id="price-detail">Sin compromiso, cancela cuando quieras</div>
                 </div>
 
                 <ul class="tier-benefits">
@@ -242,7 +242,7 @@
           } else {
             amountEl.textContent = formatPrice(tierData.monthly_price);
             periodEl.textContent = 'USD / mes';
-            detailEl.innerHTML = '🎁 <strong>Primer mes gratis</strong> · cancelás cuando quieras';
+            detailEl.textContent = 'Sin compromiso, cancela cuando quieras';
           }
         }
 
@@ -309,11 +309,7 @@
         document.getElementById('btn-stripe').addEventListener('click', function() {
           if (!tierData) return;
           track('payment_method_selected', 'stripe_' + currentCadence);
-          if (currentCadence === 'monthly') {
-            window.location.hash = '#/portal/offers/wizard-mes-gratis'; // primer mes gratis (Stripe)
-          } else {
-            window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
-          }
+          window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
         // MercadoPago → show form
