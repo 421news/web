@@ -231,16 +231,25 @@ app.post('/subscribe', async (req, res) => {
 
     console.log(`[mp] Creating subscription: ${formSubType}, ${formEmail}, $${priceUSD} USD = $${amountARS} ARS (rate: ${blueRate})`);
 
+    // Primer mes gratis (test de barrera de entrada): free_trial solo en MENSUAL.
+    // Toggle con env FREE_TRIAL_MONTHS (default 1). Poner 0 en Render para desactivar.
+    const autoRecurring = {
+      frequency,
+      frequency_type: 'months',
+      transaction_amount: amountARS,
+      currency_id: 'ARS'
+    };
+    const freeTrialMonths = parseInt(process.env.FREE_TRIAL_MONTHS || '1', 10);
+    if (freeTrialMonths > 0 && !isYearly) {
+      autoRecurring.free_trial = { frequency: freeTrialMonths, frequency_type: 'months' };
+      console.log(`[mp] free_trial: ${freeTrialMonths} mes(es) gratis`);
+    }
+
     const { status, data } = await mpRequest('POST', '/preapproval', {
       payer_email: formEmail,
       back_url: 'https://www.421.news/gracias/',
       reason,
-      auto_recurring: {
-        frequency,
-        frequency_type: 'months',
-        transaction_amount: amountARS,
-        currency_id: 'ARS'
-      },
+      auto_recurring: autoRecurring,
       external_reference: externalRef,
       status: 'pending'
     });
