@@ -76,7 +76,7 @@
                 <div id="plan-price" class="tier-price">
                   <span class="tier-price-amount" id="price-amount">$9.99</span>
                   <span class="tier-price-period" id="price-period">USD / month</span>
-                  <div class="plan-price-detail" id="price-detail">🎁 <strong>First month free</strong> · cancel anytime</div>
+                  <div class="plan-price-detail" id="price-detail">No commitment, cancel anytime</div>
                 </div>
 
                 <ul class="tier-benefits">
@@ -161,7 +161,7 @@
           } else {
             amountEl.textContent = formatPrice(tierData.monthly_price);
             periodEl.textContent = 'USD / month';
-            detailEl.innerHTML = '🎁 <strong>First month free</strong> · cancel anytime';
+            detailEl.textContent = 'No commitment, cancel anytime';
           }
         }
 
@@ -191,11 +191,7 @@
             currency: 'USD',
             items: [{ item_id: tierData.id, item_name: 'Wizard ' + currentCadence }]
           });
-          if (currentCadence === 'monthly') {
-            window.location.hash = '#/portal/offers/wizard-mes-gratis'; // first month free
-          } else {
-            window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
-          }
+          window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
         document.getElementById('btn-free').addEventListener('click', function() {
