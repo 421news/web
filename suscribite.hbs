@@ -40,7 +40,7 @@
               <span class="sub-hero-eyebrow">✨ Suscribite</span>
               <h1 class="sub-hero-title">Convertite en <span class="sub-hero-accent">Wizard</span> y aport&aacute; tu magia al proyecto</h1>
               <p class="sub-hero-subtitle">Con una suscripci&oacute;n mensual acced&eacute;s a varios beneficios y ayud&aacute;s a que podamos <strong>contratar nuevos escritores</strong> cada mes. Tu aporte hace la diferencia.</p>
-              <div class="sub-hero-proof">242 wizards · 5.379 lectores</div>
+              <div class="sub-hero-proof">235 wizards · 5.694 lectores</div>
             </div>
             <hr class="sub-gradient-divider">
 
@@ -74,9 +74,9 @@
                 </div>
 
                 <div id="plan-price" class="tier-price">
-                  <span class="tier-price-amount" id="price-amount">...</span>
+                  <span class="tier-price-amount" id="price-amount">$9.99</span>
                   <span class="tier-price-period" id="price-period">USD / mes</span>
-                  <div class="plan-price-detail" id="price-detail"></div>
+                  <div class="plan-price-detail" id="price-detail">Sin compromiso, cancela cuando quieras</div>
                 </div>
 
                 <ul class="tier-benefits">
@@ -209,7 +209,7 @@
         var sectionMp = document.getElementById('sub-section-mp');
 
         // Fetch tiers from Content API
-        fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
+        fetch('https://421bn.ghost.io/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
           .then(function(r) { return r.json(); })
           .then(function(data) {
             var tiers = data.tiers || [];
@@ -220,7 +220,8 @@
               }
             }
             if (tierData) updatePriceDisplay();
-          });
+          })
+          .catch(function() { /* el precio ya se muestra hardcodeado ($9.99) en el HTML */ });
 
         function formatPrice(cents) {
           var dollars = cents / 100;
