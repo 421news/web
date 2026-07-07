@@ -40,7 +40,7 @@
               <span class="sub-hero-eyebrow">✨ Become a Wizard</span>
               <h1 class="sub-hero-title">Read <span class="sub-hero-accent">Revista 421 before anyone else</span> and back the project</h1>
               <p class="sub-hero-subtitle">Every new issue reaches Wizards <strong>one month before</strong> the public. Plus commenting on articles, the Magic app and the Monthly Council with Juan Ruocco.</p>
-              <div class="sub-hero-proof">242 wizards · 5,379 readers</div>
+              <div class="sub-hero-proof">235 wizards · 5,694 readers</div>
             </div>
             <hr class="sub-gradient-divider">
 
@@ -74,9 +74,9 @@
                 </div>
 
                 <div id="plan-price" class="tier-price">
-                  <span class="tier-price-amount" id="price-amount">...</span>
+                  <span class="tier-price-amount" id="price-amount">$9.99</span>
                   <span class="tier-price-period" id="price-period">USD / month</span>
-                  <div class="plan-price-detail" id="price-detail"></div>
+                  <div class="plan-price-detail" id="price-detail">No commitment, cancel anytime</div>
                 </div>
 
                 <ul class="tier-benefits">
@@ -128,7 +128,7 @@
         var currentCadence = 'monthly';
         var tierData = null;
 
-        fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
+        fetch('https://421bn.ghost.io/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
           .then(function(r) { return r.json(); })
           .then(function(data) {
             var tiers = data.tiers || [];
@@ -139,7 +139,8 @@
               }
             }
             if (tierData) updatePriceDisplay();
-          });
+          })
+          .catch(function() { /* price already shown as $9.99 fallback in HTML */ });
 
         function formatPrice(cents) {
           var dollars = cents / 100;
