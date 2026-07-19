@@ -22,7 +22,6 @@
             <a href="/es/revista-421/">Magazine</a>
             <a href="/es/random-podcast-juan-ruocco/">Podcast</a>
             <a href="/es/pitcheale-a-421/">Pitch us</a>
-            <a href="/en/my-subscription/">My account</a>
             <a href="/en/rss/">RSS</a>
           </div>
         </div>
@@ -76,7 +75,6 @@
     <a href="/es/revista-421/">Magazine</a>
     <a href="/es/random-podcast-juan-ruocco/">Podcast</a>
     <a href="/es/pitcheale-a-421/">Pitch us</a>
-    <a href="/en/my-subscription/">My account</a>
     <a href="/en/subscribe/" class="nav-mobile-subscribe" onclick="if(typeof gtag==='function')gtag('event','nav_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Subscribe</a>
   </nav>
 </header>
@@ -114,6 +112,19 @@
         link.classList.add('is-active');
       }
     });
+
+    // Logged-in: the "Subscribe" button becomes the account entry
+    fetch('/members/api/member/', { credentials: 'same-origin' })
+      .then(function(r) { return (!r.ok || r.status === 204) ? null : r.json(); })
+      .then(function(member) {
+        if (!member) return;
+        document.querySelectorAll('.nav-subscribe-btn, .nav-mobile-subscribe').forEach(function(btn) {
+          btn.textContent = 'My session';
+          btn.setAttribute('href', '/en/my-subscription/');
+          btn.removeAttribute('onclick');
+        });
+      })
+      .catch(function() {});
 
     // Sync mobile mode-switch with desktop
     var mobileSwitch = document.getElementById('mode-switch-mobile');

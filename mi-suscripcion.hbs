@@ -10,103 +10,126 @@
       <div class="sub-page">
         <div class="sub-container">
 
-          <!-- Loading state (shown while fetching member data) -->
+          <!-- Loading -->
           <div id="account-loading" style="text-align: center; padding: 4rem 0;">
             <div style="font-size: var(--fs-3xl); opacity: 0.5;">Cargando...</div>
           </div>
 
-          <!-- PAID MEMBER (hidden until JS confirms) -->
-          <div id="account-paid" style="display: none;">
+          <!-- LOGGED IN -->
+          <div id="account-in" style="display: none;">
             <div class="sub-hero">
-              <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
-              <p class="sub-hero-subtitle">Gracias por ser parte de 421, <span id="paid-name"></span>. Tu apoyo hace posible este proyecto.</p>
+              <h1 class="sub-hero-title">Mi cuenta</h1>
+              <p class="sub-hero-subtitle">Hola <span id="acct-greet"></span>, gracias por ser parte de 421.</p>
             </div>
             <hr class="sub-gradient-divider">
 
             <div class="sub-card" style="max-width: 600px;">
-              <div class="sub-card-label">Wizard activo</div>
-              <p class="account-info">Email: <strong id="paid-email"></strong> &middot; <a href="#" class="account-edit-link" onclick="event.preventDefault(); window.location.hash='#/portal/account';">cambiar</a></p>
+              <div class="sub-card-label" id="acct-status">Suscripci&oacute;n activa</div>
 
-              <div class="account-app-link">
-                <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
-                  <span class="account-app-icon">&#x1F9D9;</span>
-                  <span class="account-app-text">
-                    <strong>MTG Collection</strong>
-                    <small>Tu colecci&oacute;n de cartas Magic</small>
-                  </span>
-                  <span class="account-app-arrow">&rarr;</span>
-                </a>
+              <!-- Profile (inline editable) -->
+              <div class="acct-field" data-field="name">
+                <div class="acct-field-static">
+                  <span class="acct-field-label">Nombre</span>
+                  <span class="acct-field-value" id="val-name">&mdash;</span>
+                  <button class="acct-field-edit" data-edit="name">editar</button>
+                </div>
+                <form class="acct-field-form" id="form-name">
+                  <input type="text" id="input-name" autocomplete="name" placeholder="Tu nombre">
+                  <div class="acct-field-row">
+                    <button type="submit" class="btn-pill-sm">Guardar</button>
+                    <button type="button" class="acct-field-cancel" data-cancel>Cancelar</button>
+                  </div>
+                </form>
+                <div class="acct-field-msg" data-msg="name"></div>
               </div>
 
-              <p class="account-section-title">Gestion&aacute; tu suscripci&oacute;n</p>
-              <p class="account-desc">Eleg&iacute; la opci&oacute;n seg&uacute;n c&oacute;mo te suscribiste:</p>
+              <div class="acct-field" data-field="email">
+                <div class="acct-field-static">
+                  <span class="acct-field-label">Email</span>
+                  <span class="acct-field-value" id="val-email">&mdash;</span>
+                  <button class="acct-field-edit" data-edit="email">cambiar</button>
+                </div>
+                <form class="acct-field-form" id="form-email">
+                  <input type="email" id="input-email" autocomplete="email" placeholder="tu@email.com">
+                  <div class="acct-field-row">
+                    <button type="submit" class="btn-pill-sm">Enviar confirmaci&oacute;n</button>
+                    <button type="button" class="acct-field-cancel" data-cancel>Cancelar</button>
+                  </div>
+                  <p class="acct-field-hint">Te mandamos un link a la nueva direcci&oacute;n para confirmar el cambio.</p>
+                </form>
+                <div class="acct-field-msg" data-msg="email"></div>
+              </div>
 
-              <div class="account-options">
-                <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
-                  Stripe (tarjeta internacional)
-                </button>
-                <a href="https://www.mercadopago.com.ar/subscriptions" target="_blank" rel="noopener" class="btn-solid" style="text-align:center; text-decoration:none;">
-                  MercadoPago (pesos argentinos)
+              <!-- Newsletters (inline, sin modal) -->
+              <div class="acct-field acct-newsletters" id="acct-newsletters" style="display:none;">
+                <span class="acct-field-label" style="display:block; margin-bottom:.7rem;">Emails de 421</span>
+                <div id="newsletter-list"></div>
+                <div class="acct-field-msg" data-msg="nl"></div>
+              </div>
+
+              <!-- PAID block -->
+              <div id="block-paid" style="display:none;">
+                <div class="account-app-link" style="margin-top: 1.6rem;">
+                  <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
+                    <span class="account-app-icon">&#x1F0CF;</span>
+                    <span class="account-app-text">
+                      <strong>MTG Collection</strong>
+                      <small>Tu colecci&oacute;n de cartas Magic</small>
+                    </span>
+                    <span class="account-app-arrow">&rarr;</span>
+                  </a>
+                </div>
+
+                <p class="account-section-title">Tu suscripci&oacute;n</p>
+                <p class="account-desc">Para actualizar la tarjeta o cancelar, entr&aacute; al panel de tu proveedor:</p>
+                <div class="account-options">
+                  <a href="https://www.mercadopago.com.ar/subscriptions" target="_blank" rel="noopener" class="btn-solid" style="text-align:center; text-decoration:none;">
+                    MercadoPago (pesos argentinos)
+                  </a>
+                  <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
+                    Stripe (tarjeta internacional)
+                  </button>
+                </div>
+                <p class="account-desc" style="margin-top: 1rem;">&iquest;Quer&eacute;s cambiar de plan (mensual/anual) o de m&eacute;todo de pago? Escribinos a <a href="mailto:admin@421.news" style="color:var(--amarillo);">admin@421.news</a> y lo resolvemos sin que pagues doble.</p>
+              </div>
+
+              <!-- FREE block -->
+              <div id="block-free" style="display:none;">
+                <p class="account-section-title" style="margin-top: 1.6rem;">Suscribite</p>
+                <p class="account-desc">Acced&eacute; a la revista un mes antes, comentarios, concilio mensual y la app de Magic.</p>
+                <a href="/es/suscribite/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
+                  Suscribite
                 </a>
               </div>
 
               <p class="account-help">
-                &iquest;Necesit&aacute;s ayuda? Escrib&iacute;nos a <a href="mailto:contacto@421.news">contacto@421.news</a>
+                &iquest;Necesit&aacute;s ayuda? Escrib&iacute;nos a <a href="mailto:admin@421.news">admin@421.news</a>
               </p>
 
-              <button class="btn-outline account-logout" onclick="fetch('/members/api/session', {method:'DELETE',credentials:'same-origin'}).then(function(){window.location.reload();});" style="margin-top: 1.5rem;">
+              <button class="btn-outline account-logout" data-logout style="margin-top: 1.5rem;">
                 Cerrar sesi&oacute;n
               </button>
             </div>
           </div>
 
-          <!-- FREE MEMBER (hidden until JS confirms) -->
-          <div id="account-free" style="display: none;">
-            <div class="sub-hero">
-              <h1 class="sub-hero-title">Mi cuenta</h1>
-              <p class="sub-hero-subtitle">Est&aacute;s registrado como miembro gratuito. Suscribite para acceder a todos los beneficios.</p>
-            </div>
-            <hr class="sub-gradient-divider">
-
-            <div class="sub-card" style="max-width: 600px;">
-              <div class="sub-card-label">Goblin (gratuito)</div>
-              <p class="account-info">Email: <strong id="free-email"></strong></p>
-
-              <a href="/es/suscribite/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
-                Upgrade a Wizard
-              </a>
-
-              <div style="margin-top: 1.5rem;">
-                <button class="btn-outline" onclick="window.location.hash='#/portal/account';">
-                  Gestionar mi cuenta
-                </button>
-              </div>
-
-              <button class="btn-outline account-logout" onclick="fetch('/members/api/session', {method:'DELETE',credentials:'same-origin'}).then(function(){window.location.reload();});" style="margin-top: 1rem;">
-                Cerrar sesi&oacute;n
-              </button>
-            </div>
-          </div>
-
-          <!-- NOT LOGGED IN (hidden until JS confirms) -->
+          <!-- NOT LOGGED IN -->
           <div id="account-anon" style="display: none;">
             <div class="sub-hero">
-              <h1 class="sub-hero-title">Mi suscripci&oacute;n</h1>
-              <p class="sub-hero-subtitle">Inici&aacute; sesi&oacute;n para gestionar tu suscripci&oacute;n.</p>
+              <h1 class="sub-hero-title">Mi cuenta</h1>
+              <p class="sub-hero-subtitle">Ingres&aacute; tu email y te mandamos un link para entrar. Sin contrase&ntilde;a.</p>
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="sub-card" style="max-width: 600px; text-align: center;">
-              <div style="font-size: 4rem; line-height: 1; margin-bottom: 0.5rem;">&#x1F9D9;</div>
-              <p style="font-size: var(--fs-base); opacity: 0.5; margin-bottom: 1.5rem;">Portal de Wizards</p>
-
-              <button class="btn-gradient" onclick="window.location.hash='#/portal/signin';">
-                Iniciar sesi&oacute;n
-              </button>
+            <div class="sub-card" style="max-width: 480px;">
+              <form id="anon-login-form" class="inline-login open" style="margin-top:0;">
+                <input type="email" id="anon-login-email" placeholder="tu@email.com" required autocomplete="email">
+                <button type="submit" class="btn-gradient" id="anon-login-submit">Enviar link de acceso</button>
+                <div class="login-msg" id="anon-login-msg"></div>
+              </form>
 
               <div class="free-tier-link">
                 <p>&iquest;No ten&eacute;s cuenta?</p>
-                <a href="/es/suscribite/" class="btn-outline" style="text-decoration:none;">Suscribite</a>
+                <a href="/es/suscribite/" class="btn-outline" style="text-decoration:none;">Registrate</a>
               </div>
             </div>
           </div>
@@ -119,26 +142,144 @@
 
 <script defer>
 (function() {
+  function getIntegrityToken() {
+    return fetch('/members/api/integrity-token/', { credentials: 'same-origin' })
+      .then(function(r) { return r.ok ? r.text() : ''; })
+      .catch(function() { return ''; });
+  }
+
   fetch('/members/api/member/', { credentials: 'same-origin' })
-    .then(function(res) {
-      if (!res.ok) throw new Error('not signed in');
-      return res.json();
-    })
+    .then(function(res) { if (!res.ok) throw new Error('anon'); return res.json(); })
     .then(function(member) {
       document.getElementById('account-loading').style.display = 'none';
+      document.getElementById('account-in').style.display = '';
+      var name = member.name || '';
+      var email = member.email || '';
+      document.getElementById('acct-greet').textContent = name || 'wizard';
+      document.getElementById('val-name').textContent = name || '(sin nombre)';
+      document.getElementById('val-email').textContent = email;
+      document.getElementById('input-name').value = name;
+      document.getElementById('input-email').value = email;
       var hasPaid = member.paid || (member.subscriptions && member.subscriptions.length > 0);
-      if (hasPaid) {
-        document.getElementById('paid-name').textContent = member.name || '';
-        document.getElementById('paid-email').textContent = member.email || '';
-        document.getElementById('account-paid').style.display = '';
-      } else {
-        document.getElementById('free-email').textContent = member.email || '';
-        document.getElementById('account-free').style.display = '';
-      }
+      document.getElementById('acct-status').textContent = hasPaid ? 'Suscripción activa' : 'Cuenta gratuita';
+      document.getElementById('block-paid').style.display = hasPaid ? '' : 'none';
+      document.getElementById('block-free').style.display = hasPaid ? 'none' : '';
+
+      // Newsletters (inline, sin modal)
+      var subIds = (member.newsletters || []).map(function(n) { return n.id; });
+      fetch('/ghost/api/content/newsletters/?key=420da6f85b5cc903b347de9e33', { headers: { 'Accept-Version': 'v5.0' } })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var nls = (d.newsletters || []).filter(function(n) { return n.slug !== 'marketing'; });
+          if (!nls.length) return;
+          document.getElementById('newsletter-list').innerHTML = nls.map(function(n) {
+            var checked = subIds.indexOf(n.id) !== -1 ? ' checked' : '';
+            return '<label class="nl-row"><input type="checkbox" data-nl-id="' + n.id + '"' + checked + '><span class="nl-name">' + n.name + '</span></label>';
+          }).join('');
+          document.getElementById('acct-newsletters').style.display = '';
+        })
+        .catch(function() {});
     })
     .catch(function() {
       document.getElementById('account-loading').style.display = 'none';
       document.getElementById('account-anon').style.display = '';
     });
+
+  // Newsletter toggle → PUT member (sin modal)
+  document.addEventListener('change', function(e) {
+    var cb = e.target.closest('#newsletter-list input[data-nl-id]');
+    if (!cb) return;
+    var ids = Array.prototype.slice.call(document.querySelectorAll('#newsletter-list input[data-nl-id]'))
+      .filter(function(x) { return x.checked; })
+      .map(function(x) { return { id: x.getAttribute('data-nl-id') }; });
+    setMsg('[data-msg="nl"]', 'Guardando…', '');
+    fetch('/members/api/member/', { method: 'PUT', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ newsletters: ids }) })
+      .then(function(r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function() { setMsg('[data-msg="nl"]', '✓ Preferencias guardadas.', 'ok'); })
+      .catch(function() { setMsg('[data-msg="nl"]', 'No se pudo guardar. Probá de nuevo.', 'err'); cb.checked = !cb.checked; });
+  });
+
+  // Toggle inline edit forms
+  document.addEventListener('click', function(e) {
+    var editBtn = e.target.closest('[data-edit]');
+    if (editBtn) {
+      var f = editBtn.getAttribute('data-edit');
+      var field = document.querySelector('.acct-field[data-field="' + f + '"]');
+      if (field) { field.classList.add('editing'); field.querySelector('input').focus(); }
+      return;
+    }
+    var cancel = e.target.closest('[data-cancel]');
+    if (cancel) {
+      var pf = cancel.closest('.acct-field');
+      if (pf) { pf.classList.remove('editing'); var mm = pf.querySelector('.acct-field-msg'); if (mm) { mm.textContent=''; mm.className='acct-field-msg'; } }
+      return;
+    }
+  });
+
+  function setMsg(sel, text, cls) {
+    var m = document.querySelector(sel);
+    m.textContent = text;
+    m.className = 'acct-field-msg' + (cls ? ' ' + cls : '');
+  }
+
+  // Save name → PUT member
+  document.getElementById('form-name').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = document.getElementById('input-name').value.trim();
+    setMsg('[data-msg="name"]', 'Guardando…', '');
+    fetch('/members/api/member/', { method: 'PUT', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: val }) })
+      .then(function(r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function(m) {
+        document.getElementById('val-name').textContent = (m.name || val) || '(sin nombre)';
+        document.getElementById('acct-greet').textContent = (m.name || val) || 'wizard';
+        document.querySelector('.acct-field[data-field="name"]').classList.remove('editing');
+        setMsg('[data-msg="name"]', '', '');
+      })
+      .catch(function() { setMsg('[data-msg="name"]', 'No se pudo guardar. Probá de nuevo.', 'err'); });
+  });
+
+  // Change email → send-magic-link (updateEmail, requiere confirmación)
+  document.getElementById('form-email').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = document.getElementById('input-email').value.trim();
+    if (!val) return;
+    setMsg('[data-msg="email"]', 'Enviando…', '');
+    getIntegrityToken().then(function(token) {
+      var body = { email: val, emailType: 'updateEmail' };
+      if (token) body.integrityToken = token;
+      return fetch('/members/api/send-magic-link/', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    })
+    .then(function(r) { if (!r.ok) throw 0;
+      document.querySelector('.acct-field[data-field="email"]').classList.remove('editing');
+      setMsg('[data-msg="email"]', '✓ Te mandamos un mail a ' + val + ' para confirmar el cambio.', 'ok');
+    })
+    .catch(function() { setMsg('[data-msg="email"]', 'No se pudo enviar la confirmación. Probá de nuevo.', 'err'); });
+  });
+
+  // Anon login → send-magic-link (signin)
+  var anonForm = document.getElementById('anon-login-form');
+  anonForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = document.getElementById('anon-login-email').value.trim();
+    var msg = document.getElementById('anon-login-msg');
+    if (!val) return;
+    msg.textContent = 'Enviando…'; msg.className = 'login-msg';
+    getIntegrityToken().then(function(token) {
+      var body = { email: val, emailType: 'signin' };
+      if (token) body.integrityToken = token;
+      return fetch('/members/api/send-magic-link/', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    })
+    .then(function(r) { if (!r.ok) throw 0;
+      msg.textContent = '✓ Te mandamos un link a ' + val + ' para entrar.'; msg.className = 'login-msg ok';
+    })
+    .catch(function() { msg.textContent = 'No pudimos enviar el link. Probá de nuevo.'; msg.className = 'login-msg err'; });
+  });
+
+  // Logout
+  document.querySelectorAll('[data-logout]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      fetch('/members/api/session', { method: 'DELETE', credentials: 'same-origin' }).then(function() { window.location.reload(); });
+    });
+  });
 })();
 </script>
