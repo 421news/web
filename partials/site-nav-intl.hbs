@@ -130,6 +130,22 @@
       }
     });
 
+    // Logged-in: the "Subscribe" button becomes the account entry
+    // (no per-lang account page → English account page as fallback)
+    var sessionLabel = { en:'My session', pt:'Minha sessão', fr:'Ma session', tr:'Oturumum', zh:'我的账户', ja:'マイアカウント', ko:'내 계정' };
+    fetch('/members/api/member/', { credentials: 'same-origin' })
+      .then(function(r) { return (!r.ok || r.status === 204) ? null : r.json(); })
+      .then(function(member) {
+        if (!member) return;
+        document.querySelectorAll('.nav-subscribe-btn, .nav-mobile-subscribe').forEach(function(btn) {
+          btn.textContent = sessionLabel[navLang] || sessionLabel.en;
+          btn.removeAttribute('data-path');
+          btn.setAttribute('href', '/en/my-subscription/');
+          btn.removeAttribute('onclick');
+        });
+      })
+      .catch(function() {});
+
     // Sync mobile mode-switch with desktop
     var mobileSwitch = document.getElementById('mode-switch-mobile');
     var desktopSwitch = document.getElementById('mode-switch');

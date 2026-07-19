@@ -11,35 +11,44 @@
           <div id="sub-section-plan">
 
             <div class="sub-hero">
-              <span class="sub-hero-eyebrow" data-i18n="eyebrow">✨ Become a Wizard</span>
-              <h1 class="sub-hero-title"><span data-i18n="h1pre">Read </span><span class="sub-hero-accent" data-i18n="h1accent">Revista 421 before anyone else</span><span data-i18n="h1post"> and back the project</span></h1>
-              <p class="sub-hero-subtitle" data-i18n-html="subtitle">Every new issue reaches Wizards <strong>one month before</strong> the public. Plus commenting on articles, the Magic app and the Monthly Council with Juan Ruocco.</p>
-              <div class="sub-hero-proof" data-i18n="proof">228 wizards · 5,031 readers</div>
+              <span class="sub-hero-eyebrow" data-i18n="eyebrow">✦ Join 421</span>
+              <h1 class="sub-hero-title" data-i18n="h1">Read 421 and back the project</h1>
+              <p class="sub-hero-subtitle" data-i18n-html="subtitle">Sign up for free to read, or subscribe for full access and help us <strong>hire new writers</strong> every month.</p>
+              <div class="sub-hero-proof" data-i18n="proof">228 subscribers · 5,031 readers</div>
             </div>
             <hr class="sub-gradient-divider">
 
             <div class="tier-grid">
 
-              <!-- FREE TIER -->
+              <!-- REGISTER + LOGIN -->
               <div class="tier">
-                <h2 class="tier-name" data-i18n="freeName">Free</h2>
-                <p class="tier-tagline" data-i18n="freeTagline">To start reading 421</p>
-                <div class="tier-price"><span class="tier-price-amount">$0</span></div>
-                <ul class="tier-benefits" data-i18n-list="freeBenefits">
-                  <li>Access to all articles on the site</li>
-                  <li>Weekly newsletter with the best of 421</li>
-                  <li>Download of released magazines (back issues)</li>
-                  <li>Access to the 421 Canon and reading routes</li>
+                <h2 class="tier-name" data-i18n="registerName">Sign up</h2>
+                <p class="tier-tagline" data-i18n="registerTagline">Create your free account and start reading 421</p>
+                <div class="tier-free-label" data-i18n="freeLabel">Free</div>
+                <ul class="tier-benefits" data-i18n-list="registerBenefits">
+                  <li>Download of <strong>released</strong> magazines (back issues)</li>
+                  <li>Keep your session on any device</li>
                 </ul>
-                <button class="btn-outline" id="btn-free" data-i18n="freeCta">Sign up for free →</button>
-                <p class="tier-fine" data-i18n="freeFine">No card · Cancel anytime</p>
+
+                <div class="tier-actions">
+                  <button class="btn-outline" id="btn-free" data-i18n="registerCta">Sign up for free</button>
+                  <div class="tier-actions-divider" data-i18n="or">or</div>
+                  <button class="btn-ghost" id="btn-login-toggle" data-i18n="loginToggle">I have an account · Log in</button>
+
+                  <form class="inline-login" id="inline-login">
+                    <input type="email" id="login-email" data-i18n-ph="loginPlaceholder" placeholder="you@email.com" required autocomplete="email">
+                    <button type="submit" class="btn-outline" id="login-submit" data-i18n="loginSubmit">Send me the login link</button>
+                    <div class="login-msg" id="login-msg"></div>
+                    <button type="button" class="inline-login-back" id="btn-login-back" data-i18n="loginBack">&larr; Back</button>
+                  </form>
+                </div>
               </div>
 
-              <!-- PAID TIER -->
+              <!-- SUBSCRIPTION -->
               <div class="tier featured" id="sub-plan-card">
-                <span class="tier-badge" data-i18n="badge">Most popular</span>
-                <h2 class="tier-name" data-i18n="wizardName">Wizard</h2>
-                <p class="tier-tagline" data-i18n="wizardTagline">Full access + back the project</p>
+                <span class="tier-badge" data-i18n="badge">Recommended</span>
+                <h2 class="tier-name" data-i18n="subscribeName">Subscribe</h2>
+                <p class="tier-tagline" data-i18n="subscribeTagline">Full access + back the project</p>
 
                 <div class="plan-toggle">
                   <button class="plan-toggle-btn active" id="toggle-monthly" data-i18n="monthly">Monthly</button>
@@ -55,15 +64,14 @@
                   <div class="plan-price-detail" id="price-detail"></div>
                 </div>
 
-                <ul class="tier-benefits" data-i18n-list="wizardBenefits">
+                <ul class="tier-benefits" data-i18n-list="subscribeBenefits">
                   <li class="tier-benefit-featured">📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release</li>
                   <li>Comment and join discussions on every article</li>
-                  <li><strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other wizards</li>
+                  <li><strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other subscribers</li>
                   <li>Access to the <a href="https://mtg.421.news">Magic 421 app</a></li>
                 </ul>
 
-                <button class="btn-gradient" id="btn-suscribirme" data-i18n="wizardCta">Become a Wizard →</button>
-                <p class="tier-fine" data-i18n="wizardFine">Pay with international card (Stripe, USD)</p>
+                <button class="btn-gradient" id="btn-suscribirme" data-i18n="subscribeCta">Subscribe →</button>
               </div>
 
             </div>
@@ -72,7 +80,7 @@
               <h2 data-i18n="faqTitle">FAQ</h2>
               <details class="sub-faq-item">
                 <summary data-i18n="faqQ1">What exactly is "early access" to the magazine?</summary>
-                <p data-i18n="faqA1">Each new issue of Revista 421 is released first to Wizards only, as a PDF. One month later it's released to the rest of the public.</p>
+                <p data-i18n="faqA1">Each new issue of Revista 421 is released first to subscribers only, as a PDF. One month later it's released to the rest of the public.</p>
               </details>
               <details class="sub-faq-item">
                 <summary data-i18n="faqQ2">How do I cancel?</summary>
@@ -80,11 +88,11 @@
               </details>
               <details class="sub-faq-item">
                 <summary data-i18n="faqQ3">What about old issues of the magazine?</summary>
-                <p data-i18n-html="faqA3">They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for Wizards during its first month.</p>
+                <p data-i18n-html="faqA3">They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for subscribers during its first month.</p>
               </details>
               <details class="sub-faq-item">
                 <summary data-i18n="faqQ4">What's the Monthly Council?</summary>
-                <p data-i18n="faqA4">A roughly 1-hour video call with Juan Ruocco and other Wizards. Open discussion, editorial proposals, debates. Announced in advance via newsletter.</p>
+                <p data-i18n="faqA4">A roughly 1-hour video call with Juan Ruocco and other subscribers. Open discussion, editorial proposals, debates. Announced in advance by email.</p>
               </details>
             </section>
           </div>
@@ -100,140 +108,154 @@
         var m = window.location.pathname.match(/^\/([a-z]{2})\//);
         var lang = m ? m[1] : 'en';
 
-        // EN is canonical fallback; intl strings are simplified — we keep the editorial nuance
+        // EN is canonical fallback; intl strings keep the editorial nuance
         // (revista anticipada, concilio, magic app) intact across languages.
         var i18n = {
           en: {
-            eyebrow:'✨ Become a Wizard',
-            h1pre:'Read ', h1accent:'Revista 421 before anyone else', h1post:' and back the project',
-            subtitle:'Every new issue reaches Wizards <strong>one month before</strong> the public. Plus commenting on articles, the Magic app and the Monthly Council with Juan Ruocco.',
-            proof:'228 wizards · 5,031 readers',
-            freeName:'Free', freeTagline:'To start reading 421',
-            freeBenefits:['Access to all articles on the site','Weekly newsletter with the best of 421','Download of <strong>released</strong> magazines (back issues)','Access to the <a href="/en/canon/">421 Canon</a> and reading routes'],
-            freeCta:'Sign up for free →', freeFine:'No card · Cancel anytime',
-            badge:'Most popular', wizardName:'Wizard', wizardTagline:'Full access + back the project',
+            eyebrow:'✦ Join 421',
+            h1:'Read 421 and back the project',
+            subtitle:'Sign up for free to read, or subscribe for full access and help us <strong>hire new writers</strong> every month.',
+            proof:'228 subscribers · 5,031 readers',
+            registerName:'Sign up', registerTagline:'Create your free account and start reading 421', freeLabel:'Free',
+            registerBenefits:['Download of <strong>released</strong> magazines (back issues)','Keep your session on any device'],
+            registerCta:'Sign up for free', or:'or', loginToggle:'I have an account · Log in',
+            loginPlaceholder:'you@email.com', loginSubmit:'Send me the login link', loginBack:'← Back',
+            loginSending:'Sending…', loginSent:'✓ We sent you a login link to sign in.', loginError:'Couldn’t send the link. Check your email and try again.',
+            badge:'Recommended', subscribeName:'Subscribe', subscribeTagline:'Full access + back the project',
             monthly:'Monthly', annual:'Annual', year:'USD / year', month:'USD / month', save:'save 2 months', nocommit:'No commitment, cancel anytime',
-            wizardBenefits:['📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release','Comment and join discussions on every article','<strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other wizards','Access to the <a href="https://mtg.421.news">Magic 421 app</a>'],
-            wizardCta:'Become a Wizard →', wizardFine:'Pay with international card (Stripe, USD)',
+            subscribeBenefits:['📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release','Comment and join discussions on every article','<strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other subscribers','Access to the <a href="https://mtg.421.news">Magic 421 app</a>'],
+            subscribeCta:'Subscribe →',
             faqTitle:'FAQ',
-            faqQ1:'What exactly is "early access" to the magazine?', faqA1:'Each new issue of Revista 421 is released first to Wizards only, as a PDF. One month later it\'s released to the rest of the public.',
+            faqQ1:'What exactly is "early access" to the magazine?', faqA1:'Each new issue of Revista 421 is released first to subscribers only, as a PDF. One month later it\'s released to the rest of the public.',
             faqQ2:'How do I cancel?', faqA2:'From your account, anytime. No commitment, no questions. You keep access until the end of the paid period.',
-            faqQ3:'What about old issues of the magazine?', faqA3:'They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for Wizards during its first month.',
-            faqQ4:'What\'s the Monthly Council?', faqA4:'A roughly 1-hour video call with Juan Ruocco and other Wizards. Open discussion, editorial proposals, debates. Announced in advance via newsletter.'
+            faqQ3:'What about old issues of the magazine?', faqA3:'They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for subscribers during its first month.',
+            faqQ4:'What\'s the Monthly Council?', faqA4:'A roughly 1-hour video call with Juan Ruocco and other subscribers. Open discussion, editorial proposals, debates. Announced in advance by email.'
           },
           pt: {
-            eyebrow:'✨ Vire um Wizard',
-            h1pre:'Leia a ', h1accent:'Revista 421 antes de todos', h1post:' e apoie o projeto',
-            subtitle:'Cada novo número chega aos Wizards <strong>um mês antes</strong> do público. Mais comentários nas notas, o app de Magic e o Concílio mensal com Juan Ruocco.',
-            proof:'228 wizards · 5.031 leitores',
-            freeName:'Grátis', freeTagline:'Para começar a ler 421',
-            freeBenefits:['Acesso a todas as notas do site','Newsletter semanal com o melhor de 421','Download de revistas <strong>liberadas</strong> (números antigos)','Acesso ao <a href="/en/canon/">Canon 421</a> e rotas de leitura'],
-            freeCta:'Cadastre-se grátis →', freeFine:'Sem cartão · Cancele quando quiser',
-            badge:'Mais popular', wizardName:'Wizard', wizardTagline:'Acesso completo + apoia o projeto',
+            eyebrow:'✦ Junte-se a 421',
+            h1:'Leia 421 e apoie o projeto',
+            subtitle:'Cadastre-se grátis para ler, ou assine para ter acesso completo e ajudar a <strong>contratar novos escritores</strong> todo mês.',
+            proof:'228 assinantes · 5.031 leitores',
+            registerName:'Cadastre-se', registerTagline:'Crie sua conta grátis e comece a ler 421', freeLabel:'Grátis',
+            registerBenefits:['Download de revistas <strong>liberadas</strong> (números antigos)','Mantenha sua sessão em qualquer dispositivo'],
+            registerCta:'Cadastre-se grátis', or:'ou', loginToggle:'Já tenho conta · Entrar',
+            loginPlaceholder:'voce@email.com', loginSubmit:'Envie meu link de acesso', loginBack:'← Voltar',
+            loginSending:'Enviando…', loginSent:'✓ Enviamos um link de acesso para o seu e-mail.', loginError:'Não foi possível enviar o link. Verifique o e-mail e tente de novo.',
+            badge:'Recomendado', subscribeName:'Assine', subscribeTagline:'Acesso completo + apoia o projeto',
             monthly:'Mensal', annual:'Anual', year:'USD / ano', month:'USD / mês', save:'economize 2 meses', nocommit:'Sem compromisso, cancele quando quiser',
-            wizardBenefits:['📕 Leia a <strong>Revista 421 #<span data-revista-numero>14</span></strong> em PDF <strong>um mês antes</strong> do público','Comentar e participar dos debates de cada nota','<strong>Concílio mensal</strong>: videochamada com <a href="/author/juan-ruocco/">Juan Ruocco</a> e outros wizards','Acesso ao <a href="https://mtg.421.news">app de Magic 421</a>'],
-            wizardCta:'Vire um Wizard →', wizardFine:'Pague com cartão internacional (Stripe, USD)',
+            subscribeBenefits:['📕 Leia a <strong>Revista 421 #<span data-revista-numero>14</span></strong> em PDF <strong>um mês antes</strong> do público','Comentar e participar dos debates de cada nota','<strong>Concílio mensal</strong>: videochamada com <a href="/author/juan-ruocco/">Juan Ruocco</a> e outros assinantes','Acesso ao <a href="https://mtg.421.news">app de Magic 421</a>'],
+            subscribeCta:'Assine →',
             faqTitle:'Perguntas frequentes',
-            faqQ1:'O que é exatamente o "acesso antecipado" à revista?', faqA1:'Cada novo número da Revista 421 sai primeiro apenas para Wizards, em PDF. Um mês depois é liberado para o resto.',
+            faqQ1:'O que é exatamente o "acesso antecipado" à revista?', faqA1:'Cada novo número da Revista 421 sai primeiro apenas para assinantes, em PDF. Um mês depois é liberado para o resto.',
             faqQ2:'Como cancelo?', faqA2:'Da sua conta, a qualquer momento. Sem permanência, sem perguntas. Você mantém o acesso até o fim do período pago.',
-            faqQ3:'E os números antigos da revista?', faqA3:'Continuam disponíveis para todos (grátis). Apenas o <strong>último número</strong> fica reservado aos Wizards durante o primeiro mês.',
-            faqQ4:'O que inclui o Concílio mensal?', faqA4:'Uma videochamada de cerca de 1 hora com Juan Ruocco e outros Wizards. Conversa aberta, propostas editoriais, debates. Anunciada com antecedência via newsletter.'
+            faqQ3:'E os números antigos da revista?', faqA3:'Continuam disponíveis para todos (grátis). Apenas o <strong>último número</strong> fica reservado aos assinantes durante o primeiro mês.',
+            faqQ4:'O que inclui o Concílio mensal?', faqA4:'Uma videochamada de cerca de 1 hora com Juan Ruocco e outros assinantes. Conversa aberta, propostas editoriais, debates. Anunciada com antecedência por e-mail.'
           },
           fr: {
-            eyebrow:'✨ Devenez Wizard',
-            h1pre:'Lisez la ', h1accent:'Revista 421 avant tout le monde', h1post:' et soutenez le projet',
-            subtitle:'Chaque nouveau numéro arrive aux Wizards <strong>un mois avant</strong> le public. Plus les commentaires sur les articles, l\'app Magic et le Concile mensuel avec Juan Ruocco.',
-            proof:'228 wizards · 5 031 lecteurs',
-            freeName:'Gratuit', freeTagline:'Pour commencer à lire 421',
-            freeBenefits:['Accès à tous les articles du site','Newsletter hebdomadaire avec le meilleur de 421','Téléchargement des magazines <strong>libérés</strong> (anciens numéros)','Accès au <a href="/en/canon/">Canon 421</a> et aux parcours de lecture'],
-            freeCta:'Inscription gratuite →', freeFine:'Sans carte · Annulez quand vous voulez',
-            badge:'Le plus populaire', wizardName:'Wizard', wizardTagline:'Accès complet + soutien au projet',
+            eyebrow:'✦ Rejoignez 421',
+            h1:'Lisez 421 et soutenez le projet',
+            subtitle:'Inscrivez-vous gratuitement pour lire, ou abonnez-vous pour un accès complet et aidez-nous à <strong>recruter de nouveaux auteurs</strong> chaque mois.',
+            proof:'228 abonnés · 5 031 lecteurs',
+            registerName:'Inscription', registerTagline:'Créez votre compte gratuit et commencez à lire 421', freeLabel:'Gratuit',
+            registerBenefits:['Téléchargement des magazines <strong>libérés</strong> (anciens numéros)','Gardez votre session sur tous vos appareils'],
+            registerCta:'Inscription gratuite', or:'ou', loginToggle:'J\'ai déjà un compte · Se connecter',
+            loginPlaceholder:'vous@email.com', loginSubmit:'Envoyez-moi le lien de connexion', loginBack:'← Retour',
+            loginSending:'Envoi…', loginSent:'✓ Nous vous avons envoyé un lien de connexion par e-mail.', loginError:'Impossible d\'envoyer le lien. Vérifiez l\'e-mail et réessayez.',
+            badge:'Recommandé', subscribeName:'S\'abonner', subscribeTagline:'Accès complet + soutien au projet',
             monthly:'Mensuel', annual:'Annuel', year:'USD / an', month:'USD / mois', save:'économisez 2 mois', nocommit:'Sans engagement, annulez quand vous voulez',
-            wizardBenefits:['📕 Lisez la <strong>Revista 421 #<span data-revista-numero>14</span></strong> en PDF <strong>un mois avant</strong> le grand public','Commentez et participez aux débats sur chaque article','<strong>Concile mensuel</strong> : visioconférence avec <a href="/author/juan-ruocco/">Juan Ruocco</a> et les autres wizards','Accès à l\'<a href="https://mtg.421.news">app Magic 421</a>'],
-            wizardCta:'Devenez Wizard →', wizardFine:'Payez par carte internationale (Stripe, USD)',
+            subscribeBenefits:['📕 Lisez la <strong>Revista 421 #<span data-revista-numero>14</span></strong> en PDF <strong>un mois avant</strong> le grand public','Commentez et participez aux débats sur chaque article','<strong>Concile mensuel</strong> : visioconférence avec <a href="/author/juan-ruocco/">Juan Ruocco</a> et les autres abonnés','Accès à l\'<a href="https://mtg.421.news">app Magic 421</a>'],
+            subscribeCta:'S\'abonner →',
             faqTitle:'Questions fréquentes',
-            faqQ1:'Qu\'est-ce que l\'"accès anticipé" au magazine ?', faqA1:'Chaque nouveau numéro de Revista 421 sort d\'abord uniquement pour les Wizards, en PDF. Un mois plus tard il est libéré pour le reste du public.',
-            faqQ2:'Comment annuler ?', faqA2:'Depuis votre compte, à tout moment. Sans engagement, sans questions. Vous gardez l\'accès jusqu\'à la fin de la période payée.',
-            faqQ3:'Et les anciens numéros ?', faqA3:'Ils restent disponibles pour tous (gratuit). Seul le <strong>dernier numéro</strong> est réservé aux Wizards pendant le premier mois.',
-            faqQ4:'Que comprend le Concile mensuel ?', faqA4:'Une visioconférence d\'environ 1 heure avec Juan Ruocco et d\'autres Wizards. Discussion ouverte, propositions éditoriales, débats. Annoncée à l\'avance via la newsletter.'
+            faqQ1:'Qu\'est-ce que l\'"accès anticipé" au magazine ?', faqA1:'Chaque nouveau numéro de Revista 421 sort d\'abord uniquement pour les abonnés, en PDF. Un mois plus tard il est libéré pour le reste du public.',
+            faqQ2:'Comment annuler ?', faqA2:'Depuis votre compte, à tout moment. Sans engagement, sans questions. Vous gardez l\'accès jusqu\'à la fin de la période payée.',
+            faqQ3:'Et les anciens numéros ?', faqA3:'Ils restent disponibles pour tous (gratuit). Seul le <strong>dernier numéro</strong> est réservé aux abonnés pendant le premier mois.',
+            faqQ4:'Que comprend le Concile mensuel ?', faqA4:'Une visioconférence d\'environ 1 heure avec Juan Ruocco et d\'autres abonnés. Discussion ouverte, propositions éditoriales, débats. Annoncée à l\'avance par e-mail.'
           },
           zh: {
-            eyebrow:'✨ 成为 Wizard',
-            h1pre:'抢先阅读 ', h1accent:'《Revista 421》', h1post:'，支持项目',
-            subtitle:'每期新刊 Wizards 可比公众 <strong>提前一个月</strong>阅读。包含文章评论、Magic 应用以及与 Juan Ruocco 的月度议会。',
-            proof:'228 wizards · 5,031 读者',
-            freeName:'免费', freeTagline:'开始阅读 421',
-            freeBenefits:['访问网站所有文章','每周邮件推送 421 精选','下载<strong>已公开</strong>的期刊（旧期刊）','访问 <a href="/en/canon/">421 Canon</a> 与阅读路径'],
-            freeCta:'免费注册 →', freeFine:'无需银行卡 · 随时取消',
-            badge:'最受欢迎', wizardName:'Wizard', wizardTagline:'完整权限 + 支持项目',
+            eyebrow:'✦ 加入 421',
+            h1:'阅读 421，支持项目',
+            subtitle:'免费注册即可阅读，或订阅以获得完整权限，并帮助我们每月<strong>聘请新作者</strong>。',
+            proof:'228 订阅者 · 5,031 读者',
+            registerName:'注册', registerTagline:'创建免费账户，开始阅读 421', freeLabel:'免费',
+            registerBenefits:['下载<strong>已公开</strong>的期刊（旧期刊）','在任何设备上保持登录'],
+            registerCta:'免费注册', or:'或', loginToggle:'已有账户 · 登录',
+            loginPlaceholder:'you@email.com', loginSubmit:'发送登录链接', loginBack:'← 返回',
+            loginSending:'发送中…', loginSent:'✓ 我们已向您的邮箱发送了登录链接。', loginError:'无法发送链接。请检查邮箱后重试。',
+            badge:'推荐', subscribeName:'订阅', subscribeTagline:'完整权限 + 支持项目',
             monthly:'月付', annual:'年付', year:'USD / 年', month:'USD / 月', save:'节省2个月', nocommit:'无承诺，随时取消',
-            wizardBenefits:['📕 PDF 抢先阅读<strong>《Revista 421 #<span data-revista-numero>14</span>》</strong>，<strong>比公众提前一个月</strong>','评论并参与每篇文章的讨论','<strong>月度议会</strong>：与 <a href="/author/juan-ruocco/">Juan Ruocco</a> 及其他 wizards 视频通话','访问 <a href="https://mtg.421.news">Magic 421 应用</a>'],
-            wizardCta:'成为 Wizard →', wizardFine:'使用国际信用卡支付 (Stripe, USD)',
+            subscribeBenefits:['📕 PDF 抢先阅读<strong>《Revista 421 #<span data-revista-numero>14</span>》</strong>，<strong>比公众提前一个月</strong>','评论并参与每篇文章的讨论','<strong>月度议会</strong>：与 <a href="/author/juan-ruocco/">Juan Ruocco</a> 及其他订阅者视频通话','访问 <a href="https://mtg.421.news">Magic 421 应用</a>'],
+            subscribeCta:'订阅 →',
             faqTitle:'常见问题',
-            faqQ1:'杂志“抢先访问”是什么？', faqA1:'每期新的 Revista 421 首先只面向 Wizards 发布 PDF。一个月后才面向公众开放。',
+            faqQ1:'杂志“抢先访问”是什么？', faqA1:'每期新的 Revista 421 首先只面向订阅者发布 PDF。一个月后才面向公众开放。',
             faqQ2:'如何取消订阅？', faqA2:'从您的账户随时可以。无合同，无询问。您可保留访问权限直至付费期结束。',
-            faqQ3:'旧期刊怎么办？', faqA3:'依然面向所有人免费提供。只有<strong>最新期刊</strong>在首月仅限 Wizards 访问。',
-            faqQ4:'月度议会包含什么？', faqA4:'与 Juan Ruocco 及其他 Wizards 约 1 小时的视频通话。公开交流、编辑提议、辩论。提前通过邮件通知。'
+            faqQ3:'旧期刊怎么办？', faqA3:'依然面向所有人免费提供。只有<strong>最新期刊</strong>在首月仅限订阅者访问。',
+            faqQ4:'月度议会包含什么？', faqA4:'与 Juan Ruocco 及其他订阅者约 1 小时的视频通话。公开交流、编辑提议、辩论。提前通过邮件通知。'
           },
           ja: {
-            eyebrow:'✨ Wizard になろう',
-            h1pre:'', h1accent:'誰よりも早く Revista 421を読もう', h1post:'。プロジェクトを支援。',
-            subtitle:'新号は Wizards に一般公開の<strong>1ヶ月前</strong>に届きます。記事へのコメント、Magicアプリ、Juan Ruocco との月例会議も。',
-            proof:'228 wizards · 5,031 読者',
-            freeName:'無料', freeTagline:'421を読み始めるために',
-            freeBenefits:['サイト上のすべての記事へのアクセス','421もっともうちよい、週次ニュースレター','<strong>公開済み</strong>雑誌のダウンロード（バックナンバー）','<a href="/en/canon/">421 Canon</a> と読書ルートへのアクセス'],
-            freeCta:'無料登録 →', freeFine:'カード不要 · いつでも解約可能',
-            badge:'人気 No.1', wizardName:'Wizard', wizardTagline:'フルアクセス + プロジェクト支援',
+            eyebrow:'✦ 421に参加',
+            h1:'421を読んでプロジェクトを支援',
+            subtitle:'無料登録で読めます。購読すればすべてにアクセスでき、毎月<strong>新しい書き手を雇う</strong>支援になります。',
+            proof:'228 購読者 · 5,031 読者',
+            registerName:'登録', registerTagline:'無料アカウントを作成して421を読み始めよう', freeLabel:'無料',
+            registerBenefits:['<strong>公開済み</strong>雑誌のダウンロード（バックナンバー）','どのデバイスでもセッションを保持'],
+            registerCta:'無料登録', or:'または', loginToggle:'アカウントを持っている · ログイン',
+            loginPlaceholder:'you@email.com', loginSubmit:'ログインリンクを送る', loginBack:'← 戻る',
+            loginSending:'送信中…', loginSent:'✓ ログインリンクをメールに送信しました。', loginError:'リンクを送信できませんでした。メールを確認して再試行してください。',
+            badge:'おすすめ', subscribeName:'購読する', subscribeTagline:'フルアクセス + プロジェクト支援',
             monthly:'月額', annual:'年額', year:'USD / 年', month:'USD / 月', save:'2ヶ月分お得', nocommit:'縛りなし、いつでも解約可能',
-            wizardBenefits:['📕 一般公開より<strong>1ヶ月早く</strong>《Revista 421 #<span data-revista-numero>14</span>》PDFを読める','すべての記事へのコメントと議論参加','<strong>月例会議</strong>: <a href="/author/juan-ruocco/">Juan Ruocco</a> と他の wizards とのビデオ通話','<a href="https://mtg.421.news">Magic 421 アプリ</a>へのアクセス'],
-            wizardCta:'Wizard になる →', wizardFine:'国際カードでお支払い (Stripe, USD)',
+            subscribeBenefits:['📕 一般公開より<strong>1ヶ月早く</strong>《Revista 421 #<span data-revista-numero>14</span>》PDFを読める','すべての記事へのコメントと議論参加','<strong>月例会議</strong>: <a href="/author/juan-ruocco/">Juan Ruocco</a> と他の購読者とのビデオ通話','<a href="https://mtg.421.news">Magic 421 アプリ</a>へのアクセス'],
+            subscribeCta:'購読する →',
             faqTitle:'よくある質問',
-            faqQ1:'雑誌への「早期アクセス」とは何ですか？', faqA1:'新号の Revista 421 はまず Wizards 限定で PDF として公開されます。1ヶ月後に一般に公開されます。',
+            faqQ1:'雑誌への「早期アクセス」とは何ですか？', faqA1:'新号の Revista 421 はまず購読者限定で PDF として公開されます。1ヶ月後に一般に公開されます。',
             faqQ2:'キャンセル方法は？', faqA2:'アカウントからいつでも可能。縛りなし、質問なし。支払い期間終了までアクセス可能です。',
-            faqQ3:'旧号はどうなりますか？', faqA3:'すべての人に無料で提供されます。<strong>最新号</strong>のみ初月は Wizards 専用です。',
-            faqQ4:'月例会議とは？', faqA4:'Juan Ruocco と他の Wizards と約1時間のビデオ通話。オープンな会話、編集提案、議論。ニュースレターで事前告知。'
+            faqQ3:'旧号はどうなりますか？', faqA3:'すべての人に無料で提供されます。<strong>最新号</strong>のみ初月は購読者専用です。',
+            faqQ4:'月例会議とは？', faqA4:'Juan Ruocco と他の購読者と約1時間のビデオ通話。オープンな会話、編集提案、議論。メールで事前告知。'
           },
           ko: {
-            eyebrow:'✨ Wizard 가 되세요',
-            h1pre:'', h1accent:'누구보다 먼저 Revista 421 읽기', h1post:' 그리고 프로젝트 지원',
-            subtitle:'새 호가 Wizards에게 일반 공개보다 <strong>1개월 먼저</strong> 제공됩니다. 기사 댓글, Magic 앱, Juan Ruocco와의 월례 회의도 포함됩니다.',
-            proof:'228 wizards · 5,031 독자',
-            freeName:'무료', freeTagline:'421 읽기 시작하기',
-            freeBenefits:['사이트의 모든 기사 접근','421의 하이라이트를 담은 주간 뉴슬레터','<strong>공개된</strong> 잡지 다운로드 (이전 호)','<a href="/en/canon/">421 Canon</a> 및 독서 로드 접근'],
-            freeCta:'무료 가입 →', freeFine:'카드 불필요 · 언제든 취소',
-            badge:'가장 인기', wizardName:'Wizard', wizardTagline:'전체 접근 + 프로젝트 지원',
+            eyebrow:'✦ 421 함께하기',
+            h1:'421을 읽고 프로젝트를 지원하세요',
+            subtitle:'무료로 가입해 읽거나, 구독해 전체에 접근하고 매달 <strong>새로운 필자 고용</strong>을 도와주세요.',
+            proof:'228 구독자 · 5,031 독자',
+            registerName:'가입', registerTagline:'무료 계정을 만들고 421을 읽기 시작하세요', freeLabel:'무료',
+            registerBenefits:['<strong>공개된</strong> 잡지 다운로드 (이전 호)','모든 기기에서 세션 유지'],
+            registerCta:'무료 가입', or:'또는', loginToggle:'이미 계정이 있어요 · 로그인',
+            loginPlaceholder:'you@email.com', loginSubmit:'로그인 링크 보내기', loginBack:'← 뒤로',
+            loginSending:'보내는 중…', loginSent:'✓ 로그인 링크를 이메일로 보냈어요.', loginError:'링크를 보내지 못했어요. 이메일을 확인하고 다시 시도하세요.',
+            badge:'추천', subscribeName:'구독하기', subscribeTagline:'전체 접근 + 프로젝트 지원',
             monthly:'월간', annual:'연간', year:'USD / 년', month:'USD / 월', save:'2개월 절약', nocommit:'약정 없음, 언제든 취소 가능',
-            wizardBenefits:['📕 일반 공개보다 <strong>1개월 먼저</strong> <strong>Revista 421 #<span data-revista-numero>14</span></strong> PDF 읽기','모든 기사에 댓글 작성 및 토론 참여','<strong>월례 회의</strong>: <a href="/author/juan-ruocco/">Juan Ruocco</a> 및 다른 wizards와 화상 통화','<a href="https://mtg.421.news">Magic 421 앱</a> 접근'],
-            wizardCta:'Wizard 가 되기 →', wizardFine:'국제 카드 결제 (Stripe, USD)',
+            subscribeBenefits:['📕 일반 공개보다 <strong>1개월 먼저</strong> <strong>Revista 421 #<span data-revista-numero>14</span></strong> PDF 읽기','모든 기사에 댓글 작성 및 토론 참여','<strong>월례 회의</strong>: <a href="/author/juan-ruocco/">Juan Ruocco</a> 및 다른 구독자와 화상 통화','<a href="https://mtg.421.news">Magic 421 앱</a> 접근'],
+            subscribeCta:'구독하기 →',
             faqTitle:'자주 묻는 질문',
-            faqQ1:'잡지 "조기 접근"이란?', faqA1:'새 호의 Revista 421은 먼저 Wizards에게만 PDF로 공개되며, 1개월 후 대중에게 공개됩니다.',
+            faqQ1:'잡지 "조기 접근"이란?', faqA1:'새 호의 Revista 421은 먼저 구독자에게만 PDF로 공개되며, 1개월 후 대중에게 공개됩니다.',
             faqQ2:'해지는 어떻게?', faqA2:'계정에서 언제든지. 약정 없음, 질문 없음. 결제 기간 종료 시까지 접근 유지.',
-            faqQ3:'이전 호는 어떻게 되나요?', faqA3:'모두에게 무료로 계속 제공됩니다. <strong>최신 호</strong>만 첫 달 동안 Wizards에게 예약되어 있습니다.',
-            faqQ4:'월례 회의에는 무엇이 포함되나요?', faqA4:'Juan Ruocco 및 다른 Wizards와 약 1시간 동안의 화상 통화. 공개 대화, 편집 제안, 토론. 뉴슬레터를 통해 사전에 안내됩니다.'
+            faqQ3:'이전 호는 어떻게 되나요?', faqA3:'모두에게 무료로 계속 제공됩니다. <strong>최신 호</strong>만 첫 달 동안 구독자에게 예약되어 있습니다.',
+            faqQ4:'월례 회의에는 무엇이 포함되나요?', faqA4:'Juan Ruocco 및 다른 구독자와 약 1시간 동안의 화상 통화. 공개 대화, 편집 제안, 토론. 이메일로 사전에 안내됩니다.'
           },
           tr: {
-            eyebrow:'✨ Wizard ol',
-            h1pre:'', h1accent:'Revista 421\'i kimseden önce oku', h1post:' ve projeyi destekle',
-            subtitle:'Her yeni sayı Wizards\'a halka <strong>bir ay önceden</strong> ulaşır. Ayrıca makalelerde yorum, Magic uygulaması ve Juan Ruocco ile Aylık Konsey.',
-            proof:'228 wizards · 5.031 okuyucu',
-            freeName:'Ücretsiz', freeTagline:'421\'i okumaya başlamak için',
-            freeBenefits:['Sitedeki tüm makalelere erişim','421\'in en iyilerini içeren haftalık bülten','<strong>Yayınlanmış</strong> dergileri indirme (eski sayılar)','<a href="/en/canon/">421 Canon</a> ve okuma rotalarına erişim'],
-            freeCta:'Ücretsiz kayıt →', freeFine:'Kart yok · İstediğin zaman iptal',
-            badge:'En popüler', wizardName:'Wizard', wizardTagline:'Tam erişim + projeyi destekle',
+            eyebrow:'✦ 421\'e katıl',
+            h1:'421 oku ve projeyi destekle',
+            subtitle:'Okumak için ücretsiz kaydol, ya da tam erişim için abone ol ve her ay <strong>yeni yazarlar işe almamıza</strong> yardım et.',
+            proof:'228 abone · 5.031 okuyucu',
+            registerName:'Kayıt ol', registerTagline:'Ücretsiz hesabını oluştur ve 421 okumaya başla', freeLabel:'Ücretsiz',
+            registerBenefits:['<strong>Yayınlanmış</strong> dergileri indirme (eski sayılar)','Oturumunu her cihazda koru'],
+            registerCta:'Ücretsiz kayıt', or:'veya', loginToggle:'Hesabım var · Giriş yap',
+            loginPlaceholder:'sen@email.com', loginSubmit:'Giriş bağlantısını gönder', loginBack:'← Geri',
+            loginSending:'Gönderiliyor…', loginSent:'✓ Giriş bağlantısını e-postana gönderdik.', loginError:'Bağlantı gönderilemedi. E-postanı kontrol edip tekrar dene.',
+            badge:'Önerilen', subscribeName:'Abone ol', subscribeTagline:'Tam erişim + projeyi destekle',
             monthly:'Aylık', annual:'Yıllık', year:'USD / yıl', month:'USD / ay', save:'2 ay tasarruf', nocommit:'Taahhüt yok, istediğin zaman iptal',
-            wizardBenefits:['📕 <strong>Revista 421 #<span data-revista-numero>14</span></strong>\'ü PDF olarak halka <strong>bir ay önce</strong> oku','Her makalede yorum ve tartışmalara katıl','<strong>Aylık Konsey</strong>: <a href="/author/juan-ruocco/">Juan Ruocco</a> ve diğer wizards ile görüntülü görüşme','<a href="https://mtg.421.news">Magic 421 uygulamasına</a> erişim'],
-            wizardCta:'Wizard ol →', wizardFine:'Uluslararası kart ile öde (Stripe, USD)',
+            subscribeBenefits:['📕 <strong>Revista 421 #<span data-revista-numero>14</span></strong>\'ü PDF olarak halka <strong>bir ay önce</strong> oku','Her makalede yorum ve tartışmalara katıl','<strong>Aylık Konsey</strong>: <a href="/author/juan-ruocco/">Juan Ruocco</a> ve diğer abonelerle görüntülü görüşme','<a href="https://mtg.421.news">Magic 421 uygulamasına</a> erişim'],
+            subscribeCta:'Abone ol →',
             faqTitle:'Sıkça sorulan sorular',
-            faqQ1:'Dergiye "erken erişim" tam olarak ne?', faqA1:'Her yeni Revista 421 sayısı önce sadece Wizards için PDF olarak yayınlanır. Bir ay sonra halka açılır.',
+            faqQ1:'Dergiye "erken erişim" tam olarak ne?', faqA1:'Her yeni Revista 421 sayısı önce sadece aboneler için PDF olarak yayınlanır. Bir ay sonra halka açılır.',
             faqQ2:'Nasıl iptal ederim?', faqA2:'Hesabınızdan istediğiniz zaman. Taahhüt yok, soru yok. Ödeme döneminin sonuna kadar erişim sağlanır.',
-            faqQ3:'Eski sayılar ne olacak?', faqA3:'Herkese ücretsiz olarak açık kalır. Sadece <strong>en son sayı</strong> ilk ay boyunca Wizards için ayrılmıştır.',
-            faqQ4:'Aylık Konsey neyi içerir?', faqA4:'Juan Ruocco ve diğer Wizards ile yaklaşık 1 saatlik görüntülü görüşme. Açık sohbet, editöryal öneriler, tartışmalar. Bülten aracılığıyla önceden duyurulur.'
+            faqQ3:'Eski sayılar ne olacak?', faqA3:'Herkese ücretsiz olarak açık kalır. Sadece <strong>en son sayı</strong> ilk ay boyunca aboneler için ayrılmıştır.',
+            faqQ4:'Aylık Konsey neyi içerir?', faqA4:'Juan Ruocco ve diğer abonelerle yaklaşık 1 saatlik görüntülü görüşme. Açık sohbet, editöryal öneriler, tartışmalar. E-posta ile önceden duyurulur.'
           }
         };
 
         var t = i18n[lang] || i18n.en;
 
-        // Apply text translations via data-i18n / data-i18n-html / data-i18n-list
+        // Apply translations via data-i18n / data-i18n-html / data-i18n-list / data-i18n-ph
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
           var key = el.getAttribute('data-i18n');
           if (t[key] !== undefined) el.textContent = t[key];
@@ -241,6 +263,10 @@
         document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
           var key = el.getAttribute('data-i18n-html');
           if (t[key] !== undefined) el.innerHTML = t[key];
+        });
+        document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-ph');
+          if (t[key] !== undefined) el.setAttribute('placeholder', t[key]);
         });
         document.querySelectorAll('[data-i18n-list]').forEach(function(ul) {
           var key = ul.getAttribute('data-i18n-list');
@@ -264,9 +290,9 @@
             var doc = new DOMParser().parseFromString(p.html, 'text/html');
             var h2 = doc.querySelector('h2');
             if (!h2) return;
-            var m = h2.textContent.trim().match(/#(\d+)/);
-            if (!m) return;
-            document.querySelectorAll('[data-revista-numero]').forEach(function(el){ el.textContent = m[1]; });
+            var mm = h2.textContent.trim().match(/#(\d+)/);
+            if (!mm) return;
+            document.querySelectorAll('[data-revista-numero]').forEach(function(el){ el.textContent = mm[1]; });
           })
           .catch(function(){});
 
@@ -323,13 +349,67 @@
 
         document.getElementById('btn-suscribirme').addEventListener('click', function() {
           if (!tierData) return;
-          if (typeof gtag === 'function') gtag('event','begin_checkout',{event_category:'subscription',event_label:'wizard_'+currentCadence+'_intl_'+lang});
+          if (typeof gtag === 'function') gtag('event','begin_checkout',{event_category:'subscription',event_label:'subscribe_'+currentCadence+'_intl_'+lang});
           window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
         document.getElementById('btn-free').addEventListener('click', function() {
-          if (typeof gtag === 'function') gtag('event','sign_up_intent',{event_category:'subscription',event_label:'free_newsletter_intl_'+lang});
+          if (typeof gtag === 'function') gtag('event','sign_up_intent',{event_category:'subscription',event_label:'free_register_intl_'+lang});
           window.location.hash = '#/portal/signup/free';
+        });
+
+        // ===== Inline login (magic link, signin) =====
+        var loginForm = document.getElementById('inline-login');
+        var loginEmail = document.getElementById('login-email');
+        var loginSubmit = document.getElementById('login-submit');
+
+        function setLoginMsg(text, cls) {
+          var el = document.getElementById('login-msg');
+          el.textContent = text;
+          el.className = 'login-msg' + (cls ? ' ' + cls : '');
+        }
+
+        document.getElementById('btn-login-toggle').addEventListener('click', function() {
+          loginForm.classList.add('open');
+          setLoginMsg('', '');
+          loginEmail.focus();
+        });
+        document.getElementById('btn-login-back').addEventListener('click', function() {
+          loginForm.classList.remove('open');
+          setLoginMsg('', '');
+        });
+
+        function getIntegrityToken() {
+          return fetch('/members/api/integrity-token/', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.text() : ''; })
+            .catch(function() { return ''; });
+        }
+
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var email = loginEmail.value.trim();
+          if (!email) return;
+          loginSubmit.disabled = true;
+          setLoginMsg(t.loginSending, '');
+          if (typeof gtag === 'function') gtag('event','login_magiclink_request',{event_category:'subscription',event_label:'subscribe_intl_'+lang});
+          getIntegrityToken().then(function(token) {
+            var body = { email: email, emailType: 'signin' };
+            if (token) body.integrityToken = token;
+            return fetch('/members/api/send-magic-link/', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+          })
+          .then(function(r) {
+            if (!r.ok) throw new Error('http ' + r.status);
+            setLoginMsg(t.loginSent, 'ok');
+          })
+          .catch(function() {
+            setLoginMsg(t.loginError, 'err');
+            loginSubmit.disabled = false;
+          });
         });
       });
     </script>

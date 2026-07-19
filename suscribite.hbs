@@ -37,33 +37,44 @@
           <div id="sub-section-plan">
 
             <div class="sub-hero">
-              <span class="sub-hero-eyebrow">✨ Suscribite</span>
-              <h1 class="sub-hero-title">Convertite en <span class="sub-hero-accent">Wizard</span> y aport&aacute; tu magia al proyecto</h1>
-              <p class="sub-hero-subtitle">Con una suscripci&oacute;n mensual acced&eacute;s a varios beneficios y ayud&aacute;s a que podamos <strong>contratar nuevos escritores</strong> cada mes. Tu aporte hace la diferencia.</p>
-              <div class="sub-hero-proof">235 wizards · 5.694 lectores</div>
+              <span class="sub-hero-eyebrow">✦ Sumate a 421</span>
+              <h1 class="sub-hero-title">Le&eacute; 421 y banc&aacute; el proyecto</h1>
+              <p class="sub-hero-subtitle">Registrate gratis para leer, o suscribite para acceder a todo y ayudar a que podamos <strong>contratar nuevos escritores</strong> cada mes.</p>
+              <div class="sub-hero-proof">235 suscriptores · 5.694 lectores</div>
             </div>
             <hr class="sub-gradient-divider">
 
             <div class="tier-grid">
 
-              <!-- FREE TIER -->
+              <!-- REGISTRO + LOGIN -->
               <div class="tier">
-                <h2 class="tier-name">Gratis</h2>
-                <p class="tier-tagline">Para empezar a leer 421</p>
-                <div class="tier-price"><span class="tier-price-amount">$0</span></div>
+                <h2 class="tier-name">Registrate</h2>
+                <p class="tier-tagline">Cre&aacute; tu cuenta gratis y empez&aacute; a leer 421</p>
+                <div class="tier-free-label">Gratis</div>
                 <ul class="tier-benefits">
-                  <li>Newsletter semanal con lo mejor de 421</li>
                   <li>Descarga de revistas <strong>liberadas</strong> (n&uacute;meros viejos)</li>
+                  <li>Guard&aacute;s tu sesi&oacute;n en cualquier dispositivo</li>
                 </ul>
-                <button class="btn-outline" id="btn-free">Registrate gratis &rarr;</button>
-                <p class="tier-fine">Sin tarjeta &middot; Cancel&aacute;s cuando quieras</p>
+
+                <div class="tier-actions">
+                  <button class="btn-outline" id="btn-free">Registrate gratis</button>
+                  <div class="tier-actions-divider">o</div>
+                  <button class="btn-ghost" id="btn-login-toggle">Ya tengo cuenta &middot; Inici&aacute; sesi&oacute;n</button>
+
+                  <form class="inline-login" id="inline-login">
+                    <input type="email" id="login-email" placeholder="tu@email.com" required autocomplete="email">
+                    <button type="submit" class="btn-outline" id="login-submit">Envi&aacute; el link de acceso</button>
+                    <div class="login-msg" id="login-msg"></div>
+                    <button type="button" class="inline-login-back" id="btn-login-back">&larr; Volver</button>
+                  </form>
+                </div>
               </div>
 
-              <!-- PAID TIER -->
+              <!-- SUSCRIPCION -->
               <div class="tier featured" id="sub-plan-card">
-                <span class="tier-badge">M&aacute;s popular</span>
-                <h2 class="tier-name">Wizard</h2>
-                <p class="tier-tagline">El acceso completo + banc&aacute;s el proyecto</p>
+                <span class="tier-badge">Recomendado</span>
+                <h2 class="tier-name">Suscribite</h2>
+                <p class="tier-tagline">Acceso completo + banc&aacute;s el proyecto</p>
 
                 <div class="plan-toggle">
                   <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
@@ -82,12 +93,11 @@
                 <ul class="tier-benefits">
                   <li class="tier-benefit-featured">📕 Le&eacute; la <strong>Revista 421</strong> en PDF <strong>un mes antes</strong> de que se libere al p&uacute;blico</li>
                   <li>Comentar y participar en debates de cada nota</li>
-                  <li><strong>Concilio mensual</strong>: videollamada con <a href="/author/juan-ruocco/">Juan Ruocco</a> y otros wizards</li>
+                  <li><strong>Concilio mensual</strong>: videollamada con <a href="/author/juan-ruocco/">Juan Ruocco</a> y otros suscriptores</li>
                   <li>Acceso a la <a href="https://mtg.421.news">app de Magic 421</a></li>
                 </ul>
 
-                <button class="btn-gradient" id="btn-suscribirme">Hacete Wizard &rarr;</button>
-                <p class="tier-fine">Pag&aacute;s en pesos (MP) o tarjeta (Stripe)</p>
+                <button class="btn-gradient" id="btn-suscribirme">Suscribite &rarr;</button>
               </div>
 
             </div>
@@ -97,7 +107,7 @@
               <h2>Preguntas frecuentes</h2>
               <details class="sub-faq-item">
                 <summary>¿Qu&eacute; es exactamente el "acceso anticipado" a la revista?</summary>
-                <p>Cada nuevo n&uacute;mero de Revista 421 sale primero solo para Wizards, en PDF. Un mes despu&eacute;s se libera para el resto.</p>
+                <p>Cada nuevo n&uacute;mero de Revista 421 sale primero solo para suscriptores, en PDF. Un mes despu&eacute;s se libera para el resto.</p>
               </details>
               <details class="sub-faq-item">
                 <summary>¿Puedo pagar en pesos argentinos?</summary>
@@ -109,11 +119,11 @@
               </details>
               <details class="sub-faq-item">
                 <summary>¿Qu&eacute; pasa con los n&uacute;meros viejos de la revista?</summary>
-                <p>Quedan disponibles para todos (gratis). Solo el <strong>&uacute;ltimo n&uacute;mero</strong> est&aacute; reservado a los Wizards durante el primer mes.</p>
+                <p>Quedan disponibles para todos (gratis). Solo el <strong>&uacute;ltimo n&uacute;mero</strong> est&aacute; reservado a los suscriptores durante el primer mes.</p>
               </details>
               <details class="sub-faq-item">
                 <summary>¿Qu&eacute; incluye el Concilio mensual?</summary>
-                <p>Una videollamada de aprox. 1 hora con Juan Ruocco y otros Wizards. Charla abierta, propuestas editoriales, debates. Se anuncia con tiempo via newsletter.</p>
+                <p>Una videollamada de aprox. 1 hora con Juan Ruocco y otros suscriptores. Charla abierta, propuestas editoriales, debates. Se anuncia con tiempo por mail.</p>
               </details>
             </section>
           </div>
@@ -257,9 +267,9 @@
         function getPlanLabel() {
           if (!tierData) return '';
           if (currentCadence === 'yearly') {
-            return 'Wizard Anual \u2014 ' + formatPrice(tierData.yearly_price) + ' USD/a\u00f1o';
+            return 'Suscripci\u00f3n anual \u2014 ' + formatPrice(tierData.yearly_price) + ' USD/a\u00f1o';
           }
-          return 'Wizard Mensual \u2014 ' + formatPrice(tierData.monthly_price) + ' USD/mes';
+          return 'Suscripci\u00f3n mensual \u2014 ' + formatPrice(tierData.monthly_price) + ' USD/mes';
         }
 
         // Toggle monthly/yearly
@@ -301,8 +311,64 @@
 
         // Free signup → Ghost Portal
         document.getElementById('btn-free').addEventListener('click', function() {
-          track('sign_up_intent', 'free_newsletter');
+          track('sign_up_intent', 'free_register');
           window.location.hash = '#/portal/signup/free';
+        });
+
+        // ===== Inline login (magic link, signin) =====
+        var loginForm = document.getElementById('inline-login');
+        var loginEmail = document.getElementById('login-email');
+        var loginSubmit = document.getElementById('login-submit');
+
+        function setLoginMsg(text, cls) {
+          var m = document.getElementById('login-msg');
+          m.textContent = text;
+          m.className = 'login-msg' + (cls ? ' ' + cls : '');
+        }
+
+        document.getElementById('btn-login-toggle').addEventListener('click', function() {
+          loginForm.classList.add('open');
+          setLoginMsg('', '');
+          loginEmail.focus();
+        });
+        document.getElementById('btn-login-back').addEventListener('click', function() {
+          loginForm.classList.remove('open');
+          setLoginMsg('', '');
+        });
+
+        // Ghost 5.x pide un integrity-token antes del send-magic-link; si el
+        // endpoint no existe (Ghost viejo) seguimos sin token.
+        function getIntegrityToken() {
+          return fetch('/members/api/integrity-token/', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.text() : ''; })
+            .catch(function() { return ''; });
+        }
+
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var email = loginEmail.value.trim();
+          if (!email) return;
+          loginSubmit.disabled = true;
+          setLoginMsg('Enviando…', '');
+          track('login_magiclink_request', 'suscribite');
+          getIntegrityToken().then(function(token) {
+            var body = { email: email, emailType: 'signin' };
+            if (token) body.integrityToken = token;
+            return fetch('/members/api/send-magic-link/', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+          })
+          .then(function(r) {
+            if (!r.ok) throw new Error('http ' + r.status);
+            setLoginMsg('✓ Te mandamos un link a ' + email + ' para entrar.', 'ok');
+          })
+          .catch(function() {
+            setLoginMsg('No pudimos enviar el link. Revisá el mail e intentá de nuevo.', 'err');
+            loginSubmit.disabled = false;
+          });
         });
 
         // Stripe → Ghost Portal with tier

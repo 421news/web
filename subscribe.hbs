@@ -37,32 +37,43 @@
           <div id="sub-section-plan">
 
             <div class="sub-hero">
-              <span class="sub-hero-eyebrow">✨ Become a Wizard</span>
-              <h1 class="sub-hero-title">Read <span class="sub-hero-accent">Revista 421 before anyone else</span> and back the project</h1>
-              <p class="sub-hero-subtitle">Every new issue reaches Wizards <strong>one month before</strong> the public. Plus commenting on articles, the Magic app and the Monthly Council with Juan Ruocco.</p>
-              <div class="sub-hero-proof">235 wizards · 5,694 readers</div>
+              <span class="sub-hero-eyebrow">✦ Join 421</span>
+              <h1 class="sub-hero-title">Read 421 and back the project</h1>
+              <p class="sub-hero-subtitle">Sign up for free to read, or subscribe for full access and help us <strong>hire new writers</strong> every month.</p>
+              <div class="sub-hero-proof">235 subscribers · 5,694 readers</div>
             </div>
             <hr class="sub-gradient-divider">
 
             <div class="tier-grid">
 
-              <!-- FREE TIER -->
+              <!-- REGISTER + LOGIN -->
               <div class="tier">
-                <h2 class="tier-name">Free</h2>
-                <p class="tier-tagline">To start reading 421</p>
-                <div class="tier-price"><span class="tier-price-amount">$0</span></div>
+                <h2 class="tier-name">Sign up</h2>
+                <p class="tier-tagline">Create your free account and start reading 421</p>
+                <div class="tier-free-label">Free</div>
                 <ul class="tier-benefits">
-                  <li>Weekly newsletter with the best of 421</li>
                   <li>Download of <strong>released</strong> magazines (back issues)</li>
+                  <li>Keep your session on any device</li>
                 </ul>
-                <button class="btn-outline" id="btn-free">Sign up for free →</button>
-                <p class="tier-fine">No card · Cancel anytime</p>
+
+                <div class="tier-actions">
+                  <button class="btn-outline" id="btn-free">Sign up for free</button>
+                  <div class="tier-actions-divider">or</div>
+                  <button class="btn-ghost" id="btn-login-toggle">I have an account · Log in</button>
+
+                  <form class="inline-login" id="inline-login">
+                    <input type="email" id="login-email" placeholder="you@email.com" required autocomplete="email">
+                    <button type="submit" class="btn-outline" id="login-submit">Send me the login link</button>
+                    <div class="login-msg" id="login-msg"></div>
+                    <button type="button" class="inline-login-back" id="btn-login-back">&larr; Back</button>
+                  </form>
+                </div>
               </div>
 
-              <!-- PAID TIER -->
+              <!-- SUBSCRIPTION -->
               <div class="tier featured" id="sub-plan-card">
-                <span class="tier-badge">Most popular</span>
-                <h2 class="tier-name">Wizard</h2>
+                <span class="tier-badge">Recommended</span>
+                <h2 class="tier-name">Subscribe</h2>
                 <p class="tier-tagline">Full access + back the project</p>
 
                 <div class="plan-toggle">
@@ -82,12 +93,11 @@
                 <ul class="tier-benefits">
                   <li class="tier-benefit-featured">📕 Read <strong>Revista 421</strong> in PDF <strong>one month before</strong> public release</li>
                   <li>Comment and join discussions on every article</li>
-                  <li><strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other wizards</li>
+                  <li><strong>Monthly Council</strong>: video call with <a href="/author/juan-ruocco/">Juan Ruocco</a> and other subscribers</li>
                   <li>Access to the <a href="https://mtg.421.news">Magic 421 app</a></li>
                 </ul>
 
-                <button class="btn-gradient" id="btn-suscribirme">Become a Wizard →</button>
-                <p class="tier-fine">Pay with international card (Stripe, USD)</p>
+                <button class="btn-gradient" id="btn-suscribirme">Subscribe &rarr;</button>
               </div>
 
             </div>
@@ -97,7 +107,7 @@
               <h2>FAQ</h2>
               <details class="sub-faq-item">
                 <summary>What exactly is "early access" to the magazine?</summary>
-                <p>Each new issue of Revista 421 is released first to Wizards only, as a PDF. One month later it's released to the rest of the public.</p>
+                <p>Each new issue of Revista 421 is released first to subscribers only, as a PDF. One month later it's released to the rest of the public.</p>
               </details>
               <details class="sub-faq-item">
                 <summary>How do I cancel?</summary>
@@ -105,11 +115,11 @@
               </details>
               <details class="sub-faq-item">
                 <summary>What about old issues of the magazine?</summary>
-                <p>They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for Wizards during its first month.</p>
+                <p>They remain available to everyone (free). Only the <strong>latest issue</strong> is reserved for subscribers during its first month.</p>
               </details>
               <details class="sub-faq-item">
                 <summary>What's the Monthly Council?</summary>
-                <p>A roughly 1-hour video call with Juan Ruocco and other Wizards. Open discussion, editorial proposals, debates. Announced in advance via newsletter.</p>
+                <p>A roughly 1-hour video call with Juan Ruocco and other subscribers. Open discussion, editorial proposals, debates. Announced in advance by email.</p>
               </details>
             </section>
           </div>
@@ -197,9 +207,63 @@
         document.getElementById('btn-free').addEventListener('click', function() {
           if (typeof gtag === 'function') gtag('event', 'sign_up_intent', {
             event_category: 'subscription',
-            event_label: 'free_newsletter_en'
+            event_label: 'free_register_en'
           });
           window.location.hash = '#/portal/signup/free';
+        });
+
+        // ===== Inline login (magic link, signin) =====
+        var loginForm = document.getElementById('inline-login');
+        var loginEmail = document.getElementById('login-email');
+        var loginSubmit = document.getElementById('login-submit');
+
+        function setLoginMsg(text, cls) {
+          var m = document.getElementById('login-msg');
+          m.textContent = text;
+          m.className = 'login-msg' + (cls ? ' ' + cls : '');
+        }
+
+        document.getElementById('btn-login-toggle').addEventListener('click', function() {
+          loginForm.classList.add('open');
+          setLoginMsg('', '');
+          loginEmail.focus();
+        });
+        document.getElementById('btn-login-back').addEventListener('click', function() {
+          loginForm.classList.remove('open');
+          setLoginMsg('', '');
+        });
+
+        function getIntegrityToken() {
+          return fetch('/members/api/integrity-token/', { credentials: 'same-origin' })
+            .then(function(r) { return r.ok ? r.text() : ''; })
+            .catch(function() { return ''; });
+        }
+
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var email = loginEmail.value.trim();
+          if (!email) return;
+          loginSubmit.disabled = true;
+          setLoginMsg('Sending…', '');
+          if (typeof gtag === 'function') gtag('event', 'login_magiclink_request', { event_category: 'subscription', event_label: 'subscribe_en' });
+          getIntegrityToken().then(function(token) {
+            var body = { email: email, emailType: 'signin' };
+            if (token) body.integrityToken = token;
+            return fetch('/members/api/send-magic-link/', {
+              method: 'POST',
+              credentials: 'same-origin',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+            });
+          })
+          .then(function(r) {
+            if (!r.ok) throw new Error('http ' + r.status);
+            setLoginMsg('✓ We sent a login link to ' + email + '.', 'ok');
+          })
+          .catch(function() {
+            setLoginMsg('Couldn’t send the link. Check the email and try again.', 'err');
+            loginSubmit.disabled = false;
+          });
         });
       });
     </script>

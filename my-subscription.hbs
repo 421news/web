@@ -10,99 +10,126 @@
       <div class="sub-page">
         <div class="sub-container">
 
-          <!-- Loading state (shown while fetching member data) -->
+          <!-- Loading -->
           <div id="account-loading" style="text-align: center; padding: 4rem 0;">
             <div style="font-size: var(--fs-3xl); opacity: 0.5;">Loading...</div>
           </div>
 
-          <!-- PAID MEMBER (hidden until JS confirms) -->
-          <div id="account-paid" style="display: none;">
+          <!-- LOGGED IN -->
+          <div id="account-in" style="display: none;">
             <div class="sub-hero">
-              <h1 class="sub-hero-title">My subscription</h1>
-              <p class="sub-hero-subtitle">Thanks for being part of 421, <span id="paid-name"></span>. Your support makes this project possible.</p>
+              <h1 class="sub-hero-title">My account</h1>
+              <p class="sub-hero-subtitle">Hi <span id="acct-greet"></span>, thanks for being part of 421.</p>
             </div>
             <hr class="sub-gradient-divider">
 
             <div class="sub-card" style="max-width: 600px;">
-              <div class="sub-card-label">Active Wizard</div>
-              <p class="account-info">Email: <strong id="paid-email"></strong> &middot; <a href="#" class="account-edit-link" onclick="event.preventDefault(); window.location.hash='#/portal/account';">change</a></p>
+              <div class="sub-card-label" id="acct-status">Active subscription</div>
 
-              <div class="account-app-link">
-                <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
-                  <span class="account-app-icon">&#x1F9D9;</span>
-                  <span class="account-app-text">
-                    <strong>MTG Collection</strong>
-                    <small>Your Magic card collection</small>
-                  </span>
-                  <span class="account-app-arrow">&rarr;</span>
+              <!-- Profile (inline editable) -->
+              <div class="acct-field" data-field="name">
+                <div class="acct-field-static">
+                  <span class="acct-field-label">Name</span>
+                  <span class="acct-field-value" id="val-name">&mdash;</span>
+                  <button class="acct-field-edit" data-edit="name">edit</button>
+                </div>
+                <form class="acct-field-form" id="form-name">
+                  <input type="text" id="input-name" autocomplete="name" placeholder="Your name">
+                  <div class="acct-field-row">
+                    <button type="submit" class="btn-pill-sm">Save</button>
+                    <button type="button" class="acct-field-cancel" data-cancel>Cancel</button>
+                  </div>
+                </form>
+                <div class="acct-field-msg" data-msg="name"></div>
+              </div>
+
+              <div class="acct-field" data-field="email">
+                <div class="acct-field-static">
+                  <span class="acct-field-label">Email</span>
+                  <span class="acct-field-value" id="val-email">&mdash;</span>
+                  <button class="acct-field-edit" data-edit="email">change</button>
+                </div>
+                <form class="acct-field-form" id="form-email">
+                  <input type="email" id="input-email" autocomplete="email" placeholder="you@email.com">
+                  <div class="acct-field-row">
+                    <button type="submit" class="btn-pill-sm">Send confirmation</button>
+                    <button type="button" class="acct-field-cancel" data-cancel>Cancel</button>
+                  </div>
+                  <p class="acct-field-hint">We'll send a link to the new address to confirm the change.</p>
+                </form>
+                <div class="acct-field-msg" data-msg="email"></div>
+              </div>
+
+              <!-- Newsletters (inline, no modal) -->
+              <div class="acct-field acct-newsletters" id="acct-newsletters" style="display:none;">
+                <span class="acct-field-label" style="display:block; margin-bottom:.7rem;">421 emails</span>
+                <div id="newsletter-list"></div>
+                <div class="acct-field-msg" data-msg="nl"></div>
+              </div>
+
+              <!-- PAID block -->
+              <div id="block-paid" style="display:none;">
+                <div class="account-app-link" style="margin-top: 1.6rem;">
+                  <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
+                    <span class="account-app-icon">&#x1F0CF;</span>
+                    <span class="account-app-text">
+                      <strong>MTG Collection</strong>
+                      <small>Your Magic card collection</small>
+                    </span>
+                    <span class="account-app-arrow">&rarr;</span>
+                  </a>
+                </div>
+
+                <p class="account-section-title">Your subscription</p>
+                <p class="account-desc">To update your card or cancel, go to your provider's dashboard:</p>
+                <div class="account-options">
+                  <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
+                    Manage via Stripe
+                  </button>
+                  <a href="https://www.mercadopago.com.ar/subscriptions" target="_blank" rel="noopener" class="btn-solid" style="text-align:center; text-decoration:none;">
+                    MercadoPago
+                  </a>
+                </div>
+                <p class="account-desc" style="margin-top: 1rem;">Want to change plan (monthly/annual) or payment method? Email <a href="mailto:admin@421.news" style="color:var(--amarillo);">admin@421.news</a> and we'll sort it out without double-charging you.</p>
+              </div>
+
+              <!-- FREE block -->
+              <div id="block-free" style="display:none;">
+                <p class="account-section-title" style="margin-top: 1.6rem;">Subscribe</p>
+                <p class="account-desc">Get the magazine a month early, comments, the monthly council and the Magic app.</p>
+                <a href="/en/subscribe/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
+                  Subscribe
                 </a>
               </div>
 
-              <p class="account-section-title">Manage your subscription</p>
-
-              <div class="account-options">
-                <button class="btn-solid" onclick="window.location.hash='#/portal/account';">
-                  Manage via Stripe
-                </button>
-              </div>
-
               <p class="account-help">
-                Need help? Write to <a href="mailto:contacto@421.news">contacto@421.news</a>
+                Need help? Write to <a href="mailto:admin@421.news">admin@421.news</a>
               </p>
 
-              <button class="btn-outline account-logout" onclick="fetch('/members/api/session', {method:'DELETE',credentials:'same-origin'}).then(function(){window.location.reload();});" style="margin-top: 1.5rem;">
+              <button class="btn-outline account-logout" data-logout style="margin-top: 1.5rem;">
                 Sign out
               </button>
             </div>
           </div>
 
-          <!-- FREE MEMBER (hidden until JS confirms) -->
-          <div id="account-free" style="display: none;">
-            <div class="sub-hero">
-              <h1 class="sub-hero-title">My account</h1>
-              <p class="sub-hero-subtitle">You're registered as a free member. Subscribe to access all benefits.</p>
-            </div>
-            <hr class="sub-gradient-divider">
-
-            <div class="sub-card" style="max-width: 600px;">
-              <div class="sub-card-label">Goblin (free)</div>
-              <p class="account-info">Email: <strong id="free-email"></strong></p>
-
-              <a href="/en/subscribe/" class="btn-gradient" style="display:block; text-align:center; text-decoration:none;">
-                Upgrade to Wizard
-              </a>
-
-              <div style="margin-top: 1.5rem;">
-                <button class="btn-outline" onclick="window.location.hash='#/portal/account';">
-                  Manage my account
-                </button>
-              </div>
-
-              <button class="btn-outline account-logout" onclick="fetch('/members/api/session', {method:'DELETE',credentials:'same-origin'}).then(function(){window.location.reload();});" style="margin-top: 1rem;">
-                Sign out
-              </button>
-            </div>
-          </div>
-
-          <!-- NOT LOGGED IN (hidden until JS confirms) -->
+          <!-- NOT LOGGED IN -->
           <div id="account-anon" style="display: none;">
             <div class="sub-hero">
-              <h1 class="sub-hero-title">My subscription</h1>
-              <p class="sub-hero-subtitle">Sign in to manage your subscription.</p>
+              <h1 class="sub-hero-title">My account</h1>
+              <p class="sub-hero-subtitle">Enter your email and we'll send you a link to sign in. No password.</p>
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="sub-card" style="max-width: 600px; text-align: center;">
-              <div style="font-size: 4rem; line-height: 1; margin-bottom: 0.5rem;">&#x1F9D9;</div>
-              <p style="font-size: var(--fs-base); opacity: 0.5; margin-bottom: 1.5rem;">Wizard Portal</p>
-
-              <button class="btn-gradient" onclick="window.location.hash='#/portal/signin';">
-                Sign in
-              </button>
+            <div class="sub-card" style="max-width: 480px;">
+              <form id="anon-login-form" class="inline-login open" style="margin-top:0;">
+                <input type="email" id="anon-login-email" placeholder="you@email.com" required autocomplete="email">
+                <button type="submit" class="btn-gradient" id="anon-login-submit">Send me the login link</button>
+                <div class="login-msg" id="anon-login-msg"></div>
+              </form>
 
               <div class="free-tier-link">
                 <p>Don't have an account?</p>
-                <a href="/en/subscribe/" class="btn-outline" style="text-decoration:none;">Subscribe</a>
+                <a href="/en/subscribe/" class="btn-outline" style="text-decoration:none;">Sign up</a>
               </div>
             </div>
           </div>
@@ -115,26 +142,143 @@
 
 <script defer>
 (function() {
+  function getIntegrityToken() {
+    return fetch('/members/api/integrity-token/', { credentials: 'same-origin' })
+      .then(function(r) { return r.ok ? r.text() : ''; })
+      .catch(function() { return ''; });
+  }
+
   fetch('/members/api/member/', { credentials: 'same-origin' })
-    .then(function(res) {
-      if (!res.ok) throw new Error('not signed in');
-      return res.json();
-    })
+    .then(function(res) { if (!res.ok) throw new Error('anon'); return res.json(); })
     .then(function(member) {
       document.getElementById('account-loading').style.display = 'none';
+      document.getElementById('account-in').style.display = '';
+      var name = member.name || '';
+      var email = member.email || '';
+      document.getElementById('acct-greet').textContent = name || 'reader';
+      document.getElementById('val-name').textContent = name || '(no name)';
+      document.getElementById('val-email').textContent = email;
+      document.getElementById('input-name').value = name;
+      document.getElementById('input-email').value = email;
       var hasPaid = member.paid || (member.subscriptions && member.subscriptions.length > 0);
-      if (hasPaid) {
-        document.getElementById('paid-name').textContent = member.name || '';
-        document.getElementById('paid-email').textContent = member.email || '';
-        document.getElementById('account-paid').style.display = '';
-      } else {
-        document.getElementById('free-email').textContent = member.email || '';
-        document.getElementById('account-free').style.display = '';
-      }
+      document.getElementById('acct-status').textContent = hasPaid ? 'Active subscription' : 'Free account';
+      document.getElementById('block-paid').style.display = hasPaid ? '' : 'none';
+      document.getElementById('block-free').style.display = hasPaid ? 'none' : '';
+
+      // Newsletters (inline, no modal)
+      var subIds = (member.newsletters || []).map(function(n) { return n.id; });
+      fetch('/ghost/api/content/newsletters/?key=420da6f85b5cc903b347de9e33', { headers: { 'Accept-Version': 'v5.0' } })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          var nls = (d.newsletters || []).filter(function(n) { return n.slug !== 'marketing'; });
+          if (!nls.length) return;
+          document.getElementById('newsletter-list').innerHTML = nls.map(function(n) {
+            var checked = subIds.indexOf(n.id) !== -1 ? ' checked' : '';
+            return '<label class="nl-row"><input type="checkbox" data-nl-id="' + n.id + '"' + checked + '><span class="nl-name">' + n.name + '</span></label>';
+          }).join('');
+          document.getElementById('acct-newsletters').style.display = '';
+        })
+        .catch(function() {});
     })
     .catch(function() {
       document.getElementById('account-loading').style.display = 'none';
       document.getElementById('account-anon').style.display = '';
     });
+
+  // Newsletter toggle → PUT member (no modal)
+  document.addEventListener('change', function(e) {
+    var cb = e.target.closest('#newsletter-list input[data-nl-id]');
+    if (!cb) return;
+    var ids = Array.prototype.slice.call(document.querySelectorAll('#newsletter-list input[data-nl-id]'))
+      .filter(function(x) { return x.checked; })
+      .map(function(x) { return { id: x.getAttribute('data-nl-id') }; });
+    setMsg('[data-msg="nl"]', 'Saving…', '');
+    fetch('/members/api/member/', { method: 'PUT', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ newsletters: ids }) })
+      .then(function(r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function() { setMsg('[data-msg="nl"]', '✓ Preferences saved.', 'ok'); })
+      .catch(function() { setMsg('[data-msg="nl"]', 'Couldn’t save. Try again.', 'err'); cb.checked = !cb.checked; });
+  });
+
+  document.addEventListener('click', function(e) {
+    var editBtn = e.target.closest('[data-edit]');
+    if (editBtn) {
+      var f = editBtn.getAttribute('data-edit');
+      var field = document.querySelector('.acct-field[data-field="' + f + '"]');
+      if (field) { field.classList.add('editing'); field.querySelector('input').focus(); }
+      return;
+    }
+    var cancel = e.target.closest('[data-cancel]');
+    if (cancel) {
+      var pf = cancel.closest('.acct-field');
+      if (pf) { pf.classList.remove('editing'); var mm = pf.querySelector('.acct-field-msg'); if (mm) { mm.textContent=''; mm.className='acct-field-msg'; } }
+      return;
+    }
+  });
+
+  function setMsg(sel, text, cls) {
+    var m = document.querySelector(sel);
+    m.textContent = text;
+    m.className = 'acct-field-msg' + (cls ? ' ' + cls : '');
+  }
+
+  // Save name → PUT member
+  document.getElementById('form-name').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = document.getElementById('input-name').value.trim();
+    setMsg('[data-msg="name"]', 'Saving…', '');
+    fetch('/members/api/member/', { method: 'PUT', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: val }) })
+      .then(function(r) { if (!r.ok) throw 0; return r.json(); })
+      .then(function(m) {
+        document.getElementById('val-name').textContent = (m.name || val) || '(no name)';
+        document.getElementById('acct-greet').textContent = (m.name || val) || 'reader';
+        document.querySelector('.acct-field[data-field="name"]').classList.remove('editing');
+        setMsg('[data-msg="name"]', '', '');
+      })
+      .catch(function() { setMsg('[data-msg="name"]', 'Couldn’t save. Try again.', 'err'); });
+  });
+
+  // Change email → send-magic-link (updateEmail, needs confirmation)
+  document.getElementById('form-email').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = document.getElementById('input-email').value.trim();
+    if (!val) return;
+    setMsg('[data-msg="email"]', 'Sending…', '');
+    getIntegrityToken().then(function(token) {
+      var body = { email: val, emailType: 'updateEmail' };
+      if (token) body.integrityToken = token;
+      return fetch('/members/api/send-magic-link/', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    })
+    .then(function(r) { if (!r.ok) throw 0;
+      document.querySelector('.acct-field[data-field="email"]').classList.remove('editing');
+      setMsg('[data-msg="email"]', '✓ We sent a confirmation link to ' + val + '.', 'ok');
+    })
+    .catch(function() { setMsg('[data-msg="email"]', 'Couldn’t send the confirmation. Try again.', 'err'); });
+  });
+
+  // Anon login → send-magic-link (signin)
+  var anonForm = document.getElementById('anon-login-form');
+  anonForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var val = document.getElementById('anon-login-email').value.trim();
+    var msg = document.getElementById('anon-login-msg');
+    if (!val) return;
+    msg.textContent = 'Sending…'; msg.className = 'login-msg';
+    getIntegrityToken().then(function(token) {
+      var body = { email: val, emailType: 'signin' };
+      if (token) body.integrityToken = token;
+      return fetch('/members/api/send-magic-link/', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    })
+    .then(function(r) { if (!r.ok) throw 0;
+      msg.textContent = '✓ We sent a login link to ' + val + '.'; msg.className = 'login-msg ok';
+    })
+    .catch(function() { msg.textContent = 'Couldn’t send the link. Try again.'; msg.className = 'login-msg err'; });
+  });
+
+  // Logout
+  document.querySelectorAll('[data-logout]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      fetch('/members/api/session', { method: 'DELETE', credentials: 'same-origin' }).then(function() { window.location.reload(); });
+    });
+  });
 })();
 </script>
