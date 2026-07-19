@@ -469,6 +469,50 @@
 }
 .nl-name { font-size: var(--fs-body); }
 
+/* ===== CONCILIO (v3.34.62) ===== */
+.concilio { margin-top: 1.6rem; }
+.concilio-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
+.concilio-badge {
+  font-size: var(--fs-2xs, 0.62rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--gradient-main);
+  color: var(--negro);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+.concilio-next {
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  border-image: var(--gradient-main) 1;
+  text-decoration: none;
+  color: inherit;
+}
+.concilio-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000 center / cover no-repeat;
+}
+.concilio-thumb::after {
+  content: '▶';
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 2.4rem;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  opacity: 0.92;
+}
+.concilio-meta { padding: 0.8rem 1rem; background: rgba(252, 210, 33, 0.05); }
+.concilio-title { font-weight: 800; margin: 0 0 0.15rem; }
+.concilio-date { font-size: var(--fs-sm); opacity: 0.65; margin: 0; }
+.concilio-live { color: var(--verde); font-weight: 800; }
+.light-mode .concilio-meta { background: rgba(23, 165, 131, 0.06); }
+
 .account-logout {
   width: 100%;
   opacity: 0.5;
