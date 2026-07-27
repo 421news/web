@@ -41,3 +41,4 @@ scripts/mercadopago-ghost/.env
 dist/
 build/
 *.zip
+assets/data/revenue-data.json

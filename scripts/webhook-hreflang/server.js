@@ -1631,6 +1631,108 @@ async function getTeamHashes() {
   return [...hashes];
 }
 
+// --- Ghost member token verification (gates sensitive endpoints, e.g. revenue) ---
+// A logged-in Ghost member can mint a signed identity JWT at /members/api/session.
+// We verify its RS256 signature against the site's public JWKS, so the identity
+// cannot be forged: only a real logged-in member's browser can produce a valid token.
+const GHOST_JWKS_URL = 'https://www.421.news/members/.well-known/jwks.json';
+let _jwksCache = { pems: {}, ts: 0 };
+
+function fetchJwks() {
+  return new Promise((resolve, reject) => {
+    https.get(GHOST_JWKS_URL, (res) => {
+      let b = '';
+      res.on('data', (c) => { b += c; });
+      res.on('end', () => { try { resolve(JSON.parse(b)); } catch (e) { reject(e); } });
+    }).on('error', reject);
+  });
+}
+
+async function getSigningPem(kid) {
+  const fresh = (Date.now() - _jwksCache.ts) < 3600 * 1000;
+  if (fresh && _jwksCache.pems[kid]) return _jwksCache.pems[kid];
+  const jwks = await fetchJwks();
+  const pems = {};
+  for (const k of (jwks.keys || [])) {
+    pems[k.kid] = crypto.createPublicKey({ key: k, format: 'jwk' }).export({ type: 'spki', format: 'pem' });
+  }
+  _jwksCache = { pems, ts: Date.now() };
+  return pems[kid];
+}
+
+// Verify Bearer member token → return decoded claims (signature proven), or null.
+async function verifyMemberToken(req) {
+  const auth = req.get('authorization') || '';
+  const m = auth.match(/^Bearer\s+(.+)$/i);
+  if (!m) return null;
+  const token = m[1].trim();
+  let header;
+  try { header = JSON.parse(Buffer.from(token.split('.')[0], 'base64').toString()); }
+  catch (e) { return null; }
+  if (!header || !header.kid) return null;
+  try {
+    const pem = await getSigningPem(header.kid);
+    if (!pem) return null;
+    return jwt.verify(token, pem, { algorithms: ['RS256'] }) || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Pull the member email out of verified claims regardless of which claim carries it
+// (Ghost uses `sub`, but we scan defensively so a claim-shape change never locks out
+// the team). Falls back to resolving a uuid-shaped identifier via the Admin API.
+async function emailFromClaims(claims) {
+  if (!claims) return null;
+  if (typeof claims.sub === 'string' && claims.sub.includes('@')) return claims.sub;
+  for (const v of Object.values(claims)) {
+    if (typeof v === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return v;
+  }
+  const uuid = [claims.sub, claims.uuid, claims.id].find(v => typeof v === 'string' && /^[0-9a-f-]{20,}$/i.test(v));
+  if (uuid) {
+    try {
+      const r = await ghostRequest('GET', `/ghost/api/admin/members/?filter=${encodeURIComponent(`uuid:'${uuid}'`)}&limit=1`);
+      return (r.members && r.members[0] && r.members[0].email) || null;
+    } catch (e) { return null; }
+  }
+  return null;
+}
+
+// Is this verified member on the team? Reuses the exact team set used elsewhere
+// (fallback hashes ∪ Ghost label:equipo), so access matches the old client-side gate.
+async function isTeamMember(claims) {
+  const email = await emailFromClaims(claims);
+  if (!email) return false;
+  let team = (ga4Data && Array.isArray(ga4Data.team) && ga4Data.team.length) ? ga4Data.team : null;
+  if (!team) team = await getTeamHashes();
+  return team.includes(sha256Hex(email));
+}
+
+// Express gate for team-only endpoints.
+async function requireTeam(req, res, next) {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Vary', 'Origin');
+  try {
+    const claims = await verifyMemberToken(req);
+    if (!claims || !(await isTeamMember(claims))) {
+      res.status(403).json({ error: 'forbidden' });
+      return;
+    }
+  } catch (e) {
+    res.status(403).json({ error: 'forbidden' });
+    return;
+  }
+  next();
+}
+
+function teamPreflight(req, res) {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Methods', 'GET');
+  res.set('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+  res.set('Vary', 'Origin');
+  res.status(204).end();
+}
+
 // --- Titles enrichment from existing data ---
 
 async function enrichArticleTitles(data) {
@@ -1739,16 +1841,19 @@ async function refreshGA4Data() {
 // --- GA4 endpoint ---
 
 app.get('/api/ga4-data.json', (req, res) => {
-  // Public, non-sensitive aggregate analytics (same data is world-readable in the
-  // public GitHub repo + /assets/). '*' lets the media kit fetch it from any origin,
-  // incl. the standalone deck opened as a local file.
+  // Public, aggregate analytics (powers homepage most-read + media kit + pricing).
+  // '*' lets the media kit fetch it from any origin, incl. the standalone deck.
+  // NOTE: `team` (SHA-256 access list) is stripped — it's used server-side only now
+  // (see requireTeam); it must not travel in a world-readable payload.
   res.set('Access-Control-Allow-Origin', '*');
   res.set('Cache-Control', 'public, max-age=300');
   if (!ga4Data) {
     res.status(503).json({ error: 'GA4 data not ready yet' });
     return;
   }
-  res.json(ga4Data);
+  const pub = Object.assign({}, ga4Data);
+  delete pub.team;
+  res.json(pub);
 });
 
 app.options('/api/ga4-data.json', (req, res) => {
@@ -2000,9 +2105,10 @@ async function refreshRevenueData() {
   console.log(`[revenue] Refresh done in ${((Date.now() - start) / 1000).toFixed(1)}s: pagos=${totalPagos}, total=${ghost.total}, MRR USD=${revUsdM}, blue=${blue}, weeks=${history.length}`);
 }
 
-app.get('/api/revenue-data.json', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
-  res.set('Cache-Control', 'public, max-age=300');
+app.options('/api/revenue-data.json', teamPreflight);
+app.get('/api/revenue-data.json', requireTeam, (req, res) => {
+  // Sensitive: revenue/MRR/tiers. Team-only (requireTeam) + never cached by shared caches.
+  res.set('Cache-Control', 'private, no-store');
   if (!revenueData) { res.status(503).json({ error: 'Revenue data not ready yet' }); return; }
   res.json(revenueData);
 });

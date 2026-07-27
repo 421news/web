@@ -267,50 +267,54 @@ document.documentElement.classList.add('is-analytics');
 </div>
 
 <script>
+var REVENUE_ENDPOINT = 'https://webhook-hreflang.onrender.com/api/revenue-data.json';
+
+// Ghost mints a signed identity JWT for the logged-in member. Only a real
+// logged-in member's browser can obtain one; the webhook verifies its signature.
+var __memberToken = fetch('/members/api/session', { credentials: 'same-origin' })
+  .then(function(r) { return r.status === 200 ? r.text() : null; })
+  .catch(function() { return null; });
+
+// Analytics = public aggregate feed (same data powers homepage most-read + media kit). No auth.
 window.__ga4Data = (function() {
   var themeUrl = '{{asset "data/ga4-data.json"}}';
   var renderUrl = 'https://webhook-hreflang.onrender.com/api/ga4-data.json';
-  // Try Render first (5s timeout), fallback to theme asset
   var controller = new AbortController();
   var timer = setTimeout(function() { controller.abort(); }, 5000);
   return fetch(renderUrl, { signal: controller.signal })
     .then(function(r) { clearTimeout(timer); if (!r.ok) throw new Error(r.status); return r.json(); })
     .catch(function() { clearTimeout(timer); return fetch(themeUrl).then(function(r) { return r.json(); }); });
 })();
-window.__revenueData = (function() {
-  var themeUrl = '{{asset "data/revenue-data.json"}}';
-  var renderUrl = 'https://webhook-hreflang.onrender.com/api/revenue-data.json';
-  var controller = new AbortController();
-  var timer = setTimeout(function() { controller.abort(); }, 5000);
-  return fetch(renderUrl, { signal: controller.signal })
-    .then(function(r) { clearTimeout(timer); if (!r.ok) throw new Error(r.status); return r.json(); })
-    .catch(function() { clearTimeout(timer); return fetch(themeUrl).then(function(r) { return r.json(); }); });
-})();
-(function() {
-  function sha256(str) {
-    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.toLowerCase().trim()))
-      .then(function(buf) { return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join(''); });
-  }
-  Promise.all([
-    fetch('/members/api/member/', { credentials: 'same-origin' }).then(function(r) { if (!r.ok) throw new Error('no'); return r.json(); }),
-    window.__ga4Data
-  ]).then(function(res) {
-    var member = res[0];
-    var data = res[1];
-    var team = data && data.team ? data.team : [];
-    return sha256(member.email).then(function(hash) {
-      document.getElementById('auth-loading').style.display = 'none';
-      if (team.indexOf(hash) !== -1) {
-        document.getElementById('dashboard').style.display = '';
-      } else {
-        document.getElementById('auth-denied').style.display = '';
-      }
+
+// Revenue = SENSITIVE. Team-only via signed token. No public fallback. One fetch,
+// reused for both the data promise and the page access gate.
+var __revenueResp = __memberToken.then(function(token) {
+  if (!token) return { status: 401 };
+  return fetch(REVENUE_ENDPOINT, { headers: { 'Authorization': 'Bearer ' + token } })
+    .then(function(r) {
+      if (r.status === 200) return r.json().then(function(d) { return { status: 200, data: d }; });
+      return { status: r.status };
     });
-  }).catch(function() {
-    document.getElementById('auth-loading').style.display = 'none';
+}).catch(function() { return { status: 0 }; });
+
+window.__revenueData = __revenueResp.then(function(x) {
+  return x.status === 200 ? x.data : Promise.reject(new Error('revenue-' + x.status));
+});
+window.__revenueData.catch(function() {}); // silence unhandled rejection; dashboard handles absence
+
+// Page access gate: the revenue endpoint is the auth oracle.
+// 200 (data ready) or 503 (team, data loading) => authorized; 401/403/other => denied.
+__revenueResp.then(function(x) {
+  document.getElementById('auth-loading').style.display = 'none';
+  if (x.status === 200 || x.status === 503) {
+    document.getElementById('dashboard').style.display = '';
+  } else {
     document.getElementById('auth-denied').style.display = '';
-  });
-})();
+  }
+}).catch(function() {
+  document.getElementById('auth-loading').style.display = 'none';
+  document.getElementById('auth-denied').style.display = '';
+});
 // View toggle: Analytics | Revenue (lazy-init revenue dashboard on first show)
 (function() {
   var tabs = document.querySelectorAll('.analytics-toptab');
