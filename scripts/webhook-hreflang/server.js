@@ -1712,17 +1712,35 @@ async function isTeamMember(claims) {
 async function requireTeam(req, res, next) {
   res.set('Access-Control-Allow-Origin', 'https://www.421.news');
   res.set('Vary', 'Origin');
+  // TEMP DEBUG: 403 body carries a non-sensitive diagnosis (booleans + masked email
+  // + claim key names) so we can see why a legit member is denied. Remove after.
+  const diag = { verified: false, emailFound: false, inTeam: false };
   try {
     const claims = await verifyMemberToken(req);
-    if (!claims || !(await isTeamMember(claims))) {
-      res.status(403).json({ error: 'forbidden' });
-      return;
+    diag.verified = !!claims;
+    if (!claims) {
+      const raw = (req.get('authorization') || '').replace(/^Bearer\s+/i, '');
+      try {
+        const h = JSON.parse(Buffer.from(raw.split('.')[0], 'base64').toString());
+        const p = JSON.parse(Buffer.from(raw.split('.')[1], 'base64').toString());
+        diag.header = { alg: h.alg, kid: h.kid };
+        diag.claimKeys = Object.keys(p);
+        diag.hasEmailClaim = Object.values(p).some(v => typeof v === 'string' && v.includes('@'));
+      } catch (e) { diag.decodeError = e.message; }
+    } else {
+      diag.claimKeys = Object.keys(claims);
+      const email = await emailFromClaims(claims);
+      diag.emailFound = !!email;
+      if (email) {
+        diag.emailMasked = email.replace(/^(.).*(@.*)$/, '$1***$2');
+        let team = (ga4Data && Array.isArray(ga4Data.team) && ga4Data.team.length) ? ga4Data.team : await getTeamHashes();
+        diag.teamSize = team.length;
+        diag.inTeam = team.includes(sha256Hex(email));
+      }
     }
-  } catch (e) {
-    res.status(403).json({ error: 'forbidden' });
-    return;
-  }
-  next();
+    if (diag.verified && diag.inTeam) { next(); return; }
+  } catch (e) { diag.error = e.message; }
+  res.status(403).json({ error: 'forbidden', diag });
 }
 
 function teamPreflight(req, res) {
