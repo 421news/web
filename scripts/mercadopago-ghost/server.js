@@ -234,35 +234,32 @@ async function uncompMember(member) {
 
 // --- Label helpers ---
 
+// Membership labels are managed by this webhook; everything else (equipo,
+// original wizard) is preserved. Taxonomy simplified 2026-07-28: dropped
+// payment-method:mercadopago, mp-cancelled, cancelados, Stripe.
+const MEMBERSHIP_LABELS = ['Wizard', 'mensual', 'anual', 'mp-cancelled', 'cancelados', 'payment-method:mercadopago', 'Stripe'];
+
 function buildActiveLabels(planType, existingLabels) {
-  // Keep non-MP labels, add MP labels
-  const keepLabels = (existingLabels || []).filter(l =>
-    !['Wizard', 'mensual', 'anual', 'mp-cancelled'].includes(l.name)
-  );
+  // Keep non-membership labels (equipo, original wizard); add Wizard + plan.
+  const keepLabels = (existingLabels || []).filter(l => !MEMBERSHIP_LABELS.includes(l.name));
   const planLabel = planType === 'wizard-yearly' ? 'anual' : 'mensual';
   return [
     ...keepLabels,
     { name: 'Wizard' },
-    { name: planLabel },
-    { name: 'payment-method:mercadopago' }
+    { name: planLabel }
   ];
 }
 
 function buildCancelledLabels(existingLabels) {
-  const keepLabels = (existingLabels || []).filter(l =>
-    !['Wizard', 'mensual', 'anual', 'mp-cancelled'].includes(l.name)
-  );
-  return [
-    ...keepLabels,
-    { name: 'mp-cancelled' },
-    { name: 'payment-method:mercadopago' }
-  ];
+  // Cancellation: strip membership labels, add none. Member reverts to `free`.
+  // Non-membership markers (equipo, original wizard) are preserved.
+  return (existingLabels || []).filter(l => !MEMBERSHIP_LABELS.includes(l.name));
 }
 
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.3.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.4.0' });
 });
 
 // POST /subscribe — Create MercadoPago subscription
