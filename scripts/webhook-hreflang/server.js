@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.3', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.4', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2105,6 +2105,39 @@ async function refreshRevenueData() {
   };
   revenueLastUpdate = new Date().toISOString();
   console.log(`[revenue] Refresh done in ${((Date.now() - start) / 1000).toFixed(1)}s: pagos=${totalPagos}, total=${ghost.total}, MRR USD=${revUsdM}, blue=${blue}, weeks=${history.length}`);
+  saveRevenueStore(revenueData).catch(() => {}); // persist to private store (survives restarts + Fastly purge)
+}
+
+// --- Private revenue history store (Ghost draft page) ---
+// Persists revenue-data to a non-public Ghost draft page so history survives Render
+// restarts WITHOUT relying on the public /assets/data/revenue-data.json (which only
+// still works because it's stuck in Fastly cache). Read/written via the Admin API the
+// webhook already has. Lets us purge the public asset without losing the weekly series.
+const REVENUE_STORE_SLUG = 'revenue-data-store';
+
+async function loadRevenueStore() {
+  try {
+    const { status, data } = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
+    if (status === 200 && data.pages && data.pages[0] && data.pages[0].codeinjection_foot) {
+      return JSON.parse(data.pages[0].codeinjection_foot);
+    }
+  } catch (e) { console.error(`[revenue-store] load failed: ${e.message}`); }
+  return null;
+}
+
+async function saveRevenueStore(obj) {
+  const blob = JSON.stringify(obj);
+  try {
+    const g = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
+    const page = g.status === 200 && g.data.pages && g.data.pages[0];
+    if (page) {
+      // optimistic locking: send the current updated_at
+      await ghostRequest('PUT', `/ghost/api/admin/pages/${page.id}/`, { pages: [{ codeinjection_foot: blob, updated_at: page.updated_at }] });
+    } else {
+      await ghostRequest('POST', '/ghost/api/admin/pages/', { pages: [{ title: 'Revenue data store (internal — do not publish)', slug: REVENUE_STORE_SLUG, status: 'draft', codeinjection_foot: blob }] });
+      console.log('[revenue-store] created draft store page');
+    }
+  } catch (e) { console.error(`[revenue-store] save failed: ${e.message}`); }
 }
 
 app.options('/api/revenue-data.json', teamPreflight);
@@ -2197,17 +2230,24 @@ app.listen(PORT, () => {
     console.log('[ga4] GA4 credentials not set, GA4 endpoint disabled');
   }
 
-  // Bootstrap revenue data: seed history from theme asset, then refresh live
+  // Bootstrap revenue data: seed history from the private Ghost store (survives restarts
+  // + Fastly purge). Fall back to the public theme asset only during the transition.
   if (REVENUE_ENABLED) {
     (async () => {
       try {
-        const existing = await httpsGetJson('www.421.news', '/assets/data/revenue-data.json', {});
-        if (existing.status === 200 && existing.json && Array.isArray(existing.json.history)) {
-          revenueData = existing.json;
-          console.log(`[revenue] Bootstrap loaded from theme (${existing.json.history.length} weeks)`);
+        const stored = await loadRevenueStore();
+        if (stored && Array.isArray(stored.history)) {
+          revenueData = stored;
+          console.log(`[revenue] Bootstrap loaded from private store (${stored.history.length} weeks)`);
+        } else {
+          const existing = await httpsGetJson('www.421.news', '/assets/data/revenue-data.json', {});
+          if (existing.status === 200 && existing.json && Array.isArray(existing.json.history)) {
+            revenueData = existing.json;
+            console.log(`[revenue] Bootstrap fell back to theme asset (${existing.json.history.length} weeks)`);
+          }
         }
       } catch (e) {
-        console.log(`[revenue] Bootstrap from theme failed: ${e.message}`);
+        console.log(`[revenue] Bootstrap failed: ${e.message}`);
       }
       // Refresh live snapshot 45s after startup
       setTimeout(() => {
