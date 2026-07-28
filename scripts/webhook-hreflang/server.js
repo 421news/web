@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.2', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.3', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2126,10 +2126,17 @@ app.post('/api/revenue-refresh', async (req, res) => {
 });
 
 function scheduleRevenueCron() {
-  // Check every 6h; refresh if it's been >= 7 days since the last one (weekly)
+  // Weekly, self-running. Uses a 7-day "week bucket" (Math.floor(now / 7d)) instead of
+  // the in-memory revenueLastUpdate timestamp, which resets on every Render restart and
+  // made the "≥7 days" cadence drift/stall. The bucket is restart-safe: the cron fires
+  // once whenever the week rolls over (or if we somehow have no data yet). History merges
+  // dedupe by ISO week, so an extra refresh is harmless.
+  let lastWeek = Math.floor(Date.now() / (7 * 24 * 3600 * 1000)); // boot refresh (45s) covers the current week
   setInterval(() => {
-    if (revenueLastUpdate && (Date.now() - new Date(revenueLastUpdate).getTime()) < 7 * 24 * 3600 * 1000) return;
-    refreshRevenueData().then(() => { revenueLastError = null; }).catch(err => {
+    const w = Math.floor(Date.now() / (7 * 24 * 3600 * 1000));
+    if (w === lastWeek && revenueData) return; // same week and we already have data → skip
+    lastWeek = w;
+    refreshRevenueData().then(() => { revenueLastError = null; console.log('[revenue-cron] Weekly refresh done'); }).catch(err => {
       revenueLastError = err.message;
       console.error('[revenue-cron] Refresh error:', err.message);
     });
