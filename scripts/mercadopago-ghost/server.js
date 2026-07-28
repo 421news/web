@@ -240,7 +240,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.1.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.2.0' });
 });
 
 // POST /subscribe — Create MercadoPago subscription
@@ -516,6 +516,91 @@ app.get('/test/rate', async (req, res) => {
   }
 });
 
+// --- Weekly reconciliation: catch silent MP lapses that never sent an IPN ---
+// Orphan = comped in Ghost AND cancelled in MP AND no active sub (excludes dual-sub
+// still paying) AND not Stripe AND not `equipo`. Double-evidence + safety cap so a
+// bad MP API run can never mass-uncomp. Paused subs are left alone. See memory
+// project-comped-reconciliation.
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function reconcileComped() {
+  console.log('[reconcile] start');
+  async function preapprovalsByStatus(status) {
+    const payers = new Map(); // payer_id -> external_reference email (if any)
+    let offset = 0, total = 0;
+    do {
+      const { status: st, data } = await mpRequest('GET', `/preapproval/search?status=${status}&limit=100&offset=${offset}`);
+      if (st !== 200) { console.error(`[reconcile] MP ${status} offset ${offset}: HTTP ${st}`); break; }
+      total = data.paging ? data.paging.total : 0;
+      for (const s of (data.results || [])) {
+        let e = ''; try { e = (JSON.parse(s.external_reference || '{}').email || '').toLowerCase().trim(); } catch (x) {}
+        if (s.payer_id) payers.set(String(s.payer_id), e || payers.get(String(s.payer_id)) || '');
+      }
+      offset += 100; await sleep(250);
+    } while (offset < total);
+    return payers;
+  }
+
+  const active = await preapprovalsByStatus('authorized');
+  const cancelled = await preapprovalsByStatus('cancelled');
+  const paused = await preapprovalsByStatus('paused');
+
+  // resolve emails for payer_ids that lacked an external_reference email
+  const allPayers = new Set([...active.keys(), ...cancelled.keys(), ...paused.keys()]);
+  const emailMap = new Map();
+  for (let pass = 1; pass <= 2; pass++) {
+    for (const pid of allPayers) {
+      if (emailMap.has(pid)) continue;
+      const e = await mpResolveEmail(pid);
+      if (e) emailMap.set(pid, e);
+      await sleep(110);
+    }
+  }
+  const emailsFrom = (payers) => new Set([...payers.entries()].map(([pid, ext]) => ext || emailMap.get(pid)).filter(Boolean));
+  const activeEmails = emailsFrom(active);
+  const cancelledEmails = emailsFrom(cancelled);
+
+  // Ghost comped
+  const comped = [];
+  let page = 1, pages = 1;
+  do {
+    const { data } = await ghostRequest('GET', `/ghost/api/admin/members/?filter=${encodeURIComponent('status:comped')}&limit=100&page=${page}&include=labels,subscriptions`);
+    for (const m of (data.members || [])) comped.push(m);
+    pages = (data.meta && data.meta.pagination && data.meta.pagination.pages) || 1; page++;
+  } while (page <= pages);
+
+  // classify
+  const orphans = [];
+  for (const m of comped) {
+    const email = (m.email || '').toLowerCase().trim();
+    const labels = (m.labels || []).map(l => (l.slug || l.name || '').toLowerCase());
+    if (labels.includes('equipo')) continue;
+    if ((m.subscriptions || []).some(s => (s.status === 'active' || s.status === 'trialing') && s.price && s.price.amount > 0)) continue;
+    if (activeEmails.has(email)) continue; // dual-sub, still paying
+    if (cancelledEmails.has(email)) orphans.push(m); // double-evidence; paused left alone
+  }
+
+  if (orphans.length > 25) {
+    console.error(`[reconcile] ABORT: ${orphans.length} candidatos > cap 25 — probable MP API issue, nada aplicado`);
+    return;
+  }
+  for (const m of orphans) {
+    try { await uncompMember(m); console.log(`[reconcile] uncomped ${m.email}`); }
+    catch (e) { console.error(`[reconcile] uncomp ${m.email}: ${e.message}`); }
+    await sleep(300);
+  }
+  console.log(`[reconcile] done: ${orphans.length} uncomped (comped=${comped.length}, active=${activeEmails.size}, cancelled=${cancelledEmails.size})`);
+}
+
+function scheduleReconcileCron() {
+  // First run 1h after boot (let the service settle), then every 7 days.
+  // Idempotent + safety-capped, so re-running on restarts is harmless.
+  setTimeout(() => {
+    reconcileComped().catch(e => console.error(`[reconcile] error: ${e.message}`));
+    setInterval(() => reconcileComped().catch(e => console.error(`[reconcile] error: ${e.message}`)), 7 * 24 * 60 * 60 * 1000);
+  }, 60 * 60 * 1000);
+}
+
 // --- Keep-alive ping (Render free tier) ---
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
 
@@ -541,4 +626,6 @@ app.listen(PORT, () => {
   console.log(`[mp] Ghost: ${GHOST_URL}`);
   console.log(`[mp] Wizard tier: ${WIZARD_TIER_ID}`);
   console.log(`[keep-alive] Self-ping every 14min`);
+  scheduleReconcileCron();
+  console.log(`[reconcile] Weekly comped reconciliation scheduled (first run in 1h)`);
 });
