@@ -97,6 +97,28 @@ async function getBlueDollarRate() {
   }
 }
 
+// --- Official dollar rate (cached 1 hour) — subscription pricing is pegged to oficial ---
+let cachedOficial = null;
+let cacheOficialTime = 0;
+
+async function getOficialRate() {
+  if (cachedOficial && (Date.now() - cacheOficialTime) < CACHE_TTL) return cachedOficial;
+  try {
+    const { data } = await fetchJSON('https://dolarapi.com/v1/dolares/oficial', {});
+    if (data && data.venta) {
+      cachedOficial = data.venta;
+      cacheOficialTime = Date.now();
+      console.log(`[mp] Official dollar rate: $${cachedOficial} ARS`);
+      return cachedOficial;
+    }
+    throw new Error('No venta field in response');
+  } catch (err) {
+    console.error(`[mp] Official dollar API error: ${err.message}`);
+    if (cachedOficial) return cachedOficial;
+    throw new Error('Cannot fetch official dollar rate');
+  }
+}
+
 // --- MercadoPago API ---
 
 function mpRequest(method, endpoint, body) {
@@ -240,7 +262,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.2.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.3.0' });
 });
 
 // POST /subscribe — Create MercadoPago subscription
@@ -257,9 +279,10 @@ app.post('/subscribe', async (req, res) => {
   }
 
   try {
-    // Fetch blue dollar rate
-    const blueRate = await getBlueDollarRate();
-    const amountARS = Math.round(priceUSD * blueRate);
+    // Price new subscriptions at the OFFICIAL dollar (rounded to nearest 100),
+    // matching the monthly price-peg. Legacy $5 tier is not created here.
+    const oficialRate = await getOficialRate();
+    const amountARS = Math.round(priceUSD * oficialRate / 100) * 100;
 
     // Determine frequency
     const isYearly = formSubType === 'wizard-yearly';
@@ -275,7 +298,7 @@ app.post('/subscribe', async (req, res) => {
       name: formName || ''
     });
 
-    console.log(`[mp] Creating subscription: ${formSubType}, ${formEmail}, $${priceUSD} USD = $${amountARS} ARS (rate: ${blueRate})`);
+    console.log(`[mp] Creating subscription: ${formSubType}, ${formEmail}, $${priceUSD} USD = $${amountARS} ARS (oficial: ${oficialRate})`);
 
     const { status, data } = await mpRequest('POST', '/preapproval', {
       payer_email: formEmail,
@@ -601,6 +624,69 @@ function scheduleReconcileCron() {
   }, 60 * 60 * 1000);
 }
 
+// --- Monthly price peg: keep monthly subs at N × official dollar (only if it goes UP) ---
+// $5 tier → 5×oficial, $10 tier → 10×oficial (rounded to nearest 100). Annuals untouched.
+// Never lowers a price. Each monthly sub is classified by the closest tier target, which
+// stays correct as the dollar drifts. Safety cap so a bad MP API run can't mass-change.
+async function runPricePeg() {
+  let oficial;
+  try { oficial = await getOficialRate(); } catch (e) { console.error(`[peg] no oficial rate: ${e.message}`); return; }
+  const t5 = Math.round(5 * oficial / 100) * 100;
+  const t10 = Math.round(10 * oficial / 100) * 100;
+  console.log(`[peg] start — oficial=${oficial} → $5=${t5} $10=${t10}`);
+
+  const subs = new Map();
+  for (let pass = 0; pass < 2; pass++) { // 2 passes union — MP pagination fluctuates
+    let offset = 0, total = 0;
+    do {
+      const { status, data } = await mpRequest('GET', `/preapproval/search?status=authorized&limit=100&offset=${offset}`);
+      if (status !== 200) break;
+      total = data.paging ? data.paging.total : 0;
+      for (const s of (data.results || [])) subs.set(s.id, s);
+      offset += 100; await sleep(250);
+    } while (offset < total);
+  }
+
+  const changes = [];
+  for (const s of subs.values()) {
+    const ar = s.auto_recurring || {};
+    const amt = ar.transaction_amount;
+    if (/TEST|borrar/i.test(s.reason || '')) continue;
+    const annual = (ar.frequency_type === 'months' && ar.frequency >= 12) || ar.frequency_type === 'years' || amt >= 30000;
+    if (annual) continue; // monthly only
+    const tier = Math.abs(amt - t5) <= Math.abs(amt - t10) ? t5 : t10;
+    if (tier > amt) changes.push({ id: s.id, from: amt, to: tier, ar }); // only raises
+  }
+
+  if (changes.length > 250) {
+    console.error(`[peg] ABORT: ${changes.length} > cap 250 — probable MP API issue, nada aplicado`);
+    return;
+  }
+  let ok = 0, err = 0;
+  for (const c of changes) {
+    try {
+      const newAR = Object.assign({}, c.ar, { transaction_amount: c.to, currency_id: c.ar.currency_id || 'ARS' });
+      const put = await mpRequest('PUT', `/preapproval/${c.id}`, { auto_recurring: newAR });
+      if (put.status === 200) ok++; else { err++; console.error(`[peg] ${c.id} HTTP ${put.status}`); }
+    } catch (e) { err++; console.error(`[peg] ${c.id}: ${e.message}`); }
+    await sleep(200);
+  }
+  console.log(`[peg] done — raised ${ok} (errors ${err}) of ${subs.size} authorized`);
+}
+
+function schedulePricePegCron() {
+  // Once per calendar month (also on boot; idempotent + only-raises → safe to re-run).
+  let lastMonth = null;
+  const monthKey = () => { const d = new Date(); return `${d.getUTCFullYear()}-${d.getUTCMonth()}`; };
+  setTimeout(() => {
+    const tick = () => {
+      if (monthKey() !== lastMonth) { lastMonth = monthKey(); runPricePeg().catch(e => console.error(`[peg] error: ${e.message}`)); }
+    };
+    tick();
+    setInterval(tick, 12 * 60 * 60 * 1000);
+  }, 2 * 60 * 60 * 1000); // 2h after boot (reconcile runs at 1h)
+}
+
 // --- Keep-alive ping (Render free tier) ---
 const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
 
@@ -628,4 +714,6 @@ app.listen(PORT, () => {
   console.log(`[keep-alive] Self-ping every 14min`);
   scheduleReconcileCron();
   console.log(`[reconcile] Weekly comped reconciliation scheduled (first run in 1h)`);
+  schedulePricePegCron();
+  console.log(`[peg] Monthly price peg scheduled (oficial, only-raises; first run in 2h)`);
 });
