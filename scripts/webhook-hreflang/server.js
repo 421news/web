@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.4', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.5', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2105,7 +2105,7 @@ async function refreshRevenueData() {
   };
   revenueLastUpdate = new Date().toISOString();
   console.log(`[revenue] Refresh done in ${((Date.now() - start) / 1000).toFixed(1)}s: pagos=${totalPagos}, total=${ghost.total}, MRR USD=${revUsdM}, blue=${blue}, weeks=${history.length}`);
-  saveRevenueStore(revenueData).catch(() => {}); // persist to private store (survives restarts + Fastly purge)
+  await saveRevenueStore(revenueData); // persist to private store while the instance is active (Render free-tier freezes post-response background work)
 }
 
 // --- Private revenue history store (Ghost draft page) ---
