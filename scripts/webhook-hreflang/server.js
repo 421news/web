@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.5', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.6', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2115,23 +2115,26 @@ async function refreshRevenueData() {
 // webhook already has. Lets us purge the public asset without losing the weekly series.
 const REVENUE_STORE_SLUG = 'revenue-data-store';
 
+// NOTE: this webhook's ghostRequest returns the PARSED BODY directly (e.g. {pages:[...]})
+// and THROWS on non-2xx (incl. 404). Handle accordingly (do not read .status/.data).
 async function loadRevenueStore() {
   try {
-    const { status, data } = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
-    if (status === 200 && data.pages && data.pages[0] && data.pages[0].codeinjection_foot) {
-      return JSON.parse(data.pages[0].codeinjection_foot);
-    }
-  } catch (e) { console.error(`[revenue-store] load failed: ${e.message}`); }
+    const data = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
+    const page = data && data.pages && data.pages[0];
+    if (page && page.codeinjection_foot) return JSON.parse(page.codeinjection_foot);
+  } catch (e) { /* 404 = store page not created yet */ }
   return null;
 }
 
 async function saveRevenueStore(obj) {
   const blob = JSON.stringify(obj);
+  let page = null;
   try {
-    const g = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
-    const page = g.status === 200 && g.data.pages && g.data.pages[0];
+    const data = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
+    page = data && data.pages && data.pages[0];
+  } catch (e) { page = null; } // 404 → doesn't exist yet
+  try {
     if (page) {
-      // optimistic locking: send the current updated_at
       await ghostRequest('PUT', `/ghost/api/admin/pages/${page.id}/`, { pages: [{ codeinjection_foot: blob, updated_at: page.updated_at }] });
     } else {
       await ghostRequest('POST', '/ghost/api/admin/pages/', { pages: [{ title: 'Revenue data store (internal — do not publish)', slug: REVENUE_STORE_SLUG, status: 'draft', codeinjection_foot: blob }] });
