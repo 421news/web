@@ -108,6 +108,25 @@ function mpRequest(method, endpoint, body) {
   });
 }
 
+// Resolve a subscriber email from their payer_id via the payments API.
+// Needed because /preapproval/{id} returns empty payer_email/external_reference
+// for older subscriptions (created before external_reference carried the email),
+// so on cancellation we couldn't identify the Ghost member without this.
+async function mpResolveEmail(payerId) {
+  if (!payerId) return null;
+  try {
+    const { status, data } = await mpRequest('GET', `/v1/payments/search?payer.id=${payerId}&sort=date_created&criteria=desc&limit=5`);
+    if (status === 200 && data.results) {
+      for (const p of data.results) {
+        if (p.payer && p.payer.email) return p.payer.email.toLowerCase().trim();
+      }
+    }
+  } catch (e) {
+    console.error(`[mp] resolveEmail(${payerId}) failed: ${e.message}`);
+  }
+  return null;
+}
+
 // --- Ghost Admin API ---
 
 function makeGhostJWT() {
@@ -164,6 +183,33 @@ async function updateMember(id, updates) {
   throw new Error(`Update member failed (${status}): ${JSON.stringify(data).slice(0, 200)}`);
 }
 
+// Cancel a member's complimentary subscription (Type A: has a real subscription id).
+// This is what the Admin UI "Remove complimentary subscription" button does.
+function cancelGhostSubscription(memberId, subId) {
+  return ghostRequest('PUT', `/ghost/api/admin/members/${memberId}/subscriptions/${subId}/`, { status: 'canceled' });
+}
+
+// Robustly move a comped member to free. Two representations exist:
+//   Type A — subscription has a real id (sub_...): cancel via the subscription endpoint.
+//   Type B — pure comp (subscription id ""): PUT comped:false + tiers:[].
+// comped:false alone is a no-op; comped:false+tiers:[] 400s on Type A. So we do both,
+// in order, which covers either kind. See memory reference-uncomp-ghost-api.
+async function uncompMember(member) {
+  // Type A: cancel any active subscription that has a real id
+  for (const s of (member.subscriptions || [])) {
+    if (s.status === 'active' && s.id) {
+      try { await cancelGhostSubscription(member.id, s.id); }
+      catch (e) { console.error(`[ghost] cancel sub ${s.id}: ${e.message}`); }
+    }
+  }
+  // Type B / cleanup: strip the tier + un-comp + relabel
+  try {
+    await updateMember(member.id, { comped: false, tiers: [], labels: buildCancelledLabels(member.labels) });
+  } catch (e) {
+    console.error(`[ghost] uncomp PUT ${member.email}: ${e.message}`);
+  }
+}
+
 // --- Label helpers ---
 
 function buildActiveLabels(planType, existingLabels) {
@@ -194,7 +240,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.0.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.1.0' });
 });
 
 // POST /subscribe — Create MercadoPago subscription
@@ -325,8 +371,14 @@ async function handlePreapprovalUpdate(preapprovalId) {
       : 'wizard-monthly';
   }
 
+  // Older subs have no email in the preapproval — resolve it from the payer_id.
+  if (!email && data.payer_id) {
+    email = await mpResolveEmail(data.payer_id);
+    if (email) console.log(`[ipn] Resolved email via payer_id ${data.payer_id}: ${email}`);
+  }
+
   if (!email) {
-    console.error(`[ipn] No email found for preapproval ${preapprovalId}`);
+    console.error(`[ipn] No email found for preapproval ${preapprovalId} (payer_id ${data.payer_id})`);
     return;
   }
 
@@ -406,28 +458,35 @@ async function activateMember(email, name, planType) {
 async function deactivateMember(email) {
   console.log(`[ghost] Deactivating member: ${email}`);
 
-  const existing = await findMemberByEmail(email);
+  // Fetch WITH subscriptions so we can detect the comp type (A vs B).
+  const { status, data } = await ghostRequest(
+    'GET',
+    `/ghost/api/admin/members/?filter=email:'${encodeURIComponent(email)}'&include=labels,tiers,subscriptions`
+  );
+  const existing = status === 200 && data.members && data.members[0];
   if (!existing) {
     console.log(`[ghost] Member not found: ${email} — nothing to deactivate`);
     return;
   }
+  if (existing.status === 'free') {
+    console.log(`[ghost] ${email} already free — nothing to do`);
+    return;
+  }
 
-  // Skip members with active Stripe subscriptions — never touch those
+  // Never touch members paying via Stripe (>$0 active sub).
   const hasActiveStripe = (existing.subscriptions || []).some(
     s => (s.status === 'active' || s.status === 'trialing') && s.price && s.price.amount > 0
   );
   if (hasActiveStripe) {
-    console.log(`[ghost] Skipping ${email} — has active Stripe subscription`);
+    console.log(`[ghost] Skipping ${email} — has active paid subscription`);
     return;
   }
 
-  const labels = buildCancelledLabels(existing.labels);
-  if (!labels.some(l => l.name === 'cancelados')) labels.push({ name: 'cancelados' });
-  // Remove Wizard tier, keep non-Wizard tiers
-  const tiers = (existing.tiers || []).filter(t => t.id !== WIZARD_TIER_ID);
+  await uncompMember(existing);
 
-  await updateMember(existing.id, { labels, tiers, comped: false });
-  console.log(`[ghost] Deactivated member: ${email} → free`);
+  const chk = await ghostRequest('GET', `/ghost/api/admin/members/${existing.id}/?fields=status`);
+  const newStatus = chk.data.members && chk.data.members[0] && chk.data.members[0].status;
+  console.log(`[ghost] Deactivated ${email} → ${newStatus}${newStatus !== 'free' ? ' ⚠️ (still not free)' : ''}`);
 }
 
 // --- Debug/test endpoint ---
