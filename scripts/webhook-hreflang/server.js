@@ -1016,7 +1016,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.6', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.7', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2063,7 +2063,7 @@ function isoWeekKey(d) {
   const week = Math.ceil((((date - yearStart) / 86400000) + 1) / 7);
   return date.getUTCFullYear() + '-W' + String(week).padStart(2, '0');
 }
-function parseDDMMYY(s) { const p = s.split('-').map(Number); return new Date(2000 + p[2], p[1] - 1, p[0]); }
+function parseDDMMYY(s) { if (!s || typeof s !== 'string') return new Date(0); const p = s.split('-').map(Number); return new Date(2000 + p[2], p[1] - 1, p[0]); }
 
 async function refreshRevenueData() {
   if (!REVENUE_ENABLED) throw new Error('Revenue disabled (missing MERCADOPAGO_ACCESS_TOKEN)');
@@ -2121,8 +2121,15 @@ async function loadRevenueStore() {
   try {
     const data = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
     const page = data && data.pages && data.pages[0];
-    if (page && page.codeinjection_foot) return JSON.parse(page.codeinjection_foot);
-  } catch (e) { /* 404 = store page not created yet */ }
+    if (page && page.codeinjection_foot) {
+      const obj = JSON.parse(page.codeinjection_foot);
+      // Only trust well-formed data: history must be snapshots that each carry a date.
+      // Guards against a corrupt/placeholder store poisoning the in-memory revenueData.
+      if (obj && Array.isArray(obj.history) && obj.history.length && obj.history.every(h => h && typeof h.date === 'string')) {
+        return obj;
+      }
+    }
+  } catch (e) { /* 404 = store page not created yet, or unreadable */ }
   return null;
 }
 
