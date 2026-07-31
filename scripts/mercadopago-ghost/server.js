@@ -119,6 +119,14 @@ async function getOficialRate() {
   }
 }
 
+// --- Pricing helper — SINGLE SOURCE OF TRUTH for what we actually charge ---
+// Both /subscribe and /prices must go through this so the price shown on the
+// subscribe page can never drift from the amount MercadoPago debits.
+// Pegged to the OFFICIAL dollar, rounded to the nearest 100 ARS.
+function arsFor(priceUSD, oficialRate) {
+  return Math.round(priceUSD * oficialRate / 100) * 100;
+}
+
 // --- MercadoPago API ---
 
 function mpRequest(method, endpoint, body) {
@@ -259,7 +267,24 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.4.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.5.0' });
+});
+
+// GET /prices — what we will ACTUALLY debit, in ARS.
+// Consumed by suscribite.hbs so the user sees pesos before being sent to
+// MercadoPago instead of discovering the real amount inside the checkout.
+app.get('/prices', async (req, res) => {
+  try {
+    const oficialRate = await getOficialRate();
+    const out = {};
+    for (const [type, usd] of Object.entries(PRICES_USD)) {
+      out[type] = { usd, ars: arsFor(usd, oficialRate) };
+    }
+    res.set('Cache-Control', 'public, max-age=1800');
+    res.json({ oficialRate, currency: 'ARS', prices: out });
+  } catch (err) {
+    res.status(503).json({ error: err.message });
+  }
 });
 
 // POST /subscribe — Create MercadoPago subscription
@@ -279,7 +304,7 @@ app.post('/subscribe', async (req, res) => {
     // Price new subscriptions at the OFFICIAL dollar (rounded to nearest 100),
     // matching the monthly price-peg. Legacy $5 tier is not created here.
     const oficialRate = await getOficialRate();
-    const amountARS = Math.round(priceUSD * oficialRate / 100) * 100;
+    const amountARS = arsFor(priceUSD, oficialRate);
 
     // Determine frequency
     const isYearly = formSubType === 'wizard-yearly';
@@ -523,12 +548,21 @@ app.post('/test/activate', async (req, res) => {
 
 app.get('/test/rate', async (req, res) => {
   try {
-    const rate = await getBlueDollarRate();
+    // NOTE: billing is pegged to the OFICIAL rate, not blue. This endpoint used to
+    // report blue-based prices, which never matched what MercadoPago actually
+    // debited. Prices now come from arsFor(), same as /subscribe and /prices.
+    // blueRate is kept for reference only (it is used by the revenue report).
+    const [blue, oficial] = await Promise.all([
+      getBlueDollarRate().catch(() => null),
+      getOficialRate()
+    ]);
     res.json({
-      blueRate: rate,
+      oficialRate: oficial,
+      blueRate: blue,
+      note: 'prices are pegged to oficial, rounded to nearest 100 ARS',
       prices: {
-        'wizard-monthly': { usd: PRICES_USD['wizard-monthly'], ars: Math.round(PRICES_USD['wizard-monthly'] * rate) },
-        'wizard-yearly': { usd: PRICES_USD['wizard-yearly'], ars: Math.round(PRICES_USD['wizard-yearly'] * rate) }
+        'wizard-monthly': { usd: PRICES_USD['wizard-monthly'], ars: arsFor(PRICES_USD['wizard-monthly'], oficial) },
+        'wizard-yearly': { usd: PRICES_USD['wizard-yearly'], ars: arsFor(PRICES_USD['wizard-yearly'], oficial) }
       }
     });
   } catch (err) {

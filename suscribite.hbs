@@ -159,12 +159,12 @@
                     </svg>
                   </span>
                   <span class="payment-method-name">MercadoPago</span>
-                  <span class="payment-method-desc">Pesos argentinos</span>
+                  <span class="payment-method-desc" id="mp-ars-hint">Pesos argentinos</span>
                 </button>
               </div>
 
               <p class="payment-method-note">
-                Stripe cobra en USD. MercadoPago cobra en pesos argentinos.
+                Stripe cobra en USD. MercadoPago cobra en pesos argentinos, con d&eacute;bito autom&aacute;tico desde tu cuenta.
               </p>
             </div>
 
@@ -181,6 +181,7 @@
 
             <div class="sub-card">
               <div class="sub-card-label" id="mp-plan-name"></div>
+              <p class="form-note" id="mp-amount-note"></p>
 
               <form id="mp-form">
                 <input type="hidden" id="mp-sub-type" value="">
@@ -212,6 +213,7 @@
         // State
         var currentCadence = 'monthly';
         var tierData = null;
+        var arsPrices = null; // { 'wizard-monthly': {usd, ars}, 'wizard-yearly': {usd, ars} }
 
         // DOM refs
         var sectionPlan = document.getElementById('sub-section-plan');
@@ -232,6 +234,41 @@
             if (tierData) updatePriceDisplay();
           })
           .catch(function() { /* el precio ya se muestra hardcodeado ($9.99) en el HTML */ });
+
+        // Precio real en pesos que va a debitar MercadoPago. Se muestra ANTES de
+        // mandar al checkout: hasta ahora el usuario veia USD en toda la pagina y
+        // recien se enteraba del monto en ARS dentro de MercadoPago.
+        fetch('https://mercadopago-ghost.onrender.com/prices')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            if (!data || !data.prices) return;
+            arsPrices = data.prices;
+            updateArsDisplay();
+          })
+          .catch(function() { /* sin ARS mostramos solo USD, como antes */ });
+
+        function formatARS(n) {
+          return '$' + Math.round(n).toLocaleString('es-AR');
+        }
+
+        function currentSubType() {
+          return currentCadence === 'yearly' ? 'wizard-yearly' : 'wizard-monthly';
+        }
+
+        function currentARS() {
+          if (!arsPrices) return null;
+          var p = arsPrices[currentSubType()];
+          return p ? p.ars : null;
+        }
+
+        // Pinta el monto en pesos en el selector de metodo de pago
+        function updateArsDisplay() {
+          var ars = currentARS();
+          var el = document.getElementById('mp-ars-hint');
+          if (!el) return;
+          if (ars === null) { el.textContent = 'Pesos argentinos'; return; }
+          el.textContent = 'Pesos argentinos · ' + formatARS(ars) + (currentCadence === 'yearly' ? ' / año' : ' / mes');
+        }
 
         function formatPrice(cents) {
           var dollars = cents / 100;
@@ -281,6 +318,7 @@
           toggleM.classList.add('active');
           toggleY.classList.remove('active');
           updatePriceDisplay();
+          updateArsDisplay();
         });
 
         toggleY.addEventListener('click', function() {
@@ -288,6 +326,7 @@
           toggleY.classList.add('active');
           toggleM.classList.remove('active');
           updatePriceDisplay();
+          updateArsDisplay();
         });
 
         // Track helper (GA4)
@@ -375,14 +414,34 @@
         document.getElementById('btn-stripe').addEventListener('click', function() {
           if (!tierData) return;
           track('payment_method_selected', 'stripe_' + currentCadence);
+          // Evento con nombre propio: `event_label` no esta registrado como custom
+          // dimension en GA4, asi que el desglose stripe/mp solo se puede leer si
+          // cada metodo dispara un evento distinto.
+          track('select_payment_stripe', 'stripe_' + currentCadence);
           window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
         // MercadoPago → show form
         document.getElementById('btn-mp').addEventListener('click', function() {
           track('payment_method_selected', 'mercadopago_' + currentCadence);
-          document.getElementById('mp-plan-name').textContent = getPlanLabel() + ' \u2014 MercadoPago';
-          document.getElementById('mp-sub-type').value = currentCadence === 'yearly' ? 'wizard-yearly' : 'wizard-monthly';
+          track('select_payment_mp', 'mercadopago_' + currentCadence);
+          var ars = currentARS();
+          document.getElementById('mp-plan-name').textContent = ars === null
+            ? getPlanLabel() + ' \u2014 MercadoPago'
+            : 'Suscripci\u00f3n ' + (currentCadence === 'yearly' ? 'anual' : 'mensual')
+              + ' \u2014 ' + formatARS(ars) + ' ARS' + (currentCadence === 'yearly' ? ' / a\u00f1o' : ' / mes');
+          var amt = document.getElementById('mp-amount-note');
+          if (amt) {
+            var usdCents = currentCadence === 'yearly'
+              ? (tierData && tierData.yearly_price)
+              : (tierData && tierData.monthly_price);
+            amt.textContent = ars === null ? '' :
+              'Se debitan ' + formatARS(ars) + ' ARS'
+              + (currentCadence === 'yearly' ? ' por a\u00f1o' : ' por mes')
+              + ' de tu cuenta de MercadoPago'
+              + (usdCents ? ' (equivale a ' + formatPrice(usdCents) + ' USD).' : '.');
+          }
+          document.getElementById('mp-sub-type').value = currentSubType();
           showSection(sectionMp);
         });
 
@@ -429,6 +488,11 @@
             }
           })
           .catch(function(err) {
+            // Sin este evento, un backend caido o un error de MP eran invisibles:
+            // el usuario veia un mensaje generico y en GA4 no quedaba ningun rastro.
+            track('purchase_error', 'mercadopago_' + currentCadence, {
+              error_message: (err && err.message) ? String(err.message).slice(0, 100) : 'unknown'
+            });
             msg.textContent = 'Error al procesar la suscripci\u00f3n. Intent\u00e1 nuevamente.';
             msg.className = 'form-message error';
             btn.disabled = false;
