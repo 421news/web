@@ -2186,9 +2186,39 @@ function scheduleRevenueCron() {
   }, 6 * 60 * 60 * 1000);
 }
 
+// --- Emails automatizados (drip de altas nuevas + campañas por segmento) ---
+// Diseño: contenido/automatizacion-emails.md · Textos: ./copys.js
+const emailsAuto = require('./emails-automaticos');
+
+// GET  /api/emails/preview        → qué mandaría hoy, sin tocar nada
+// POST /api/emails/run            → dispara la corrida (body: {dry, hoy, solo, filtroOverride})
+// Protegido con el mismo patrón que el resto: header x-webhook-key.
+app.get('/api/emails/preview', async (req, res) => {
+  try {
+    const log = await emailsAuto.correr({ dry: true, hoy: req.query.hoy });
+    res.json({ ok: true, dry: true, log });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
+app.post('/api/emails/run', async (req, res) => {
+  if (!process.env.EMAILS_RUN_KEY || req.headers['x-webhook-key'] !== process.env.EMAILS_RUN_KEY) {
+    return res.status(401).json({ ok: false, error: 'unauthorized' });
+  }
+  const { dry = true, hoy, solo, filtroOverride } = req.body || {};
+  try {
+    const log = await emailsAuto.correr({ dry, hoy, solo, filtroOverride });
+    res.json({ ok: true, dry, log });
+  } catch (e) {
+    res.status(500).json({ ok: false, error: e.message });
+  }
+});
+
 // --- Start ---
 
 app.listen(PORT, () => {
+  emailsAuto.iniciar();
   const missing = [];
   if (!GHOST_ADMIN_KEY) missing.push('GHOST_ADMIN_KEY');
   if (!GHOST_CONTENT_KEY) missing.push('GHOST_CONTENT_KEY');
