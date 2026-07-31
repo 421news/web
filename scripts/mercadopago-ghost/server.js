@@ -127,6 +127,50 @@ function arsFor(priceUSD, oficialRate) {
   return Math.round(priceUSD * oficialRate / 100) * 100;
 }
 
+// --- USD prices come from the Ghost tier, not from this file ---
+// The Ghost tier already drives two things natively: the price rendered on
+// /es/suscribite/ (read via Content API) and what Stripe charges through the
+// Portal. Reading it here makes it drive MercadoPago too, so a price change in
+// Ghost Admin propagates everywhere instead of leaving the page advertising one
+// number while the checkout debits another.
+// PRICES_USD stays as the fallback if Ghost is unreachable.
+let cachedTierPrices = null;
+let cacheTierTime = 0;
+
+async function getTierPrices() {
+  if (cachedTierPrices && (Date.now() - cacheTierTime) < CACHE_TTL) return cachedTierPrices;
+  try {
+    const { status, data } = await ghostRequest(
+      'GET',
+      '/ghost/api/admin/tiers/?limit=all&include=monthly_price,yearly_price'
+    );
+    if (status !== 200 || !data || !data.tiers) throw new Error(`HTTP ${status}`);
+
+    const tier = data.tiers.find(t => t.type === 'paid' && t.active);
+    if (!tier) throw new Error('no active paid tier');
+    if (!tier.monthly_price || !tier.yearly_price) throw new Error('tier has no prices');
+
+    const prices = {
+      'wizard-monthly': tier.monthly_price / 100,
+      'wizard-yearly': tier.yearly_price / 100
+    };
+
+    for (const [type, usd] of Object.entries(prices)) {
+      if (usd !== PRICES_USD[type]) {
+        console.warn(`[price] Ghost tier "${tier.name}" says ${type}=$${usd}, hardcoded fallback says $${PRICES_USD[type]}. Using Ghost. Update PRICES_USD to match.`);
+      }
+    }
+
+    cachedTierPrices = prices;
+    cacheTierTime = Date.now();
+    return prices;
+  } catch (err) {
+    console.error(`[price] cannot read tier from Ghost (${err.message}) — falling back to hardcoded PRICES_USD`);
+    if (cachedTierPrices) return cachedTierPrices;
+    return PRICES_USD;
+  }
+}
+
 // --- MercadoPago API ---
 
 function mpRequest(method, endpoint, body) {
@@ -267,7 +311,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.5.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.6.0' });
 });
 
 // GET /prices — what we will ACTUALLY debit, in ARS.
@@ -275,13 +319,14 @@ app.get('/', (req, res) => {
 // MercadoPago instead of discovering the real amount inside the checkout.
 app.get('/prices', async (req, res) => {
   try {
-    const oficialRate = await getOficialRate();
+    const [oficialRate, tierPrices] = await Promise.all([getOficialRate(), getTierPrices()]);
     const out = {};
-    for (const [type, usd] of Object.entries(PRICES_USD)) {
+    for (const type of Object.keys(PRICES_USD)) {
+      const usd = tierPrices[type] || PRICES_USD[type];
       out[type] = { usd, ars: arsFor(usd, oficialRate) };
     }
     res.set('Cache-Control', 'public, max-age=1800');
-    res.json({ oficialRate, currency: 'ARS', prices: out });
+    res.json({ oficialRate, currency: 'ARS', source: 'ghost-tier', prices: out });
   } catch (err) {
     res.status(503).json({ error: err.message });
   }
@@ -295,10 +340,12 @@ app.post('/subscribe', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Missing required fields' });
   }
 
-  const priceUSD = PRICES_USD[formSubType];
-  if (!priceUSD) {
+  if (!PRICES_USD[formSubType]) {
     return res.status(400).json({ success: false, message: 'Invalid subscription type' });
   }
+  // Price comes from the Ghost tier so the page and the checkout can't diverge.
+  const tierPrices = await getTierPrices();
+  const priceUSD = tierPrices[formSubType] || PRICES_USD[formSubType];
 
   try {
     // Price new subscriptions at the OFFICIAL dollar (rounded to nearest 100),
@@ -552,17 +599,20 @@ app.get('/test/rate', async (req, res) => {
     // report blue-based prices, which never matched what MercadoPago actually
     // debited. Prices now come from arsFor(), same as /subscribe and /prices.
     // blueRate is kept for reference only (it is used by the revenue report).
-    const [blue, oficial] = await Promise.all([
+    const [blue, oficial, tierPrices] = await Promise.all([
       getBlueDollarRate().catch(() => null),
-      getOficialRate()
+      getOficialRate(),
+      getTierPrices()
     ]);
     res.json({
       oficialRate: oficial,
       blueRate: blue,
-      note: 'prices are pegged to oficial, rounded to nearest 100 ARS',
+      note: 'USD comes from the Ghost tier; ARS pegged to oficial, rounded to nearest 100',
+      usdSource: 'ghost-tier',
+      hardcodedFallback: PRICES_USD,
       prices: {
-        'wizard-monthly': { usd: PRICES_USD['wizard-monthly'], ars: arsFor(PRICES_USD['wizard-monthly'], oficial) },
-        'wizard-yearly': { usd: PRICES_USD['wizard-yearly'], ars: arsFor(PRICES_USD['wizard-yearly'], oficial) }
+        'wizard-monthly': { usd: tierPrices['wizard-monthly'], ars: arsFor(tierPrices['wizard-monthly'], oficial) },
+        'wizard-yearly': { usd: tierPrices['wizard-yearly'], ars: arsFor(tierPrices['wizard-yearly'], oficial) }
       }
     });
   } catch (err) {
