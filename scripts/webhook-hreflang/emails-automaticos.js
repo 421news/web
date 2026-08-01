@@ -96,7 +96,26 @@ async function ultimaRevista() {
 }
 
 // ── Campañas ────────────────────────────────────────────────────────────────
-const FREE = 'status:free+subscribed:true';
+
+/**
+ * Ghost NO soporta `subscribed` dentro de un email_segment, y falla de la peor
+ * manera posible: lo acepta al programar y explota recién al enviar, con un
+ * ER_BAD_FIELD_ERROR que nadie ve. El post queda clavado en `scheduled` con la
+ * hora ya pasada y el mail no sale (nos pasó el 2026-08-01 con los dos del
+ * Concilio: se programaron el 31 y no salieron a las 09:00).
+ *
+ * Es redundante, además: Ghost solo entrega a los suscriptos a esa newsletter,
+ * y el alcance ya se calcula intersecando con `newsletters.id`.
+ */
+function limpiarSegmento(filtro) {
+  const limpio = String(filtro || '')
+    .replace(/\+?subscribed:(true|false)/g, '')
+    .replace(/^\+/, '')
+    .replace(/\+{2,}/g, '+');
+  return limpio || 'all';
+}
+
+const FREE = 'status:free';
 const semanasAtras = (hoy, n) => new Date(new Date(hoy) - n * 7 * 86400000).toISOString().slice(0, 10);
 
 const CAMPANAS = [
@@ -110,7 +129,7 @@ const CAMPANAS = [
   // segmento, otra newsletter y sin venta: solo dónde está el link.
   { id: 'concilio-suscriptores', tipo: 'pre-concilio',
     newsletter: 'default-newsletter-2',
-    filtro: () => 'status:-free+subscribed:true' },
+    filtro: () => 'status:-free' },
 
   { id: 'revista', tipo: 'post-concilio', filtro: h => `${FREE}+email_open_rate:>10+created_at:<'${semanasAtras(h, 8)}'` },
   { id: 'cold', tipo: 'segmento', cada: 12, offset: 4, filtro: h => `${FREE}+email_open_rate:<=10+last_seen_at:<'${semanasAtras(h, 13)}'+created_at:<'${semanasAtras(h, 8)}'` }
@@ -183,7 +202,10 @@ async function correr(opts = {}) {
     const t = toca(c, hoy);
     if (t !== true && !opts.solo) { push(`— ${c.id}: no toca (${t.no})`); continue; }
 
-    const filtro = opts.filtroOverride && opts.solo === c.id ? opts.filtroOverride : filtroDe(c, hoy);
+    const filtroPedido = opts.filtroOverride && opts.solo === c.id ? opts.filtroOverride : filtroDe(c, hoy);
+    // Un --filtro a mano con `subscribed:true` programa un mail que después no sale
+    const filtro = limpiarSegmento(filtroPedido);
+    if (filtro !== filtroPedido) push(`  ${c.id}: segmento saneado → "${filtro}" (Ghost no acepta subscribed en email_segment)`);
     const nlSlug = c.newsletter || NEWSLETTER;
     let n, nSegmento;
     try {
@@ -245,6 +267,24 @@ function horaART() {
   return { dia: d.getDay(), hora: d.getHours(), fecha: d.toISOString().slice(0, 10) };
 }
 
+/**
+ * Detecta envíos clavados: posts `scheduled` cuya hora ya pasó.
+ * Ghost no avisa cuando el envío falla al dispararse (un email_segment que la
+ * query no soporta deja el post en scheduled para siempre, en silencio).
+ * El 2026-08-01 los dos mails del Concilio estuvieron 3h así sin que nadie lo viera.
+ */
+async function revisarColgados(margenMin = 15) {
+  const r = await ghost('GET', `/posts/?filter=${encodeURIComponent('status:scheduled')}&limit=all&fields=id,title,slug,published_at,email_segment`);
+  if (!r.ok) return [];
+  const limite = Date.now() - margenMin * 60000;
+  const colgados = (r.j.posts || []).filter(p => p.published_at && new Date(p.published_at).getTime() < limite);
+  for (const p of colgados) {
+    const sospecha = /subscribed:/.test(p.email_segment || '') ? ' — el segmento tiene `subscribed`, que Ghost no soporta al enviar' : '';
+    console.error(`[emails] ⚠️ COLGADO: "${p.title}" debía salir ${p.published_at} y sigue scheduled${sospecha}`);
+  }
+  return colgados;
+}
+
 function iniciar() {
   if (process.env.EMAILS_AUTO === 'off') {
     console.log('[emails] EMAILS_AUTO=off — automatización desactivada');
@@ -255,6 +295,11 @@ function iniciar() {
     return;
   }
   const tick = async () => {
+    // Corre todos los días, no solo el de envío: un mail puede quedar colgado
+    // cualquier día (los programados a mano, sin ir más lejos).
+    try { await revisarColgados(); }
+    catch (e) { console.error(`[emails] revisión de colgados falló: ${e.message}`); }
+
     const { dia, hora } = horaART();
     if (dia !== DIA_ENVIO || hora < HORA_ENVIO_ART) return;
     try { await correr({ dry: false }); }
@@ -265,4 +310,4 @@ function iniciar() {
   console.log(`[emails] automatización activa — chequeo horario, envía los ${['dom','lun','mar','mié','jue','vie','sáb'][DIA_ENVIO]} desde las ${HORA_ENVIO_ART}:00 ART`);
 }
 
-module.exports = { correr, iniciar, CAMPANAS, conciliosCerca };
+module.exports = { correr, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };
