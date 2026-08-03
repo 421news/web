@@ -16,6 +16,13 @@ const AUTO_TRANSLATE_ENABLED = !!ANTHROPIC_API_KEY;
 const MP_TOKEN = process.env.MERCADOPAGO_ACCESS_TOKEN;
 const REVENUE_ENABLED = !!(MP_TOKEN && GHOST_ADMIN_KEY);
 
+// Bot de X: publica cada nota nueva en español. Apagado salvo X_BOT=on|dry
+const xBot = require('./x-bot');
+
+// Gate del número del mes de la Revista 421 (saca el PDF nuevo del HTML público y lo sirve
+// verificando al member). init() más abajo, cuando ya existen las deps que le pasamos.
+const revistaGate = require('./revista-gate');
+
 // --- Ghost API helpers ---
 
 function makeJWT() {
@@ -949,6 +956,12 @@ Meta description: ${(post.meta_description || post.custom_excerpt || '').substri
 function shouldAutoTranslate(post) {
   const tags = (post.tags || []).map(t => t.slug);
 
+  // Skip emails. Un post email_only es una campaña, no una nota: traducirlo deja
+  // un draft basura por cada envío (y encima con email_only:false, así que si
+  // alguien lo publica sale como nota pública). Se acumularon 4 antes de verlo.
+  if (post.email_only) return false;
+  if (/^auto-/.test(post.slug || '')) return false; // slugs del motor de emails
+
   // Skip non-ES posts (EN or intl)
   if (tags.includes('hash-en') || tags.some(t => ['hash-pt', 'hash-fr', 'hash-zh', 'hash-ja', 'hash-ko', 'hash-tr'].includes(t))) {
     return false;
@@ -1016,7 +1029,7 @@ async function autoTranslatePost(postId) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.1.7', ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})` });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.3.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1049,6 +1062,14 @@ app.post('/webhook/hreflang', async (req, res) => {
       });
     }
   }
+
+  // Bot de X (fire-and-forget). El gate por tag #es vive adentro: este webhook
+  // también dispara con las 6 traducciones intl de cada nota.
+  if (xBot.MODE !== 'off') {
+    xBot.handlePublish(req.body).catch(err => {
+      console.error(`[x-bot] Error: ${err.message}`);
+    });
+  }
 });
 
 // Synchronous test endpoint (returns full result for debugging)
@@ -1058,6 +1079,50 @@ app.post('/test', async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500).json({ error: err.message, stack: err.stack });
+  }
+});
+
+// --- Bot de X: preview (no publica nunca) ---
+
+// GET /x-bot/preview?slug=xxx  → muestra el tuit que se armaría para esa nota.
+// Sin slug, usa las últimas 5 notas ES. Sirve para ver el formato antes de prender nada.
+app.get('/x-bot/preview', async (req, res) => {
+  try {
+    const slug = (req.query.slug || '').trim();
+    let posts;
+
+    if (slug) {
+      const data = await ghostRequest('GET',
+        `/ghost/api/admin/posts/slug/${encodeURIComponent(slug)}/?include=tags&fields=id,title,slug,url,custom_excerpt,excerpt,published_at,status,visibility`);
+      posts = data.posts || [];
+    } else {
+      const data = await ghostRequest('GET',
+        `/ghost/api/admin/posts/?limit=5&order=published_at%20desc&include=tags` +
+        `&filter=${encodeURIComponent('status:published+tag:hash-es')}` +
+        `&fields=id,title,slug,url,custom_excerpt,excerpt,published_at,status,visibility`);
+      posts = data.posts || [];
+    }
+
+    if (!posts.length) return res.status(404).json({ error: 'no se encontró el post' });
+
+    const previews = posts.map(p => {
+      const gate = xBot.shouldTweet(p);
+      const { text, length } = xBot.buildTweet(p);
+      return {
+        slug: p.slug,
+        published_at: p.published_at,
+        // El gate real incluye la ventana de 6h, que para un post viejo siempre da false.
+        // Acá lo informamos pero no es señal de que el bot esté mal.
+        pasaGate: gate.ok,
+        motivo: gate.ok ? null : gate.reason,
+        chars: `${length}/280`,
+        tweet: text,
+      };
+    });
+
+    res.json({ modo: xBot.MODE, credenciales: xBot.HAS_CREDS, previews });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -1734,6 +1799,32 @@ function teamPreflight(req, res) {
   res.set('Vary', 'Origin');
   res.status(204).end();
 }
+
+// --- Revista 421: gate del número del mes ---
+// verifyMemberToken/emailFromClaims/ghostRequest son function declarations (hoisted), así
+// que ya están disponibles acá.
+revistaGate.init({ ghostRequest, verifyMemberToken, emailFromClaims });
+
+// Lo dispara Ghost (page.published.edited) cuando se guarda la página de la revista.
+// Respondemos 200 al toque y trabajamos después: Ghost reintenta si tarda.
+app.post('/webhook/revista', (req, res) => {
+  res.json({ ok: true });
+  revistaGate.syncPage('webhook').catch(err => console.error(`[revista-gate] webhook: ${err.message}`));
+});
+
+app.get('/api/revista/estado', revistaGate.estado);
+app.options('/api/revista/descarga/:numero', revistaGate.preflight);
+app.get('/api/revista/descarga/:numero', revistaGate.descargar);
+
+// Red de seguridad: si el webhook falla o nunca llega, el PDF nuevo queda público y nadie
+// se entera. Este chequeo lo vuelve a sacar. Mismo criterio que revisarColgados() en los
+// emails automáticos: lo único que detecta un automatismo que no corrió es otro que sí.
+setInterval(() => {
+  revistaGate.syncPage('cron').catch(err => console.error(`[revista-gate] cron: ${err.message}`));
+}, 30 * 60 * 1000);
+setTimeout(() => {
+  revistaGate.syncPage('boot').catch(err => console.error(`[revista-gate] boot: ${err.message}`));
+}, 20 * 1000);
 
 // --- Titles enrichment from existing data ---
 

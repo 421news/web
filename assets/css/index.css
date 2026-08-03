@@ -2415,6 +2415,25 @@ footer {
   font-weight: 600;
 }
 
+/* Paratexto, no botón: sin borde ni pill, para que no se confunda con el CTA de al lado.
+   Va en var(--amarillo) para que light-mode.css lo pase a verde solo. */
+.revista-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: var(--fs-sm, 0.8rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--amarillo);
+}
+
+.revista-card-badge svg {
+  width: 0.85em;
+  height: 0.85em;
+  flex-shrink: 0;
+}
+
 .revista-card-title {
   font-size: var(--fs-2xl);
   font-weight: 700;
