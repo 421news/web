@@ -911,6 +911,16 @@
   "^/en/internet-anonymity/?$": /en/
   "^/en/magazine-421/?$": /en/
 
+  # Segunda tanda de la auditoría: la primera pasada del chequeador tenía falsos negativos
+  # (Cloudflare devolvió 200 en URLs que son 404), así que se re-corrió y se tomó la unión.
+  "^/es/the-terminator-1984/?$": /es/the-terminator-1984-james-cameron/
+  "^/es/magic-the-gathering/?$": /es/tag/magic-the-gathering/
+  "^/es/tag/tech/?$": /es/tag/tecnologia/
+  "^/en/selfhosting-host-your-own-home-cloud/?$": /en/self-hosting-home-cloud/
+  # Estas dos NO eran traducciones faltantes: son erratas del slug (falta "an" y falta "to").
+  "^/en/cognitive-sovereignty-introduction-to-psychic-autonomy/?$": /en/cognitive-sovereignty-an-introduction-to-psychic-autonomy/
+  "^/en/cyberciruja-guide-to-digital-self-determination/?$": /en/cyberciruja-guide-digital-self-determination/
+
   # === LLMs.txt (redirect to theme asset) ===
   "^/llms\\.txt$": /assets/llms.txt
   "^/llms-full\\.txt$": /assets/llms-full.txt
