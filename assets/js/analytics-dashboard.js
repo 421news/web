@@ -243,14 +243,34 @@
   }
 
   // === Collapsible sections (generic) ===
+
+  // Los controles de una sección (tabs Artículos/Páginas, filtro de idioma, buscador,
+  // granularidad Día/Semana/Mes) viven en el header, que es HERMANO del body que se
+  // colapsa — no hijo. Por eso quedaban flotando solos con la sección cerrada. Se ocultan
+  // junto con los datos: un buscador sin tabla abajo no filtra nada.
+  // Genérico a propósito: aplica a cualquier sección que sume controles en el futuro.
+  function syncSectionControls(btn, collapsed) {
+    var header = btn.closest && btn.closest('.analytics-section-header');
+    if (!header) return; // los colapsables internos (ej. "Tabla detallada") no tienen header
+    for (var j = 0; j < header.children.length; j++) {
+      var el = header.children[j];
+      if (el.classList.contains('analytics-section-titlerow')) continue; // título y botón se quedan
+      el.classList.toggle('analytics-collapsed', collapsed);
+    }
+  }
+
   function setupCollapsibles() {
     var toggles = document.querySelectorAll('[data-collapse]');
     for (var i = 0; i < toggles.length; i++) {
+      // Las que arrancan cerradas (is-collapsed en el markup) también tienen que arrancar
+      // con sus controles ocultos, o el estado inicial queda incoherente.
+      syncSectionControls(toggles[i], toggles[i].classList.contains('is-collapsed'));
       toggles[i].addEventListener('click', function() {
         var target = document.getElementById(this.getAttribute('data-collapse'));
         if (!target) return;
         var collapsed = target.classList.toggle('analytics-collapsed');
         this.classList.toggle('is-collapsed', collapsed);
+        syncSectionControls(this, collapsed);
       });
     }
   }
