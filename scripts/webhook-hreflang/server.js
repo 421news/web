@@ -2137,6 +2137,13 @@ async function getGhostRevenue() {
 }
 
 // Live blue rate (bluelytics), fallback to env/default
+// Tres calidades de dato conviven en la serie histórica, y conviene saberlo antes de sacar
+// conclusiones de un gráfico:
+//   · 19-06-25 → 09-10-25 : solo total/pagos/ratio. No hay revenue y no se puede reconstruir.
+//   · 16-10-25 → 08-01-26 : ARS sí, pero sin blue ni Stripe. El USD de esos 8 snapshots se
+//     reconstruyó el 2026-08-04 con el blue histórico de bluelytics (/v2/evolution.json) y
+//     quedó marcado con `usd_reconstruido: true`. NO incluye Stripe → subestima un poco.
+//   · 15-03-26 en adelante : completo y medido.
 async function getBlueRate() {
   try {
     const res = await httpsGetJson('api.bluelytics.com.ar', '/v2/latest', {});
