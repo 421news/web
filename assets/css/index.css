@@ -1063,11 +1063,16 @@ body {
 /* "Lo más leído" — índice editorial (v3.34.26). Filas separadas por hairline
    crema, nº italic, título Lora, tag ▶ amarillo, meta italic "autor · min".
    Misma familia visual que las cards .pc del resto de la home. */
+/* Multi-columna, no grid: el grid llena por FILAS (1|2 / 3|4 / 5|6) y el ranking quedaba
+   en zigzag. Con column-count baja 1-2-3 por la izquierda y 4-5-6 por la derecha. */
 .most-read-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  column-count: 2;
   column-gap: 40px;
   min-height: 72px;
+}
+.most-read-grid > .mr-card {
+  -webkit-column-break-inside: avoid;
+  break-inside: avoid; /* que una tarjeta no quede partida entre columnas */
 }
 .mr-card {
   display: flex;
@@ -1134,7 +1139,7 @@ body {
 .light-mode .mr-title { color: var(--negro); }
 .light-mode .mr-thumb { border-color: var(--negro); }
 @media (max-width: 760px) {
-  .most-read-grid { grid-template-columns: 1fr; column-gap: 0; }
+  .most-read-grid { column-count: 1; column-gap: 0; }
 }
 
 /* legacy class — kept for any leftover usage, will be removed once author.hbs is updated */
