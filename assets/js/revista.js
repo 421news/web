@@ -14,15 +14,18 @@
   var svgExpand = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
   var svgLock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
-  // GA4. `value` es param estándar y sale en los reportes sin configurar nada; event_label
-  // y member_status necesitan registrarse como custom dimensions para poder desglosarlos.
-  function track(name, numero, extra) {
+  // El segmento va en el NOMBRE del evento (revista_download_wizard / _free), no en un
+  // parámetro: GA4 reporta eventName sin configurar nada, mientras que desglosar por un
+  // parámetro custom exige registrar una custom dimension en el Admin — que además no es
+  // retroactiva. Con tres nombres la cardinalidad no es un problema.
+  function track(base, numero, segmentoForzado) {
     if (typeof gtag !== 'function') return;
+    var seg = segmentoForzado || (isPaid ? 'wizard' : (isMember ? 'free' : 'anon'));
+    var name = base === 'revista_download' ? base + '_' + seg : base;
     gtag('event', name, {
       event_category: 'revista',
       event_label: 'issue-' + numero,
-      value: numero,
-      member_status: extra || (isPaid ? 'paid' : (isMember ? 'free' : 'anon'))
+      value: numero
     });
   }
 
@@ -188,7 +191,7 @@
         a.click();
         a.remove();
         setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
-        track('revista_download', numero, 'paid');
+        track('revista_download', numero, 'wizard');
         btn.innerHTML = original;
       })
       .catch(function () {

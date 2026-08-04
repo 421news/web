@@ -21,6 +21,7 @@
 // El usuario no corre nada: sube la edición en el editor de Ghost como siempre.
 
 const https = require('https');
+const crypto = require('crypto');
 
 const STORE_SLUG = 'revista-gate-store';
 const PAGE_SLUG = 'revista-421';
@@ -45,12 +46,16 @@ async function loadStore(force) {
       // Solo confiamos en un store bien formado: si está corrupto preferimos arrancar de
       // cero (y que el cron re-capture) antes que servir un nodo inválido.
       if (obj && (obj.gated === null || (obj.gated && typeof obj.gated.numero === 'number' && obj.gated.node))) {
-        store = { gated: obj.gated || null, history: Array.isArray(obj.history) ? obj.history : [] };
+        store = {
+          gated: obj.gated || null,
+          history: Array.isArray(obj.history) ? obj.history : [],
+          stats: (obj.stats && typeof obj.stats === 'object') ? obj.stats : {}
+        };
         return store;
       }
     }
   } catch (e) { /* 404 = todavía no existe */ }
-  store = { gated: null, history: [] };
+  store = { gated: null, history: [], stats: {} };
   return store;
 }
 
@@ -195,13 +200,39 @@ async function syncPage(reason) {
 
 // comped == paga. 216 de los ~225 que pagan figuran comped porque cobran por MercadoPago,
 // que es externo a Ghost. Chequear solo status:'paid' dejaría afuera al 96% de los wizards.
-async function isPaidMember(claims) {
+async function resolverMember(claims) {
   const email = await deps.emailFromClaims(claims);
-  if (!email || /['"\\]/.test(email)) return false; // comilla en el email rompería el NQL
+  if (!email || /['"\\]/.test(email)) return null; // comilla en el email rompería el NQL
   const r = await deps.ghostRequest('GET', `/ghost/api/admin/members/?filter=${encodeURIComponent(`email:'${email}'`)}&limit=1`);
   const m = r && r.members && r.members[0];
-  if (!m) return false;
-  return m.status === 'paid' || m.status === 'comped';
+  if (!m) return null;
+  return { email, status: m.status, paga: m.status === 'paid' || m.status === 'comped' };
+}
+
+// --- Conteo de descargas del número gateado ---
+// Se cuenta acá y no en GA4 porque acá es exacto: el server ve cada descarga verificada,
+// no la comen los adblockers y sabemos QUIÉN bajó, así que podemos contar personas únicas
+// en vez de clicks. Guardamos un hash del email, no el email: alcanza para deduplicar.
+let saveTimer = null;
+function persistirPronto() {
+  if (saveTimer) return;
+  // Debounce: cuando sale el mail a los que pagan las descargas llegan en ráfaga y no
+  // queremos un PUT a Ghost por cada una.
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    saveStore().catch(e => console.error(`[revista-gate] no pude guardar stats: ${e.message}`));
+  }, 60 * 1000);
+}
+
+function registrarDescarga(numero, email) {
+  if (!store.stats) store.stats = {};
+  const k = String(numero);
+  if (!store.stats[k]) store.stats[k] = { total: 0, uids: [] };
+  const s = store.stats[k];
+  s.total++;
+  const uid = crypto.createHash('sha256').update(String(email).toLowerCase()).digest('hex').slice(0, 16);
+  if (!s.uids.includes(uid)) s.uids.push(uid);
+  persistirPronto();
 }
 
 // --- Descarga ---
@@ -237,10 +268,21 @@ function cors(res) {
 
 // GET /api/revista/estado → qué número está gateado. Público a propósito: es el dato que
 // revista.js necesita para dibujar el candado, y no revela ninguna URL.
+function resumenDescargas() {
+  const s = (store && store.stats) || {};
+  return Object.keys(s)
+    .map(n => ({ numero: Number(n), descargas: s[n].total, personas: (s[n].uids || []).length }))
+    .sort((a, b) => b.numero - a.numero);
+}
+
 function estado(req, res) {
   cors(res);
   loadStore()
-    .then(() => res.json({ gated: store.gated ? store.gated.numero : null, lastSync: lastResult }))
+    .then(() => res.json({
+      gated: store.gated ? store.gated.numero : null,
+      descargas: resumenDescargas(),
+      lastSync: lastResult
+    }))
     .catch(e => res.status(500).json({ error: e.message }));
 }
 
@@ -259,8 +301,10 @@ async function descargar(req, res) {
     let claims = null;
     try { claims = await deps.verifyMemberToken(req); } catch (e) { claims = null; }
     if (!claims) { res.status(401).json({ error: 'login requerido' }); return; }
-    if (!(await isPaidMember(claims))) { res.status(403).json({ error: 'solo suscriptores' }); return; }
+    const member = await resolverMember(claims);
+    if (!member || !member.paga) { res.status(403).json({ error: 'solo suscriptores' }); return; }
 
+    registrarDescarga(numero, member.email);
     const node = store.gated.node;
     pipeUpstream(node.src, res, node.fileName || `Revista 421 #${numero}.pdf`, 0);
   } catch (e) {
@@ -276,7 +320,11 @@ function preflight(req, res) {
 }
 
 function status() {
-  return { gated: store && store.gated ? store.gated.numero : null, lastSync: lastResult };
+  return {
+    gated: store && store.gated ? store.gated.numero : null,
+    descargas: resumenDescargas(),
+    lastSync: lastResult
+  };
 }
 
 module.exports = { init, syncPage, estado, descargar, preflight, status };
