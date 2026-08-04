@@ -915,7 +915,10 @@
   # (Cloudflare devolvió 200 en URLs que son 404), así que se re-corrió y se tomó la unión.
   "^/es/the-terminator-1984/?$": /es/the-terminator-1984-james-cameron/
   "^/es/magic-the-gathering/?$": /es/tag/magic-the-gathering/
+  # Tags en inglés colgados de un path /es/: la nota low-tech-high-life-manifesto linkea
+  # los dos con el slug EN. En español los tags son `tecnologia` y `vida-real`.
   "^/es/tag/tech/?$": /es/tag/tecnologia/
+  "^/es/tag/real-life/?$": /es/tag/vida-real/
   "^/en/selfhosting-host-your-own-home-cloud/?$": /en/self-hosting-home-cloud/
   # Estas dos NO eran traducciones faltantes: son erratas del slug (falta "an" y falta "to").
   "^/en/cognitive-sovereignty-introduction-to-psychic-autonomy/?$": /en/cognitive-sovereignty-an-introduction-to-psychic-autonomy/
