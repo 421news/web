@@ -144,7 +144,7 @@
         iframe.contentWindow.postMessage({ type: '421_AUTH_FAILED' }, GAME_ORIGIN);
         loading.innerHTML =
           '<p>Necesitás estar suscrito a 421 para entrar.</p>' +
-          '<a href="/subscribe/" style="color:#6ee7b7;margin-top:1rem;display:inline-block;">Suscribite acá</a>';
+          '<a href="/es/suscribite/" style="color:#6ee7b7;margin-top:1rem;display:inline-block;">Suscribite acá</a>';
         return;
       }
       const token = await res.text();

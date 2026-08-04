@@ -897,6 +897,16 @@
   "^/whats-up-machine/?$": /en/whats-up-machine/
   "^/game-over-or-the-end-of-fun/?$": /en/game-over-or-the-end-of-fun/
 
+  # === Links rotos detectados en el contenido (auditoría 2026-08-04) ===
+  # Salieron de revisar los 1.107 links internos únicos de las 1.561 notas + 23 páginas.
+  # Van como redirect y no editando cada nota porque así también cubren los links entrantes
+  # de afuera (Google, otros sitios) que apuntan a esas URLs viejas.
+  "^/es/como-empezar-a-leer-ciencia-ficcion/?$": /es/mejores-libros-ciencia-ficcion/
+  "^/es/guia-cybersurgery-para-la-autodeterminacion-digital/?$": /es/guia-cyberciruja-para-la-autodeterminacion-digital/
+  "^/es/cannabis-medicinal-argentino/?$": /es/cannabis-medicinal-reprocann-milei-bullrich/
+  "^/es/cannabis-medicinal-geneticas-argentinas/?$": /es/autocultivo-geneticas-cannabis-favoritas-421/
+  "^/en/what-is-the-small-web-and-how-it-works/?$": /en/small-web-what-it-is-how-it-works/
+
   # === LLMs.txt (redirect to theme asset) ===
   "^/llms\\.txt$": /assets/llms.txt
   "^/llms-full\\.txt$": /assets/llms-full.txt
