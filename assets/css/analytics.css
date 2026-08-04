@@ -764,15 +764,22 @@
 .analytics-devices-col .analytics-subhead { align-self: flex-start; }
 .analytics-donut-sm { height: 200px; width: 200px; }
 .analytics-countries-col { min-width: 0; }
+/* Multi-columna, no grid: el grid llena por FILAS (1|2 / 3|4 / 5|6), así que el ranking
+   se leía en zigzag. Con column-count el orden baja entero por la primera columna y recién
+   ahí salta a la segunda, que es como se lee una lista. El espaciado lo pone el
+   margin-bottom de .analytics-cta-item. */
 .analytics-country-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.4rem 2rem;
+  column-count: 2;
+  column-gap: 2rem;
+}
+.analytics-country-list > * {
+  -webkit-column-break-inside: avoid;
+  break-inside: avoid; /* que una barra no quede partida entre dos columnas */
 }
 
 @media (max-width: 768px) {
   .analytics-funnel-grid { grid-template-columns: 1fr; gap: 1.75rem; }
   .analytics-geo-grid { grid-template-columns: 1fr; gap: 2rem; }
-  .analytics-country-list { grid-template-columns: 1fr; }
+  .analytics-country-list { column-count: 1; }
   .analytics-donut-sm { margin: 0 auto; }
 }
