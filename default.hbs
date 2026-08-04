@@ -112,7 +112,12 @@
         var bl = (navigator.language || navigator.userLanguage || '').toLowerCase();
         var bc = bl.split('-')[0];
         var langMap = { en:'/en/', zh:'/zh/', ja:'/ja/', ko:'/ko/', tr:'/tr/', pt:'/pt/', fr:'/fr/' };
-        window.location.replace(langMap[bc] || '/es/');
+        // Arrastrar search + hash es obligatorio: Ghost manda varios flujos de members a la
+        // RAÍZ con parámetros (?action=unsubscribe&uuid=... desde el link de baja de los
+        // mails, ?action=signin&success=true desde el magic link). Sin esto, el redirect
+        // los tiraba a la basura y Portal nunca se enteraba: el lector aterrizaba en la home
+        // en español y no pasaba nada. Parecía que el "darse de baja" no funcionaba.
+        window.location.replace((langMap[bc] || '/es/') + window.location.search + window.location.hash);
       }
     }
     </script>
