@@ -18,7 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (authorMatch) {
         limit = 24;
         var esExclude = 'tag:-hash-en+tag:-hash-zh+tag:-hash-ja+tag:-hash-ko+tag:-hash-tr+tag:-hash-pt+tag:-hash-fr';
-        filter = esExclude + '+tag:-hash-satelite+primary_author:' + authorMatch[1];
+        // `authors:`, NO `primary_author:`: este último es solo el PRIMERO de la lista, así
+        // que en una nota firmada por dos, el segundo autor no la veía en su página.
+        filter = esExclude + '+tag:-hash-satelite+authors:' + authorMatch[1];
     } else if (langMatch) {
         // Intl home pages use their own pagination in last-posts-intl.hbs
         return;

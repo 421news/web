@@ -146,7 +146,11 @@
   var loading = false;
 
   function buildFilter(lang) {
-    var f = 'primary_author:' + authorSlug;
+    // `authors:`, NO `primary_author:`. primary_author es solo el PRIMERO de la lista, así
+    // que en una nota firmada por dos, el segundo autor no la veía aparecer en su página.
+    // El chequeo de SEO de arriba ya usaba `authors:` — eran dos criterios distintos en el
+    // mismo template.
+    var f = 'authors:' + authorSlug;
     var parts = LANG_FILTERS[lang].tag.split('+');
     parts.forEach(function(p) { f += '+tag:' + p; });
     return f;
