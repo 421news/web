@@ -906,6 +906,10 @@
   "^/es/cannabis-medicinal-argentino/?$": /es/cannabis-medicinal-reprocann-milei-bullrich/
   "^/es/cannabis-medicinal-geneticas-argentinas/?$": /es/autocultivo-geneticas-cannabis-favoritas-421/
   "^/en/what-is-the-small-web-and-how-it-works/?$": /en/small-web-what-it-is-how-it-works/
+  # Estas dos apuntaban a traducciones al inglés que nunca se hicieron (no hay versión EN
+  # de "Anonimato en internet" ni página de revista en inglés). Van a la home EN.
+  "^/en/internet-anonymity/?$": /en/
+  "^/en/magazine-421/?$": /en/
 
   # === LLMs.txt (redirect to theme asset) ===
   "^/llms\\.txt$": /assets/llms.txt
