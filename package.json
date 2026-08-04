@@ -7,7 +7,7 @@
   "keywords": [
     "ghost-theme"
   ],
-  "version": "3.34.67",
+  "version": "3.34.68",
   "engines": {
     "ghost": ">=4.0.0"
   },
@@ -35,8 +35,6 @@
     }
   },
   "dependencies": {
-    "express": "^5.2.1",
-    "express-handlebars": "^8.0.1",
     "form-data": "^4.0.5",
     "jsonwebtoken": "^9.0.3"
   }

@@ -2230,7 +2230,32 @@ async function saveRevenueStore(obj) {
   try {
     const data = await ghostRequest('GET', `/ghost/api/admin/pages/slug/${REVENUE_STORE_SLUG}/`);
     page = data && data.pages && data.pages[0];
-  } catch (e) { page = null; } // 404 → doesn't exist yet
+  } catch (e) {
+    // SOLO un 404 significa "todavía no existe". Cualquier otro error es transitorio, y
+    // tratarlo como 404 crea una página nueva que Ghost slugifica -2, -3... dejando el
+    // store real huérfano. Así aparecieron 5 revenue-data-store-N el 2026-07-28.
+    if (!/Ghost API 404/.test(e.message)) {
+      console.error(`[revenue-store] store ilegible (${e.message}) — no escribo para no duplicarlo`);
+      return;
+    }
+    page = null;
+  }
+
+  // La serie solo crece. Si lo que vamos a escribir tiene menos semanas que lo que ya
+  // está guardado, algo salió mal aguas arriba (bootstrap que no cargó → history vacío)
+  // y sobrescribir borraría meses de historia irrecuperable.
+  if (page && page.codeinjection_foot) {
+    try {
+      const prev = JSON.parse(page.codeinjection_foot);
+      const prevLen = (prev && Array.isArray(prev.history)) ? prev.history.length : 0;
+      const newLen = (obj && Array.isArray(obj.history)) ? obj.history.length : 0;
+      if (prevLen > newLen) {
+        console.error(`[revenue-store] ABORTO: guardado tiene ${prevLen} semanas y el nuevo ${newLen}. No piso la historia.`);
+        return;
+      }
+    } catch (e) { /* store previo ilegible: seguimos, el PUT lo repara */ }
+  }
+
   try {
     if (page) {
       await ghostRequest('PUT', `/ghost/api/admin/pages/${page.id}/`, { pages: [{ codeinjection_foot: blob, updated_at: page.updated_at }] });

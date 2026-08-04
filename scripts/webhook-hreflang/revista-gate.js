@@ -60,7 +60,17 @@ async function saveStore() {
   try {
     const data = await deps.ghostRequest('GET', `/ghost/api/admin/pages/slug/${STORE_SLUG}/`);
     page = data && data.pages && data.pages[0];
-  } catch (e) { page = null; }
+  } catch (e) {
+    // SOLO un 404 significa "no existe todavía". Cualquier otro error (timeout, 5xx,
+    // token vencido) es transitorio, y tratarlo como 404 nos manda a crear una página
+    // nueva: Ghost le pone slug -2, -3... y el store real queda huérfano. Así se
+    // fabricaron 5 revenue-data-store-N el 2026-07-28. Ante la duda, abortamos.
+    if (!/Ghost API 404/.test(e.message)) {
+      console.error(`[revista-gate] store ilegible (${e.message}) — no escribo para no duplicarlo`);
+      return;
+    }
+    page = null;
+  }
   if (page) {
     await deps.ghostRequest('PUT', `/ghost/api/admin/pages/${page.id}/`, {
       pages: [{ codeinjection_foot: blob, updated_at: page.updated_at }]
