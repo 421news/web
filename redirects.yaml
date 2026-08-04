@@ -903,4 +903,8 @@
 
   # === Migración /es/: post slugs (wildcard catch-all) ===
   # Excluye paths de sistema y todos los prefijos de idioma. DEBE ir al final de las 301.
-  "^/(?!es/|en/|zh/|ja/|ko/|tr/|pt/|fr/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/)([a-z0-9][-a-z0-9]*)/?$": /es/$1/
+  # `unsubscribe` agregado 2026-08-04: es una ruta propia de Ghost que vive en la RAÍZ, y el
+  # catch-all la mandaba a /es/unsubscribe/, que no existe → el link de baja de TODOS los
+  # mails caía en un 404. Cualquier ruta de sistema de un solo segmento tiene que listarse
+  # acá; las de dos o más (/email/, /r/, /p/, /feedback/) no matchean por el $ del final.
+  "^/(?!es/|en/|zh/|ja/|ko/|tr/|pt/|fr/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/|unsubscribe)([a-z0-9][-a-z0-9]*)/?$": /es/$1/
