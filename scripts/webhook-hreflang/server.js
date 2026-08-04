@@ -2285,16 +2285,23 @@ app.post('/api/revenue-refresh', async (req, res) => {
 });
 
 function scheduleRevenueCron() {
-  // Weekly, self-running. Uses a 7-day "week bucket" (Math.floor(now / 7d)) instead of
-  // the in-memory revenueLastUpdate timestamp, which resets on every Render restart and
-  // made the "≥7 days" cadence drift/stall. The bucket is restart-safe: the cron fires
-  // once whenever the week rolls over (or if we somehow have no data yet). History merges
-  // dedupe by ISO week, so an extra refresh is harmless.
-  let lastWeek = Math.floor(Date.now() / (7 * 24 * 3600 * 1000)); // boot refresh (45s) covers the current week
+  // Semanal, autónomo: chequea cada 6h y refresca si todavía no hay snapshot de la semana
+  // ISO en curso. Las merges de historia deduplican por semana ISO, así que un refresh de
+  // más es inofensivo.
+  //
+  // OJO al leer la serie vieja: entre 23-03-26 y 28-07-26 no hay snapshots, y NO fue este
+  // cron. Hasta el 2026-07-28 no existía el store privado y la historia solo sobrevivía si
+  // alguien la commiteaba al asset público del theme. Con el store, ese agujero no se repite.
+  // La decisión sale del estado PERSISTIDO (la fecha del último snapshot), no de un
+  // contador en memoria. El bucket epoch anterior se reinicializaba a la semana actual en
+  // cada arranque, así que solo detectaba el cambio de semana si el proceso seguía vivo al
+  // cruzarla — en Render eso no está garantizado. Además, leyendo la historia el cron se
+  // auto-repara: si un refresh falla, el próximo tick (6h) lo vuelve a intentar en vez de
+  // esperar al siguiente bucket.
   setInterval(() => {
-    const w = Math.floor(Date.now() / (7 * 24 * 3600 * 1000));
-    if (w === lastWeek && revenueData) return; // same week and we already have data → skip
-    lastWeek = w;
+    const h = (revenueData && Array.isArray(revenueData.history)) ? revenueData.history : [];
+    const ultima = h.length ? h[h.length - 1].date : null;
+    if (ultima && isoWeekKey(parseDDMMYY(ultima)) === isoWeekKey(new Date())) return; // ya hay snapshot de esta semana
     refreshRevenueData().then(() => { revenueLastError = null; console.log('[revenue-cron] Weekly refresh done'); }).catch(err => {
       revenueLastError = err.message;
       console.error('[revenue-cron] Refresh error:', err.message);
