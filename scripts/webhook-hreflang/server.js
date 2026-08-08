@@ -1330,32 +1330,49 @@ async function auditarHreflang() {
   };
   const base = (s) => String(s).replace(/-\d+$/, '');
 
+  // Ojo: `fields` y `include` se pisan en la API de Ghost — pidiendo fields se pierden los
+  // tags. Se traen enteros y se filtra acá.
   let todos = [], page = 1, total = 1;
   while (todos.length < total) {
-    const d = await ghostRequest('GET', `/ghost/api/admin/posts/?limit=100&page=${page}&fields=slug,codeinjection_head&filter=status:published`);
+    const d = await ghostRequest('GET', `/ghost/api/admin/posts/?limit=100&page=${page}&include=tags&filter=status:published`);
     total = d.meta.pagination.total;
     todos = todos.concat(d.posts);
     page++;
     if (page > 30) break;
   }
+  const idiomaDe = (p) => {
+    const t = (p.tags || []).map(x => x.slug).find(s => /^hash-(es|en|pt|fr|zh|ja|ko|tr)$/.test(s));
+    return t ? t.replace('hash-', '') : 'es';
+  };
   const publicados = new Map(todos.map(p => [p.slug, p]));
-  const rotos = [], cruzados = [];
+  const rotos = [], cruzados = [], idiomaMal = [];
   todos.forEach(p => {
-    const destino = parDe(p.codeinjection_head);
+    const head = p.codeinjection_head;
+    const destino = parDe(head);
     if (!destino) return;
     if (!publicados.has(destino)) { rotos.push([p.slug, destino]); return; }
+
+    // El destino tiene que estar en el OTRO idioma del par. Sin este chequeo se cuelan
+    // los casos en que un post EN declara como versión española una traducción al francés
+    // o al turco: comparten el slug base (mcluhan-ia-llm vs mcluhan-ia-llm-7) así que la
+    // normalización numérica de más abajo los daba por buenos. Pasó con 3 posts.
+    const esperado = /english-version/.test(head || '') ? 'en' : 'es';
+    const real = idiomaDe(publicados.get(destino));
+    if (real !== esperado) { idiomaMal.push([p.slug, destino, `es ${real}, se esperaba ${esperado}`]); return; }
+
     const vuelta = parDe(publicados.get(destino).codeinjection_head);
     if (vuelta && base(vuelta) !== base(p.slug)) cruzados.push([p.slug, destino, vuelta]);
   });
 
-  if (rotos.length || cruzados.length) {
-    console.error(`[hreflang-audit] ${rotos.length} ROTOS · ${cruzados.length} CRUZADOS sobre ${todos.length} publicados`);
-    rotos.forEach(([a, b]) => console.error(`  ROTO    ${a} → ${b} (no publicado)`));
-    cruzados.forEach(([a, b, c]) => console.error(`  CRUZADO ${a} → ${b}, pero ese apunta a ${c}`));
+  if (rotos.length || cruzados.length || idiomaMal.length) {
+    console.error(`[hreflang-audit] ${rotos.length} ROTOS · ${cruzados.length} CRUZADOS · ${idiomaMal.length} IDIOMA MAL, sobre ${todos.length} publicados`);
+    rotos.forEach(([a, b]) => console.error(`  ROTO       ${a} → ${b} (no publicado)`));
+    cruzados.forEach(([a, b, c]) => console.error(`  CRUZADO    ${a} → ${b}, pero ese apunta a ${c}`));
+    idiomaMal.forEach(([a, b, m]) => console.error(`  IDIOMA MAL ${a} → ${b} (${m})`));
   } else {
-    console.log(`[hreflang-audit] OK — ${todos.length} publicados, sin pares rotos ni cruzados`);
+    console.log(`[hreflang-audit] OK — ${todos.length} publicados, sin pares rotos, cruzados ni con idioma equivocado`);
   }
-  return { revisados: todos.length, rotos, cruzados };
+  return { revisados: todos.length, rotos, cruzados, idiomaMal };
 }
 
 // Diario. El apareo falla al publicar en tanda, así que conviene enterarse al día
