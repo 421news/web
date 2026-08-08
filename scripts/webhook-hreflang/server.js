@@ -2273,6 +2273,17 @@ async function saveRevenueStore(obj) {
   } catch (e) { console.error(`[revenue-store] save failed: ${e.message}`); }
 }
 
+// Verificación de pertenencia al equipo, sin payload. La usa /es/tarifario/ para decidir
+// si muestra los precios. Antes ese gate leía el array `team` de ga4-data.json, pero ese
+// campo se saca del payload público a propósito (son hashes de los emails del equipo en un
+// endpoint world-readable), así que el tarifario quedó sin poder desbloquear a nadie.
+// Devuelve solo {ok:true}: no hay nada que filtrar si alguien la llama sin credenciales.
+app.options('/api/team-check', teamPreflight);
+app.get('/api/team-check', requireTeam, (req, res) => {
+  res.set('Cache-Control', 'private, no-store');
+  res.json({ ok: true });
+});
+
 app.options('/api/revenue-data.json', teamPreflight);
 app.get('/api/revenue-data.json', requireTeam, (req, res) => {
   // Sensitive: revenue/MRR/tiers. Team-only (requireTeam) + never cached by shared caches.

@@ -631,32 +631,29 @@
       .catch(function(){ clearTimeout(timer); });
   })();
 
-  // Team gate: reveal prices only for logged-in members with the `equipo` label —
-  // same mechanism as /analytics (SHA-256 of email vs the `team` array in ga4-data.json).
+  // Team gate: los precios se muestran solo a miembros logueados con el label `equipo`.
+  //
+  // La verificación es del lado del SERVIDOR, igual que /analytics: se pide el JWT que
+  // Ghost firma para el miembro logueado y se manda a /api/team-check, que lo valida
+  // contra el JWKS del sitio. Antes esto comparaba el SHA-256 del email contra el array
+  // `team` de ga4-data.json, pero ese campo se saca del payload público (son hashes de
+  // emails del equipo en un endpoint abierto), así que el gate no desbloqueaba a nadie:
+  // ni siquiera al equipo. Roto en silencio, porque el estado bloqueado se ve normal.
   (function gate(){
-    if(!(window.crypto && crypto.subtle)) return; // no subtle crypto -> stays locked (public)
-    function sha256(str){
-      return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str.toLowerCase().trim()))
-        .then(function(buf){ return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join(''); });
-    }
-    function getTeamData(){
-      var c = new AbortController();
-      var t = setTimeout(function(){ c.abort(); }, 5000);
-      return fetch('https://webhook-hreflang.onrender.com/api/ga4-data.json', { signal: c.signal })
-        .then(function(r){ clearTimeout(t); if(!r.ok) throw new Error(r.status); return r.json(); })
-        .catch(function(){ clearTimeout(t); return fetch('https://www.421.news/assets/data/ga4-data.json').then(function(r){ return r.json(); }); });
-    }
-    Promise.all([
-      fetch('/members/api/member/', { credentials: 'same-origin' }).then(function(r){ if(!r.ok) throw new Error('no'); return r.json(); }),
-      getTeamData()
-    ]).then(function(res){
-      var member = res[0], data = res[1];
-      var team = (data && data.team) ? data.team : [];
-      if(!member || !member.email) return;
-      return sha256(member.email).then(function(hash){
-        if(team.indexOf(hash) !== -1){ unlocked = true; document.body.classList.add('team'); renderPrices(); }
-      });
-    }).catch(function(){ /* not logged in / no access -> stays locked */ });
+    fetch('/members/api/session', { credentials: 'same-origin' })
+      .then(function(r){ if(!r.ok) throw new Error('sin sesión'); return r.text(); })
+      .then(function(token){
+        return fetch('https://webhook-hreflang.onrender.com/api/team-check', {
+          headers: { 'Authorization': 'Bearer ' + token.trim() }
+        });
+      })
+      .then(function(r){
+        if(!r.ok) return; // 401/403 → no es del equipo, queda la vista pública
+        unlocked = true;
+        document.body.classList.add('team');
+        renderPrices();
+      })
+      .catch(function(){ /* no logueado o red caída → queda la vista pública */ });
   })();
 })();
 </script>
