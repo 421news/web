@@ -340,3 +340,11 @@ collections:
 
 taxonomies:
   author: /author/{slug}/
+  # `tag` agregado 2026-08-07. Sin esta línea, el campo `url` de TODOS los tags en la
+  # Content API devuelve /404/, y cualquier cosa que lo lea inserta un link roto —
+  # incluido el buscador de links del editor de Ghost. Así se metieron 86 links a /404/
+  # en 55 notas, que además se copiaron a las 6 traducciones de cada una.
+  # Las rutas explícitas de arriba ganan sobre la taxonomía, así que los ~20 tags curados
+  # siguen con su plantilla dedicada; el resto cae en tag.hbs, que lista los posts del tag
+  # y se pone noindex si tiene menos de 3.
+  tag: /es/tag/{slug}/
