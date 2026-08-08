@@ -929,6 +929,20 @@
   "^/en/cognitive-sovereignty-introduction-to-psychic-autonomy/?$": /en/cognitive-sovereignty-an-introduction-to-psychic-autonomy/
   "^/en/cyberciruja-guide-to-digital-self-determination/?$": /en/cyberciruja-guide-digital-self-determination/
 
+  # === Duplicados EN consolidados (auditoría 2026-08-08) ===
+  # Habia dos versiones en ingles del mismo articulo: la traduccion original y una
+  # reescritura SEO posterior. Se conserva la que gana en GSC — que en 6 de 7 casos con
+  # trafico real resulto ser la reescritura, no el original — y la otra redirige a ella.
+  "^/en/fantastic-four-comics-reading-guide/?$": /en/fantastic-four-comic-book-reading-guide-for-beginners/
+  "^/en/katsuhiro-otomo-reading-guide-for-beginners/?$": /en/katsuhiro-otomos-reading-guide-for-beginners/
+  "^/en/famicom-nes-family-game-8bit-trinity/?$": /en/nes-and-the-8-bit-consoles/
+  "^/en/batman-comics-reading-guide/?$": /en/batman-comic-book-reading-guide-for-beginners/
+  "^/en/enshittification-reverse-engineering-guide/?$": /en/reverse-engineering-the-enshittification-of-the-internet/
+  "^/en/polymarket-collective-intelligence-prediction-markets/?$": /en/polymarket-collective-intelligence-and-prediction-markets/
+  "^/en/davey-wreden-the-stanley-parable-games-as-artistic-language/?$": /en/davey-wreden-videogames/
+  "^/en/lcb-studios-pixel-pulps-grizzly-man-2/?$": /en/lcb-studios-the-creators-of-pixel-pulp/
+  "^/en/lina-bo-bardis-legacy-in-sao-paulo-architecture-community-and-lazer/?$": /en/lazer-community-and-architecture-lina-bo-bardis-legacy-in-sao-paulo/
+
   # === LLMs.txt (redirect to theme asset) ===
   "^/llms\\.txt$": /assets/llms.txt
   "^/llms-full\\.txt$": /assets/llms-full.txt
