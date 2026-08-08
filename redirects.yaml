@@ -2,6 +2,11 @@
   # === Existentes (migrados del YAML original, targets actualizados a /es/) ===
   ^/en/latest-posts/: /en/last-posts/
   ^/en/how-to-make-homemade-bread-2/?$: /en/how-to-make-homemade-bread/
+  # Mismo caso que el pan: hay dos artículos EN de milanesas publicados el mismo día
+  # (2024-09-16). Se consolida en el canónico sin sufijo. Detectado 2026-08-08 auditando
+  # duplicados: el sin sufijo además había quedado apareado con "B. R. Yeager - Espacio
+  # negativo", que no tiene versión en inglés.
+  ^/en/how-to-make-homemade-milanesas-2/?$: /en/how-to-make-homemade-milanesas/
   ^/nick-land-aceleracionismo-parte-2/: /es/nick-land-aceleracionismo/
   ^/nick-land-aceleracionismo-parte-1/: /es/nick-land-aceleracionismo/
   ^/en/nick-land-the-apostle-of-chaos-part-2/: /en/nick-land-the-apostle-of-chaos/
