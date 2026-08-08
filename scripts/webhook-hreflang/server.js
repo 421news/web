@@ -114,6 +114,11 @@ function slugsShareWords(slugA, slugB) {
   return false;
 }
 
+// Score reservado al match que se apoya SOLO en la proximidad temporal, sin solapamiento
+// de slug. Es válido cuando hay un único candidato en la ventana y sospechoso cuando hay
+// varios: por eso se distingue del 1.0.
+const SCORE_SOLO_TEMPORAL = 0.95;
+
 function computeScore(postA, postB) {
   const tsA = parseTimestamp(postA.published_at);
   const tsB = parseTimestamp(postB.published_at);
@@ -122,14 +127,23 @@ function computeScore(postA, postB) {
   const delta = Math.abs(tsA - tsB);
   const MAX_DELTA = 172800; // 48h
 
-  // Auto-match if within 2 minutes
-  if (delta <= 120) return 1.0;
-
   // Beyond 48h: no match
   if (delta > MAX_DELTA) return 0;
 
-  // Slug word overlap score (0 or 0.6)
   const hasOverlap = slugsShareWords(postA.slug, postB.slug);
+
+  // Publicados con <2 min de diferencia. El slug traducido casi nunca comparte palabras
+  // con el original ("como-hacer-pan-casero" vs "how-to-make-homemade-bread"), así que
+  // acá el tiempo es la única señal disponible.
+  //
+  // ⚠️ Se devuelven scores DISTINTOS a propósito: 1.0 si además hay solapamiento de slug
+  // (match sólido), 0.95 si el match es SOLO temporal. El caller usa ese 0.95 para
+  // detectar ambigüedad — si dos candidatos caen en la misma ventana, el apareo por
+  // tiempo es una moneda al aire y hay que abstenerse. Así se cruzaron Bond con
+  // Evangelion, Feral House con Daniela D'Adamo y Adicción digital con Cyberciruja:
+  // se publicaron en tanda y ganó el primero del loop (auditado 2026-08-08).
+  if (delta <= 120) return hasOverlap ? 1.0 : SCORE_SOLO_TEMPORAL;
+
   if (!hasOverlap) return 0;
 
   const slugScore = 0.6;
@@ -258,12 +272,29 @@ async function handleWebhook(payload) {
   let bestMatch = null;
   let bestScore = 0;
 
+  let empatesTemporales = 0;
   for (const candidate of candidates) {
     const score = computeScore(post, candidate);
+    if (score === SCORE_SOLO_TEMPORAL) empatesTemporales++;
     if (score > bestScore) {
       bestScore = score;
       bestMatch = candidate;
     }
+  }
+
+  // Guarda contra el apareo por moneda al aire: si el mejor match se apoya SOLO en la
+  // proximidad temporal y hay más de un candidato en esa misma ventana, no hay forma de
+  // saber cuál es el correcto. Antes se elegía el primero del loop y así se cruzaron
+  // artículos que no tenían nada que ver. Preferimos no aparear: un post sin par se
+  // arregla a mano, uno mal apareado manda al lector al artículo equivocado y nadie lo ve.
+  if (bestScore === SCORE_SOLO_TEMPORAL && empatesTemporales > 1) {
+    console.error(`[hreflang] AMBIGUO: ${empatesTemporales} candidatos publicados dentro de la misma ventana de 2 min y ninguno comparte slug con "${postSlug}". No apareo — revisar a mano.`);
+    try {
+      await injectHreflangTags(postId, postLang, postSlug, null);
+    } catch (err) {
+      console.error(`[hreflang] Error en hreflang self: ${err.message}`);
+    }
+    return { status: 'ambiguous', candidatos: empatesTemporales, selfHreflang: true };
   }
 
   const THRESHOLD = 0.3;
@@ -1280,6 +1311,70 @@ async function hreflangCron() {
 }
 
 setInterval(hreflangCron, 30 * 60 * 1000); // every 30 minutes
+
+// --- Auditoría de hreflang: la red de seguridad ---
+// El apareo es heurístico y puede errar sin que nadie se entere: un link que lleva al
+// artículo equivocado se ve igual de bien que uno correcto. Esto lo detecta solo.
+//
+// Tres categorías, y solo dos son problemas:
+//   ROTO    → el par apunta a un slug que no está publicado. Da 404.
+//   CRUZADO → los dos tienen meta y se contradicen. Lleva al artículo equivocado.
+//   SIN VUELTA → el par no tiene meta de regreso. La ida funciona; Google prefiere
+//                bidireccional pero no rompe nada. No se reporta como error.
+// Se ignoran los hermanos numerados (post-2, post-3...): son las traducciones intl, que
+// heredan el meta del original y no pueden todas recibir el apunte de vuelta.
+async function auditarHreflang() {
+  const parDe = (head) => {
+    const m = (head || '').match(/name="(?:english|spanish)-version" content="([^"]+)"/);
+    return m ? m[1] : null;
+  };
+  const base = (s) => String(s).replace(/-\d+$/, '');
+
+  let todos = [], page = 1, total = 1;
+  while (todos.length < total) {
+    const d = await ghostRequest('GET', `/ghost/api/admin/posts/?limit=100&page=${page}&fields=slug,codeinjection_head&filter=status:published`);
+    total = d.meta.pagination.total;
+    todos = todos.concat(d.posts);
+    page++;
+    if (page > 30) break;
+  }
+  const publicados = new Map(todos.map(p => [p.slug, p]));
+  const rotos = [], cruzados = [];
+  todos.forEach(p => {
+    const destino = parDe(p.codeinjection_head);
+    if (!destino) return;
+    if (!publicados.has(destino)) { rotos.push([p.slug, destino]); return; }
+    const vuelta = parDe(publicados.get(destino).codeinjection_head);
+    if (vuelta && base(vuelta) !== base(p.slug)) cruzados.push([p.slug, destino, vuelta]);
+  });
+
+  if (rotos.length || cruzados.length) {
+    console.error(`[hreflang-audit] ${rotos.length} ROTOS · ${cruzados.length} CRUZADOS sobre ${todos.length} publicados`);
+    rotos.forEach(([a, b]) => console.error(`  ROTO    ${a} → ${b} (no publicado)`));
+    cruzados.forEach(([a, b, c]) => console.error(`  CRUZADO ${a} → ${b}, pero ese apunta a ${c}`));
+  } else {
+    console.log(`[hreflang-audit] OK — ${todos.length} publicados, sin pares rotos ni cruzados`);
+  }
+  return { revisados: todos.length, rotos, cruzados };
+}
+
+// Diario. El apareo falla al publicar en tanda, así que conviene enterarse al día
+// siguiente y no cuando un lector reporta el 404 tres semanas después.
+setInterval(() => {
+  auditarHreflang().catch(err => console.error(`[hreflang-audit] Error: ${err.message}`));
+}, 24 * 60 * 60 * 1000);
+setTimeout(() => {
+  auditarHreflang().catch(err => console.error(`[hreflang-audit] Error: ${err.message}`));
+}, 90 * 1000);
+
+// A demanda, para no esperar al cron. Público: solo devuelve slugs ya públicos.
+app.get('/api/hreflang/audit', async (req, res) => {
+  try {
+    res.json(await auditarHreflang());
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 // =============================================================================
 // GA4 ANALYTICS DATA (queries GA4 Data API, serves /api/ga4-data.json)
