@@ -21,47 +21,50 @@
 
             var weekIndex = (Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000)) + 5) % rutas.length;
             var ruta = rutas[weekIndex];
-            var slugs = ruta.slugs.slice(0, 8);
 
-            // For intl langs, the translated posts share the same slug
-            var langTag = '';
-            var intlLangs = ['zh','ja','ko','tr','pt','fr'];
-            if (intlLangs.indexOf(lang) !== -1) {
-                langTag = '+tag:hash-' + lang;
-            }
+            // La MEMBRESÍA de cada ruta vive en el tag interno #ruta-{id} de Ghost; los
+            // slugs del JSON son solo el ORDEN. Antes esto leía `ruta.slugs` como si fuera
+            // la lista de notas, así que la home seguía mostrando rutas viejas mientras
+            // /es/rutas/ —que sí consulta el tag— mostraba las actuales. Mismo criterio
+            // que rutas.js: una sola fuente de verdad, el tag.
+            var esSlugs = ruta.slugs || [];
+            var orden = {};
+            esSlugs.forEach(function (sl, i) { orden[sl] = i; });
 
-            var fetchPromise;
-            if (intlLangs.indexOf(lang) !== -1) {
-                // Intl: fetch all posts for this lang, match by slug prefix
-                fetchPromise = fetch(API_BASE + '/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=all&filter=' + encodeURIComponent('tag:hash-' + lang), { headers: { 'Accept-Version': 'v5.0' } })
-                    .then(function (r) { return r.json(); })
-                    .then(function (d) {
-                        var allPosts = d.posts || [];
-                        var postMap = {};
-                        slugs.forEach(function (targetSlug) {
-                            for (var j = 0; j < allPosts.length; j++) {
-                                var p = allPosts[j];
-                                if (p.slug === targetSlug || (p.slug.indexOf(targetSlug) === 0 && /^-\d+$/.test(p.slug.slice(targetSlug.length)))) {
-                                    postMap[targetSlug] = p;
-                                    break;
-                                }
-                            }
-                        });
-                        return postMap;
-                    });
+            var LANG_HASH = ['hash-en','hash-zh','hash-ja','hash-ko','hash-tr','hash-pt','hash-fr'];
+            var filtro = 'tag:hash-ruta-' + ruta.id;
+            if (lang === 'es') {
+                filtro += '+' + LANG_HASH.map(function (t) { return 'tag:-' + t; }).join('+');
             } else {
-                var filter = 'slug:[' + slugs.join(',') + ']';
-                fetchPromise = fetch(API_BASE + '/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=8&filter=' + encodeURIComponent(filter), { headers: { 'Accept-Version': 'v5.0' } })
-                    .then(function (r) { return r.json(); })
-                    .then(function (d) {
-                        var posts = d.posts || [];
-                        var postMap = {};
-                        posts.forEach(function (p) { postMap[p.slug] = p; });
-                        return postMap;
-                    });
+                filtro += '+tag:hash-' + lang;
             }
 
-            return fetchPromise.then(function (postMap) {
+            // El slug traducido lleva sufijo numérico (-2, -3...); se normaliza para poder
+            // ordenarlo contra la lista en español.
+            function slugCanonico(p) {
+                if (orden[p.slug] !== undefined) return p.slug;
+                for (var i = 0; i < esSlugs.length; i++) {
+                    var base = esSlugs[i];
+                    if (p.slug.indexOf(base) === 0 && /^-\d+$/.test(p.slug.slice(base.length))) return base;
+                }
+                return null;
+            }
+
+            var fetchPromise = fetch(API_BASE + '/posts/?key=' + CONTENT_KEY + '&include=tags,authors&limit=all&filter=' + encodeURIComponent(filtro), { headers: { 'Accept-Version': 'v5.0' } })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    var posts = d.posts || [];
+                    posts.sort(function (a, b) {
+                        var ca = slugCanonico(a), cb = slugCanonico(b);
+                        var oa = (ca && orden[ca] !== undefined) ? orden[ca] : Infinity;
+                        var ob = (cb && orden[cb] !== undefined) ? orden[cb] : Infinity;
+                        if (oa !== ob) return oa - ob;
+                        return new Date(b.published_at) - new Date(a.published_at);
+                    });
+                    return posts;
+                });
+
+            return fetchPromise.then(function (posts) {
 
                     var i18n = {
                         es: { texts: 'textos', eyebrow: 'Esta semana', title: 'Rutas de lectura', sub: 'Si esta es tu primera vez en 421 ac\u00e1 ten\u00e9s un camino por d\u00F3nde empezar a leer.', cta: 'Explorar las 7 rutas', href: '/es/rutas/' },
@@ -85,17 +88,14 @@
                     html += '<div class="home-ruta-header-main">';
                     html += '<div class="home-ruta-eyebrow">' + sectionEyebrow + '</div>';
                     html += '<h2 class="home-ruta-title"><a href="' + ctaHref + '" class="section-title-link">' + sectionTitle + '</a></h2>';
-                    html += '<div class="home-ruta-meta">' + esc(ruta.nombre) + ' \u00B7 ' + ruta.slugs.length + ' ' + labelTexts + '</div>';
+                    html += '<div class="home-ruta-meta">' + esc(ruta.nombre) + ' \u00B7 ' + posts.length + ' ' + labelTexts + '</div>';
                     html += '</div>';
                     html += '<p class="home-ruta-tesis">' + sectionSub + '</p>';
                     html += '</div>';
 
                     html += '<div class="post-grid w-dyn-list"><div role="list" class="post-cols w-dyn-items">';
-                    var shown = 0;
-                    slugs.forEach(function (slug) {
-                        if (shown >= 4) return;
-                        var post = postMap[slug];
-                        if (post) { html += window.renderCard(post); shown++; }
+                    posts.slice(0, 4).forEach(function (post) {
+                        html += window.renderCard(post);
                     });
                     html += '</div></div>';
 
