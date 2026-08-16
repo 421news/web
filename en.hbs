@@ -1,29 +1,14 @@
 {{!< default}}
 
-<script>
-  document.title = '421 | Quality content for your cognitive diet';
-  (function() {
-    var enDesc = 'Argentine digital media about culture, technology, games, and real life. Essays, features, guides, and interviews.';
-    var enTitle = '421 | Quality content for your cognitive diet';
-    function setMeta(attr, key, val) {
-      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
-      if (el) { el.content = val; }
-      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
-    }
-    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
-    setMeta('name', 'description', enDesc);
-    setMeta('property', 'og:title', enTitle);
-    setMeta('property', 'og:description', enDesc);
-    setMeta('property', 'og:image', img);
-    setMeta('property', 'og:url', 'https://www.421.news/en/');
-    setMeta('property', 'og:type', 'website');
-    setMeta('property', 'og:locale', 'en_US');
-    setMeta('name', 'twitter:card', 'summary_large_image');
-    setMeta('name', 'twitter:title', enTitle);
-    setMeta('name', 'twitter:description', enDesc);
-    setMeta('name', 'twitter:image', img);
-  })();
-</script>
+{{!-- Meta en inglés SERVER-SIDE. Antes esto se hacía por JS (document.title + setMeta), así que el
+     HTML crudo de /en/ salía con el título y la descripción en español y og:locale=es_AR: cualquier
+     crawler o scraper que no ejecuta JS veía la home inglesa como si fuera la española.
+     Los strings son exactamente los que ya usaba el JS — no se cambió el copy, solo dónde se emite. --}}
+{{#contentFor "metaTitle"}}421 | Quality content for your cognitive diet{{/contentFor}}
+{{#contentFor "ogTitle"}}421 | Quality content for your cognitive diet{{/contentFor}}
+{{#contentFor "metaDescription"}}Argentine digital media about culture, technology, games, and real life. Essays, features, guides, and interviews.{{/contentFor}}
+{{#contentFor "ogDescription"}}Argentine digital media about culture, technology, games, and real life. Essays, features, guides, and interviews.{{/contentFor}}
+{{#contentFor "ogLocale"}}en_US{{/contentFor}}
 
 <div class="page-wrapper">
   {{> "general-styling"}}

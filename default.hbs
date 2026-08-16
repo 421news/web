@@ -6,14 +6,16 @@
          - tag: dynamic meta_title (preserve tag-specific titles)
          - landing/collection homes/error/etc: static 421 brand title (avoids Ghost's "(Page N)" suffix on paginated collections like /es/, /en/)
          CRITICAL — RECURRING PITFALL: {{#is "home"}} matches ONLY /, NOT /es/. /es/ is a Ghost collection, not the "home" route. Don't try to override meta inside {{#is "home"}} expecting /es/ to be covered. --}}
-    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}{{#is "tag"}}<title>{{meta_title}} | 421.news</title>{{else}}<title>421 — Cultura, tecnología, juegos y vida real | 421.news</title>{{/is}}{{/is}}
+    {{!-- El default del bloque metaTitle es el español: /, /es/ y cualquier home sin contentFor salen igual que antes.
+         Las 7 homes intl (en/pt/fr/zh/ja/ko/tr) lo pisan con {{#contentFor "metaTitle"}} en su propia plantilla. --}}
+    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}{{#is "tag"}}<title>{{meta_title}} | 421.news</title>{{else}}<title>{{#block "metaTitle"}}421 — Cultura, tecnología, juegos y vida real | 421.news{{/block}}</title>{{/is}}{{/is}}
     <meta charset='utf-8' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <meta name="robots" content="max-image-preview:large">
     {{!-- Description: applies to landing AND all collection homes (/es/, /en/, etc).
          NOTE: {{#is "home"}} only matches /, NOT /es/. Use {{#unless}} chain for collection homes. --}}
     {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
-    <meta name="description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina. Suscribite gratis al newsletter." />
+    <meta name="description" content="{{#block "metaDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina. Suscribite gratis al newsletter.{{/block}}" />
     {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
     <link href='https://fonts.googleapis.com' rel='preconnect' />
     <link href='https://fonts.gstatic.com' rel='preconnect' crossorigin='anonymous' />
@@ -65,14 +67,14 @@
          (OG spec says first wins, but real-world scrapers pick last). Moved here v3.33.83
          because Ghost was injecting og:title with "(Page 1)" + twitter:card "summary" after ours. --}}
     {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
-    <meta property="og:title" content="421 — Cultura, tecnología, juegos y vida real" />
-    <meta property="og:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    <meta property="og:title" content="{{#block "ogTitle"}}421 — Cultura, tecnología, juegos y vida real{{/block}}" />
+    <meta property="og:description" content="{{#block "ogDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina.{{/block}}" />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="es_AR" />
+    <meta property="og:locale" content="{{#block "ogLocale"}}es_AR{{/block}}" />
     <meta property="og:image" content="{{#block "ogImage"}}https://www.421.news/content/images/2026/01/10_diciembre.jpg{{/block}}" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="421 — Cultura, tecnología, juegos y vida real" />
-    <meta name="twitter:description" content="421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina." />
+    <meta name="twitter:title" content="{{#block "ogTitle"}}421 — Cultura, tecnología, juegos y vida real{{/block}}" />
+    <meta name="twitter:description" content="{{#block "ogDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina.{{/block}}" />
     <meta name="twitter:image" content="{{#block "twitterImage"}}https://www.421.news/content/images/2026/01/10_diciembre.jpg{{/block}}" />
     {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
 
