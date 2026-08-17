@@ -922,8 +922,19 @@
   "^/es/magic-the-gathering/?$": /es/tag/magic-the-gathering/
   # Tags en inglés colgados de un path /es/: la nota low-tech-high-life-manifesto linkea
   # los dos con el slug EN. En español los tags son `tecnologia` y `vida-real`.
+  #
+  # 🚨 Estas 4 reglas NO son opcionales. La taxonomía `tag` de routes.yaml sirve /es/tag/{slug}/,
+  # pero cuando un tag ADEMÁS tiene rutas explícitas, Ghost redirige la URL de taxonomía a la
+  # PRIMERA ruta explícita que encuentra — y para culture/tech/games/real-life esa primera ruta
+  # es la china (/zh/tag/...), porque zh encabeza el bloque intl de routes.yaml.
+  # Medido el 2026-08-16: sin regla, /es/tag/culture/ y /es/tag/games/ hacían 301 a /zh/tag/...,
+  # mandando lector y crawler a una página en chino. tech y real-life ya estaban tapados por
+  # estas reglas, que es por lo que el bug pasó desapercibido en dos de los cuatro.
+  # Si mañana se agrega otro tag con slug compartido entre idiomas, hay que sumarle su regla acá.
   "^/es/tag/tech/?$": /es/tag/tecnologia/
   "^/es/tag/real-life/?$": /es/tag/vida-real/
+  "^/es/tag/culture/?$": /es/tag/cultura/
+  "^/es/tag/games/?$": /es/tag/juegos/
   "^/en/selfhosting-host-your-own-home-cloud/?$": /en/self-hosting-home-cloud/
   # Estas dos NO eran traducciones faltantes: son erratas del slug (falta "an" y falta "to").
   "^/en/cognitive-sovereignty-introduction-to-psychic-autonomy/?$": /en/cognitive-sovereignty-an-introduction-to-psychic-autonomy/
