@@ -94,7 +94,9 @@ function contentAPIGet(path) {
   });
 }
 
-// --- Pairing algorithm (simplified from generate-hreflang-sitemap.py) ---
+// --- Pairing algorithm ---
+// Venia de scripts/generate-hreflang-sitemap.py, borrado el 2026-08-16 junto con el sitemap
+// de hreflang. Esta copia quedo como la unica implementacion: no hay de donde re-derivarla.
 
 function parseTimestamp(tsStr) {
   if (!tsStr) return null;

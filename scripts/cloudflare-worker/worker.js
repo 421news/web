@@ -17,7 +17,6 @@ Disallow: /email/
 Disallow: /r/
 
 Sitemap: https://www.421.news/sitemap.xml
-Sitemap: https://www.421.news/assets/data/hreflang-sitemap.xml
 `;
 
 const NOINDEX_PATTERNS = [
