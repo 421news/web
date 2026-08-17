@@ -15,11 +15,17 @@ el script de mas abajo, que ajusta document.documentElement.lang segun el path. 
     <meta charset='utf-8' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <meta name="robots" content="max-image-preview:large">
-    {{!-- Description: applies to landing AND all collection homes (/es/, /en/, etc).
-         NOTE: {{#is "home"}} only matches /, NOT /es/. Use {{#unless}} chain for collection homes. --}}
-    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
+    {{!-- Description: aplica a TODAS las collection homes (/es/, /en/, /pt/, ...) pero NO a la raíz.
+         En / Ghost ya emite la suya desde el "site description" de Settings vía {{ghost_head}}, así que
+         emitir la nuestra dejaba DOS <meta name="description"> en la única página que rankea #1 por marca.
+         Se decidió el 2026-08-16 quedarse con la de Ghost y sacar esta. Medido: / tenía 2 etiquetas,
+         /es/ y las 7 intl tenían 1 (la nuestra) — por eso el gate es solo para la raíz y no global.
+         `{{#is "home"}}` matchea SOLO /, nunca /es/ (que es una collection): acá eso es justo lo que
+         queremos, pero es la trampa recurrente del theme. El {{#unless}} chain sigue excluyendo
+         post/page/tag/author/error, que traen su propia description. --}}
+    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}{{#is "home"}}{{else}}
     <meta name="description" content="{{#block "metaDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina. Suscribite gratis al newsletter.{{/block}}" />
-    {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
+    {{/is}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
     <link href='https://fonts.googleapis.com' rel='preconnect' />
     <link href='https://fonts.gstatic.com' rel='preconnect' crossorigin='anonymous' />
     <link rel='preload' as='style' href='https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,400;0,700;1,400;1,800&family=Lora:ital,wght@0,400;0,700;1,400&display=swap' onload="this.onload=null;this.rel='stylesheet'" />
