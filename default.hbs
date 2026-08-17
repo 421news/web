@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-{{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}{{#has tag="#zh"}}<html lang="zh">{{else}}{{#has tag="#ja"}}<html lang="ja">{{else}}{{#has tag="#ko"}}<html lang="ko">{{else}}{{#has tag="#tr"}}<html lang="tr">{{else}}{{#has tag="#pt"}}<html lang="pt">{{else}}{{#has tag="#fr"}}<html lang="fr">{{else}}<html lang="es">{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{else}}<html lang="es">{{/is}}
+{{#is "post"}}{{#post}}{{#has tag="#en"}}<html lang="en">{{else}}{{#has tag="#zh"}}<html lang="zh">{{else}}{{#has tag="#ja"}}<html lang="ja">{{else}}{{#has tag="#ko"}}<html lang="ko">{{else}}{{#has tag="#tr"}}<html lang="tr">{{else}}{{#has tag="#pt"}}<html lang="pt">{{else}}{{#has tag="#fr"}}<html lang="fr">{{else}}<html lang="es">{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/has}}{{/post}}{{else}}{{!-- No-posts: el default es "es" y cada home de idioma lo pisa con {{#contentFor "htmlLang"}}.
+Las plantillas intl compartidas (rutas-intl, canon-intl, tag-intl, page-intl, subscribe-intl) sirven
+6 idiomas desde un mismo archivo, asi que no pueden fijarlo server-side: para esas sigue corrigiendolo
+el script de mas abajo, que ajusta document.documentElement.lang segun el path. --}}<html lang="{{#block "htmlLang"}}es{{/block}}">{{/is}}
   <head>
     {{!-- TITLE:
          - post/page/author: dynamic meta_title

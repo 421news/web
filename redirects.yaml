@@ -947,10 +947,25 @@
   "^/llms\\.txt$": /assets/llms.txt
   "^/llms-full\\.txt$": /assets/llms-full.txt
 
+  # === Páginas EN cuyo slug de Ghost vive en la raíz (agregado 2026-08-16) ===
+  # El sitemap que Ghost genera lista las páginas por su slug crudo (/subscribe/), no por la
+  # ruta de routes.yaml (/en/subscribe/). Esas URLs quedaban a merced del catch-all de abajo,
+  # que les pegaba /es/ y las mandaba a un 404: GSC las reportaba como "Not found (404)" sobre
+  # URLs que nosotros mismos le enviamos en el sitemap. Son páginas EN, así que van a /en/.
+  # DEBEN ir antes del catch-all: Ghost aplica las 301 en orden.
+  "^/canon-en/?$": /en/canon/
+  "^/last-posts/?$": /en/last-posts/
+  "^/my-subscription/?$": /en/my-subscription/
+  "^/routes/?$": /en/routes/
+  "^/subscribe/?$": /en/subscribe/
+  "^/what-is-421/?$": /en/what-is-421/
+
   # === Migración /es/: post slugs (wildcard catch-all) ===
   # Excluye paths de sistema y todos los prefijos de idioma. DEBE ir al final de las 301.
   # `unsubscribe` agregado 2026-08-04: es una ruta propia de Ghost que vive en la RAÍZ, y el
   # catch-all la mandaba a /es/unsubscribe/, que no existe → el link de baja de TODOS los
   # mails caía en un 404. Cualquier ruta de sistema de un solo segmento tiene que listarse
   # acá; las de dos o más (/email/, /r/, /p/, /feedback/) no matchean por el $ del final.
-  "^/(?!es/|en/|zh/|ja/|ko/|tr/|pt/|fr/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/|unsubscribe)([a-z0-9][-a-z0-9]*)/?$": /es/$1/
+  # `community-fantasy-world` agregado 2026-08-16: tiene ruta propia en routes.yaml sirviendo
+  # desde la RAÍZ, pero el catch-all la interceptaba antes y la página quedaba inaccesible.
+  "^/(?!es/|en/|zh/|ja/|ko/|tr/|pt/|fr/|ghost/|assets/|content/|members/|public/|rss/|sitemap|robots|favicon|gracias|oh-yes|author/|unsubscribe|community-fantasy-world)([a-z0-9][-a-z0-9]*)/?$": /es/$1/
