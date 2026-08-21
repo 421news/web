@@ -1013,10 +1013,54 @@ function shouldAutoTranslate(post) {
 }
 
 /**
+ * Idiomas que YA tienen traduccion publicada de este post.
+ *
+ * Por que hace falta: el webhook de Ghost tambien dispara al EDITAR un post ya
+ * publicado, y aca no habia ninguna guarda. Una correccion de tipeo en una nota
+ * vieja re-traducia las 6 lenguas y dejaba 6 duplicados.
+ *
+ * La clave es compuesta, y las tres partes son necesarias (medido sobre las 606
+ * notas ES y las 493 intl del sitio):
+ *   - prefijo de slug: translateAndPublish postea con `slug: post.slug` y Ghost
+ *     deduplica agregando -2/-3. Ese sufijo es lo unico que puede sobrar.
+ *   - tag de idioma: para no contar la propia ES ni la EN.
+ *   - published_at: desempata los 33 slugs ES que terminan en -N, que si no se
+ *     confunden con la traduccion deduplicada de OTRO post (ej. la nota ES
+ *     `gad-2` vs la traduccion de `gad` que quedo como `gad-2`).
+ * published_at sola no alcanza como clave: 27 notas ES comparten el timestamp
+ * 2024-09-16T03:01:00Z de una importacion vieja.
+ *
+ * Residuo conocido: 8 posts TR viejos tienen el slug traducido (los hizo
+ * translate-batch.js, no este webhook), asi que no hay forma de vincularlos y
+ * la guarda no los ve. Si alguno de esos 8 ES se re-publica, TR se duplica.
+ * Cubre 485 de las 493 traducciones existentes.
+ */
+async function existingTranslations(post) {
+  const langs = Object.keys(INTL_LANGS);
+  const filter = `slug:~^'${post.slug}'+tag:[${langs.map(l => `hash-${l}`).join(',')}]`;
+  const data = await ghostRequest('GET', `/ghost/api/admin/posts/?limit=100&include=tags&filter=${encodeURIComponent(filter)}`);
+
+  const done = new Set();
+  for (const p of (data.posts || [])) {
+    if (!/^(-\d+)?$/.test(p.slug.slice(post.slug.length))) continue;
+    if (p.published_at !== post.published_at) {
+      console.log(`[translate] "${p.slug}" comparte prefijo pero no fecha: es traduccion de otro post, no de este`);
+      continue;
+    }
+    for (const t of (p.tags || [])) {
+      const m = /^hash-(pt|fr|zh|ja|ko|tr)$/.exec(t.slug);
+      if (m) done.add(m[1]);
+    }
+  }
+  return done;
+}
+
+/**
  * Auto-translate an ES post to all 6 intl languages.
  * Runs asynchronously (fire-and-forget from webhook).
+ * `force` saltea la guarda de ya-traducido (solo por trigger manual).
  */
-async function autoTranslatePost(postId) {
+async function autoTranslatePost(postId, force = false) {
   if (!AUTO_TRANSLATE_ENABLED) return;
 
   // Fetch the full post with HTML
@@ -1028,11 +1072,21 @@ async function autoTranslatePost(postId) {
     return;
   }
 
-  console.log(`[translate] Starting auto-translation: "${post.title}" → 6 languages`);
+  const yaTraducidos = force ? new Set() : await existingTranslations(post);
+  if (yaTraducidos.size >= Object.keys(INTL_LANGS).length) {
+    console.log(`[translate] "${post.title}" ya tiene las 6 traducciones — nada que hacer`);
+    return { ok: 0, fail: 0, skipped: yaTraducidos.size, langs: {} };
+  }
+  if (yaTraducidos.size) {
+    console.log(`[translate] "${post.title}" ya tiene: ${[...yaTraducidos].join(', ')} — solo faltan las otras`);
+  }
 
-  const results = { ok: 0, fail: 0, langs: {} };
+  console.log(`[translate] Starting auto-translation: "${post.title}" → ${Object.keys(INTL_LANGS).length - yaTraducidos.size} languages`);
+
+  const results = { ok: 0, fail: 0, skipped: yaTraducidos.size, langs: {} };
 
   for (const [lang, langName] of Object.entries(INTL_LANGS)) {
+    if (yaTraducidos.has(lang)) continue;
     let retries = 0;
     while (retries < 2) {
       try {
@@ -1055,14 +1109,14 @@ async function autoTranslatePost(postId) {
     await sleep(500); // Gentle rate limit between languages
   }
 
-  console.log(`[translate] Done: ${results.ok} ok, ${results.fail} failed`);
+  console.log(`[translate] Done: ${results.ok} ok, ${results.fail} failed, ${results.skipped} ya existian`);
   return results;
 }
 
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.3.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.4.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1172,9 +1226,9 @@ app.post('/webhook/translate', async (req, res) => {
   }
 
   // Respond immediately
-  res.status(200).json({ received: true, post_id: postId });
+  res.status(200).json({ received: true, post_id: postId, force: req.body?.force === true });
 
-  autoTranslatePost(postId).catch(err => {
+  autoTranslatePost(postId, req.body?.force === true).catch(err => {
     console.error(`[translate] Manual trigger error: ${err.message}`);
   });
 });
