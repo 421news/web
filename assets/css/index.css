@@ -1003,6 +1003,21 @@ body {
   max-width: 560px;
 }
 .light-mode .post-author-bio { color: var(--negro); }
+/* Link a /es/juan-ruocco-libros/ en la tarjeta de autor (post-es + author.hbs).
+   Usa var(--amarillo) para que light-mode.css lo pase a verde solo. */
+.post-author-libros {
+  display: inline-block;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--amarillo);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  margin: 0 0 1rem;
+  transition: opacity 0.15s ease;
+}
+.post-author-libros:hover { opacity: 0.72; }
 .post-author-socials {
   display: flex;
   gap: 0.5rem;

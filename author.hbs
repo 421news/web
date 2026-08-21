@@ -19,15 +19,6 @@
 <style>
   .author-page-card { margin-top: 0; }
   .author-page-card h1.post-author-name { margin: 0 0 0.85rem; }
-  .bio-libros-link {
-    color: var(--verde);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    font-weight: 700;
-    transition: color 0.15s ease;
-  }
-  .bio-libros-link:hover { color: var(--amarillo); }
 </style>
   <div class="page-wrapper">
     {{> "site-nav-es" }}
@@ -49,8 +40,11 @@
                   <div class="post-author-label">Autor</div>
                   <h1 class="post-author-name">{{name}}</h1>
                   {{#if bio}}
-                    <p class="post-author-bio" data-author-slug="{{slug}}">{{bio}}</p>
+                    <p class="post-author-bio">{{bio}}</p>
                   {{/if}}
+                  {{#match slug "juan-ruocco"}}
+                    <a href="/es/juan-ruocco-libros/" class="post-author-libros">Los libros de Juan Ruocco</a>
+                  {{/match}}
                   <div class="post-author-socials">
                     {{#if twitter}}
                       <a href="https://x.com/{{twitter}}" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
@@ -235,17 +229,3 @@
 })();
 </script>
 
-<script>
-// Linkify "tres libros..." en la bio de Juan Ruocco → /es/juan-ruocco-libros/
-(function () {
-  var bio = document.querySelector('p.post-author-bio[data-author-slug="juan-ruocco"]');
-  if (!bio) return;
-  var re = /(Publiqué\s+)([^.]*libros[^.]*)(\.)/i;
-  var m = bio.innerHTML.match(re);
-  if (!m) return;
-  bio.innerHTML = bio.innerHTML.replace(
-    re,
-    '$1<a href="/es/juan-ruocco-libros/" class="bio-libros-link">$2</a>$3'
-  );
-})();
-</script>

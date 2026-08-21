@@ -18,6 +18,11 @@
     {{#if bio}}
       <p class="post-author-bio">{{bio}}</p>
     {{/if}}
+    {{!-- Link a /es/juan-ruocco-libros/. El param librosLabel SOLO lo pasa post-es.hbs:
+         post-en.hbs y post-intl.hbs comparten este partial y no deben linkear a una pagina en espanol. --}}
+    {{#if ../librosLabel}}{{#match slug "juan-ruocco"}}
+      <a href="/es/juan-ruocco-libros/" class="post-author-libros">{{../librosLabel}}</a>
+    {{/match}}{{/if}}
     <div class="post-author-socials">
       {{#if twitter}}
         <a href="https://x.com/{{twitter}}" target="_blank" rel="noopener noreferrer" aria-label="X / Twitter">
