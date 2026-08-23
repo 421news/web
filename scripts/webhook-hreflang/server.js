@@ -18,6 +18,7 @@ const REVENUE_ENABLED = !!(MP_TOKEN && GHOST_ADMIN_KEY);
 
 // Bot de X: publica cada nota nueva en español. Apagado salvo X_BOT=on|dry
 const xBot = require('./x-bot');
+const C = require('./hreflang-cluster');
 
 // Gate del número del mes de la Revista 421 (saca el PDF nuevo del HTML público y lo sirve
 // verificando al member). init() más abajo, cuando ya existen las deps que le pasamos.
@@ -156,198 +157,178 @@ function computeScore(postA, postB) {
   return slugScore + timeScore;
 }
 
-// --- Hreflang tag injection ---
-
-/**
- * Strip all existing hreflang-related tags from codeinjection_head.
- * Removes:
- *   - <meta name="english-version" ...>
- *   - <meta name="spanish-version" ...>
- *   - <link rel="alternate" hreflang="..." ...>
- * Returns cleaned string (may have trailing whitespace stripped).
- */
-function stripHreflangTags(html) {
-  if (!html) return '';
-  return html
-    .replace(/<meta\s+name="(?:english|spanish)-version"\s+content="[^"]*"\s*\/?>\s*/gi, '')
-    .replace(/<link\s+rel="alternate"\s+hreflang="[^"]*"\s+href="[^"]*"\s*\/?>\s*/gi, '')
-    .trim();
-}
-
-/**
- * Build the hreflang <link> tag for a given language and slug.
- */
-function buildHreflangLink(lang, slug) {
-  const prefix = lang === 'en' ? '/en/' : '/es/';
-  return `<link rel="alternate" hreflang="${lang}" href="https://www.421.news${prefix}${slug}/" />`;
-}
-
-/**
- * Inject hreflang tags (meta + link) into a post's codeinjection_head.
- *
- * @param {string} postId - Ghost post ID to update
- * @param {string} postLang - Language of this post: 'es' or 'en'
- * @param {string} postSlug - Slug of this post
- * @param {string|null} pairSlug - Slug of the translation pair (null if no pair found)
- */
-async function injectHreflangTags(postId, postLang, postSlug, pairSlug) {
-  // Fetch current post state (need updated_at for optimistic locking)
-  const current = await ghostRequest('GET', `/ghost/api/admin/posts/${postId}/`);
-  const post = current.posts[0];
-  const existing = post.codeinjection_head || '';
-
-  // Build the tags to inject
-  const tags = [];
-
-  if (pairSlug) {
-    // Has a translation pair: inject meta tag + both hreflang links
-    if (postLang === 'es') {
-      tags.push(`<meta name="english-version" content="${pairSlug}" />`);
-      tags.push(buildHreflangLink('es', postSlug));
-      tags.push(buildHreflangLink('en', pairSlug));
-    } else {
-      tags.push(`<meta name="spanish-version" content="${pairSlug}" />`);
-      tags.push(buildHreflangLink('en', postSlug));
-      tags.push(buildHreflangLink('es', pairSlug));
-    }
-  } else {
-    // No translation pair: self-referential hreflang only
-    tags.push(buildHreflangLink(postLang, postSlug));
-  }
-
-  const tagsBlock = tags.join('\n');
-
-  // Strip old hreflang tags from existing content (idempotent)
-  const cleaned = stripHreflangTags(existing);
-
-  // Check if the cleaned content + new tags would be identical to what's already there
-  const newInjection = cleaned ? `${cleaned}\n${tagsBlock}` : tagsBlock;
-
-  if (newInjection === existing.trim()) {
-    return { skipped: true, reason: 'already-tagged' };
-  }
-
-  await ghostRequest('PUT', `/ghost/api/admin/posts/${postId}/`, {
-    posts: [{ codeinjection_head: newInjection, updated_at: post.updated_at }]
-  });
-
-  return { skipped: false, tags: tags.length };
-}
-
 // --- Webhook handler ---
 
-async function handleWebhook(payload) {
-  const post = payload?.post?.current;
-  if (!post) {
-    return { status: 'ignored', reason: 'no post data in payload' };
+/** Un post publicado por slug exacto (o null). */
+async function postPorSlug(slug) {
+  const d = await ghostRequest('GET', `/ghost/api/admin/posts/?limit=1&include=tags&filter=${encodeURIComponent(`slug:'${slug}'`)}`);
+  return (d.posts || [])[0] || null;
+}
+
+/** Candidatos a miembros del cluster: comparten prefijo de slug con el ES, más el EN del meta. */
+async function candidatosDe(esPost) {
+  const d = await ghostRequest('GET', `/ghost/api/admin/posts/?limit=100&include=tags&filter=${encodeURIComponent(`slug:~^'${esPost.slug}'`)}`);
+  const out = d.posts || [];
+  const enSlug = C.metaValue(esPost.codeinjection_head, 'english-version');
+  if (enSlug && !out.some(p => p.slug === enSlug)) {
+    const en = await postPorSlug(enSlug);
+    if (en) out.push(en);
+  }
+  return out;
+}
+
+/**
+ * La nota ES base de cualquier miembro del cluster.
+ * EN -> por el meta spanish-version. Intl -> por slug sin el sufijo -N que agrega
+ * Ghost al deduplicar, validando published_at (hay 33 slugs ES que ya terminan en -N).
+ */
+async function notaBaseDe(post) {
+  const lang = C.postLang(post);
+  if (lang === 'es') return post;
+  if (lang === 'en') {
+    const esSlug = C.metaValue(post.codeinjection_head, 'spanish-version');
+    if (!esSlug) return null;
+    const es = await postPorSlug(esSlug);
+    return es && C.postLang(es) === 'es' ? es : null;
+  }
+  const base = post.slug.replace(/-\d+$/, '');
+  if (base === post.slug) return null;             // slug traducido: no vinculable
+  const es = await postPorSlug(base);
+  if (!es || C.postLang(es) !== 'es') return null;
+  return es.published_at === post.published_at ? es : null;
+}
+
+/**
+ * Escribe el set completo de <link hreflang> en TODOS los miembros del cluster.
+ *
+ * Reemplaza al viejo injectHreflangTags, que solo sabía de ES<->EN y tenía dos
+ * defectos graves:
+ *   1. Trataba como español todo post sin tag #en, así que a una traducción
+ *      PT/FR/ZH/JA/KO/TR le escribía hreflang="es" apuntando a su propia URL.
+ *      Dejó 335 posts intl declarando que su versión española era ella misma.
+ *   2. Si no encontraba par, hacía strip y dejaba solo el self — o sea BORRABA
+ *      un par correcto preexistente. Y como el par se busca entre los 50 posts
+ *      más recientes del otro idioma, en una nota vieja nunca lo encontraba.
+ * Ahora el par conocido vive en el meta y se respeta; el score solo se usa para
+ * descubrir uno nuevo.
+ *
+ * Idempotente a propósito: nuestro propio PUT puede re-disparar el webhook y la
+ * segunda pasada no debe escribir.
+ */
+async function syncCluster(esPost) {
+  const candidatos = await candidatosDe(esPost);
+  const { members, conflicts } = C.clusterFrom(esPost, candidatos);
+
+  if (conflicts.length) {
+    // Dos posts reclamando el mismo idioma haría un hreflang inválido (Google
+    // exige una sola URL por idioma). Mismo criterio que el apareo AMBIGUO:
+    // preferimos no escribir a escribir algo que manda al lector a otra nota.
+    console.error(`[hreflang] CONFLICTO en "${esPost.slug}": ${conflicts.map(c => `${c.lang} ${c.a} vs ${c.b}`).join(' | ')} — no sincronizo`);
+    return { status: 'conflict', conflicts };
   }
 
-  const postSlug = post.slug;
-  const postId = post.id;
-  const tags = (post.tags || []).map(t => t.slug);
-  const isEnglish = tags.includes('hash-en');
-  const lang = isEnglish ? 'EN' : 'ES';
-  const postLang = isEnglish ? 'en' : 'es';
+  const links = C.linksFor(members);
+  const langs = Object.keys(members);
+  let escritos = 0;
+  for (const lang of langs) {
+    const m = members[lang];
+    const nuevo = C.applyToHead(m.codeinjection_head || '', links);
+    if (C.mismoBloque(nuevo, m.codeinjection_head)) continue;
+    await ghostRequest('PUT', `/ghost/api/admin/posts/${m.id}/`, {
+      posts: [{ codeinjection_head: nuevo, updated_at: m.updated_at }]
+    });
+    escritos++;
+  }
+  console.log(`[hreflang] Cluster "${esPost.slug}": ${langs.join(',')} (${escritos} escritos)`);
+  return { status: 'synced', langs, escritos };
+}
 
-  console.log(`[hreflang] Post published: "${post.title}" (${lang}, slug: ${postSlug})`);
-
-  // Determine what to search for
+/** Descubre el par ES<->EN por score y persiste los metas. Solo cuando no hay meta todavía. */
+async function descubrirPar(post, postLang) {
+  const isEnglish = postLang === 'en';
   const otherLangFilter = isEnglish ? 'tag:-hash-en' : 'tag:hash-en';
-  const publishedAt = post.published_at;
-
-  if (!publishedAt) {
-    return { status: 'ignored', reason: 'no published_at' };
-  }
-
-  // Fetch recent posts in the other language (last 7 days, limit 50)
   const data = await contentAPIGet(
     `/ghost/api/content/posts/?key=${GHOST_CONTENT_KEY}` +
     `&filter=${encodeURIComponent(otherLangFilter)}` +
     `&limit=50&order=published_at%20desc` +
     `&include=tags&fields=id,slug,title,published_at`
   );
-
   const candidates = data.posts || [];
-  console.log(`[hreflang] Found ${candidates.length} candidate posts in other language`);
 
-  // Score all candidates
-  let bestMatch = null;
-  let bestScore = 0;
-
-  let empatesTemporales = 0;
+  let bestMatch = null, bestScore = 0, empatesTemporales = 0;
   for (const candidate of candidates) {
     const score = computeScore(post, candidate);
     if (score === SCORE_SOLO_TEMPORAL) empatesTemporales++;
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = candidate;
-    }
+    if (score > bestScore) { bestScore = score; bestMatch = candidate; }
   }
 
-  // Guarda contra el apareo por moneda al aire: si el mejor match se apoya SOLO en la
-  // proximidad temporal y hay más de un candidato en esa misma ventana, no hay forma de
-  // saber cuál es el correcto. Antes se elegía el primero del loop y así se cruzaron
-  // artículos que no tenían nada que ver. Preferimos no aparear: un post sin par se
-  // arregla a mano, uno mal apareado manda al lector al artículo equivocado y nadie lo ve.
+  // Guarda contra el apareo por moneda al aire: si el mejor match se apoya SOLO en
+  // la proximidad temporal y hay más de un candidato en esa ventana, no hay forma
+  // de saber cuál es. Un post sin par se arregla a mano; uno mal apareado manda al
+  // lector al artículo equivocado y nadie lo ve.
   if (bestScore === SCORE_SOLO_TEMPORAL && empatesTemporales > 1) {
-    console.error(`[hreflang] AMBIGUO: ${empatesTemporales} candidatos publicados dentro de la misma ventana de 2 min y ninguno comparte slug con "${postSlug}". No apareo — revisar a mano.`);
-    try {
-      await injectHreflangTags(postId, postLang, postSlug, null);
-    } catch (err) {
-      console.error(`[hreflang] Error en hreflang self: ${err.message}`);
-    }
-    return { status: 'ambiguous', candidatos: empatesTemporales, selfHreflang: true };
+    console.error(`[hreflang] AMBIGUO: ${empatesTemporales} candidatos en la misma ventana de 2 min y ninguno comparte slug con "${post.slug}". No apareo.`);
+    return null;
+  }
+  if (!bestMatch || bestScore < 0.3) {
+    console.log(`[hreflang] Sin par para "${post.slug}" (mejor score: ${bestScore.toFixed(3)})`);
+    return null;
   }
 
-  const THRESHOLD = 0.3;
-  if (!bestMatch || bestScore < THRESHOLD) {
-    console.log(`[hreflang] No match found (best score: ${bestScore.toFixed(3)})`);
-
-    // No pair found: inject self-referential hreflang only
-    try {
-      const result = await injectHreflangTags(postId, postLang, postSlug, null);
-      console.log(`[hreflang] Self-referential hreflang for ${postSlug}: ${result.skipped ? result.reason : 'injected'}`);
-    } catch (err) {
-      console.error(`[hreflang] Error injecting self-referential hreflang: ${err.message}`);
-    }
-
-    return { status: 'no-match', bestScore: bestScore.toFixed(3), selfHreflang: true };
-  }
-
-  console.log(`[hreflang] Match: "${bestMatch.title}" (slug: ${bestMatch.slug}, score: ${bestScore.toFixed(3)})`);
-
-  // Inject hreflang tags in both posts
+  console.log(`[hreflang] Par encontrado: "${bestMatch.title}" (score ${bestScore.toFixed(3)})`);
   const esPost = isEnglish ? bestMatch : post;
   const enPost = isEnglish ? post : bestMatch;
-  const esId = isEnglish ? bestMatch.id : postId;
-  const enId = isEnglish ? postId : bestMatch.id;
+  await escribirMetaPar(esPost, enPost);
+  return await postPorSlug(esPost.slug);
+}
 
-  const results = {};
+/** Persiste el par en los metas, que son la fuente única de la relación ES<->EN. */
+async function escribirMetaPar(esPost, enPost) {
+  for (const [post, name, valor] of [[esPost, 'english-version', enPost.slug], [enPost, 'spanish-version', esPost.slug]]) {
+    const full = await ghostRequest('GET', `/ghost/api/admin/posts/${post.id}/`).then(d => d.posts[0]);
+    const head = full.codeinjection_head || '';
+    if (C.metaValue(head, name) === valor) continue;
+    const limpio = head.replace(/<meta\s+name="(?:english|spanish)-version"\s+content="[^"]*"\s*\/?>\s*/gi, '').trim();
+    const nuevo = [`<meta name="${name}" content="${valor}" />`, limpio].filter(Boolean).join('\n');
+    await ghostRequest('PUT', `/ghost/api/admin/posts/${post.id}/`, {
+      posts: [{ codeinjection_head: nuevo, updated_at: full.updated_at }]
+    });
+  }
+}
 
-  // ES post gets: meta english-version + hreflang links for both ES and EN
-  try {
-    results.es = await injectHreflangTags(esId, 'es', esPost.slug, enPost.slug);
-    console.log(`[hreflang] ES post (${esPost.slug}): ${results.es.skipped ? results.es.reason : 'injected'}`);
-  } catch (err) {
-    console.error(`[hreflang] Error injecting ES post: ${err.message}`);
-    results.es = { error: err.message };
+// --- Webhook handler ---
+
+async function handleWebhook(payload) {
+  const raw = payload?.post?.current;
+  if (!raw || !raw.id) return { status: 'ignored', reason: 'no post data in payload' };
+
+  const post = await ghostRequest('GET', `/ghost/api/admin/posts/${raw.id}/?include=tags`).then(d => d.posts[0]);
+  if (!post) return { status: 'ignored', reason: 'post not found' };
+  if (!post.published_at) return { status: 'ignored', reason: 'no published_at' };
+
+  const lang = C.postLang(post);
+  console.log(`[hreflang] Post: "${post.title}" (${lang}, slug: ${post.slug})`);
+
+  let esPost = await notaBaseDe(post);
+
+  // Solo se busca par por heurística cuando todavía no hay uno registrado. Si ya
+  // existe el meta, manda el meta: es la fuente única y no se pisa con un score.
+  if (!esPost && (lang === 'es' || lang === 'en')) {
+    esPost = await descubrirPar(post, lang);
   }
 
-  // EN post gets: meta spanish-version + hreflang links for both EN and ES
-  try {
-    results.en = await injectHreflangTags(enId, 'en', enPost.slug, esPost.slug);
-    console.log(`[hreflang] EN post (${enPost.slug}): ${results.en.skipped ? results.en.reason : 'injected'}`);
-  } catch (err) {
-    console.error(`[hreflang] Error injecting EN post: ${err.message}`);
-    results.en = { error: err.message };
+  if (!esPost) {
+    // Sin nota base: al menos dejarle el self-referencial con su idioma REAL.
+    const solo = C.applyToHead(post.codeinjection_head || '', [`<link rel="alternate" hreflang="${lang}" href="${C.SITE}/${lang}/${post.slug}/" />`]);
+    if (!C.mismoBloque(solo, post.codeinjection_head)) {
+      await ghostRequest('PUT', `/ghost/api/admin/posts/${post.id}/`, {
+        posts: [{ codeinjection_head: solo, updated_at: post.updated_at }]
+      });
+    }
+    return { status: 'no-cluster', lang, selfHreflang: true };
   }
 
-  return {
-    status: 'matched',
-    score: bestScore.toFixed(3),
-    pair: { es: esPost.slug, en: enPost.slug },
-    injection: results
-  };
+  return await syncCluster(esPost);
 }
 
 // =============================================================================
@@ -1110,13 +1091,27 @@ async function autoTranslatePost(postId, force = false) {
   }
 
   console.log(`[translate] Done: ${results.ok} ok, ${results.fail} failed, ${results.skipped} ya existian`);
+
+  // Reescribir el hreflang de todo el cluster con las traducciones nuevas adentro.
+  // El webhook de publicación de cada traducción ya lo dispara, pero depender de eso
+  // deja el set incompleto si Ghost no notifica: acá el estado final queda cerrado
+  // en la misma corrida. Es idempotente, así que la doble pasada no escribe dos veces.
+  if (results.ok > 0) {
+    try {
+      const fresco = await ghostRequest('GET', `/ghost/api/admin/posts/${post.id}/?include=tags`).then(d => d.posts[0]);
+      await syncCluster(fresco);
+    } catch (err) {
+      console.error(`[translate] Error sincronizando hreflang del cluster: ${err.message}`);
+    }
+  }
+
   return results;
 }
 
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.4.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.5.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1319,44 +1314,20 @@ async function hreflangCron() {
     const posts = data.posts || [];
     let processed = 0;
 
+    // Se corre siempre: handleWebhook es idempotente (no escribe si el bloque ya
+    // es el correcto), así que no hace falta adivinar acá qué post está incompleto.
+    // El chequeo previo miraba solo el par ES<->EN y por eso nunca detectaba que a
+    // una nota le faltaran las traducciones intl en el set.
     for (const post of posts) {
-      const tags = (post.tags || []).map(t => t.slug);
-      const isEnglish = tags.includes('hash-en');
-      const metaName = isEnglish ? 'spanish-version' : 'english-version';
-      const head = post.codeinjection_head || '';
-
-      // Check if post is missing hreflang <link> tags (the new requirement)
-      const hasHreflangLink = head.includes('rel="alternate"') && head.includes('hreflang=');
-      // Also check for the legacy meta tag
-      const hasMetaTag = head.includes(`name="${metaName}"`);
-
-      // Skip if already has both hreflang link tags
-      // (posts with meta but without link tags still need updating)
-      if (hasHreflangLink && hasMetaTag) {
-        continue;
-      }
-
-      // Also skip if has self-referential hreflang and no pair is expected
-      // (we'll let handleWebhook figure out if there's a pair)
-      if (hasHreflangLink && !hasMetaTag) {
-        // Has a self-referential link but no meta = no pair was found before.
-        // Re-run to check if a pair has been published since.
-        // (handleWebhook will upgrade from self-referential to full pair if found)
-      }
-
-      // Run the pairing handler
       const result = await handleWebhook({
         post: { current: { id: post.id, slug: post.slug, title: post.title, published_at: post.published_at, tags: post.tags } }
       });
 
-      if (result.status === 'matched') {
+      if (result.status === 'synced' && result.escritos > 0) {
         processed++;
-        console.log(`[hreflang-cron] Paired: ${result.pair.es} <-> ${result.pair.en}`);
-      } else if (result.status === 'no-match' && result.selfHreflang) {
-        if (!hasHreflangLink) {
-          processed++;
-          console.log(`[hreflang-cron] Self-hreflang injected for: ${post.slug}`);
-        }
+        console.log(`[hreflang-cron] Sincronizado ${post.slug}: ${result.langs.join(',')} (${result.escritos} escritos)`);
+      } else if (result.status === 'conflict') {
+        console.error(`[hreflang-cron] Conflicto sin resolver en ${post.slug}`);
       }
     }
 
