@@ -38,7 +38,10 @@
 
     var currentLang = detectCurrentLang();
     var hreflangMap = getHreflangMap();
-    var hasHreflang = Object.keys(hreflangMap).length > 1;
+    // >= 1: alcanza con UN link para saber que estamos en un post con traduccion.
+    // Muchos posts solo traen el link al otro idioma, sin el self-referencial;
+    // con `> 1` caian al branch de pagina comun y el selector mandaba a la home.
+    var hasHreflang = Object.keys(hreflangMap).length >= 1;
     var path = window.location.pathname.replace(/\/?$/, '/');
 
     selectors.forEach(function(selector) {
