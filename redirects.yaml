@@ -971,6 +971,24 @@
   "^/subscribe/?$": /en/subscribe/
   "^/what-is-421/?$": /en/what-is-421/
 
+  # === Traducciones duplicadas consolidadas (2026-08-23) ===
+  # Cada nota tenía DOS versiones publicadas en el mismo idioma. Eso es hreflang
+  # inválido (Google exige una URL por idioma) y hacía que el webhook se abstuviera
+  # de sincronizar el cluster entero. Se conservó la que más tráfico traía en GSC a
+  # 90 días y la otra redirige acá. Backup del contenido borrado en
+  # backups/backup-posts-duplicados-borrados-2026-08-23.json.
+  ^/fr/grant-morrison-8/?$: /fr/grant-morrison-7/
+  ^/pt/la-trampa-de-la-cultura-joven-3/?$: /pt/la-trampa-de-la-cultura-joven-2/
+  ^/pt/como-ver-one-piece-8/?$: /pt/como-ver-one-piece-7/
+  ^/tr/demon-slayer-kimetsu-no-yaiba-9/?$: /tr/demon-slayer-kimetsu-no-yaiba-7/
+  ^/ko/demon-slayer-kimetsu-no-yaiba-6/?$: /ko/demon-slayer-kimetsu-no-yaiba-8/
+  ^/tr/masaustu-bilgisayarlarin-ovgusu/?$: /tr/elogio-computadoras-escritorio-7/
+  ^/tr/internetin-curutulmesine-tersine-muhendislik-uygulamak/?$: /tr/ingenieria-inversa-a-la-mierdificacion-de-internet-6/
+  ^/tr/bir-cybercirujanin-dijital-oz-belirlenim-rehberi/?$: /tr/guia-cyberciruja-para-la-autodeterminacion-digital-7/
+  ^/tr/self-hosting-evde-kendi-bulutunu-barindirma-sanati/?$: /tr/selfhosting-alojar-nube-hogarena-7/
+  ^/tr/zaten-internet-icin-odeme-yapiyorsun-gerisi-icin-odeme-yapma/?$: /tr/ya-pagas-internet-no-pagues-por-lo-demas-7/
+  ^/tr/low-tech-high-life-cyberpunka-bir-yanit/?$: /tr/low-tech-high-life-cottagecore-cyberpunk-6/
+
   # === Migración /es/: post slugs (wildcard catch-all) ===
   # Excluye paths de sistema y todos los prefijos de idioma. DEBE ir al final de las 301.
   # `unsubscribe` agregado 2026-08-04: es una ruta propia de Ghost que vive en la RAÍZ, y el
