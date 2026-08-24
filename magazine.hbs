@@ -8,32 +8,13 @@
      depende de que el file card del PDF exista en un solo lugar: una segunda
      pagina volveria a publicar la URL que el gate saca del HTML, y el adelanto
      de un mes para suscriptores dejaria de existir.
-     Lo que se traduce es la capa de presentacion, en assets/js/revista.js. --}}
+     Lo que se traduce es la capa de presentacion, en assets/js/revista.js.
 
-<script>
-  document.title = '421 Magazine | 421.news';
-  (function() {
-    var title = '421 Magazine | 421.news';
-    var desc = '421’s digital magazine. Every issue free to download.';
-    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
-    var url = 'https://www.421.news/en/magazine/';
-    function setMeta(attr, key, val) {
-      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
-      if (el) { el.content = val; }
-      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
-    }
-    setMeta('name', 'description', desc);
-    setMeta('property', 'og:title', title);
-    setMeta('property', 'og:description', desc);
-    setMeta('property', 'og:image', img);
-    setMeta('property', 'og:url', url);
-    setMeta('property', 'og:type', 'website');
-    setMeta('name', 'twitter:card', 'summary_large_image');
-    setMeta('name', 'twitter:title', title);
-    setMeta('name', 'twitter:description', desc);
-    setMeta('name', 'twitter:image', img);
-  })();
-</script>
+     Los METADATOS (title, description, OG) salen de otra pagina de Ghost,
+     "magazine-en", que existe solo para eso: no tiene file cards, asi que no
+     duplica la URL del PDF. Con data: page.revista-421 el <title> y la
+     description salian en castellano, y para page el theme no los puede pisar
+     con un block. --}}
 
 <div class="page-wrapper">
   {{> "general-styling"}}
