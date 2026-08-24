@@ -73,6 +73,35 @@ function clusterFrom(esPost, candidates, opts = {}) {
   return { members, conflicts };
 }
 
+/**
+ * Todos los clusters de un listado completo de posts, resuelto en memoria.
+ * Mismo criterio que clusterFrom — este módulo sigue siendo el único que decide
+ * quién es traducción de quién — pero sin una consulta por nota, para poder
+ * barrer el sitio entero de una.
+ */
+function clustersFrom(posts) {
+  const pub = posts.filter(p => !p.status || p.status === 'published');
+  const bySlug = new Map();
+  const byBase = new Map();
+  for (const p of pub) {
+    bySlug.set(p.slug, p);
+    for (const k of new Set([p.slug, p.slug.replace(/-\d+$/, '')])) {
+      if (!byBase.has(k)) byBase.set(k, []);
+      byBase.get(k).push(p);
+    }
+  }
+  const out = [];
+  for (const es of pub) {
+    if (postLang(es) !== 'es') continue;
+    const cands = (byBase.get(es.slug) || []).filter(p => p.id !== es.id);
+    const enSlug = metaValue(es.codeinjection_head, 'english-version');
+    const en = enSlug ? bySlug.get(enSlug) : null;
+    if (en && !cands.some(p => p.id === en.id)) cands.push(en);
+    out.push(clusterFrom(es, cands));
+  }
+  return out;
+}
+
 /** Los <link> del set completo, self incluido. Orden estable: LANGS. */
 function linksFor(members) {
   return LANGS
@@ -100,4 +129,4 @@ function mismoBloque(a, b) {
   return set(a) === set(b) && resto(a) === resto(b);
 }
 
-module.exports = { LANGS, INTL, SITE, postLang, metaValue, esTraduccionDe, clusterFrom, linksFor, applyToHead, mismoBloque };
+module.exports = { LANGS, INTL, SITE, postLang, metaValue, esTraduccionDe, clusterFrom, clustersFrom, linksFor, applyToHead, mismoBloque };

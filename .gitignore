@@ -42,3 +42,6 @@ dist/
 build/
 *.zip
 assets/data/revenue-data.json
+
+# Salida del sweep de curaduria (se regenera en cada corrida)
+scripts/webhook-hreflang/curaduria-ultimo-sweep.json

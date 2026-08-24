@@ -67,8 +67,22 @@
             .catch(function () { return []; });
     }
 
-    // For intl: map an intl post's slug to its canonical (ES) slug via prefix matching
+    // El slug ES de un post, que es la clave con la que rutas.json guarda el orden
+    // y las razones del canon.
+    //
+    //   EN   -> meta spanish-version del codeinjection_head. Es la fuente unica del
+    //           par ES<->EN (la misma que alimenta el hreflang), no una heuristica
+    //           nueva. Antes esta funcion devolvia el slug INGLES, que nunca esta en
+    //           rutas.json: /en/canon/ se renderizaba sin ninguna razon y las rutas
+    //           de /en/routes/ salian ordenadas por fecha en vez de por la secuencia
+    //           curada.
+    //   intl -> prefijo de slug: la traduccion se postea con el slug del ES y Ghost
+    //           la deduplica agregando -2 / -3.
     function canonicalSlug(post, knownEsSlugs) {
+        if (isEN) {
+            var m = /<meta\s+name="spanish-version"\s+content="([^"]+)"/.exec(post.codeinjection_head || '');
+            return m ? m[1] : null;
+        }
         if (!isIntl) return post.slug;
         for (var i = 0; i < knownEsSlugs.length; i++) {
             var es = knownEsSlugs[i];

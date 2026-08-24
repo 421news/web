@@ -10,13 +10,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -25,13 +21,13 @@
       "tesis": "Encontrar en Star Wars principios del derecho constitucional. Encontrar en Fallout principios rudimentarios de economía. La cultura popular puede ser sólo entretenimiento o un nexo a ideas más complejas.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -43,10 +39,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -58,10 +54,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -75,9 +71,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ]
     },
     {
@@ -90,9 +86,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -100,14 +96,14 @@
       "nombre": "Hacelo vos mismo",
       "tesis": "Pan, milanesas, fanzines, videojuegos, wargames: todo lo que podés hacer con tus propias manos.",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -119,9 +115,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -145,10 +142,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "Tu propia nube, tus propias reglas. La infraestructura personal como acto de independencia."
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "Liberar el dispositivo que más usás. El celular como territorio de soberanía."
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -195,36 +188,40 @@
       "razon": "Quién fue San Jorge y qué significa la leyenda del dragón. De la Edad Media hasta hoy."
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "El Magus de Northampton: cómics, ocultismo y anarquismo. Un repaso profundo por la carrera del autor más influyente del medio."
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "A veinticinco años, sigue rompiendo récords. Lógica comunitaria e independiente desde la periferia argentina."
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "El héroe de metal argentino. Cómo un tipo de Villa Recondo cambió la historia del coleccionismo y la nerdencia nacional."
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "Cómo se creó el juego de rol más trascendente de todos. Historia esencial desde la Caja Blanca hasta hoy."
-    },
-    {
       "slug": "akira-1988",
       "razon": "Crítica cultural en su máxima expresión. Hablar de anime es hablar de política, urbanismo y futuro."
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "De la idea a la versión final. Guía paso a paso de estas publicaciones transmisoras de cultura."
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "Filosofía de la mente en una conversación con ChatGPT-3. Acá empezó 421 a discutir en serio qué hay del otro lado de la pantalla."
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "Antropología de los juegos de mesa. Un texto que convierte una partida de cartas en teoría social."
+      "slug": "mcluhan-ia-llm",
+      "razon": "McLuhan aplicado a los LLM: la técnica no cambia lo que opinás, cambia cómo percibís el mundo."
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "Juego, lore y hobby en el wargame por excelencia. La puerta de entrada a un universo inagotable."
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "Correr modelos de lenguaje en tu propia máquina, sin nube ni servidores ajenos. Soberanía digital aplicada a la IA."
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "La pereza metacognitiva, medida por los estudios: delegar el pensamiento tiene un costo y se paga en el cerebro."
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "Un réquiem por las ideas de Mencius Moldbug, leídas cinco años después de que dejaran de ser un chiste de internet."
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "La evolución del humor digital desde 4chan: cómo la ironía dejó de ser un escudo y terminó en la arena política."
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "De 11 millones de bits, tu cerebro procesa 50. Entender ese filtro es el primer paso de la soberanía cognitiva."
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "La disolución del yo, el arte en la máquina y la dignidad de negarse a participar de la industria creativa."
     }
   ],
   "rutas_en": [
@@ -238,13 +235,9 @@
         "reverse-engineering-the-enshittification-of-the-internet",
         "you-already-pay-for-internet-dont-pay-for-the-rest",
         "defense-internet-anonymity",
-        "android-phones-without-google",
-        "self-hosting-home-cloud",
-        "small-web-what-it-is-how-it-works",
-        "pop-os-guide-to-installing-linux-pc",
-        "in-praise-of-desktop-computers",
         "cyberciruja-guide-digital-self-determination",
-        "gael-duval-new-mobile-world"
+        "how-to-avoid-losing-cognitive-sovereignty-en",
+        "how-to-protect-brain-algorithm-cognitive-sovereignty-biochemistry-en"
       ]
     },
     {
@@ -253,13 +246,13 @@
       "tesis": "Finding constitutional law principles in Star Wars. Finding rudimentary economics in Fallout. Popular culture can be just entertainment or a bridge to more complex ideas.",
       "slugs": [
         "constitutional-law-in-star-wars",
-        "economics-lessons-from-fallout",
-        "fallout-new-vegas-political-factions",
         "ballard-crash-cronenberg-movie",
         "yarvin-houellebecq-land-fisher-political-readings-of-lovecraft",
         "kayfabe-pro-wrestling-is-real",
-        "grant-morrison-batman",
-        "alan-moore-comic-magic-anarchy"
+        "alan-moore-comic-magic-anarchy",
+        "dark-souls-videogame-tragedy-dignity-human-en",
+        "purism-homer-odyssey-nolan-movie-en",
+        "borges-argentina-precursor-movie-backrooms-en"
       ]
     },
     {
@@ -271,10 +264,10 @@
         "history-of-parque-rivadavia",
         "dinosaurs-discovered-in-argentina",
         "argentina-before-argentina",
-        "argentina-ice-cream-story",
         "ricardo-fort-the-real-super-chad",
         "milei-libra-crypto-scam",
-        "argentina-paraguay-border"
+        "argentina-paraguay-border",
+        "argentinosaurus-dinosaur-argentina-en"
       ]
     },
     {
@@ -285,12 +278,11 @@
         "byung-chul-han-sovereignty-mental-states",
         "becoming-ungovernable-peter-sloterdijk",
         "nick-land-the-apostle-of-chaos",
-        "teleoplexia-nick-land-en",
         "glossary-philosophy-of-technology",
-        "do-language-models-dream-of-electric-sheep-2",
         "on-the-fifth-aeon-peter-carroll",
         "psychos-versus-schizos",
-        "mcluhan-grammar-ai"
+        "curtis-yarvin-democracy-monarchy-neoreaction-neocameralism-en",
+        "cybernetic-art-fernando-montes-vera-en"
       ]
     },
     {
@@ -304,9 +296,9 @@
         "ghost-in-the-shell-1995-en",
         "robocop-1987",
         "gojira-1954-godzilla-2",
-        "batman-comics-reading-guide",
         "science-fiction-reading-guide",
-        "in-the-beginning-was-the-canon"
+        "in-the-beginning-was-the-canon",
+        "the-thing-1982-john-carpenter-en"
       ]
     },
     {
@@ -319,9 +311,9 @@
         "pepe-the-infinite-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet-en",
         "memes-and-assassination",
-        "ethnosoldiers-internet-memes-manifestos",
-        "can-the-left-make-memes",
-        "epstein-4chan-reddit-en"
+        "epstein-4chan-reddit-en",
+        "theory-meta-irony-post-irony-meme-sphere-en",
+        "homestuck-webcomic"
       ]
     },
     {
@@ -329,14 +321,14 @@
       "nombre": "Do It Yourself",
       "tesis": "Bread, milanesas, zines, video games, wargames: everything you can make with your own hands.",
       "slugs": [
-        "how-to-make-homemade-milanesas",
         "how-to-make-homemade-bread",
-        "outdoor-cannabis-growing-guide",
         "how-to-make-fanzines-and-why-they-matter",
-        "make-your-first-narrative-game-with-bitsy",
-        "warhammer-40k-introduction-to-wargames",
+        "interviews-with-writers-luciano-lamberti",
         "making-and-playtesting-a-board-game",
-        "introduction-to-fpv-drones"
+        "introduction-to-fpv-drones",
+        "android-phones-without-google",
+        "self-hosting-home-cloud",
+        "how-to-set-up-a-home-server-en"
       ]
     },
     {
@@ -345,13 +337,13 @@
       "tesis": "It's not magic, it's not the apocalypse. It's a tool worth understanding before it understands you.",
       "slugs": [
         "claude-code-software-moats-2026",
-        "do-language-models-dream-of-electric-sheep",
-        "ai-and-poetry-human-poiesis-against-llm",
         "do-language-models-dream-of-electric-sheep-2",
+        "ai-and-poetry-human-poiesis-against-llm",
         "mcluhan-grammar-ai",
-        "ai-broke-the-ram-economy",
-        "zerebro-ai-agents-memecoins-crypto-art",
-        "bio-ai-deep-learning-protein-research"
+        "bio-ai-deep-learning-protein-research",
+        "do-language-models-dream-of-electric-sheep",
+        "llm-scientific-method-ai-knowledge-en",
+        "encyclical-pope-ai-magnifica-humanitas-en"
       ]
     }
   ],
@@ -375,10 +367,6 @@
     {
       "slug": "self-hosting-home-cloud",
       "razon": "Your own cloud, your own rules. Personal infrastructure as an act of independence."
-    },
-    {
-      "slug": "android-phones-without-google",
-      "razon": "Free the device you use the most. The phone as a territory of sovereignty."
     },
     {
       "slug": "cyberciruja-guide-digital-self-determination",
@@ -425,36 +413,40 @@
       "razon": "Who was Saint George and what does the dragon legend mean. From the Middle Ages to the present."
     },
     {
-      "slug": "alan-moore-comic-magic-anarchy",
-      "razon": "The Magus of Northampton: comics, occultism, and anarchism. A deep dive into the most influential author in the medium."
-    },
-    {
-      "slug": "argentum-online-en",
-      "razon": "Twenty-five years later, still breaking records. Community-driven and independent logic from the Argentine periphery."
-    },
-    {
-      "slug": "luis-cannobio-captain-thule-warhammer",
-      "razon": "Argentina's metal hero. How a man from Villa Recondo changed the history of collecting and national nerd culture."
-    },
-    {
-      "slug": "dungeons-and-dragons-history-and-legacy",
-      "razon": "How the most transcendent role-playing game was created. Essential history from the White Box to the present."
-    },
-    {
       "slug": "akira-1988-en",
       "razon": "Cultural criticism at its finest. Talking about anime means talking about politics, urbanism, and the future."
     },
     {
-      "slug": "how-to-make-fanzines-and-why-they-matter",
-      "razon": "From idea to final version. A step-by-step guide to these culture-transmitting publications."
+      "slug": "do-language-models-dream-of-electric-sheep",
+      "razon": "Philosophy of mind in a conversation with ChatGPT-3. This is where 421 started taking seriously the question of what sits on the other side of the screen."
     },
     {
-      "slug": "magic-the-gathering-social-nature",
-      "razon": "Anthropology of board games. A text that turns a card game into social theory."
+      "slug": "mcluhan-grammar-ai",
+      "razon": "McLuhan applied to LLMs: technology doesn't change your opinions, it changes how you perceive the world."
     },
     {
-      "slug": "warhammer-40k-introduction-to-wargames",
-      "razon": "Game, lore, and hobby in the quintessential wargame. The gateway to an inexhaustible universe."
+      "slug": "how-to-set-up-a-home-server-en",
+      "razon": "Running language models on your own machine, with no cloud and no one else's servers. Digital sovereignty applied to AI."
+    },
+    {
+      "slug": "how-to-avoid-losing-cognitive-sovereignty-en",
+      "razon": "Metacognitive laziness, as measured by the research: outsourcing your thinking has a cost, and the brain pays it."
+    },
+    {
+      "slug": "curtis-yarvin-democracy-monarchy-neoreaction-neocameralism-en",
+      "razon": "A requiem for Mencius Moldbug's ideas, read five years after they stopped being an internet joke."
+    },
+    {
+      "slug": "theory-meta-irony-post-irony-meme-sphere-en",
+      "razon": "The evolution of digital humor since 4chan: how irony stopped being a shield and ended up in the political arena."
+    },
+    {
+      "slug": "how-to-protect-brain-algorithm-cognitive-sovereignty-biochemistry-en",
+      "razon": "Out of 11 million bits, your brain processes 50. Understanding that filter is the first step toward cognitive sovereignty."
+    },
+    {
+      "slug": "cybernetic-art-fernando-montes-vera-en",
+      "razon": "The dissolution of the self, art inside the machine, and the dignity of refusing to take part in the creative industry."
     }
   ],
   "rutas_pt": [
@@ -468,13 +460,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -483,13 +471,13 @@
       "tesis": "Encontrar em Star Wars princípios do direito constitucional. Encontrar em Fallout princípios rudimentares de economia. A cultura popular pode ser só entretenimento ou um nexo para ideias mais complexas.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -501,10 +489,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -516,10 +504,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -532,9 +520,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ],
       "link": "/pt/rutas/"
     },
@@ -548,9 +536,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -558,14 +546,14 @@
       "nombre": "Faça você mesmo",
       "tesis": "Pão, milanesas, fanzines, videogames, wargames: tudo o que você pode fazer com as próprias mãos.",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -577,9 +565,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -603,10 +592,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "Sua própria nuvem, suas próprias regras. A infraestrutura pessoal como ato de independência."
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "Libertar o dispositivo que você mais usa. O celular como território de soberania."
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -653,36 +638,40 @@
       "razon": "Quem foi São Jorge e o que significa a lenda do dragão. Da Idade Média até hoje."
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "O Magus de Northampton: quadrinhos, ocultismo e anarquismo. Um percurso aprofundado pela carreira do autor mais influente do meio."
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "A vinte e cinco anos, continua quebrando recordes. Lógica comunitária e independente desde a periferia argentina."
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "O herói de metal argentino. Como um cara de Villa Recondo mudou a história do colecionismo e da nerdice nacional."
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "Como foi criado o jogo de RPG mais transcendente de todos. História essencial desde a Caixa Branca até hoje."
-    },
-    {
       "slug": "akira-1988",
       "razon": "Crítica cultural em sua máxima expressão. Falar de anime é falar de política, urbanismo e futuro."
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "Da ideia à versão final. Guia passo a passo dessas publicações transmissoras de cultura."
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "Filosofia da mente em uma conversa com o ChatGPT-3. Foi aqui que a 421 começou a discutir a sério o que há do outro lado da tela."
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "Antropologia dos jogos de tabuleiro. Um texto que transforma uma partida de cartas em teoria social."
+      "slug": "mcluhan-ia-llm",
+      "razon": "McLuhan aplicado aos LLMs: a técnica não muda as suas opiniões, muda como você percebe o mundo."
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "Jogo, lore e hobby no wargame por excelência. A porta de entrada para um universo inesgotável."
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "Rodar modelos de linguagem na sua própria máquina, sem nuvem e sem servidores alheios. Soberania digital aplicada à IA."
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "A preguiça metacognitiva, medida pelos estudos: delegar o pensamento tem um custo, e quem paga é o cérebro."
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "Um réquiem para as ideias de Mencius Moldbug, lidas cinco anos depois de deixarem de ser uma piada de internet."
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "A evolução do humor digital desde o 4chan: como a ironia deixou de ser um escudo e foi parar na arena política."
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "De 11 milhões de bits, o seu cérebro processa 50. Entender esse filtro é o primeiro passo da soberania cognitiva."
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "A dissolução do eu, a arte dentro da máquina e a dignidade de se recusar a participar da indústria criativa."
     }
   ],
   "rutas_fr": [
@@ -696,13 +685,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -711,13 +696,13 @@
       "tesis": "Trouver dans Star Wars des principes de droit constitutionnel. Trouver dans Fallout des principes rudimentaires d'économie. La culture populaire peut n'être que du divertissement ou un pont vers des idées plus complexes.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -729,10 +714,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -744,10 +729,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -760,9 +745,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ],
       "link": "/fr/rutas/"
     },
@@ -776,9 +761,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -786,14 +771,14 @@
       "nombre": "Fais-le toi-même",
       "tesis": "Pain, escalopes, fanzines, jeux vidéo, wargames : tout ce que tu peux faire de tes propres mains.",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -805,9 +790,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -831,10 +817,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "Ton propre cloud, tes propres règles. L'infrastructure personnelle comme acte d'indépendance."
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "Libérer l'appareil que tu utilises le plus. Le téléphone portable comme territoire de souveraineté."
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -881,36 +863,40 @@
       "razon": "Qui était Saint Georges et que signifie la légende du dragon. Du Moyen Âge jusqu'à aujourd'hui."
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "Le Magus de Northampton : bandes dessinées, occultisme et anarchisme. Un tour d'horizon approfondi de la carrière de l'auteur le plus influent du medium."
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "À vingt-cinq ans, il continue de battre des records. Logique communautaire et indépendante depuis la périphérie argentine."
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "Le héros de métal argentin. Comment un gars de Villa Recondo a changé l'histoire du collectionnisme et de la culture nerd nationale."
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "Comment a été créé le jeu de rôle le plus marquant de tous. Histoire essentielle depuis la Boîte Blanche jusqu'à aujourd'hui."
-    },
-    {
       "slug": "akira-1988",
       "razon": "La critique culturelle dans sa plus haute expression. Parler d'anime, c'est parler de politique, d'urbanisme et d'avenir."
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "De l'idée à la version finale. Guide étape par étape de ces publications transmettrices de culture."
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "Philosophie de l'esprit dans une conversation avec ChatGPT-3. C'est ici que 421 a commencé à prendre au sérieux ce qui se trouve de l'autre côté de l'écran."
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "Anthropologie des jeux de société. Un texte qui transforme une partie de cartes en théorie sociale."
+      "slug": "mcluhan-ia-llm",
+      "razon": "McLuhan appliqué aux LLM : la technique ne change pas vos opinions, elle change votre perception du monde."
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "Jeu, lore et hobby dans le wargame par excellence. La porte d'entrée vers un univers inépuisable."
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "Faire tourner des modèles de langage sur sa propre machine, sans cloud ni serveurs étrangers. La souveraineté numérique appliquée à l'IA."
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "La paresse métacognitive, mesurée par les études : déléguer sa pensée a un coût, et c'est le cerveau qui le paie."
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "Un requiem pour les idées de Mencius Moldbug, relues cinq ans après qu'elles ont cessé d'être une blague d'internet."
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "L'évolution de l'humour numérique depuis 4chan : comment l'ironie a cessé d'être un bouclier pour finir dans l'arène politique."
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "Sur 11 millions de bits, votre cerveau en traite 50. Comprendre ce filtre est le premier pas vers la souveraineté cognitive."
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "La dissolution du moi, l'art dans la machine et la dignité de refuser de participer à l'industrie créative."
     }
   ],
   "rutas_zh": [
@@ -924,13 +910,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -939,13 +921,13 @@
       "tesis": "在《星球大战》中发现宪法原则，在《辐射》中发现基础经济学原理。流行文化可以只是娱乐，也可以成为通往更复杂思想的桥梁。",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -957,10 +939,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -972,10 +954,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -988,9 +970,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ],
       "link": "/zh/rutas/"
     },
@@ -1004,9 +986,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -1014,14 +996,14 @@
       "nombre": "自己动手做",
       "tesis": "面包、炸肉排、独立杂志、电子游戏、战棋：一切你能亲手制作的东西。",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -1033,9 +1015,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -1059,10 +1042,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "你自己的云，你自己的规则。个人基础设施作为独立自主的行动。"
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "解放你最常用的设备。手机作为主权领地。"
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -1109,36 +1088,40 @@
       "razon": "圣乔治是谁，屠龙传说意味着什么。从中世纪至今。"
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "北安普顿的法师：漫画、神秘主义与无政府主义。深度回顾这位最具影响力的漫画作者的创作历程。"
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "二十五年后，依然打破纪录。来自阿根廷边缘的独立社群逻辑。"
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "阿根廷的金属英雄。一个来自比利亚雷孔多的男人如何改变了国内收藏与极客文化的历史。"
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "史上最具影响力的角色扮演游戏是如何诞生的。从白盒子到今天的核心历史。"
-    },
-    {
       "slug": "akira-1988",
       "razon": "文化批评的极致表达。谈论动漫，就是谈论政治、城市主义与未来。"
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "从创意到最终成品。这些文化传播出版物的逐步制作指南。"
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "与 ChatGPT-3 的一场心灵哲学对话。421 正是从这里开始认真追问：屏幕的另一端究竟是什么。"
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "桌游的人类学。一篇将一局牌局转化为社会理论的文章。"
+      "slug": "mcluhan-ia-llm",
+      "razon": "把麦克卢汉用在大语言模型上：技术改变的不是你的观点，而是你感知世界的方式。"
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "战棋之王中的游戏、传说与爱好。通向一个无穷宇宙的入口。"
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "在自己的电脑上运行语言模型，不依赖云端，也不依赖别人的服务器。把数字主权用在人工智能上。"
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "研究测出的元认知惰性：把思考外包出去是有代价的，而买单的是大脑。"
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "为门修斯·摩尔德巴格的思想写的安魂曲——在它们不再只是网络笑话的五年之后重读。"
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "从 4chan 开始的网络幽默演变：反讽如何从一面盾牌，变成政治角力的场地。"
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "在一千一百万比特里，你的大脑只处理五十。看懂这道过滤器，是认知主权的第一步。"
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "自我的消解、机器里的艺术，以及拒绝参与创意产业的那份尊严。"
     }
   ],
   "rutas_ja": [
@@ -1152,13 +1135,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -1167,13 +1146,13 @@
       "tesis": "スター・ウォーズに憲法の原則を見出す。フォールアウトに初歩的な経済学の原則を見出す。大衆文化は単なる娯楽にもなり得るし、より複雑な思想へのつながりにもなり得る。",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -1185,10 +1164,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -1200,10 +1179,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -1216,9 +1195,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ],
       "link": "/ja/rutas/"
     },
@@ -1232,9 +1211,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -1242,14 +1221,14 @@
       "nombre": "自分でやれ",
       "tesis": "パン、ミラネーサ、ファンジン、ビデオゲーム、ウォーゲーム：自分の手で作れるすべてのもの。",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -1261,9 +1240,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -1287,10 +1267,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "自分のクラウド、自分のルール。個人インフラを独立の行為として捉える。"
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "最もよく使うデバイスを解放すること。携帯電話を主権の領域として。"
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -1337,36 +1313,40 @@
       "razon": "聖ゲオルギウスとは誰で、竜の伝説は何を意味するのか。中世から今日まで。"
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "ノーサンプトンの魔術師：コミックス、オカルティズム、アナーキズム。最も影響力のある作家のキャリアを深く振り返る。"
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "二十五年を経てもまだ記録を塗り替え続けている。アルゼンチンの周縁から生まれたコミュニティ的で独立した論理。"
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "アルゼンチンの鋼鉄のヒーロー。ビジャ・レコンドの男がコレクション文化とナショナル・ナードダムの歴史をいかに変えたか。"
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "最も重要なロールプレイングゲームはどのように作られたか。白い箱から今日に至るまでの本質的な歴史。"
-    },
-    {
       "slug": "akira-1988",
       "razon": "最高の形での文化批評。アニメについて語ることは、政治、都市計画、そして未来について語ることだ。"
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "アイデアから最終版まで。文化を伝えるこれらの出版物のステップバイステップガイド。"
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "ChatGPT-3との対話による心の哲学。画面の向こう側に何があるのかを421が本気で問い始めた場所。"
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "ボードゲームの人類学。カードゲームの一局を社会理論に変えるテキスト。"
+      "slug": "mcluhan-ia-llm",
+      "razon": "LLMに適用されたマクルーハン。技術が変えるのは意見ではなく、世界の知覚のしかたである。"
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "最高のウォーゲームにおけるゲーム、ロア、ホビー。尽きることのない宇宙への入口。"
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "クラウドも他人のサーバーも使わず、自分のマシンで言語モデルを動かす。AIに適用されたデジタル主権。"
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "研究が測定したメタ認知的怠惰。思考を外部に委ねることには代償があり、それを払うのは脳だ。"
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "メンシウス・モールドバグの思想への鎮魂歌。それがネットの冗談でなくなって五年後に読み直す。"
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "4chan以降のデジタルユーモアの変遷。アイロニーは盾であることをやめ、政治の闘技場に移った。"
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "1100万ビットのうち、脳が処理するのは50。そのフィルターを理解することが認知主権の第一歩だ。"
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "自我の解体、機械のなかの芸術、そしてクリエイティブ産業に加わることを拒む尊厳。"
     }
   ],
   "rutas_ko": [
@@ -1380,13 +1360,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -1395,13 +1371,13 @@
       "tesis": "스타워즈에서 헌법적 원리를 찾고, 폴아웃에서 기초 경제학의 원리를 찾는다. 대중문화는 단순한 오락에 그칠 수도 있고, 더 복잡한 아이디어로 나아가는 통로가 될 수도 있다.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -1413,10 +1389,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -1428,10 +1404,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -1444,9 +1420,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ],
       "link": "/ko/rutas/"
     },
@@ -1460,9 +1436,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -1470,14 +1446,14 @@
       "nombre": "직접 만들어라",
       "tesis": "빵, 밀라네사, 팬진, 비디오 게임, 워게임: 두 손으로 직접 만들 수 있는 모든 것.",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -1489,9 +1465,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -1515,10 +1492,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "나만의 클라우드, 나만의 규칙. 독립의 행위로서의 개인 인프라."
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "가장 많이 사용하는 기기를 해방하라. 주권의 영토로서의 휴대폰."
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -1565,36 +1538,40 @@
       "razon": "성 조르헤는 누구였으며 용의 전설은 무엇을 의미하는가. 중세부터 오늘날까지."
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "노샘프턴의 마구스: 만화, 오컬트, 아나키즘. 매체에서 가장 영향력 있는 작가의 경력에 대한 심층 개관."
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "25년이 지난 지금도 기록을 경신하고 있다. 아르헨티나 주변부에서 비롯된 공동체적이고 독립적인 논리."
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "아르헨티나의 금속 영웅. 비야 레콘도 출신의 한 남자가 어떻게 국가적 수집과 너드 문화의 역사를 바꿨는가."
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "가장 중요한 롤플레잉 게임이 어떻게 만들어졌는가. 화이트 박스부터 오늘날까지의 필수적인 역사."
-    },
-    {
       "slug": "akira-1988",
       "razon": "최고의 형태로 구현된 문화 비평. 애니메이션을 이야기하는 것은 정치, 도시계획, 미래를 이야기하는 것이다."
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "아이디어에서 최종본까지. 문화를 전달하는 이 출판물들에 대한 단계별 안내."
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "ChatGPT-3와의 대화로 풀어낸 심리철학. 421이 화면 저편에 무엇이 있는지를 진지하게 묻기 시작한 지점."
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "보드게임의 인류학. 카드 게임 한 판을 사회 이론으로 변환하는 텍스트."
+      "slug": "mcluhan-ia-llm",
+      "razon": "LLM에 적용한 매클루언. 기술이 바꾸는 것은 당신의 의견이 아니라 세계를 지각하는 방식이다."
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "최고의 워게임에서의 게임, 로어, 그리고 취미. 무궁무진한 세계로 들어가는 입구."
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "클라우드도 남의 서버도 없이 내 컴퓨터에서 언어 모델을 돌리기. AI에 적용한 디지털 주권."
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "연구가 측정한 메타인지적 게으름. 사고를 위탁하는 데는 대가가 따르고, 그 값은 뇌가 치른다."
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "멘시우스 몰드버그의 사상을 위한 진혼곡. 그것이 인터넷 농담이기를 그만둔 지 5년 뒤에 다시 읽는다."
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "4chan 이후 디지털 유머의 진화. 아이러니는 방패이기를 그만두고 정치의 무대로 옮겨갔다."
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "1,100만 비트 가운데 뇌가 처리하는 것은 50. 그 필터를 이해하는 것이 인지 주권의 첫걸음이다."
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "자아의 해체, 기계 속의 예술, 그리고 창작 산업에 참여하기를 거부하는 존엄."
     }
   ],
   "rutas_tr": [
@@ -1608,13 +1585,9 @@
         "ingenieria-inversa-a-la-mierdificacion-de-internet",
         "ya-pagas-internet-no-pagues-por-lo-demas",
         "anonimato-en-internet",
-        "telefonos-android-sin-google",
-        "selfhosting-alojar-nube-hogarena",
-        "que-es-small-web-como-funciona",
-        "pop-os-linux",
-        "elogio-computadoras-escritorio",
         "guia-cyberciruja-para-la-autodeterminacion-digital",
-        "gael-duval-nuevo-ecosistema-mobile"
+        "ia-soberania-cognitiva-low-tech-high-life",
+        "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica"
       ]
     },
     {
@@ -1623,13 +1596,13 @@
       "tesis": "Star Wars'ta anayasa hukuku ilkeleri bulmak. Fallout'ta ilkel ekonomi ilkeleri bulmak. Popüler kültür yalnızca eğlence olabilir ya da daha karmaşık fikirlere açılan bir kapı.",
       "slugs": [
         "derecho-constitucional-en-star-wars",
-        "economia-videojuego-fallout",
-        "fallout-new-vegas-facciones-politica",
         "crash-ballard-cronenberg",
         "lecturas-politicas-sobre-lovecraft",
         "kayfabe-la-lucha-libre-es-real-y-todo-lo-demas-es-falso",
-        "grant-morrison",
-        "alan-moore-comic-magia-anarquia"
+        "alan-moore-comic-magia-anarquia",
+        "dark-souls-videojuego-tragedia-dignidad-humana",
+        "purismo-homero-odisea-nolan-pelicula",
+        "borges-precursor-pelicula-backrooms"
       ]
     },
     {
@@ -1641,10 +1614,10 @@
         "la-historia-del-parque-rivadavia",
         "dinosaurios-descubiertos-en-argentina-1",
         "de-donde-venimos-los-argentinos",
-        "helado-heladerias-argentinas",
         "la-historia-de-ricardo-fort",
         "milei-libra-y-el-criptobardo-de-la-estafa",
-        "frontera-argentina-paraguay"
+        "frontera-argentina-paraguay",
+        "argentinosaurus-dinosaurio-argentina"
       ]
     },
     {
@@ -1656,10 +1629,10 @@
         "volverse-ingobernable-peter-sloterdijk",
         "nick-land-aceleracionismo",
         "glosario-de-filosofia-de-la-tecnica",
-        "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "quinto-eon-peter-carroll",
         "psicopatas-vs-esquizos-guerra-silenciosa",
-        "mcluhan-ia-llm"
+        "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+        "arte-cibernetica-fernando-montes-vera"
       ]
     },
     {
@@ -1672,9 +1645,9 @@
         "ghost-in-the-shell-1995",
         "robocop-1987-paul-verhoeven",
         "gojira-1954-godzilla",
-        "guia-de-lectura-comics-batman",
         "mejores-libros-ciencia-ficcion",
-        "en-el-principio-fue-el-canon"
+        "en-el-principio-fue-el-canon",
+        "the-thing-1982-john-carpenter"
       ],
       "link": "/tr/rutas/"
     },
@@ -1688,9 +1661,9 @@
         "pepe-meme-positive-feedback-loop",
         "remilia-milady-charlotte-fang-nueva-internet",
         "memes-y-magnicidio",
-        "etnosoldados-internet-memes-manifiestos",
-        "puede-hacer-memes-la-izquierda",
-        "epstein-4chan-reddit"
+        "epstein-4chan-reddit",
+        "memes-meta-ironia-post-ironia",
+        "homestuck-webcomic-internet"
       ]
     },
     {
@@ -1698,14 +1671,14 @@
       "nombre": "Kendin Yap",
       "tesis": "Ekmek, şnitzel, fanzinler, video oyunları, savaş oyunları: kendi ellerinle yapabileceğin her şey.",
       "slugs": [
-        "como-hacer-milanesas-caseras",
         "como-hacer-pan-casero",
-        "guia-cultivo-exterior-marihuana",
         "como-hacer-fanzines-para-que-sirven",
-        "como-hacer-tu-primer-videojuego-narrativo-con-bitsy",
         "entrevista-luciano-lamberti-cuentos",
         "como-hacer-un-juego-de-mesa",
-        "introduccion-al-mundo-de-los-drones-fpv"
+        "introduccion-al-mundo-de-los-drones-fpv",
+        "telefonos-android-sin-google",
+        "selfhosting-alojar-nube-hogarena",
+        "como-hostear-la-ia-computadora"
       ]
     },
     {
@@ -1717,9 +1690,10 @@
         "chat-gpt-inteligencia-artificial-filosofia-del-lenguaje",
         "poesia-ia-modelos-de-lenguaje",
         "mcluhan-ia-llm",
-        "ia-crisis-memoria-ram",
-        "zerebro-ai-agents-memecoins",
-        "bio-ia-deep-learning-investigacion-proteinas"
+        "bio-ia-deep-learning-investigacion-proteinas",
+        "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+        "ia-metodo-cientifico-llm-conocimiento",
+        "enciclica-papa-inteligencia-artificial-magnifica-humanitas"
       ]
     }
   ],
@@ -1743,10 +1717,6 @@
     {
       "slug": "selfhosting-alojar-nube-hogarena",
       "razon": "Kendi bulutun, kendi kuralların. Kişisel altyapı bir bağımsızlık eylemi olarak."
-    },
-    {
-      "slug": "telefonos-android-sin-google",
-      "razon": "En çok kullandığın cihazı özgürleştirmek. Cep telefonu bir egemenlik alanı olarak."
     },
     {
       "slug": "guia-cyberciruja-para-la-autodeterminacion-digital",
@@ -1793,36 +1763,40 @@
       "razon": "Aziz Yorgo kimdi ve ejderha efsanesinin anlamı ne. Orta Çağ'dan günümüze."
     },
     {
-      "slug": "alan-moore-comic-magia-anarquia",
-      "razon": "Northampton'ın Büyücüsü: çizgi romanlar, okültizm ve anarşizm. Alanın en etkili yazarının kariyerine derinlemesine bir bakış."
-    },
-    {
-      "slug": "argentum-online",
-      "razon": "Yirmi beş yıl sonra hâlâ rekor kırıyor. Arjantin çevresinden toplulukçu ve bağımsız bir mantık."
-    },
-    {
-      "slug": "luis-cannobio-capitan-thule-warhammer",
-      "razon": "Arjantin'in metal kahramanı. Villa Recondo'lu bir adamın ulusal koleksiyonculuk ve nerd kültürü tarihini nasıl değiştirdiği."
-    },
-    {
-      "slug": "dungeons-dragons-historia-y-legado-lis",
-      "razon": "En önemli rol yapma oyunu nasıl yaratıldı. Beyaz Kutu'dan günümüze temel tarih."
-    },
-    {
       "slug": "akira-1988",
       "razon": "En yüksek ifadesiyle kültür eleştirisi. Anime hakkında konuşmak siyaset, şehircilik ve gelecek hakkında konuşmaktır."
     },
     {
-      "slug": "como-hacer-fanzines-para-que-sirven",
-      "razon": "Fikirden son sürüme. Bu kültür aktarıcı yayınlar için adım adım rehber."
+      "slug": "los-modelos-de-lenguaje-suenan-con-ovejas-electricas",
+      "razon": "ChatGPT-3 ile bir sohbet üzerinden zihin felsefesi. 421'in ekranın öbür tarafında ne olduğunu ciddi ciddi sormaya başladığı yer."
     },
     {
-      "slug": "magic-the-gathering-juego-social",
-      "razon": "Masa oyunlarının antropolojisi. Bir kağıt oyunu oturumunu toplumsal teoriye dönüştüren bir metin."
+      "slug": "mcluhan-ia-llm",
+      "razon": "LLM'lere uygulanan McLuhan: teknoloji fikirlerinizi değil, dünyayı algılama biçiminizi değiştirir."
     },
     {
-      "slug": "warhammer-40k-introduccion-wargames",
-      "razon": "En büyük savaş oyununda oyun, lore ve hobi. Tükenmez bir evrene açılan kapı."
+      "slug": "como-hostear-la-ia-computadora",
+      "razon": "Dil modellerini bulut olmadan, başkasının sunucusu olmadan kendi makinenizde çalıştırmak. Yapay zekâya uygulanan dijital egemenlik."
+    },
+    {
+      "slug": "ia-soberania-cognitiva-low-tech-high-life",
+      "razon": "Araştırmaların ölçtüğü bilişsel tembellik: düşünmeyi devretmenin bir bedeli vardır ve onu beyin öder."
+    },
+    {
+      "slug": "curtis-yarvin-democracia-monarquia-neorreaccion-neocameralismo",
+      "razon": "Mencius Moldbug'ın fikirleri için bir ağıt: internet şakası olmaktan çıkmalarının beş yıl sonrasında okunmuş hâli."
+    },
+    {
+      "slug": "memes-meta-ironia-post-ironia",
+      "razon": "4chan'den bu yana dijital mizahın evrimi: ironi nasıl bir kalkan olmaktan çıkıp siyasi arenaya taşındı."
+    },
+    {
+      "slug": "como-proteger-cerebro-algoritmo-soberania-cognitiva-bioquimica",
+      "razon": "11 milyon bitin içinden beyniniz 50 tanesini işler. O filtreyi anlamak bilişsel egemenliğin ilk adımıdır."
+    },
+    {
+      "slug": "arte-cibernetica-fernando-montes-vera",
+      "razon": "Benliğin çözülüşü, makinenin içindeki sanat ve yaratıcı endüstriye katılmayı reddetmenin onuru."
     }
   ]
 }

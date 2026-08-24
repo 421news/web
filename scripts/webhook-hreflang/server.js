@@ -19,6 +19,7 @@ const REVENUE_ENABLED = !!(MP_TOKEN && GHOST_ADMIN_KEY);
 // Bot de X: publica cada nota nueva en español. Apagado salvo X_BOT=on|dry
 const xBot = require('./x-bot');
 const C = require('./hreflang-cluster');
+const curaduria = require('./curaduria');
 
 // Gate del número del mes de la Revista 421 (saca el PDF nuevo del HTML público y lo sirve
 // verificando al member). init() más abajo, cuando ya existen las deps que le pasamos.
@@ -230,17 +231,34 @@ async function syncCluster(esPost) {
   const links = C.linksFor(members);
   const langs = Object.keys(members);
   let escritos = 0;
+  const curado = [];
   for (const lang of langs) {
     const m = members[lang];
+    const body = {};
+
     const nuevo = C.applyToHead(m.codeinjection_head || '', links);
-    if (C.mismoBloque(nuevo, m.codeinjection_head)) continue;
-    await ghostRequest('PUT', `/ghost/api/admin/posts/${m.id}/`, {
-      posts: [{ codeinjection_head: nuevo, updated_at: m.updated_at }]
-    });
+    if (!C.mismoBloque(nuevo, m.codeinjection_head)) body.codeinjection_head = nuevo;
+
+    // La curaduría (Canon + Rutas) viaja en el MISMO PUT que el hreflang: dos
+    // escrituras seguidas sobre el mismo post chocarían con el optimistic
+    // locking de Ghost (el updated_at que tenemos en mano queda viejo tras la
+    // primera), y además duplicarían el webhook de vuelta.
+    if (lang !== 'es') {
+      const plan = curaduria.planFor(esPost, m);
+      if (plan) {
+        body.tags = plan.tags;
+        curado.push(`${lang}:+${plan.add.length}/-${plan.del.length}`);
+      }
+    }
+
+    if (!Object.keys(body).length) continue;
+    body.updated_at = m.updated_at;
+    await ghostRequest('PUT', `/ghost/api/admin/posts/${m.id}/`, { posts: [body] });
     escritos++;
   }
-  console.log(`[hreflang] Cluster "${esPost.slug}": ${langs.join(',')} (${escritos} escritos)`);
-  return { status: 'synced', langs, escritos };
+  console.log(`[hreflang] Cluster "${esPost.slug}": ${langs.join(',')} (${escritos} escritos)` +
+              (curado.length ? ` | curaduría ${curado.join(' ')}` : ''));
+  return { status: 'synced', langs, escritos, curaduria: curado };
 }
 
 /** Descubre el par ES<->EN por score y persiste los metas. Solo cuando no hay meta todavía. */
@@ -1111,7 +1129,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.5.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.6.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1338,6 +1356,50 @@ async function hreflangCron() {
 }
 
 setInterval(hreflangCron, 30 * 60 * 1000); // every 30 minutes
+
+// --- Curaduría cron: barrido completo una vez por día ---
+//
+// El webhook ya sincroniza el cluster cuando se publica o se edita una nota, así
+// que el caso normal está cubierto. Esto es la red de seguridad para el caso que
+// el webhook NO ve bien: re-curar una nota vieja (sacarle #canon a algo de 2024)
+// dispara un edit, pero si Render estaba reiniciando o Ghost no reintentó, la
+// divergencia queda muda y solo se nota mirando /en/routes/ contra /es/rutas/.
+// Un barrido diario es barato (~18 requests) y cierra el agujero.
+
+const CURADURIA_ENABLED = process.env.CURADURIA_SYNC !== 'off';
+
+async function curaduriaCron() {
+  if (!CURADURIA_ENABLED) return;
+  try {
+    await curaduria.sweep({ ghostRequest });
+  } catch (err) {
+    console.error(`[curaduria] cron: ${err.message}`);
+  }
+}
+
+setInterval(curaduriaCron, 24 * 60 * 60 * 1000);
+setTimeout(curaduriaCron, 5 * 60 * 1000); // al arrancar, pasados los 5 min de warmup
+
+// Auditoría a demanda: dice qué está fuera de sincro sin tocar nada.
+app.get('/api/curaduria/audit', async (req, res) => {
+  try {
+    res.json(await curaduria.sweep({ ghostRequest, dry: true }));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Sincronización a demanda. Escribe: mismo patrón de auth que /api/emails/run.
+app.post('/api/curaduria/sync', async (req, res) => {
+  if (!process.env.EMAILS_RUN_KEY || req.headers['x-webhook-key'] !== process.env.EMAILS_RUN_KEY) {
+    return res.status(401).json({ error: 'unauthorized' });
+  }
+  try {
+    res.json(await curaduria.sweep({ ghostRequest }));
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // --- Auditoría de hreflang: la red de seguridad ---
 // El apareo es heurístico y puede errar sin que nadie se entere: un link que lleva al
