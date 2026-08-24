@@ -248,7 +248,7 @@
 // i18n del footer. El footer es UN partial compartido por los 8 idiomas, asi que
 // el idioma se saca de la URL, igual que en site-nav-intl y en lang-selector.js.
 //
-// Antes esto era un {{#if lang}} con dos ramas (ES/EN) que dependia de que cada
+// Antes esto era un bloque "if lang" con dos ramas (ES/EN) que dependia de que cada
 // template pasara lang="en" al incluir el partial. La mitad no lo pasaba: /en/
 // y /en/subscribe/ mostraban el slogan en ingles, pero /en/canon/ y /en/routes/
 // lo mostraban en castellano, y los 6 idiomas intl no tenian rama posible.
