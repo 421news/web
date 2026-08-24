@@ -1,13 +1,14 @@
 {{!< default}}
 
 {{!-- Revista 421 — version en ingles de /es/revista-421/.
-     Ruta: /en/magazine/ (routes.yaml, data: page.revista-421).
+     Ruta: /en/magazine/ (routes.yaml, data: page.magazine-en).
 
-     Apunta a LA MISMA pagina de Ghost que la version en castellano, a proposito.
-     No hay una copia en ingles porque el gate del numero nuevo (revista-gate.js)
-     depende de que el file card del PDF exista en un solo lugar: una segunda
-     pagina volveria a publicar la URL que el gate saca del HTML, y el adelanto
-     de un mes para suscriptores dejaria de existir.
+     El LISTADO de numeros sale de la misma pagina que la version en castellano
+     (revista-421), que revista.js lee por Content API. No hay una copia en
+     ingles de ESE contenido a proposito: el gate del numero nuevo
+     (revista-gate.js) depende de que el file card del PDF exista en un solo
+     lugar, y una segunda pagina volveria a publicar la URL que el gate saca del
+     HTML, dejando sin efecto el adelanto de un mes para suscriptores.
      Lo que se traduce es la capa de presentacion, en assets/js/revista.js.
 
      Los METADATOS (title, description, OG) salen de otra pagina de Ghost,
