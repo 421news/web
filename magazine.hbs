@@ -1,0 +1,74 @@
+{{!< default}}
+
+{{!-- Revista 421 — version en ingles de /es/revista-421/.
+     Ruta: /en/magazine/ (routes.yaml, data: page.revista-421).
+
+     Apunta a LA MISMA pagina de Ghost que la version en castellano, a proposito.
+     No hay una copia en ingles porque el gate del numero nuevo (revista-gate.js)
+     depende de que el file card del PDF exista en un solo lugar: una segunda
+     pagina volveria a publicar la URL que el gate saca del HTML, y el adelanto
+     de un mes para suscriptores dejaria de existir.
+     Lo que se traduce es la capa de presentacion, en assets/js/revista.js. --}}
+
+<script>
+  document.title = 'Revista 421 | 421.news';
+  (function() {
+    var title = 'Revista 421 | 421.news';
+    var desc = '421’s digital magazine. Every issue free to download.';
+    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
+    var url = 'https://www.421.news/en/magazine/';
+    function setMeta(attr, key, val) {
+      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
+      if (el) { el.content = val; }
+      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
+    }
+    setMeta('name', 'description', desc);
+    setMeta('property', 'og:title', title);
+    setMeta('property', 'og:description', desc);
+    setMeta('property', 'og:image', img);
+    setMeta('property', 'og:url', url);
+    setMeta('property', 'og:type', 'website');
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', title);
+    setMeta('name', 'twitter:description', desc);
+    setMeta('name', 'twitter:image', img);
+  })();
+</script>
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-en"}}
+
+  {{!-- Wizards early-access announcement bar (visible to non-paid members only) --}}
+  {{#unless @member.paid}}
+  <div class="revista-wizard-announce">
+    <div class="revista-wizard-announce-inner">
+      <span>📕 <strong>Wizards</strong> read every new issue <strong>a month before</strong> everyone else.</span>
+      <a href="/en/subscribe/" onclick="if(typeof gtag==='function')gtag('event','revista_wizard_cta_click',{event_category:'engagement',event_label:'revista_page'});">Become a Wizard &rarr;</a>
+    </div>
+  </div>
+  {{/unless}}
+
+  {{> "section-hero"
+      eyebrow="421 · digital magazine"
+      title="Revista 421"
+      tesis="Every issue of 421&rsquo;s digital magazine, where we collect the best pieces from the site and bring in designers, photographers and illustrators. The magazine is in Spanish."}}
+
+  <div class="revista-page">
+    <div class="global-container">
+
+      <!-- Revista container: JS will populate this -->
+      <div id="revista-container"></div>
+
+    </div>
+
+    <!-- File Browser -->
+    <div class="global-container" style="padding: 3rem 0;">
+      {{> "file-browser-en"}}
+    </div>
+  </div>
+
+  {{> "site-footer" lang="en"}}
+</div>
+
+<script src="{{asset "js/revista.js"}}" defer></script>

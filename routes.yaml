@@ -49,6 +49,9 @@ routes:
   /en/podcast/:
     template: podcast-en
     data: page.random-podcast-juan-ruocco-en
+  /en/magazine/:
+    template: magazine
+    data: page.revista-421
   /es/revista-velociraptors-editorial-neptuno/:
     template: page
     data: page.revista-velociraptors-editorial-neptuno

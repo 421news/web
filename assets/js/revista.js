@@ -10,6 +10,84 @@
   var isPaid = false;
   var gatedNum = null;   // número que todavía no se liberó (adelanto de suscriptores)
 
+  // --- i18n ---------------------------------------------------------------
+  // La página en inglés (/en/magazine/) lee EXACTAMENTE la misma página de Ghost
+  // que /es/revista-421/. No se duplica en un segundo post a propósito: el gate
+  // del número nuevo depende de que su file card exista en un solo lugar, y una
+  // copia en inglés volvería a publicar la URL del PDF que el gate saca del HTML.
+  // Por eso lo que se traduce es la CAPA de presentación, no la fuente.
+  var LANG = window.location.pathname.indexOf('/en/') === 0 ? 'en' : 'es';
+  var T = {
+    es: {
+      badgeAdelanto: 'Adelanto suscriptores', descargar: 'Descargar PDF',
+      suscribite: 'Suscribite para leerlo ya', registrate: 'Registrate para descargar',
+      verTapa: 'Ver tapa', preparando: 'Preparando...', falloDescarga: 'No se pudo, reintentá',
+      alt: 'Revista 421 #', subscribeUrl: '/es/suscribite/'
+    },
+    en: {
+      badgeAdelanto: 'Subscriber early access', descargar: 'Download PDF',
+      suscribite: 'Subscribe to read it now', registrate: 'Sign up to download',
+      verTapa: 'View cover', preparando: 'Preparing...', falloDescarga: 'Failed, try again',
+      alt: 'Revista 421 #', subscribeUrl: '/en/subscribe/'
+    }
+  }[LANG];
+
+  var MESES = {
+    'enero': 'January', 'febrero': 'February', 'marzo': 'March', 'abril': 'April',
+    'mayo': 'May', 'junio': 'June', 'julio': 'July', 'agosto': 'August',
+    'septiembre': 'September', 'setiembre': 'September', 'octubre': 'October',
+    'noviembre': 'November', 'diciembre': 'December'
+  };
+
+  // Los títulos de cada número viven en los h2 de la página de Ghost, en castellano.
+  // Traducirlos acá es la contrapartida de no duplicar la página: cuando sale un
+  // número nuevo hay que agregar una línea. Si falta, cae al título en castellano
+  // en vez de romperse — un título sin traducir es mejor que una tarjeta vacía.
+  var TITULOS_EN = {
+    18: 'Land, Yarvin, Sloterdijk',
+    17: 'How to start writing',
+    16: 'Behind the veil',
+    15: 'Digital ruins',
+    14: 'Artificial intelligence',
+    13: 'Isometric perspective',
+    12: 'Manga / Anime',
+    11: 'Autonomy',
+    10: 'Video games',
+    9: 'Gadgets',
+    8: 'Rock & Roll',
+    7: 'Technology',
+    6: 'Magic: The Gathering',
+    5: 'Warhammer 40K',
+    4: 'Vol. 4', 3: 'Vol. 3', 2: 'Vol. 2', 1: 'Vol. 1'
+  };
+
+  var ROLES_EN = {
+    'portada': 'Cover', 'portada y diagramación': 'Cover and layout',
+    'diseño': 'Design', 'diagramación': 'Layout',
+    'ilustraciones': 'Illustrations', 'ilustración': 'Illustration',
+    'ilustración de portada': 'Cover illustration',
+    'ilustración interna': 'Interior illustration',
+    'ilustraciones internas': 'Interior illustrations',
+    'ilustraciones con ia': 'AI illustrations',
+    'fotografía': 'Photography', 'fotos': 'Photos',
+    'fotos de consolas': 'Console photos', 'crédito': 'Credit'
+  };
+
+  function traducirFecha(fecha) {
+    if (LANG !== 'en') return fecha;
+    return fecha.replace(/([A-Za-zÁÉÍÓÚáéíóú]+)\s+(\d{4})/, function (_, mes, anio) {
+      return (MESES[mes.toLowerCase()] || mes) + ' ' + anio;
+    });
+  }
+  function traducirTitulo(numero, titulo) {
+    if (LANG !== 'en') return titulo;
+    return TITULOS_EN[numero] || titulo;
+  }
+  function traducirRol(rol) {
+    if (LANG !== 'en') return rol;
+    return ROLES_EN[String(rol).toLowerCase().trim()] || rol;
+  }
+
   var svgDownload = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
   var svgExpand = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg>';
   var svgLock = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
@@ -112,7 +190,7 @@
       var nameHtml = c.url
         ? '<a href="' + c.url + '" target="_blank" rel="noopener">' + c.nombre + '</a>'
         : c.nombre;
-      return '<span><span class="revista-credit-rol">' + c.rol + ':</span> ' + nameHtml + '</span>';
+      return '<span><span class="revista-credit-rol">' + traducirRol(c.rol) + ':</span> ' + nameHtml + '</span>';
     }).join('');
 
     // El número gateado no trae PDF en el HTML a propósito: su URL vive solo en el server.
@@ -121,24 +199,24 @@
     var badge = '';
 
     if (esGateado) {
-      badge = '<span class="revista-card-badge">' + svgLock + ' Adelanto suscriptores</span>';
+      badge = '<span class="revista-card-badge">' + svgLock + ' ' + T.badgeAdelanto + '</span>';
       if (isPaid) {
         downloadBtn = '<a href="#" class="revista-btn-download revista-btn-gated" data-gated="' + issue.numero + '">' +
-          svgDownload + ' Descargar PDF' +
+          svgDownload + ' ' + T.descargar +
           '</a>';
       } else {
-        downloadBtn = '<a href="/es/suscribite/" class="revista-btn-download revista-btn-locked" data-locked="' + issue.numero + '">' +
-          svgLock + ' Suscribite para leerlo ya' +
+        downloadBtn = '<a href="' + T.subscribeUrl + '" class="revista-btn-download revista-btn-locked" data-locked="' + issue.numero + '">' +
+          svgLock + ' ' + T.suscribite +
           '</a>';
       }
     } else if (issue.pdf) {
       if (isMember) {
         downloadBtn = '<a href="' + issue.pdf + '" class="revista-btn-download" data-issue="' + issue.numero + '" download>' +
-          svgDownload + ' Descargar PDF' + (issue.size ? ' (' + issue.size + ')' : '') +
+          svgDownload + ' ' + T.descargar + (issue.size ? ' (' + issue.size + ')' : '') +
           '</a>';
       } else {
         downloadBtn = '<a href="#" class="revista-btn-download revista-btn-locked" data-signup="1">' +
-          svgLock + ' Registrate para descargar' +
+          svgLock + ' ' + T.registrate +
           '</a>';
       }
     }
@@ -146,21 +224,21 @@
     return '<div class="revista-card' + (esGateado ? ' revista-card-gated' : '') + '">' +
       '<div class="revista-card-cover">' +
         '<a href="' + issue.cover + '" target="_blank">' +
-          '<img src="' + issue.cover + '" alt="Revista 421 #' + issue.numero + '" loading="lazy">' +
+          '<img src="' + issue.cover + '" alt="' + T.alt + issue.numero + '" loading="lazy">' +
         '</a>' +
       '</div>' +
       '<div class="revista-card-info">' +
         '<div class="revista-card-header">' +
           '<span class="revista-card-number">#' + issue.numero + '</span>' +
-          '<span class="revista-card-fecha">' + issue.fecha + '</span>' +
+          '<span class="revista-card-fecha">' + traducirFecha(issue.fecha) + '</span>' +
           badge +
         '</div>' +
-        '<div class="revista-card-title">' + issue.titulo + '</div>' +
+        '<div class="revista-card-title">' + traducirTitulo(issue.numero, issue.titulo) + '</div>' +
         '<div class="revista-card-credits">' + creditsHtml + '</div>' +
         '<div class="revista-card-actions">' +
           downloadBtn +
           '<a href="' + issue.cover + '" target="_blank" class="revista-btn-cover">' +
-            svgExpand + ' Ver tapa' +
+            svgExpand + ' ' + T.verTapa +
           '</a>' +
         '</div>' +
       '</div>' +
@@ -170,7 +248,7 @@
   // El PDF gateado no es un href: se pide con el JWT del member y se baja como blob.
   function descargarGateado(numero, btn) {
     var original = btn.innerHTML;
-    btn.innerHTML = svgDownload + ' Preparando...';
+    btn.innerHTML = svgDownload + ' ' + T.preparando;
     fetch('/members/api/session', { credentials: 'same-origin' })
       .then(function (r) { return r.text(); })
       .then(function (token) {
@@ -195,7 +273,7 @@
         btn.innerHTML = original;
       })
       .catch(function () {
-        btn.innerHTML = svgLock + ' No se pudo, reintentá';
+        btn.innerHTML = svgLock + ' ' + T.falloDescarga;
         setTimeout(function () { btn.innerHTML = original; }, 3000);
       });
   }
@@ -215,7 +293,7 @@
         window.location.hash = '#/portal/signup/free';
         return;
       }
-      // El del mes: deja pasar el click a /es/suscribite/, solo lo registra.
+      // El del mes: deja pasar el click a la pagina de suscripcion, solo lo registra.
       track('revista_locked_click', parseInt(locked.getAttribute('data-locked'), 10));
       return;
     }
