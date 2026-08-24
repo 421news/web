@@ -20,15 +20,15 @@
       {{/if}}
       <h1 class="home-featured-title">{{title}}</h1>
       <div class="home-featured-byline">
-        <span class="home-featured-by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
+        <span class="home-featured-by" data-i18n="by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
         {{#has tag="#en"}}
-          {{#foreach authors}}{{#unless @first}}<span class="home-featured-by">and</span> {{/unless}}<a href="{{url}}" class="home-featured-author">{{name}}</a> {{/foreach}}
+          {{#foreach authors}}{{#unless @first}}<span class="home-featured-by" data-i18n="and">and</span> {{/unless}}<a href="{{url}}" class="home-featured-author">{{name}}</a> {{/foreach}}
         {{else}}
-          {{#foreach authors}}{{#unless @first}}<span class="home-featured-by">y</span> {{/unless}}<a href="{{url}}" class="home-featured-author">{{name}}</a> {{/foreach}}
+          {{#foreach authors}}{{#unless @first}}<span class="home-featured-by" data-i18n="and">y</span> {{/unless}}<a href="{{url}}" class="home-featured-author">{{name}}</a> {{/foreach}}
         {{/has}}
-        <span class="home-featured-meta">· {{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</span>
+        <span class="home-featured-meta">· {{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} <span data-i18n="read">{{#has tag="#en"}}read{{else}}lectura{{/has}}</span></span>
         <span id="translation-link" class="home-featured-translation"></span>
-        <a href="#/share" class="home-featured-share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
+        <a href="#/share" class="home-featured-share" data-i18n="share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         </a>
       </div>
@@ -57,16 +57,16 @@
     {{/if}}
     <h1 class="post-mhero-title">{{title}}</h1>
     <div class="post-mhero-byline">
-      <span class="post-mhero-by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
+      <span class="post-mhero-by" data-i18n="by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
       {{#has tag="#en"}}
-        {{#foreach authors}}{{#unless @first}}<span class="post-mhero-by">and</span> {{/unless}}<a href="{{url}}" class="post-mhero-author">{{name}}</a> {{/foreach}}
+        {{#foreach authors}}{{#unless @first}}<span class="post-mhero-by" data-i18n="and">and</span> {{/unless}}<a href="{{url}}" class="post-mhero-author">{{name}}</a> {{/foreach}}
       {{else}}
-        {{#foreach authors}}{{#unless @first}}<span class="post-mhero-by">y</span> {{/unless}}<a href="{{url}}" class="post-mhero-author">{{name}}</a> {{/foreach}}
+        {{#foreach authors}}{{#unless @first}}<span class="post-mhero-by" data-i18n="and">y</span> {{/unless}}<a href="{{url}}" class="post-mhero-author">{{name}}</a> {{/foreach}}
       {{/has}}
-      <div class="post-mhero-meta">{{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} {{#has tag="#en"}}read{{else}}lectura{{/has}}</div>
+      <div class="post-mhero-meta">{{#has tag="#en"}}{{date published_at format="MMM D, YYYY"}}{{else}}{{date published_at format="D MMM YYYY"}}{{/has}} · {{reading_time minute="1 min" minutes="% min"}} <span data-i18n="read">{{#has tag="#en"}}read{{else}}lectura{{/has}}</span></div>
       <div class="post-mhero-actions">
         <span id="translation-link-mobile" class="post-mhero-translation"></span>
-        <a href="#/share" class="post-mhero-share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
+        <a href="#/share" class="post-mhero-share" data-i18n="share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         </a>
       </div>

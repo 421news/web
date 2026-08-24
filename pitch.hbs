@@ -3,17 +3,10 @@
 {{!-- Pitch us — version en ingles de /es/pitcheale-a-421/.
      Misma estructura y mismos estilos; lo unico distinto son los tres formularios
      de Google, que son los de ingles (carpeta "Forms en ingles" de julieta@421.news).
-     Ruta: /en/pitch-us/ (routes.yaml, data: page.pitcheale-a-421) --}}
-
-<meta property="og:title" content="Write for 421 | 421">
-<meta property="og:description" content="Got an idea you want to share? Pitch it and get published on 421.">
-<meta property="og:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
-<meta property="og:url" content="https://www.421.news/en/pitch-us/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Write for 421 | 421">
-<meta name="twitter:description" content="Got an idea you want to share? Pitch it and get published on 421.">
-<meta name="twitter:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
+     Ruta: /en/pitch-us/ (routes.yaml, data: page.pitch-us-en).
+     Los metas (title, description, OG) salen de esa pagina de Ghost. Apuntar la
+     ruta a la pagina en castellano dejaba el <title> y la description en
+     castellano, porque para post/page el theme no puede pisarlos con un block. --}}
 
 <div class="page-wrapper">
   {{> "general-styling"}}

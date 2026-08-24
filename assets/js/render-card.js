@@ -14,18 +14,46 @@
         return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear();
     };
 
-    window.getContentType = function (tags) {
+    // El idioma de una nota vive en su tag interno #{lang}. Antes esto era
+    // `isEn ? 'en' : 'es'`, asi que TODA tarjeta intl (pt/fr/zh/ja/ko/tr) se
+    // renderizaba como si fuera española: el chip de tag linkeaba a /es/tag/... y
+    // el badge a /es/canon/, sacando al lector de su idioma de un click.
+    var CARD_LANGS = ['en', 'pt', 'fr', 'zh', 'ja', 'ko', 'tr'];
+    window.postLang = function (tags) {
+        for (var i = 0; i < (tags || []).length; i++) {
+            var idx = CARD_LANGS.indexOf(String(tags[i].slug).replace('hash-', ''));
+            if (idx !== -1) return CARD_LANGS[idx];
+        }
+        return 'es';
+    };
+
+    // La seccion de rutas es /en/routes/ en ingles y /{lang}/rutas/ en el resto.
+    // Con la URL generica salia /en/rutas/, que es un 404.
+    window.rutasUrl = function (lang) {
+        return lang === 'en' ? '/en/routes/' : '/' + lang + '/rutas/';
+    };
+
+    var CT_LABELS = {
+        es: { ensayo: 'ensayo', guia: 'guía', resena: 'reseña', cronica: 'crónica', entrevista: 'entrevista', novedades: 'novedades', ruta: 'ruta' },
+        en: { ensayo: 'essay', guia: 'guide', resena: 'review', cronica: 'reportage', entrevista: 'interview', novedades: 'news', ruta: 'path' },
+        pt: { ensayo: 'ensaio', guia: 'guia', resena: 'resenha', cronica: 'crônica', entrevista: 'entrevista', novedades: 'novidades', ruta: 'rota' },
+        fr: { ensayo: 'essai', guia: 'guide', resena: 'critique', cronica: 'chronique', entrevista: 'entretien', novedades: 'actualités', ruta: 'parcours' },
+        zh: { ensayo: '随笔', guia: '指南', resena: '评论', cronica: '纪实', entrevista: '访谈', novedades: '新闻', ruta: '路线' },
+        ja: { ensayo: 'エッセイ', guia: 'ガイド', resena: 'レビュー', cronica: 'ルポ', entrevista: 'インタビュー', novedades: 'ニュース', ruta: 'ルート' },
+        ko: { ensayo: '에세이', guia: '가이드', resena: '리뷰', cronica: '르포', entrevista: '인터뷰', novedades: '소식', ruta: '루트' },
+        tr: { ensayo: 'deneme', guia: 'rehber', resena: 'inceleme', cronica: 'anlatı', entrevista: 'söyleşi', novedades: 'haberler', ruta: 'rota' }
+    };
+    window.cardLabel = function (lang, clave) {
+        return (CT_LABELS[lang] || CT_LABELS.es)[clave] || '';
+    };
+
+    window.getContentType = function (tags, lang) {
         if (!tags) return '';
-        var map = {
-            'hash-ensayo': 'ensayo',
-            'hash-guia': 'guía',
-            'hash-resena': 'reseña',
-            'hash-cronica': 'crónica',
-            'hash-entrevista': 'entrevista',
-            'hash-novedades': 'novedades'
-        };
+        var claves = ['ensayo', 'guia', 'resena', 'cronica', 'entrevista', 'novedades'];
+        lang = lang || window.postLang(tags);
         for (var i = 0; i < tags.length; i++) {
-            if (map[tags[i].slug]) return map[tags[i].slug];
+            var c = String(tags[i].slug).replace('hash-', '');
+            if (claves.indexOf(c) !== -1) return window.cardLabel(lang, c);
         }
         return '';
     };
@@ -35,13 +63,12 @@
         var tag = post.primary_tag || {};
         var author = post.primary_author || {};
         var tags = post.tags || [];
-        var isEn = tags.some(function (t) { return t.slug === 'hash-en'; });
         var isCanon = tags.some(function (t) { return t.slug === 'hash-canon'; });
         var isRuta = tags.some(function (t) { return (t.slug || '').indexOf('hash-ruta-') === 0; });
         var featured = isCanon || isRuta;
-        var lang = isEn ? 'en' : 'es';
+        var lang = window.postLang(tags);
 
-        var ct = window.getContentType(tags);
+        var ct = window.getContentType(tags, lang);
         var ctHtml = ct ? '<span class="pc__type"> · ' + window.escHtml(ct) + '</span>' : '';
         var tagUrl = tag.slug ? '/' + lang + '/tag/' + tag.slug + '/' : '';
         var tagName = window.escHtml(tag.name || 'Uncategorized');
@@ -60,7 +87,7 @@
         if (featured) {
             var badge = isCanon
                 ? '<span class="pc__badge" data-href="/' + lang + '/canon/"><span class="pc__star">★</span> canon</span>'
-                : '<span class="pc__badge" data-href="/' + lang + '/rutas/"><span class="pc__star">★</span> ruta</span>';
+                : '<span class="pc__badge" data-href="' + window.rutasUrl(lang) + '"><span class="pc__star">★</span> ' + window.cardLabel(lang, 'ruta') + '</span>';
             var tagPill = tag.slug
                 ? '<span class="pc__tag pc__tag--pill" data-tag-url="' + window.escHtml(tagUrl) + '">' + tagName + ctHtml + '</span>'
                 : '';

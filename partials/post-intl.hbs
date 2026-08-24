@@ -61,7 +61,7 @@
             <div class="global-container">
                 <div class="pv-huge">
                     <div class="related-header">
-                        <h2 class="related-title">Related posts</h2>
+                        <h2 class="related-title" data-i18n="related">Related posts</h2>
                     </div>
                     <div id="intl-related-posts" class="post-grid w-dyn-list">
                         <div role="list" class="post-cols w-dyn-items"></div>
@@ -88,6 +88,47 @@
             }).catch(function() {});
         })();
         </script>
+    <script>
+    // i18n del cuerpo de la nota para los 6 idiomas intl.
+    //
+    // Los partials del header y del author box solo tienen ramas server-side para
+    // ES y EN ({{#has tag="#en"}}), asi que una nota en portugues o japones salia
+    // con "por", "Suscribite", "Compartir" y "Escrito por" en castellano, y el
+    // boton de suscripcion apuntaba a /es/suscribite/. post-intl es el unico
+    // wrapper de los 6 idiomas y no sabe cual es cual server-side (comparte
+    // plantilla), asi que el idioma se saca de la URL, como en el resto del theme.
+    (function () {
+      var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+      if (!m) return;
+      var lang = m[1];
+      var I18N = {
+        pt: { by: 'por', and: 'e',  read: 'de leitura',  subscribe: 'Assine',      share: 'Compartilhar', writtenBy: 'Escrito por', related: 'Posts relacionados' },
+        fr: { by: 'par', and: 'et', read: 'de lecture',  subscribe: 'S’abonner',   share: 'Partager',     writtenBy: 'Écrit par',   related: 'Articles liés' },
+        zh: { by: '作者', and: '和', read: '阅读',        subscribe: '订阅',         share: '分享',          writtenBy: '撰文',        related: '相关文章' },
+        ja: { by: '著者', and: 'と', read: '読了',        subscribe: '購読する',      share: 'シェア',        writtenBy: '執筆',        related: '関連記事' },
+        ko: { by: '글',   and: '및', read: '읽기',        subscribe: '구독하기',      share: '공유',          writtenBy: '글쓴이',      related: '관련 글' },
+        tr: { by: 'yazan', and: 've', read: 'okuma',     subscribe: 'Abone ol',    share: 'Paylaş',       writtenBy: 'Yazan',       related: 'İlgili yazılar' }
+      };
+      var t = I18N[lang];
+      if (!t) return;
+
+      var els = document.querySelectorAll('[data-i18n]');
+      for (var i = 0; i < els.length; i++) {
+        var el = els[i];
+        var k = el.getAttribute('data-i18n');
+        var v = t[k];
+        if (!v) continue;
+        if (k === 'share') {
+          el.setAttribute('aria-label', v);
+          // El pill de compartir lleva ademas texto visible; el icono no.
+          if (el.lastChild && el.lastChild.nodeType === 3 && el.lastChild.nodeValue.trim()) el.lastChild.nodeValue = ' ' + v;
+        } else {
+          el.textContent = v;
+        }
+        if (k === 'subscribe') el.setAttribute('href', '/' + lang + '/subscribe/');
+      }
+    })();
+    </script>
     </main>
     {{> "site-footer"}}
     <script src="{{asset "js/related-posts.js"}}" defer></script>

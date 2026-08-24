@@ -45,7 +45,7 @@ routes:
     data: page.subscribe
   /en/pitch-us/:
     template: pitch
-    data: page.pitcheale-a-421
+    data: page.pitch-us-en
   /en/podcast/:
     template: podcast-en
     data: page.random-podcast-juan-ruocco-en

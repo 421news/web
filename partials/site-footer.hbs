@@ -5,7 +5,7 @@
 
         <!-- LOGO SVG -->
         <div>
-          <a href="{{#if lang}}/en/{{else}}/es/{{/if}}" class="footer-logo-link" aria-label="{{#if lang}}421 — Home{{else}}421 — Inicio{{/if}}">
+          <a href="/es/" class="footer-logo-link" data-footer-home aria-label="421 — Inicio">
             <div class='icon-embed-custom w-embed'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
@@ -44,18 +44,14 @@
 
         <!-- SLOGAN -->
         <div>
-          {{#if lang}}
-            <a href="/en/what-is-421/" class="footer-slogan-link"><p class="footer-slogan">Quality information for your cognitive diet</p></a>
-          {{else}}
-            <a href="/es/que-es-421/" class="footer-slogan-link"><p class="footer-slogan">Informaci&oacute;n de calidad para tu dieta cognitiva</p></a>
-          {{/if}}
+          <a href="/es/que-es-421/" class="footer-slogan-link" data-footer-about><p class="footer-slogan" data-footer-slogan>Informaci&oacute;n de calidad para tu dieta cognitiva</p></a>
         </div>
 
         <!-- NAV BUTTONS -->
         <div class='nav_buttons is-footer'>
           <a
             href='https://x.com/421net'
-            aria-label='421 en X (Twitter)'
+            aria-label='421 en X (Twitter)' data-footer-red='X (Twitter)'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -68,7 +64,7 @@
           </a>
           <a
             href='https://instagram.com/421net'
-            aria-label='421 en Instagram'
+            aria-label='421 en Instagram' data-footer-red='Instagram'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -83,7 +79,7 @@
           </a>
           <a
             href='https://www.linkedin.com/company/421net'
-            aria-label='421 en LinkedIn'
+            aria-label='421 en LinkedIn' data-footer-red='LinkedIn'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -96,7 +92,7 @@
           </a>
           <a
             href='https://www.youtube.com/@421net/'
-            aria-label='421 en YouTube'
+            aria-label='421 en YouTube' data-footer-red='YouTube'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -109,7 +105,7 @@
           </a>
           <a
             href='https://open.spotify.com/show/0mDtmWPN5NtlUQDDXcBK3F'
-            aria-label='421 en Spotify'
+            aria-label='421 en Spotify' data-footer-red='Spotify'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -131,7 +127,7 @@
         <div class="mobile-footer-first-box">
           <!-- LOGO SVG -->
           <div>
-            <a href="{{#if lang}}/en/{{else}}/es/{{/if}}" class="footer-logo-link" aria-label="{{#if lang}}421 — Home{{else}}421 — Inicio{{/if}}">
+            <a href="/es/" class="footer-logo-link" data-footer-home aria-label="421 — Inicio">
               <div class='icon-embed-custom w-embed'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -170,11 +166,7 @@
 
           <!-- SLOGAN -->
           <div>
-            {{#if lang}}
-              <a href="/en/what-is-421/" class="footer-slogan-link"><p>Quality information for your cognitive diet</p></a>
-            {{else}}
-              <a href="/es/que-es-421/" class="footer-slogan-link"><p>Informaci&oacute;n de calidad para tu dieta cognitiva</p></a>
-            {{/if}}
+            <a href="/es/que-es-421/" class="footer-slogan-link" data-footer-about><p data-footer-slogan>Informaci&oacute;n de calidad para tu dieta cognitiva</p></a>
           </div>
         </div>
 
@@ -182,7 +174,7 @@
         <div class='nav_buttons is-footer'>
           <a
             href='https://x.com/421net'
-            aria-label='421 en X (Twitter)'
+            aria-label='421 en X (Twitter)' data-footer-red='X (Twitter)'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -195,7 +187,7 @@
           </a>
           <a
             href='https://instagram.com/421net'
-            aria-label='421 en Instagram'
+            aria-label='421 en Instagram' data-footer-red='Instagram'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -210,7 +202,7 @@
           </a>
           <a
             href='https://www.linkedin.com/company/421net'
-            aria-label='421 en LinkedIn'
+            aria-label='421 en LinkedIn' data-footer-red='LinkedIn'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -223,7 +215,7 @@
           </a>
           <a
             href='https://www.youtube.com/@421net/'
-            aria-label='421 en YouTube'
+            aria-label='421 en YouTube' data-footer-red='YouTube'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -236,7 +228,7 @@
           </a>
           <a
             href='https://open.spotify.com/show/0mDtmWPN5NtlUQDDXcBK3F'
-            aria-label='421 en Spotify'
+            aria-label='421 en Spotify' data-footer-red='Spotify'
             class='button is-icon w-inline-block footer-button'
             target='_blank'
             rel='noopener noreferrer'
@@ -251,4 +243,46 @@
       </div>
     </div>
   </div>
+
+<script>
+// i18n del footer. El footer es UN partial compartido por los 8 idiomas, asi que
+// el idioma se saca de la URL, igual que en site-nav-intl y en lang-selector.js.
+//
+// Antes esto era un {{#if lang}} con dos ramas (ES/EN) que dependia de que cada
+// template pasara lang="en" al incluir el partial. La mitad no lo pasaba: /en/
+// y /en/subscribe/ mostraban el slogan en ingles, pero /en/canon/ y /en/routes/
+// lo mostraban en castellano, y los 6 idiomas intl no tenian rama posible.
+(function () {
+  var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+  var lang = m ? m[1] : 'es';
+  var I18N = {
+    es: { slogan: 'Información de calidad para tu dieta cognitiva', about: '/es/que-es-421/', home: '421 — Inicio', red: function (n) { return '421 en ' + n; } },
+    en: { slogan: 'Quality information for your cognitive diet',        about: '/en/what-is-421/', home: '421 — Home',   red: function (n) { return '421 on ' + n; } },
+    pt: { slogan: 'Informação de qualidade para a sua dieta cognitiva', about: '/pt/what-is-421/', home: '421 — Início', red: function (n) { return '421 no ' + n; } },
+    fr: { slogan: 'De l’information de qualité pour votre régime cognitif', about: '/fr/what-is-421/', home: '421 — Accueil', red: function (n) { return '421 sur ' + n; } },
+    zh: { slogan: '为你的认知饮食提供优质信息', about: '/zh/what-is-421/', home: '421 — 首页', red: function (n) { return '421 在 ' + n; } },
+    ja: { slogan: 'あなたの認知的食生活のための良質な情報', about: '/ja/what-is-421/', home: '421 — ホーム', red: function (n) { return '421 の ' + n; } },
+    ko: { slogan: '당신의 인지적 식단을 위한 양질의 정보', about: '/ko/what-is-421/', home: '421 — 홈', red: function (n) { return '421의 ' + n; } },
+    tr: { slogan: 'Bilişsel beslenmen için nitelikli bilgi', about: '/tr/what-is-421/', home: '421 — Ana sayfa', red: function (n) { return '421 ' + n + ' hesabı'; } }
+  };
+  var t = I18N[lang];
+  if (!t || lang === 'es') return;   // el HTML ya viene en castellano
+
+  var i, els;
+  els = document.querySelectorAll('[data-footer-slogan]');
+  for (i = 0; i < els.length; i++) els[i].textContent = t.slogan;
+
+  els = document.querySelectorAll('[data-footer-about]');
+  for (i = 0; i < els.length; i++) els[i].setAttribute('href', t.about);
+
+  els = document.querySelectorAll('[data-footer-home]');
+  for (i = 0; i < els.length; i++) {
+    els[i].setAttribute('href', '/' + lang + '/');
+    els[i].setAttribute('aria-label', t.home);
+  }
+
+  els = document.querySelectorAll('[data-footer-red]');
+  for (i = 0; i < els.length; i++) els[i].setAttribute('aria-label', t.red(els[i].getAttribute('data-footer-red')));
+})();
+</script>
 </footer>

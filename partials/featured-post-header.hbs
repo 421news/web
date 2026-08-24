@@ -7,11 +7,11 @@
     <h1 class="featured-post-title">{{title}}</h1>
 
     <div class="featured-post-byline">
-      <span>{{#has tag="#en"}}by{{else}}por{{/has}}</span>
+      <span data-i18n="by">{{#has tag="#en"}}by{{else}}por{{/has}}</span>
       {{#has tag="#en"}}
-        {{#foreach authors}}{{#unless @first}}<span>and</span> {{/unless}}<a href="{{url}}" class="featured-post-author">{{name}}</a> {{/foreach}}
+        {{#foreach authors}}{{#unless @first}}<span data-i18n="and">and</span> {{/unless}}<a href="{{url}}" class="featured-post-author">{{name}}</a> {{/foreach}}
       {{else}}
-        {{#foreach authors}}{{#unless @first}}<span>y</span> {{/unless}}<a href="{{url}}" class="featured-post-author">{{name}}</a> {{/foreach}}
+        {{#foreach authors}}{{#unless @first}}<span data-i18n="and">y</span> {{/unless}}<a href="{{url}}" class="featured-post-author">{{name}}</a> {{/foreach}}
       {{/has}}
       <span class="featured-post-sep">·</span>
       <span class="featured-post-meta">{{date published_at format="D MMM YYYY"}} · {{reading_time minute="1 min" minutes="% min"}}</span>
@@ -26,15 +26,15 @@
     {{!-- Pill footer: Suscribite + translation (dynamic via #translation-link JS) + Share --}}
     <div class="featured-post-footer">
       {{#has tag="#en"}}
-        <a href="/en/subscribe/" class="featured-post-pill-item is-primary" onclick="if(typeof gtag==='function')gtag('event','post_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Subscribe</a>
+        <a href="/en/subscribe/" class="featured-post-pill-item is-primary" data-i18n="subscribe" onclick="if(typeof gtag==='function')gtag('event','post_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Subscribe</a>
       {{else}}
-        <a href="/es/suscribite/" class="featured-post-pill-item is-primary" onclick="if(typeof gtag==='function')gtag('event','post_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Suscribite</a>
+        <a href="/es/suscribite/" class="featured-post-pill-item is-primary" data-i18n="subscribe" onclick="if(typeof gtag==='function')gtag('event','post_subscribe_click',{event_category:'engagement',event_label:location.pathname});">Suscribite</a>
       {{/has}}
       {{!-- #translation-link is populated by JS in post.hbs from english-version/spanish-version meta tag --}}
       <span id="translation-link" class="featured-post-pill-translation"></span>
-      <a href="#/share" class="featured-post-pill-item" aria-label="Share">
+      <a href="#/share" class="featured-post-pill-item" data-i18n="share" aria-label="{{#has tag="#en"}}Share{{else}}Compartir{{/has}}">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-        Share
+        {{#has tag="#en"}}Share{{else}}Compartir{{/has}}
       </a>
     </div>
   </div>

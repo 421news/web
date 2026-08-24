@@ -13,9 +13,9 @@
       />
       <div class="pc__overlay" style="background-size:cover;background-position:center"></div>
       <div class="pc__mask"></div>
-      {{#has tag="#canon"}}<span class="pc__badge" data-href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/canon/"><span class="pc__star">★</span> canon</span>{{else}}<span class="pc__badge" data-href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/rutas/"><span class="pc__star">★</span> ruta</span>{{/has}}
+      {{#has tag="#canon"}}<span class="pc__badge" data-href="{{#has tag="#en"}}/en{{else}}/es{{/has}}/canon/"><span class="pc__star">★</span> canon</span>{{else}}<span class="pc__badge" data-href="{{#has tag="#en"}}/en/routes/{{else}}/es/rutas/{{/has}}"><span class="pc__star">★</span> {{#has tag="#en"}}path{{else}}ruta{{/has}}</span>{{/has}}
       {{#if primary_tag}}
-      <span class="pc__tag pc__tag--pill" data-tag-url="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}{{#has tag="#ensayo"}}<span class="pc__type"> · ensayo</span>{{/has}}{{#has tag="#guia"}}<span class="pc__type"> · guía</span>{{/has}}{{#has tag="#resena"}}<span class="pc__type"> · reseña</span>{{/has}}{{#has tag="#cronica"}}<span class="pc__type"> · crónica</span>{{/has}}{{#has tag="#entrevista"}}<span class="pc__type"> · entrevista</span>{{/has}}{{#has tag="#novedades"}}<span class="pc__type"> · novedades</span>{{/has}}</span>
+      <span class="pc__tag pc__tag--pill" data-tag-url="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}{{#has tag="#ensayo"}}<span class="pc__type"> · {{#has tag="#en"}}essay{{else}}ensayo{{/has}}</span>{{/has}}{{#has tag="#guia"}}<span class="pc__type"> · {{#has tag="#en"}}guide{{else}}guía{{/has}}</span>{{/has}}{{#has tag="#resena"}}<span class="pc__type"> · {{#has tag="#en"}}review{{else}}reseña{{/has}}</span>{{/has}}{{#has tag="#cronica"}}<span class="pc__type"> · {{#has tag="#en"}}reportage{{else}}crónica{{/has}}</span>{{/has}}{{#has tag="#entrevista"}}<span class="pc__type"> · {{#has tag="#en"}}interview{{else}}entrevista{{/has}}</span>{{/has}}{{#has tag="#novedades"}}<span class="pc__type"> · {{#has tag="#en"}}news{{else}}novedades{{/has}}</span>{{/has}}</span>
       {{/if}}
       <div class="pc__titlebox">
         <h3 class="pc__title">{{title}}</h3>
@@ -38,7 +38,7 @@
     </div>
     <div class="pc__body">
       {{#if primary_tag}}
-      <span class="pc__tag" data-tag-url="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}{{#has tag="#ensayo"}}<span class="pc__type"> · ensayo</span>{{/has}}{{#has tag="#guia"}}<span class="pc__type"> · guía</span>{{/has}}{{#has tag="#resena"}}<span class="pc__type"> · reseña</span>{{/has}}{{#has tag="#cronica"}}<span class="pc__type"> · crónica</span>{{/has}}{{#has tag="#entrevista"}}<span class="pc__type"> · entrevista</span>{{/has}}{{#has tag="#novedades"}}<span class="pc__type"> · novedades</span>{{/has}}</span>
+      <span class="pc__tag" data-tag-url="{{#has tag="#en"}}/en{{else}}/es{{/has}}/tag/{{primary_tag.slug}}/">{{primary_tag.name}}{{#has tag="#ensayo"}}<span class="pc__type"> · {{#has tag="#en"}}essay{{else}}ensayo{{/has}}</span>{{/has}}{{#has tag="#guia"}}<span class="pc__type"> · {{#has tag="#en"}}guide{{else}}guía{{/has}}</span>{{/has}}{{#has tag="#resena"}}<span class="pc__type"> · {{#has tag="#en"}}review{{else}}reseña{{/has}}</span>{{/has}}{{#has tag="#cronica"}}<span class="pc__type"> · {{#has tag="#en"}}reportage{{else}}crónica{{/has}}</span>{{/has}}{{#has tag="#entrevista"}}<span class="pc__type"> · {{#has tag="#en"}}interview{{else}}entrevista{{/has}}</span>{{/has}}{{#has tag="#novedades"}}<span class="pc__type"> · {{#has tag="#en"}}news{{else}}novedades{{/has}}</span>{{/has}}</span>
       {{else}}
       <span class="pc__tag">Uncategorized</span>
       {{/if}}

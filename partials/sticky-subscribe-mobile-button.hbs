@@ -3,3 +3,30 @@
    onclick="if(typeof gtag==='function')gtag('event','sticky_subscribe_click',{event_category:'engagement',event_label:location.pathname});">
     Sumate a 421 &rarr;
 </a>
+<script>
+// Este pill lo incluye default.hbs, o sea que sale en las 8 lenguas y en la
+// landing. Estaba escrito a mano en castellano y apuntando a /es/suscribite/:
+// en ingles y en los 6 idiomas intl decia "Sumate a 421" y mandaba al checkout
+// en castellano. Es la superficie de suscripcion mas usada (60% del trafico es
+// mobile), asi que el idioma se saca de la URL como en el resto del theme.
+(function () {
+  var el = document.getElementById('hero-mobile-subscribe-button');
+  if (!el) return;
+  var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+  var lang = m ? m[1] : 'es';
+  var I18N = {
+    es: { texto: 'Sumate a 421', href: '/es/suscribite/' },
+    en: { texto: 'Join 421', href: '/en/subscribe/' },
+    pt: { texto: 'Junte-se ao 421', href: '/pt/subscribe/' },
+    fr: { texto: 'Rejoignez 421', href: '/fr/subscribe/' },
+    zh: { texto: '\u52a0\u5165 421', href: '/zh/subscribe/' },
+    ja: { texto: '421 \u306b\u53c2\u52a0', href: '/ja/subscribe/' },
+    ko: { texto: '421 \ud568\uaed8\ud558\uae30', href: '/ko/subscribe/' },
+    tr: { texto: '421\u2019e kat\u0131l', href: '/tr/subscribe/' }
+  };
+  var t = I18N[lang];
+  if (!t || lang === 'es') return;
+  el.setAttribute('href', t.href);
+  el.textContent = t.texto + ' \u2192';
+})();
+</script>
