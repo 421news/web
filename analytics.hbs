@@ -34,6 +34,7 @@ document.documentElement.classList.add('is-analytics');
         <div class="analytics-auth-icon">&#x1F512;</div>
         <h2>Acceso restringido</h2>
         <p>Esta p&aacute;gina es solo para el equipo de 421.</p>
+        <p id="auth-denied-quien" style="display:none;"></p>
         <a href="/es/" class="analytics-back-link">&larr; Volver al inicio</a>
       </div>
 
@@ -324,12 +325,29 @@ function mostrarEstado(id) {
   document.getElementById('auth-loading').style.display = 'none';
   document.getElementById(id).style.display = '';
 }
+
+// Con qué mail está logueado el navegador. Un 403 sin este dato es un callejón
+// sin salida: el mail que tiene el label "equipo" en Ghost y el mail con el que
+// quedó la sesión en ESE navegador pueden ser distintos, y desde afuera los dos
+// casos se ven igual. Mostrarlo convierte el cartel en algo accionable.
+function decirQuienSoy() {
+  fetch('/members/api/member/', { credentials: 'same-origin' })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(m) {
+      if (!m || !m.email) return;
+      var el = document.getElementById('auth-denied-quien');
+      el.textContent = 'Estás logueado como ' + m.email + '. Si esa no es tu cuenta de 421, cerrá sesión y entrá con la otra.';
+      el.style.display = '';
+    })
+    .catch(function() {});
+}
+
 __revenueResp.then(function(x) {
   if (x.status === 200 || x.status === 503) mostrarEstado('dashboard');
   else if (x.status === 401) mostrarEstado('auth-signin');
-  else mostrarEstado('auth-denied');
+  else { mostrarEstado('auth-denied'); decirQuienSoy(); }
 }).catch(function() {
-  mostrarEstado('auth-denied');
+  mostrarEstado('auth-denied'); decirQuienSoy();
 });
 // View toggle: Analytics | Revenue (lazy-init revenue dashboard on first show)
 (function() {
