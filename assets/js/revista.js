@@ -22,13 +22,13 @@
       badgeAdelanto: 'Adelanto suscriptores', descargar: 'Descargar PDF',
       suscribite: 'Suscribite para leerlo ya', registrate: 'Registrate para descargar',
       verTapa: 'Ver tapa', preparando: 'Preparando...', falloDescarga: 'No se pudo, reintentá',
-      alt: 'Revista 421 #', subscribeUrl: '/es/suscribite/'
+      nombre: 'Revista 421', subscribeUrl: '/es/suscribite/'
     },
     en: {
       badgeAdelanto: 'Subscriber early access', descargar: 'Download PDF',
       suscribite: 'Subscribe to read it now', registrate: 'Sign up to download',
       verTapa: 'View cover', preparando: 'Preparing...', falloDescarga: 'Failed, try again',
-      alt: 'Revista 421 #', subscribeUrl: '/en/subscribe/'
+      nombre: '421 Magazine', subscribeUrl: '/en/subscribe/'
     }
   }[LANG];
 
@@ -119,7 +119,7 @@
 
       var numero = parseInt(match[1], 10);
       var fecha = match[2].trim();
-      var titulo = match[3] ? match[3].trim() : 'Revista 421 #' + numero;
+      var titulo = match[3] ? match[3].trim() : T.nombre + ' #' + numero;
 
       var cover = '';
       var creditos = [];
@@ -224,7 +224,7 @@
     return '<div class="revista-card' + (esGateado ? ' revista-card-gated' : '') + '">' +
       '<div class="revista-card-cover">' +
         '<a href="' + issue.cover + '" target="_blank">' +
-          '<img src="' + issue.cover + '" alt="' + T.alt + issue.numero + '" loading="lazy">' +
+          '<img src="' + issue.cover + '" alt="' + T.nombre + ' #' + issue.numero + '" loading="lazy">' +
         '</a>' +
       '</div>' +
       '<div class="revista-card-info">' +
@@ -264,7 +264,7 @@
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'Revista 421 #' + numero + '.pdf';
+        a.download = T.nombre + ' #' + numero + '.pdf';
         document.body.appendChild(a);
         a.click();
         a.remove();
