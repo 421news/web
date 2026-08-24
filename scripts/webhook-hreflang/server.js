@@ -1129,7 +1129,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.6.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.6.1', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1866,7 +1866,8 @@ function processGA4Results(pageRows, channelRows, monthlyRows, dailyRows, eventR
 
 // --- Team hashes for /analytics access ---
 // Safety fallback so a Ghost API failure never locks out the current team.
-// Identidad de los primeros 2 hashes desconocida — mantener.
+// Son jfruocco@gmail.com, agustinasojit@gmail.com y juanvon@421.news (verificado
+// 2026-08-24). Mantener: si la consulta a Ghost falla, son los unicos que entran.
 const FALLBACK_TEAM_HASHES = [
   '00285f8378c256764d05b03690b04ab876110c230a199a060064c33bfc734d24',
   '708e778156d49e0e207733e8f57251fbff7189c94bccbd175afafd04608c06e7',
@@ -1966,27 +1967,67 @@ async function emailFromClaims(claims) {
   return null;
 }
 
-// Is this verified member on the team? Reuses the exact team set used elsewhere
-// (fallback hashes ∪ Ghost label:equipo), so access matches the old client-side gate.
-async function isTeamMember(claims) {
+// Un mail sin exponerlo entero en los logs: j***@gmail.com.
+function mailEnmascarado(email) {
+  return String(email).replace(/^(.)[^@]*(@.*)$/, '$1***$2');
+}
+
+/**
+ * ¿Este miembro verificado es del equipo?
+ *
+ * El set es fallback hashes ∪ label "equipo" de Ghost. Se mira primero la copia
+ * cacheada en ga4Data.team, que se rearma en cada refresh de GA4 (2 veces por día).
+ *
+ * ⚠️ Ante un MISS se re-consulta Ghost en vivo antes de negar. Sin eso, alguien
+ * que acaba de recibir el label queda afuera hasta el próximo refresh —hasta 12
+ * horas— y el síntoma es idéntico al de un bug de permisos: "le puse el tag y no
+ * entra". El costo es una consulta a Ghost por acceso denegado, nada.
+ */
+async function resolverAccesoEquipo(claims) {
   const email = await emailFromClaims(claims);
-  if (!email) return false;
-  let team = (ga4Data && Array.isArray(ga4Data.team) && ga4Data.team.length) ? ga4Data.team : null;
-  if (!team) team = await getTeamHashes();
-  return team.includes(sha256Hex(email));
+  if (!email) return { ok: false, motivo: `claims sin email (${Object.keys(claims || {}).join(',')})` };
+
+  const hash = sha256Hex(email);
+  const cache = (ga4Data && Array.isArray(ga4Data.team) && ga4Data.team.length) ? ga4Data.team : null;
+  if (cache && cache.includes(hash)) return { ok: true, email };
+
+  const fresco = await getTeamHashes();
+  if (ga4Data) ga4Data.team = fresco;
+  if (fresco.includes(hash)) return { ok: true, email, via: 'refresco' };
+
+  return { ok: false, email, motivo: `no tiene el label "equipo" (${fresco.length} en el equipo)` };
+}
+
+async function isTeamMember(claims) {
+  return (await resolverAccesoEquipo(claims)).ok;
 }
 
 // Express gate for team-only endpoints.
+//
+// Loguea SIEMPRE el motivo del rechazo. Un 403 mudo era indistinguible entre "no
+// está logueado", "el token no verifica" y "no está en el equipo", y las tres se
+// arreglan de manera distinta.
 async function requireTeam(req, res, next) {
   res.set('Access-Control-Allow-Origin', 'https://www.421.news');
   res.set('Vary', 'Origin');
+  const ruta = req.path;
   try {
     const claims = await verifyMemberToken(req);
-    if (!claims || !(await isTeamMember(claims))) {
+    if (!claims) {
+      const auth = req.get('authorization') || '';
+      console.log(`[team] 403 en ${ruta}: ${auth ? 'token invalido o vencido' : 'sin header Authorization (miembro no logueado)'}`);
       res.status(403).json({ error: 'forbidden' });
       return;
     }
+    const r = await resolverAccesoEquipo(claims);
+    if (!r.ok) {
+      console.log(`[team] 403 en ${ruta}: ${r.email ? mailEnmascarado(r.email) + ' ' : ''}${r.motivo}`);
+      res.status(403).json({ error: 'forbidden' });
+      return;
+    }
+    console.log(`[team] OK en ${ruta}: ${mailEnmascarado(r.email)}${r.via ? ' (' + r.via + ')' : ''}`);
   } catch (e) {
+    console.log(`[team] 403 en ${ruta}: error inesperado — ${e.message}`);
     res.status(403).json({ error: 'forbidden' });
     return;
   }

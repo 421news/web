@@ -20,6 +20,15 @@ document.documentElement.classList.add('is-analytics');
         <p>Verificando acceso...</p>
       </div>
 
+      <!-- Auth: sin sesion de miembro (distinto de "no sos del equipo") -->
+      <div id="auth-signin" class="analytics-auth-state" style="display:none;">
+        <div class="analytics-auth-icon">&#x1F511;</div>
+        <h2>Iniciá sesión</h2>
+        <p>Para ver esta página tenés que estar logueado con el mail de tu cuenta de 421.</p>
+        <p><a href="#/portal/signin" class="btn-solid">Iniciar sesión</a></p>
+        <a href="/es/" class="analytics-back-link">&larr; Volver al inicio</a>
+      </div>
+
       <!-- Auth: Denied -->
       <div id="auth-denied" class="analytics-auth-state" style="display:none;">
         <div class="analytics-auth-icon">&#x1F512;</div>
@@ -303,17 +312,24 @@ window.__revenueData = __revenueResp.then(function(x) {
 window.__revenueData.catch(function() {}); // silence unhandled rejection; dashboard handles absence
 
 // Page access gate: the revenue endpoint is the auth oracle.
-// 200 (data ready) or 503 (team, data loading) => authorized; 401/403/other => denied.
+// 200 (data ready) o 503 (es del equipo, los datos todavia cargan) => adentro.
+//
+// 401 y 403 son DOS PROBLEMAS DISTINTOS y hasta ahora mostraban el mismo cartel:
+//   401 = el navegador no tiene sesion de miembro (nunca inicio sesion, o se le
+//         vencio). Se arregla iniciando sesion.
+//   403 = esta logueado pero su mail no tiene el label "equipo" en Ghost.
+// Mostrarle "acceso restringido" a alguien que nunca inicio sesion lo manda a
+// pedir un permiso que ya tiene. Paso exactamente eso con el equipo nuevo.
+function mostrarEstado(id) {
+  document.getElementById('auth-loading').style.display = 'none';
+  document.getElementById(id).style.display = '';
+}
 __revenueResp.then(function(x) {
-  document.getElementById('auth-loading').style.display = 'none';
-  if (x.status === 200 || x.status === 503) {
-    document.getElementById('dashboard').style.display = '';
-  } else {
-    document.getElementById('auth-denied').style.display = '';
-  }
+  if (x.status === 200 || x.status === 503) mostrarEstado('dashboard');
+  else if (x.status === 401) mostrarEstado('auth-signin');
+  else mostrarEstado('auth-denied');
 }).catch(function() {
-  document.getElementById('auth-loading').style.display = 'none';
-  document.getElementById('auth-denied').style.display = '';
+  mostrarEstado('auth-denied');
 });
 // View toggle: Analytics | Revenue (lazy-init revenue dashboard on first show)
 (function() {

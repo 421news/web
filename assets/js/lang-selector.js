@@ -1,15 +1,48 @@
 (function() {
   var LANGS = ['es','en','pt','fr','zh','ja','ko','tr'];
-  var HOME_MAP = {};
-  LANGS.forEach(function(l) { HOME_MAP[l] = '/' + l + '/'; });
+  var INTL = ['pt','fr','zh','ja','ko','tr'];
 
-  // Page-level URL mappings for non-post pages
-  var PAGE_MAP = {
-    '/es/': { en:'/en/', pt:'/pt/', fr:'/fr/', zh:'/zh/', ja:'/ja/', ko:'/ko/', tr:'/tr/' },
-    '/en/': { es:'/es/', pt:'/pt/', fr:'/fr/', zh:'/zh/', ja:'/ja/', ko:'/ko/', tr:'/tr/' },
-    '/es/suscribite/': { en:'/en/subscribe/', pt:'/pt/subscribe/', fr:'/fr/subscribe/', zh:'/zh/subscribe/', ja:'/ja/subscribe/', ko:'/ko/subscribe/', tr:'/tr/subscribe/' },
-    '/en/subscribe/': { es:'/es/suscribite/', pt:'/pt/subscribe/', fr:'/fr/subscribe/', zh:'/zh/subscribe/', ja:'/ja/subscribe/', ko:'/ko/subscribe/', tr:'/tr/subscribe/' }
-  };
+  // Las secciones del sitio, con el slug que usa cada una en cada idioma.
+  // Los 6 idiomas intl comparten slug siempre; ES y EN son los que difieren.
+  // `null` = la seccion no existe en ese idioma.
+  //
+  // Esta tabla es la fuente unica del mapeo. Antes habia un PAGE_MAP escrito a
+  // mano que solo cubria la home y suscribite: desde /es/rutas/ el selector de
+  // idioma mandaba a /en/ en vez de /en/routes/, y lo mismo pasaba en canon,
+  // que-es-421, los archivos y las 4 paginas de tag primarias.
+  function seccion(es, en, intl) {
+    var m = { es: es, en: en };
+    INTL.forEach(function(l) { m[l] = intl; });
+    return m;
+  }
+  var SECCIONES = [
+    seccion('',              '',                ''),
+    seccion('rutas',         'routes',          'rutas'),
+    seccion('canon',         'canon',           'canon'),
+    seccion('suscribite',    'subscribe',       'subscribe'),
+    seccion('que-es-421',    'what-is-421',     'what-is-421'),
+    seccion('ultimos-posts', 'last-posts',      null),
+    seccion('mi-suscripcion','my-subscription', null),
+    seccion('tag/cultura',   'tag/culture',     'tag/culture'),
+    seccion('tag/juegos',    'tag/games',       'tag/games'),
+    seccion('tag/vida-real', 'tag/real-life',   'tag/real-life'),
+    seccion('tag/tecnologia','tag/tech',        'tag/tech')
+  ];
+
+  // path -> { lang: url }. Se deriva de la tabla, no se escribe a mano.
+  var urlDe = function(lang, slug) { return '/' + lang + '/' + (slug ? slug + '/' : ''); };
+  var PAGE_MAP = {};
+  SECCIONES.forEach(function(sec) {
+    LANGS.forEach(function(desde) {
+      if (sec[desde] == null) return;
+      var destinos = {};
+      LANGS.forEach(function(hacia) {
+        if (hacia === desde || sec[hacia] == null) return;
+        destinos[hacia] = urlDe(hacia, sec[hacia]);
+      });
+      PAGE_MAP[urlDe(desde, sec[desde])] = destinos;
+    });
+  });
 
   function detectCurrentLang() {
     var path = window.location.pathname;
@@ -66,10 +99,16 @@
           opt.classList.add('is-unavailable');
           opt.href = '/' + lang + '/';
         } else if (!hasHreflang) {
-          // Non-post page: map known pages or go to home
+          // Pagina de seccion: se traduce por la tabla.
           var pageEntry = PAGE_MAP[path];
           if (pageEntry && pageEntry[lang]) {
             opt.href = pageEntry[lang];
+            opt.classList.remove('is-unavailable');
+          } else if (pageEntry && lang !== currentLang) {
+            // La seccion existe, pero no en este idioma (ej. el archivo, que solo
+            // esta en ES y EN): se marca igual que un post sin traduccion.
+            opt.classList.add('is-unavailable');
+            opt.href = '/' + lang + '/';
           } else {
             opt.href = '/' + lang + '/';
           }
