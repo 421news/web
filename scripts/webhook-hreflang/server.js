@@ -1129,7 +1129,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.6.1', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.6.2', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2520,6 +2520,45 @@ async function saveRevenueStore(obj) {
 // campo se saca del payload público a propósito (son hashes de los emails del equipo en un
 // endpoint world-readable), así que el tarifario quedó sin poder desbloquear a nadie.
 // Devuelve solo {ok:true}: no hay nada que filtrar si alguien la llama sin credenciales.
+// Diagnóstico de acceso al equipo. Responde por qué un mail entra o no, sin
+// exponer nada: protegido con la misma key que /api/emails/run.
+//
+// Existe porque un 403 tiene tres causas que desde afuera se ven idénticas (no
+// está logueado / el token no verifica / no está en la lista) y perseguirlas a
+// ciegas cuesta un ida y vuelta con la persona por cada hipótesis.
+app.get('/api/team-debug', async (req, res) => {
+  if (!process.env.EMAILS_RUN_KEY || req.headers['x-webhook-key'] !== process.env.EMAILS_RUN_KEY) {
+    return res.status(401).json({ error: 'unauthorized' });
+  }
+  const email = String(req.query.email || '').trim();
+  if (!email) return res.status(400).json({ error: 'falta ?email=' });
+  try {
+    const hash = sha256Hex(email);
+    const cache = (ga4Data && Array.isArray(ga4Data.team)) ? ga4Data.team : null;
+    const vivo = await getTeamHashes();
+    const g = await ghostRequest('GET', `/ghost/api/admin/members/?limit=1&filter=${encodeURIComponent(`email:'${email}'`)}`);
+    const m = (g.members || [])[0] || null;
+    res.json({
+      email,
+      hashPrefijo: hash.slice(0, 12),
+      enGhost: !!m,
+      labels: m ? (m.labels || []).map(l => l.slug) : null,
+      status: m ? m.status : null,
+      ultimoAcceso: m ? m.last_seen_at : null,
+      enCache: cache ? cache.includes(hash) : null,
+      tamanoCache: cache ? cache.length : null,
+      enVivo: vivo.includes(hash),
+      tamanoVivo: vivo.length,
+      jwksKids: Object.keys(_jwksCache.pems),
+      veredicto: vivo.includes(hash)
+        ? 'esta en el equipo: un 403 para este mail viene del token, no de la lista'
+        : 'NO esta en el equipo: el 403 es correcto'
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.options('/api/team-check', teamPreflight);
 app.get('/api/team-check', requireTeam, (req, res) => {
   res.set('Cache-Control', 'private, no-store');
