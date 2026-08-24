@@ -1,0 +1,28 @@
+{{!< default}}
+
+{{!-- Random Podcast — version en ingles de /es/random-podcast-juan-ruocco/.
+     Ruta: /en/podcast/ (routes.yaml, data: page.random-podcast-juan-ruocco-en)
+     El podcast se graba en castellano; el aviso va en el cuerpo de la pagina en Ghost. --}}
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-en"}}
+  <main style="min-height: 80vh;">
+    {{#page}}
+      {{> "section-hero"
+          eyebrow="421 · Podcast"
+          title=title
+          tesis=custom_excerpt}}
+    {{/page}}
+    <div class="pv-large">
+      <div class="global-container">
+        <div class="rich-text w-richtext">{{#page}}{{content}}{{/page}}</div>
+      </div>
+    </div>
+  </main>
+  <!-- FILE BROWSER NAVIGATION -->
+  <div class="global-container pt-small pb-small">
+    {{> "file-browser-en"}}
+  </div>
+  {{> "site-footer"}}
+</div>

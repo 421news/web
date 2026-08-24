@@ -29,6 +29,15 @@ document.documentElement.classList.add('is-analytics');
         <a href="/es/" class="analytics-back-link">&larr; Volver al inicio</a>
       </div>
 
+      <!-- Auth: no llegamos al servidor de datos (no es un problema de permisos) -->
+      <div id="auth-network" class="analytics-auth-state" style="display:none;">
+        <div class="analytics-auth-icon">&#x1F4E1;</div>
+        <h2>No pudimos verificar tu acceso</h2>
+        <p>Tu navegador no logró conectarse al servidor de datos de 421. No es un problema de permisos.</p>
+        <p>Suele ser un bloqueador de anuncios, una extensión de privacidad o una VPN bloqueando <code>webhook-hreflang.onrender.com</code>. Probá desactivarlos para este sitio, o entrá desde otro navegador.</p>
+        <a href="/es/analytics/" class="analytics-back-link">Reintentar</a>
+      </div>
+
       <!-- Auth: Denied -->
       <div id="auth-denied" class="analytics-auth-state" style="display:none;">
         <div class="analytics-auth-icon">&#x1F512;</div>
@@ -286,14 +295,19 @@ var __memberToken = fetch('/members/api/session', { credentials: 'same-origin' }
   .catch(function() { return null; });
 
 // Analytics = public aggregate feed (same data powers homepage most-read + media kit). No auth.
+// De paso sirve de sonda: si este fetch al host de datos falla, el navegador no
+// llega a Render (adblocker, VPN, red corporativa, o el servicio caido). Sin esa
+// distincion, el gate de abajo muestra "acceso restringido" ante un problema de
+// conectividad, que es un diagnostico falso y manda a pedir permisos que ya se tienen.
+window.__hostDeDatosAlcanzable = null;
 window.__ga4Data = (function() {
   var themeUrl = '{{asset "data/ga4-data.json"}}';
   var renderUrl = 'https://webhook-hreflang.onrender.com/api/ga4-data.json';
   var controller = new AbortController();
   var timer = setTimeout(function() { controller.abort(); }, 5000);
   return fetch(renderUrl, { signal: controller.signal })
-    .then(function(r) { clearTimeout(timer); if (!r.ok) throw new Error(r.status); return r.json(); })
-    .catch(function() { clearTimeout(timer); return fetch(themeUrl).then(function(r) { return r.json(); }); });
+    .then(function(r) { clearTimeout(timer); if (!r.ok) throw new Error(r.status); window.__hostDeDatosAlcanzable = true; return r.json(); })
+    .catch(function() { clearTimeout(timer); window.__hostDeDatosAlcanzable = false; return fetch(themeUrl).then(function(r) { return r.json(); }); });
 })();
 
 // Revenue = SENSITIVE. Team-only via signed token. No public fallback. One fetch,
@@ -343,9 +357,16 @@ function decirQuienSoy() {
 }
 
 __revenueResp.then(function(x) {
-  if (x.status === 200 || x.status === 503) mostrarEstado('dashboard');
-  else if (x.status === 401) mostrarEstado('auth-signin');
-  else { mostrarEstado('auth-denied'); decirQuienSoy(); }
+  if (x.status === 200 || x.status === 503) return mostrarEstado('dashboard');
+  if (x.status === 401) return mostrarEstado('auth-signin');
+  // status 0 = el fetch ni salio (bloqueado o host inalcanzable). Se confirma con
+  // la sonda al endpoint publico antes de acusar de nada al navegador.
+  if (x.status === 0) {
+    return window.__ga4Data.then(function() {
+      mostrarEstado(window.__hostDeDatosAlcanzable === false ? 'auth-network' : 'auth-denied');
+    }).catch(function() { mostrarEstado('auth-network'); });
+  }
+  mostrarEstado('auth-denied'); decirQuienSoy();
 }).catch(function() {
   mostrarEstado('auth-denied'); decirQuienSoy();
 });

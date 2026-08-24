@@ -1,0 +1,123 @@
+{{!< default}}
+
+{{!-- Pitch us — version en ingles de /es/pitcheale-a-421/.
+     Misma estructura y mismos estilos; lo unico distinto son los tres formularios
+     de Google, que son los de ingles (carpeta "Forms en ingles" de julieta@421.news).
+     Ruta: /en/pitch-us/ (routes.yaml, data: page.pitcheale-a-421) --}}
+
+<meta property="og:title" content="Write for 421 | 421">
+<meta property="og:description" content="Got an idea you want to share? Pitch it and get published on 421.">
+<meta property="og:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
+<meta property="og:url" content="https://www.421.news/en/pitch-us/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Write for 421 | 421">
+<meta name="twitter:description" content="Got an idea you want to share? Pitch it and get published on 421.">
+<meta name="twitter:image" content="https://www.421.news/content/images/2024/09/GXnmmH3WgAABx7l-1.jpg">
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+  {{> "site-nav-en"}}
+
+  {{> "section-hero"
+      eyebrow="421 · open call"
+      title="Write for 421"
+      meta="3 categories · writing, illustration, video games"
+      tesis='Got an idea you want to share? Tired of <a href="https://www.421.news/en/interviews-with-writers-luciano-lamberti/">writing</a> for free? Want to tell your parents you finally <strong>got published</strong>? Pick your category, fill out the form and light a candle.'}}
+
+  <div class="pitcheale-page">
+    <div class="global-container">
+
+      <!-- Category Selector -->
+      <div class="pitch-categories">
+        <div class="pitch-category-card is-active" data-form="writing">
+          <img class="pitch-category-icon" src="{{asset "images/icono_escritura.svg"}}" alt="Writing">
+          <div class="pitch-category-info">
+            <div class="pitch-category-name">Writing</div>
+            <div class="pitch-category-desc">Essays, reportage, guides, tutorials</div>
+          </div>
+        </div>
+        <div class="pitch-category-card" data-form="illustration">
+          <img class="pitch-category-icon" src="{{asset "images/icono_ilustracion.svg"}}" alt="Illustration">
+          <div class="pitch-category-info">
+            <div class="pitch-category-name">Illustration</div>
+            <div class="pitch-category-desc">Covers, editorial art, comics</div>
+          </div>
+        </div>
+        <div class="pitch-category-card" data-form="games">
+          <img class="pitch-category-icon" src="{{asset "images/icono_videojuegos.svg"}}" alt="Video games">
+          <div class="pitch-category-info">
+            <div class="pitch-category-name">Video games</div>
+            <div class="pitch-category-desc">Indie devs, demos, game jams</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Forms -->
+      <div id="form-writing" class="pitch-form-wrapper is-visible">
+        <div class="pitch-form-header">
+          <span class="pitch-form-badge"><img class="pitch-badge-icon" src="{{asset "images/icono_escritura.svg"}}" alt=""> Writing</span>
+          <span class="pitch-form-hint">Fill out every field in the form</span>
+        </div>
+        <div class="pitch-iframe-container">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfxbko0mgcU6v4C-1tmQz9SAtfZFFGmQwJyXs7Pjr6I2hA1TQ/viewform?embedded=true" loading="lazy" title="Write an article for 421">Loading...</iframe>
+        </div>
+      </div>
+
+      <div id="form-illustration" class="pitch-form-wrapper">
+        <div class="pitch-form-header">
+          <span class="pitch-form-badge"><img class="pitch-badge-icon" src="{{asset "images/icono_ilustracion.svg"}}" alt=""> Illustration</span>
+          <span class="pitch-form-hint">Fill out every field in the form</span>
+        </div>
+        <div class="pitch-iframe-container">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeJxEZX3Wcz6mVC_4gU4rKomLJ5uZUI8pba5sl3vt0XUSTorQ/viewform?embedded=true" loading="lazy" title="Illustrate for 421">Loading...</iframe>
+        </div>
+      </div>
+
+      <div id="form-games" class="pitch-form-wrapper">
+        <div class="pitch-form-header">
+          <span class="pitch-form-badge"><img class="pitch-badge-icon" src="{{asset "images/icono_videojuegos.svg"}}" alt=""> Video games</span>
+          <span class="pitch-form-hint">Fill out every field in the form</span>
+        </div>
+        <div class="pitch-iframe-container">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScsQrL_2wPFhaxy2Jxn_qILs8E59-m00CF20peDaiQHMt3-6w/viewform?embedded=true" loading="lazy" title="Tell us about your video game on 421">Loading...</iframe>
+        </div>
+      </div>
+
+      <!-- Bottom -->
+      <div class="pitch-bottom">
+        <p>If we really like your pitch, <strong>we'll get in touch</strong>.</p>
+      </div>
+
+    </div>
+
+    <!-- File Browser -->
+    <div class="global-container" style="padding: 3rem 0;">
+      {{> "file-browser-en"}}
+    </div>
+  </div>
+
+  {{> "site-footer"}}
+</div>
+
+<script>
+(function() {
+  var cards = document.querySelectorAll('.pitch-category-card');
+  var forms = document.querySelectorAll('.pitch-form-wrapper');
+  cards.forEach(function(card) {
+    card.addEventListener('click', function() {
+      var formId = card.dataset.form;
+      cards.forEach(function(c) { c.classList.remove('is-active'); });
+      card.classList.add('is-active');
+      forms.forEach(function(f) { f.classList.remove('is-visible'); });
+      var target = document.getElementById('form-' + formId);
+      if (target) {
+        target.style.animation = 'none';
+        target.offsetHeight;
+        target.style.animation = '';
+        target.classList.add('is-visible');
+      }
+    });
+  });
+})();
+</script>
