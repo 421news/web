@@ -1129,7 +1129,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.6.2', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: `${xBot.MODE}${xBot.HAS_CREDS ? '' : ' (sin credenciales)'}`, xBotStats: xBot.stats });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.7.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1163,8 +1163,8 @@ app.post('/webhook/hreflang', async (req, res) => {
     }
   }
 
-  // Bot de X (fire-and-forget). El gate por tag #es vive adentro: este webhook
-  // también dispara con las 6 traducciones intl de cada nota.
+  // Bot de X (fire-and-forget). El gate por idioma vive adentro, una cuenta por
+  // idioma: este webhook también dispara con las 6 traducciones intl de cada nota.
   if (xBot.MODE !== 'off') {
     xBot.handlePublish(req.body).catch(err => {
       console.error(`[x-bot] Error: ${err.message}`);
@@ -1185,42 +1185,60 @@ app.post('/test', async (req, res) => {
 // --- Bot de X: preview (no publica nunca) ---
 
 // GET /x-bot/preview?slug=xxx  → muestra el tuit que se armaría para esa nota.
-// Sin slug, usa las últimas 5 notas ES. Sirve para ver el formato antes de prender nada.
+// Sin slug, usa las últimas 5 notas del idioma de cada cuenta. Sirve para ver el
+// formato antes de prender nada. No publica jamás, ni con X_BOT=on.
 app.get('/x-bot/preview', async (req, res) => {
   try {
     const slug = (req.query.slug || '').trim();
-    let posts;
+    // ?cuenta=en para ver solo la cuenta en inglés; sin nada, las dos.
+    const filtroCuenta = (req.query.cuenta || '').trim().toLowerCase();
+    const cuentas = filtroCuenta ? xBot.CUENTAS.filter(c => c.id === filtroCuenta) : xBot.CUENTAS;
+    if (!cuentas.length) return res.status(400).json({ error: `cuenta desconocida: ${filtroCuenta}` });
+
+    const CAMPOS = 'id,title,slug,url,custom_excerpt,excerpt,published_at,status,visibility';
 
     if (slug) {
       const data = await ghostRequest('GET',
-        `/ghost/api/admin/posts/slug/${encodeURIComponent(slug)}/?include=tags&fields=id,title,slug,url,custom_excerpt,excerpt,published_at,status,visibility`);
-      posts = data.posts || [];
-    } else {
-      const data = await ghostRequest('GET',
-        `/ghost/api/admin/posts/?limit=5&order=published_at%20desc&include=tags` +
-        `&filter=${encodeURIComponent('status:published+tag:hash-es')}` +
-        `&fields=id,title,slug,url,custom_excerpt,excerpt,published_at,status,visibility`);
-      posts = data.posts || [];
+        `/ghost/api/admin/posts/slug/${encodeURIComponent(slug)}/?include=tags&fields=${CAMPOS}`);
+      const post = (data.posts || [])[0];
+      if (!post) return res.status(404).json({ error: 'no se encontró el post' });
+      return res.json({
+        slug: post.slug,
+        cuentas: cuentas.map(c => {
+          const gate = xBot.shouldTweet(post, c);
+          const { text, length } = xBot.buildTweet(post);
+          return { cuenta: c.id, modo: c.mode, pasaGate: gate.ok, motivo: gate.ok ? null : gate.reason, chars: `${length}/280`, tweet: text };
+        }),
+      });
     }
 
-    if (!posts.length) return res.status(404).json({ error: 'no se encontró el post' });
-
-    const previews = posts.map(p => {
-      const gate = xBot.shouldTweet(p);
-      const { text, length } = xBot.buildTweet(p);
-      return {
-        slug: p.slug,
-        published_at: p.published_at,
-        // El gate real incluye la ventana de 6h, que para un post viejo siempre da false.
-        // Acá lo informamos pero no es señal de que el bot esté mal.
-        pasaGate: gate.ok,
-        motivo: gate.ok ? null : gate.reason,
-        chars: `${length}/280`,
-        tweet: text,
-      };
-    });
-
-    res.json({ modo: xBot.MODE, credenciales: xBot.HAS_CREDS, previews });
+    // Sin slug: las últimas 5 notas del idioma de cada cuenta.
+    const salida = [];
+    for (const c of cuentas) {
+      const data = await ghostRequest('GET',
+        `/ghost/api/admin/posts/?limit=5&order=published_at%20desc&include=tags` +
+        `&filter=${encodeURIComponent(`status:published+tag:${c.tag}`)}` +
+        `&fields=${CAMPOS}`);
+      salida.push({
+        cuenta: c.id, idioma: c.tag.replace('hash-', ''), modo: c.mode,
+        credenciales: c.hasCreds, handle: c.handle || null,
+        previews: (data.posts || []).map(p => {
+          const gate = xBot.shouldTweet(p, c);
+          const { text, length } = xBot.buildTweet(p);
+          return {
+            slug: p.slug,
+            published_at: p.published_at,
+            // El gate real incluye la ventana de 6h, que para un post viejo siempre da
+            // false. Acá lo informamos pero no es señal de que el bot esté mal.
+            pasaGate: gate.ok,
+            motivo: gate.ok ? null : gate.reason,
+            chars: `${length}/280`,
+            tweet: text,
+          };
+        }),
+      });
+    }
+    res.json({ cuentas: salida });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
