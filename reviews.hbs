@@ -2,52 +2,27 @@
 
 {{!-- Book reviews — landing de la seccion, version en ingles de resenas.hbs.
      Ruta: /en/reviews/ (routes.yaml, data: page.reviews)
-     La membresia es el tag publico `review` (en castellano es `resena`).
+     La membresia es el tag publico `review`. --}}
 
-     No lleva CSS propio a proposito: se arma con section-hero + post-card +
-     global-container, que ya tienen sus reglas en light-mode.css. --}}
+{{> "breadcrumb-tag" tagName="Book reviews" lang="en"}}
 
-{{> "breadcrumb-tag" tagName="Reviews" lang="en"}}
+  <div class="page-wrapper">
+    {{> "general-styling"}}
+    {{> "site-nav-en"}}
+    <main>
+      <!-- SECTION HEADER -->
+      {{> "tag-hero-section" tagSlug="review" languageFilter="'hash-en'" eyebrow="Section" postsLabel="reviews" titulo="Book reviews" sinDestacados=true}}
 
-<div class="page-wrapper">
-  {{> "general-styling"}}
-  {{> "site-nav-en"}}
+      <!-- LIST -->
+      {{> "last-posts-en-tag" tag="review"}}
 
-  <main>
-    {{> "section-hero"
-        eyebrow="421 · section"
-        title="Book reviews"
-        tesis="Books read closely and argued with: what each one proposes, what it takes issue with, and who it might be for."}}
+    </main>
 
-    <div class="preview-section">
-      <div class="global-container">
-        <div class="pv-huge">
-          <div class="last-posts-section">
-            {{#get "posts"
-                include="tags,authors"
-                filter="tag:review+tag:hash-en"
-                limit="all"
-                order="published_at desc"
-                as |articles|
-            }}
-              {{#if articles}}
-                {{#foreach articles}}
-                  {{> "post-card"}}
-                {{/foreach}}
-              {{else}}
-                <p class="section-meta-label">No reviews published yet.</p>
-              {{/if}}
-            {{/get}}
-          </div>
-        </div>
-      </div>
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser-en"}}
     </div>
-  </main>
+    {{> "site-footer" lang="en"}}
 
-  <!-- FILE BROWSER NAVIGATION -->
-  <div class="global-container pt-small pb-small">
-    {{> "file-browser-en"}}
   </div>
-
-  {{> "site-footer" lang="en"}}
-</div>
+  <script src="{{asset "js/pagination.js"}}" defer></script>

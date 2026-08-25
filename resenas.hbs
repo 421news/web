@@ -2,55 +2,32 @@
 
 {{!-- Reseñas de libros — landing de la sección.
      Ruta: /es/resenas/ (routes.yaml, data: page.resenas)
-     La membresía es el tag público `resena`; la versión en inglés usa `review`
-     y vive en reviews.hbs.
+     La membresía es el tag público `resena`; en inglés es `review` (reviews.hbs).
 
-     No lleva CSS propio a proposito: se arma con section-hero + post-card +
-     global-container, que ya tienen sus reglas en light-mode.css. Cualquier
-     color nuevo tendria que salir de var(--amarillo) / var(--crema) / var(--negro)
-     para que el modo claro lo resuelva solo. --}}
+     Misma estructura que las secciones (tag-cultura, tag-tecnologia): cabecera
+     con nombre, cantidad y descripción del tag —los tres salen de Ghost— más el
+     listado con "Cargar más". Sin CSS propio: todo sale de componentes que ya
+     tienen su regla de modo claro. --}}
 
 {{> "breadcrumb-tag" tagName="Reseñas"}}
 
-<div class="page-wrapper">
-  {{> "general-styling"}}
-  {{> "site-nav-es"}}
+  <div class="page-wrapper">
+    {{> "general-styling"}}
+    {{> "site-nav-es"}}
+    <main>
+      <!-- CABECERA DE SECCIÓN -->
+      {{> "tag-hero-section" tagSlug="resena" languageFilter="-'hash-en'" eyebrow="Sección" postsLabel="reseñas" titulo="Reseñas de libros" sinDestacados=true}}
 
-  <main>
-    {{> "section-hero"
-        eyebrow="421 · sección"
-        title="Reseñas de libros"
-        tesis="Libros leídos con atención y discutidos en serio: qué propone cada uno, con qué polemiza y a quién le puede servir."}}
+      <!-- LISTADO -->
+      {{> "last-posts-es-tag" tag="resena"}}
 
-    <div class="preview-section">
-      <div class="global-container">
-        <div class="pv-huge">
-          <div class="last-posts-section">
-            {{#get "posts"
-                include="tags,authors"
-                filter="tag:resena+tag:-'hash-en'+tag:-'hash-pt'+tag:-'hash-fr'+tag:-'hash-zh'+tag:-'hash-ja'+tag:-'hash-ko'+tag:-'hash-tr'"
-                limit="all"
-                order="published_at desc"
-                as |articles|
-            }}
-              {{#if articles}}
-                {{#foreach articles}}
-                  {{> "post-card"}}
-                {{/foreach}}
-              {{else}}
-                <p class="section-meta-label">Todavía no hay reseñas publicadas.</p>
-              {{/if}}
-            {{/get}}
-          </div>
-        </div>
-      </div>
+    </main>
+
+    <!-- FILE BROWSER NAVIGATION -->
+    <div class="global-container pt-small pb-small">
+      {{> "file-browser"}}
     </div>
-  </main>
+    {{> "site-footer"}}
 
-  <!-- FILE BROWSER NAVIGATION -->
-  <div class="global-container pt-small pb-small">
-    {{> "file-browser"}}
   </div>
-
-  {{> "site-footer"}}
-</div>
+  <script src="{{asset "js/pagination.js"}}" defer></script>

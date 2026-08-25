@@ -10,6 +10,13 @@
 {{!-- SEO: noindex a los tags finos (<3 posts), mismo criterio que author.hbs. Una página
      de tag con dos notas es exactamente lo que Google reporta como "Crawled - currently
      not indexed", y activar la taxonomía crea varias de golpe. --}}
+{{!-- ⚠️ El tag NO esta en el contexto de nivel superior: hay que entrar con
+     {{#tag}}, igual que {{#author}} en author.hbs. Sin eso {{slug}} y {{name}}
+     salen vacios, el filtro queda "tag:+tag:-'hash-en'" y la pagina se
+     renderiza ENTERA vacia: sin titulo, sin tarjetas y con noindex. Le pasaba a
+     todos los tags servidos por la taxonomia (los que no tienen plantilla
+     dedicada): /es/tag/resena/, /es/tag/comics/, etc. --}}
+{{#tag}}
 {{#get "posts" limit="2" filter="tag:{{slug}}+tag:-'hash-en'" as |tagPosts tagPagination|}}
   {{#unless tagPagination.next}}
 <meta name="robots" content="noindex, follow">
@@ -17,8 +24,9 @@
 {{else}}
 <meta name="robots" content="noindex, follow">
 {{/get}}
+{{/tag}}
 
-{{> "breadcrumb-tag" tagName=name}}
+{{#tag}}{{> "breadcrumb-tag" tagName=name}}{{/tag}}
 
   <div class="page-wrapper">
     {{> "general-styling"}}
@@ -26,7 +34,7 @@
     <main>
       <div style="margin-top: 50px"></div>
       <!-- LAST POSTS -->
-      {{> "last-posts-es-secondary-tag" tag=slug title=name}}
+      {{#tag}}{{> "last-posts-es-secondary-tag" tag=slug title=name}}{{/tag}}
 
     </main>
 

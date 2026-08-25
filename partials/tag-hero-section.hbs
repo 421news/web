@@ -1,15 +1,28 @@
-{{!-- params: tagSlug, languageFilter, eyebrow, postsLabel --}}
+{{!-- params: tagSlug, languageFilter, eyebrow, postsLabel
+     opcional: sinDestacados=true -> solo la cabecera, sin la tira de 4 tarjetas.
+     opcional: titulo -> pisa el nombre del tag en el h1 (el nombre del tag es el que
+     se ve en el chip de cada tarjeta, y ahi conviene el singular: "Reseña").
+
+     ⚠️ La tira repite tarjetas que ya salen en el listado de abajo: cuando el tag
+     no tiene ningun post con featured:true, el fallback muestra las 4 mas nuevas
+     y el listado vuelve a mostrarlas. Verificado en /es/tag/tecnologia/: de 19
+     tarjetas, 4 estan duplicadas. En una seccion recien estrenada eso significa
+     ver la misma nota dos veces, asi que las landings nuevas la ocultan. --}}
 <section class="preview-section home-ruta-section tag-hero-section">
   <div class="global-container">
     <div class="pv-huge">
       <div class="home-ruta-header">
         <div class="home-ruta-header-main">
           <div class="home-ruta-eyebrow">{{eyebrow}}</div>
-          {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tagInfo|}}
-            {{#foreach tagInfo}}
-              <h1 class="home-ruta-title">{{name}}</h1>
-            {{/foreach}}
-          {{/get}}
+          {{#if titulo}}
+            <h1 class="home-ruta-title">{{titulo}}</h1>
+          {{else}}
+            {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tagInfo|}}
+              {{#foreach tagInfo}}
+                <h1 class="home-ruta-title">{{name}}</h1>
+              {{/foreach}}
+            {{/get}}
+          {{/if}}
           <div class="home-ruta-meta">
             {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tc|}}{{#foreach tc}}{{count.posts}}{{/foreach}}{{/get}}
             {{postsLabel}}
@@ -24,6 +37,7 @@
         {{/get}}
       </div>
 
+      {{#unless sinDestacados}}
       {{#get "posts"
           include="tags,authors"
           limit="4"
@@ -59,6 +73,7 @@
           {{/get}}
         {{/if}}
       {{/get}}
+      {{/unless}}
     </div>
   </div>
 </section>
