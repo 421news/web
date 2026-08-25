@@ -48,6 +48,12 @@
   "^/en/suscribite/?$": /en/subscribe/
 
   # === Tags EN en path ES (apuntan a /en/) ===
+  # Seccion de resenas de libros: la landing es /es/resenas/ y /en/reviews/.
+  # El chip de tag de cada post-card apunta a /{lang}/tag/{slug}/, que en ES cae en
+  # la taxonomia generica (contenido duplicado con la landing) y en EN es 404
+  # directo, porque Ghost admite una sola taxonomia `tag` y ya la usa /es/.
+  "^/es/tag/resena/?$": /es/resenas/
+  "^/en/tag/review/?$": /en/reviews/
   "^/tag/culture/?$": /en/tag/culture/
   "^/tag/games/?$": /en/tag/games/
   "^/tag/real-life/?$": /en/tag/real-life/

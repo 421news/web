@@ -16,6 +16,9 @@ routes:
   /es/canon/:
     template: canon
     data: page.canon
+  /es/resenas/:
+    template: resenas
+    data: page.resenas
   /es/revista-421/:
     template: revista
     data: page.revista-421
@@ -34,6 +37,9 @@ routes:
   /en/canon/:
     template: canon-en
     data: page.canon-en
+  /en/reviews/:
+    template: reviews
+    data: page.reviews
   /es/ultimos-posts/:
     template: last-posts-es
     data: page.ultimos-posts
