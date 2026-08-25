@@ -48,6 +48,27 @@
   "^/en/suscribite/?$": /en/subscribe/
 
   # === Tags EN en path ES (apuntan a /en/) ===
+  # Chips de tag que apuntaban a una URL inexistente.
+  #
+  # Ghost admite UNA sola taxonomia `tag` y la usa /es/, asi que /es/tag/{slug}/
+  # resuelve cualquier tag, pero en EN y en los 6 intl solo existen las 4 rutas
+  # explicitas (culture/games/real-life/tech). Cualquier post cuyo primary_tag sea
+  # otro deja el chip de su tarjeta apuntando a un 404. Medido: 10 posts.
+  #
+  # Los 6 de `wiki` aparecieron al arreglar render-card.js (2026-08-24): antes TODA
+  # tarjeta intl linkeaba a /es/tag/..., o sea que 79 posts por idioma sacaban al
+  # lector de su idioma; ahora van a su propio idioma y solo cae `wiki`, que no
+  # tiene pagina en ninguna lengua salvo castellano. Se manda a la home del idioma,
+  # mismo criterio que el /en/tag/wiki/ que ya existia.
+  "^/en/tag/argentine-video-games/?$": /en/tag/games/
+  "^/en/tag/internet/?$": /en/tag/tech/
+  "^/pt/tag/wiki/?$": /pt/
+  "^/fr/tag/wiki/?$": /fr/
+  "^/zh/tag/wiki/?$": /zh/
+  "^/ja/tag/wiki/?$": /ja/
+  "^/ko/tag/wiki/?$": /ko/
+  "^/tr/tag/wiki/?$": /tr/
+
   # Seccion de resenas de libros: la landing es /es/resenas/ y /en/reviews/.
   # El chip de tag de cada post-card apunta a /{lang}/tag/{slug}/, que en ES cae en
   # la taxonomia generica (contenido duplicado con la landing) y en EN es 404
