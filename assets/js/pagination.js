@@ -8,6 +8,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var path = location.pathname.replace(/\/+$/, '');
     var isEnglish = path.startsWith('/en');
 
+    // El filtro puede venir declarado por la plantilla en el propio boton. Es la via
+    // preferida: adivinar el tipo de pagina por la URL solo funciona mientras el
+    // listado viva en /{lang}/tag/{slug}/, y se rompe callado en cualquier landing
+    // con URL propia — /es/resenas/ y /en/reviews/ caian en el `else` y "Cargar mas"
+    // traia TODO el sitio. Ademas el data-filter copia textualmente el filtro del
+    // {{#get}} de la plantilla, asi que la pagina 2 no puede discrepar de la 1
+    // (las paginas de tag filtran por primary_tag y esto filtraba por tag).
+    var declarado = btn.getAttribute('data-filter');
+    if (declarado) {
+        arrancar(declarado, parseInt(btn.getAttribute('data-limit'), 10) || 15);
+        return;
+    }
+
     // Detect page type and configure
     var tagMatch = path.match(/\/(es|en)\/tag\/([^/]+)$/);
     var authorMatch = path.match(/\/author\/([^/]+)$/);
@@ -34,6 +47,9 @@ document.addEventListener('DOMContentLoaded', function () {
         filter = isEnglish ? 'tag:hash-en+tag:-hash-satelite' : esExcludeAll + '+tag:-hash-satelite';
     }
 
+    arrancar(filter, limit);
+
+    function arrancar(filter, limit) {
     var nextPage = 2;
     var loading = false;
     var prefetched = null;
@@ -98,4 +114,5 @@ document.addEventListener('DOMContentLoaded', function () {
 
     btn.addEventListener('click', loadMore);
     prefetchNext();
+    }
 });

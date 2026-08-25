@@ -1,5 +1,6 @@
 {{!-- params: tagSlug, languageFilter, eyebrow, postsLabel
      opcional: sinDestacados=true -> solo la cabecera, sin la tira de 4 tarjetas.
+     opcional: postsLabelSingular -> etiqueta cuando el tag tiene una sola nota.
      opcional: titulo -> pisa el nombre del tag en el h1 (el nombre del tag es el que
      se ve en el chip de cada tarjeta, y ahi conviene el singular: "Reseña").
 
@@ -24,8 +25,9 @@
             {{/get}}
           {{/if}}
           <div class="home-ruta-meta">
-            {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tc|}}{{#foreach tc}}{{count.posts}}{{/foreach}}{{/get}}
-            {{postsLabel}}
+            {{!-- postsLabelSingular es opcional: sin el, se comporta como siempre
+                  (siempre plural). Con una sola nota se leia "1 reseñas". --}}
+            {{#get "tags" filter="slug:{{tagSlug}}" include="count.posts" limit="1" as |tc|}}{{#foreach tc}}{{count.posts}} {{#match count.posts 1}}{{#if ../../postsLabelSingular}}{{../../postsLabelSingular}}{{else}}{{../../postsLabel}}{{/if}}{{else}}{{../../postsLabel}}{{/match}}{{/foreach}}{{/get}}
           </div>
         </div>
         {{#get "tags" filter="slug:{{tagSlug}}" limit="1" as |tagDesc|}}

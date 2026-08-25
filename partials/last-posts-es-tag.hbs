@@ -22,7 +22,8 @@
                     {{/if}}
                 {{/get}}
             </div>
-            <button class="btn-load-more" id="load-more" data-next="{{next}}">
+            <button class="btn-load-more" id="load-more" data-next="{{next}}"
+                    data-filter="primary_tag:{{tag}}+tag:-'hash-en'" data-limit="15">
                 Cargar más
             </button>
         </div>
