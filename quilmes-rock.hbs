@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{!-- Documento para compartir con PopArt, no para indexar. Mismo criterio que
+     media-kit.hbs y tarifario.hbs: template standalone, sin default.hbs, con
+     noindex explícito. El anexo vive en /es/quilmes-rock-anexo/. --}}
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="googlebot" content="noindex, nofollow">
+<title>421 · Road to Quilmes Rock 2027</title>
+<meta name="description" content="Plan de 421 para llegar al Quilmes Rock 2027: vertical de música y temporada de entrevistas y sesiones.">
+<meta property="og:title" content="421 · Road to Quilmes Rock 2027">
+<meta property="og:description" content="Plan de 421 para llegar al Quilmes Rock 2027: vertical de música y temporada de entrevistas y sesiones.">
+<meta property="og:url" content="https://www.421.news/es/quilmes-rock/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Nunito+Sans:ital,wght@0,400;0,700;0,900;1,400&display=swap">
+<style>
+/* Identidad de deck de 421: fondo negro, crema, y la rampa amarillo→verde de 7
+   pasos como firma. Compromiso deliberado con un solo mundo visual —el mismo del
+   media kit y de las placas de Instagram—, así que no hay tema claro; todos los
+   colores se pintan explícitos para que no herede el fondo del host. */
+:root {
+  --negro:#121212; --crema:#eae6e1; --amarillo:#fcd221; --verde:#17a583;
+  --panel:#191918; --linea:#2b2b28;
+  --tenue:#8f8a80; --medio:#b3ada2;
+  --rampa: linear-gradient(90deg,#17A583 0%,#36AB75 10%,#7BB857 35%,#B2C340 57%,#DACB2F 78%,#F3D024 90%,#FCD221 100%);
+}
+*,*::before,*::after { box-sizing:border-box; }
+body {
+  margin:0; background:var(--negro); color:var(--crema);
+  font-family:'Nunito Sans',system-ui,-apple-system,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+.wrap { max-width:960px; margin:0 auto; padding:clamp(24px,5vw,56px) clamp(18px,5vw,40px) 96px; }
+
+.eyebrow {
+  font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:.24em; text-transform:uppercase; color:var(--amarillo); margin:0;
+}
+.regla { height:4px; background:var(--rampa); border-radius:2px; }
+
+/* ---- portada ---- */
+.cover { padding:clamp(32px,7vw,72px) 0 clamp(28px,5vw,48px); display:flex; flex-direction:column; gap:20px; }
+.cover h1 {
+  font-family:'Space Grotesk',sans-serif; font-weight:700;
+  font-size:clamp(38px,8.5vw,86px); line-height:.98; letter-spacing:-.035em;
+  margin:0; text-wrap:balance;
+}
+.grad {
+  background:var(--rampa); -webkit-background-clip:text; background-clip:text;
+  color:transparent;
+}
+.lead { font-size:clamp(17px,2.4vw,21px); line-height:1.5; max-width:34ch; margin:0; color:var(--crema); }
+.lead b { color:var(--amarillo); font-weight:900; }
+.cover .regla { margin-top:6px; }
+
+/* ---- bloque de la noticia ---- */
+.headline {
+  background:var(--panel); border:1px solid var(--linea); border-left:4px solid transparent;
+  border-image:var(--rampa) 1; border-image-slice:1; border-width:0 0 0 4px; border-style:solid;
+  padding:24px clamp(18px,3vw,30px); margin:8px 0 0;
+}
+.headline p { margin:0; font-size:clamp(17px,2.2vw,20px); line-height:1.5; }
+.headline p + p { margin-top:12px; color:var(--medio); font-size:16px; }
+
+/* ---- secciones ---- */
+section { margin-top:clamp(48px,7vw,78px); }
+.sec-head { display:flex; align-items:flex-start; gap:16px; margin-bottom:6px; }
+.n {
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:13px;
+  letter-spacing:.1em; color:var(--negro); background:var(--amarillo);
+  padding:3px 9px; border-radius:2px; margin-top:9px; flex:0 0 auto;
+}
+.sec-head h2 {
+  font-family:'Space Grotesk',sans-serif; font-weight:700;
+  font-size:clamp(26px,4.6vw,42px); line-height:1.05; letter-spacing:-.025em; margin:0;
+}
+.sec-sub { color:var(--medio); max-width:60ch; margin:10px 0 0; }
+.sec-sub b, .cuerpo b { color:var(--crema); font-weight:900; }
+.cuerpo { max-width:60ch; color:var(--medio); }
+.cuerpo p { margin:14px 0 0; }
+.cuerpo a { color:var(--amarillo); }
+/* Los nombres linkeados van subrayados finos, no en amarillo pleno: dentro de un
+   <b> el amarillo pisaría la jerarquía del texto destacado. */
+.cuerpo a, .sec-sub a, .ficha a {
+  color:inherit; text-decoration:none;
+  border-bottom:1px solid var(--amarillo); padding-bottom:1px;
+}
+.cuerpo a:hover, .sec-sub a:hover, .ficha a:hover { color:var(--amarillo); }
+
+/* ---- ficha ----
+   Cantidad de columnas fija por breakpoint, no auto-fit: con auto-fit entraban 5 y
+   el sexto caía solo en una segunda fila, dejando un hueco al lado. Son 6 campos,
+   así que las tres opciones (6 / 3 / 2) siempre dan filas completas. */
+.ficha { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--linea); border:1px solid var(--linea); margin-top:26px; }
+@media (min-width:600px) { .ficha { grid-template-columns:repeat(3,1fr); } }
+@media (min-width:920px) { .ficha { grid-template-columns:repeat(6,1fr); } }
+.ficha div { background:var(--negro); padding:14px 15px; }
+.ficha dt { font-family:'Space Grotesk',sans-serif; font-size:9.5px; font-weight:700; letter-spacing:.13em; text-transform:uppercase; color:var(--tenue); margin:0 0 5px; line-height:1.35; }
+.ficha dd { margin:0; font-size:14.5px; font-weight:700; line-height:1.35; }
+
+/* ---- números grandes, como el media kit ---- */
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px; background:var(--linea); border:1px solid var(--linea); margin-top:28px; }
+.stat { background:var(--negro); padding:20px 18px; }
+.stat .num {
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5vw,44px);
+  line-height:1; letter-spacing:-.03em; font-variant-numeric:tabular-nums; display:block;
+}
+.stat .lbl { font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--tenue); margin-top:8px; display:block; }
+.stat.green .num { color:var(--verde); }
+.stat.yellow .num { color:var(--amarillo); }
+
+/* ---- alerta / punto abierto ---- */
+.abierto { margin-top:28px; border:1px solid var(--linea); background:var(--panel); padding:20px clamp(16px,3vw,26px); }
+.abierto h3 { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--amarillo); margin:0 0 9px; }
+.abierto p { margin:0; color:var(--medio); max-width:62ch; }
+
+/* ---- calendario ---- */
+.meses { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-top:26px; }
+.mes { border:1px solid var(--linea); padding:18px; }
+.mes h4 { font-family:'Space Grotesk',sans-serif; font-size:19px; font-weight:700; margin:0 0 12px; letter-spacing:-.01em; }
+.mes ul { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px; }
+.mes li { font-size:14px; color:var(--medio); display:flex; align-items:baseline; gap:8px; }
+.mes li::before { content:''; width:7px; height:7px; flex:0 0 auto; border-radius:50%; background:var(--verde); }
+.mes li.pod::before { background:var(--amarillo); }
+
+.tabla { width:100%; border-collapse:collapse; margin-top:26px; font-variant-numeric:tabular-nums; }
+.tabla th { font-family:'Space Grotesk',sans-serif; font-size:10.5px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--tenue); text-align:right; padding:0 10px 10px; border-bottom:1px solid var(--linea); }
+.tabla th:first-child { text-align:left; }
+.tabla td { padding:11px 10px; text-align:right; border-bottom:1px solid var(--linea); }
+.tabla td:first-child { text-align:left; color:var(--medio); }
+.tabla tr:last-child td { font-weight:900; color:var(--crema); border-bottom:0; }
+.tabla tr:last-child td:first-child { color:var(--crema); }
+
+/* ---- cierre ----
+   Una sola línea: etiqueta, precio y salvedad conviven en la misma fila, alineados
+   por baseline. En pantallas angostas hace wrap y cae uno debajo del otro. */
+.cierre {
+  margin-top:clamp(52px,8vw,88px); padding-top:26px;
+  border-top:4px solid transparent; border-image:var(--rampa) 1;
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:10px 22px;
+}
+.cierre .eyebrow { flex:0 0 auto; }
+.cierre .num-big {
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(28px,4.6vw,44px);
+  line-height:1; letter-spacing:-.03em; margin:0; flex:0 0 auto;
+}
+.cierre p.nota { margin:0; color:var(--medio); font-size:14px; max-width:34ch; flex:1 1 260px; }
+/* ---- llamada al anexo ----
+   Pill según la convención de 421: borde de 1.5px, radio 999px, uppercase y hover
+   que invierte rellenando el borde. Sin flecha: los pills de 421 no la llevan. */
+.anexo {
+  margin-top:clamp(40px,6vw,64px); border:1px solid var(--linea); background:var(--panel);
+  padding:26px clamp(18px,3vw,30px);
+  display:flex; align-items:center; justify-content:space-between; gap:20px 28px; flex-wrap:wrap;
+}
+.anexo-txt { flex:1 1 320px; }
+.anexo-txt h3 { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--amarillo); margin:0 0 7px; }
+.anexo-txt p { margin:0; color:var(--medio); font-size:15px; max-width:52ch; }
+.pill {
+  flex:0 0 auto; display:inline-block; text-decoration:none;
+  font-family:'Space Grotesk',sans-serif; font-size:12.5px; font-weight:700;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:var(--amarillo); border:1.5px solid var(--amarillo); border-radius:999px;
+  padding:.62rem 1.35rem; transition:background .16s ease, color .16s ease;
+}
+.pill:hover, .pill:focus-visible { background:var(--amarillo); color:var(--negro); }
+.pie { margin-top:44px; font-size:13px; color:var(--tenue); }
+.pie a { color:var(--amarillo); }
+/* ---- entregables ---- */
+.mini { font-family:'Space Grotesk',sans-serif; font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--amarillo); margin:34px 0 0; }
+.entregables { list-style:none; margin:14px 0 0; padding:0; display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:8px 24px; max-width:760px; }
+.entregables li { font-size:15px; color:var(--medio); display:flex; align-items:baseline; gap:10px; }
+.entregables li::before { content:''; width:6px; height:6px; flex:0 0 auto; background:var(--amarillo); }
+.abierto p + p { margin-top:11px; }
+.abierto b { color:var(--crema); font-weight:900; }
+a:focus-visible { outline:2px solid var(--amarillo); outline-offset:3px; }
+@media (prefers-reduced-motion:reduce) { * { animation:none!important; transition:none!important; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="cover">
+    <p class="eyebrow">421 · Plan de contenidos</p>
+    <h1>Road to<br><span class="grad">Quilmes Rock 2027</span></h1>
+    <div class="regla"></div>
+    <p class="lead">Una temporada para llegar con la vertical de música consolidada y el formato de podcast probado.</p>
+  </header>
+
+  <div class="headline">
+    <p><b>PopArt quiere un escenario en el Quilmes Rock 2027 dedicado a los podcast y charlas sobre rock.</b></p>
+    <p>Ese escenario es exactamente lo que hacemos. Lo que falta es llegar en condiciones de ocuparlo, y todo lo que sigue es eso.</p>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">01</span>
+      <h2>La vertical de música</h2>
+    </div>
+    <div class="cuerpo">
+      <p><b>Una nota de música por semana</b>, sostenida. Es lo que instala a 421 como voz en la conversación del rock argentino y lo que alimenta el agite en redes.</p>
+      <p><b>Se financia sola.</b> PopArt nos da entradas para los Wizards a cambio de la columna: la vertical no tiene costo en efectivo y de paso le suma un beneficio concreto a los suscriptores.</p>
+      <p>Hoy contamos con <b><a href="https://www.421.news/author/pierre/" target="_blank" rel="noopener">Pierre Froidevaux</a></b>. Sumamos una segunda firma para garantizar el flujo: el candidato es <b>Juanjo Méndez</b>, ex Ripio y melómano.</p>
+    </div>
+    <div class="stats">
+      <div class="stat green"><span class="num">1</span><span class="lbl">Nota por semana</span></div>
+      <div class="stat green"><span class="num">2</span><span class="lbl">Firmas</span></div>
+      <div class="stat green"><span class="num">$0</span><span class="lbl">Costo en efectivo</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="n">02</span>
+      <h2>El ciclo de entrevistas y sesiones</h2>
+    </div>
+    <p class="sec-sub">Entrevista de 40 a 60 minutos, y después la banda toca dos o tres canciones en vivo: dos temas propios y, cuando se pueda, un cover argentino. Es el formato que después sube al escenario, así que <b>la temporada es también el ensayo general</b>.</p>
+    <p class="sec-sub">Lo conduce <b><a href="https://www.421.news/author/pierre/" target="_blank" rel="noopener">Pierre Froidevaux</a></b>, el mismo que lleva la columna: una sola voz para las dos líneas, y la cara reconocible que después sube al escenario.</p>
+    <p class="sec-sub">La curaduría combina <b>figuras de primera línea, artistas del ecosistema PopArt y nuevos talentos</b>. La idea es que la temporada quede como archivo contemporáneo de la música argentina.</p>
+    <dl class="ficha">
+      <div><dt>Conducción</dt><dd><a href="https://www.421.news/author/pierre/" target="_blank" rel="noopener">Pierre Froidevaux</a></dd></div>
+      <div><dt>Producción general</dt><dd>Pedro Santoro</dd></div>
+      <div><dt>Productora</dt><dd>Óxido</dd></div>
+      <div><dt>Locación</dt><dd>Aquilea, sin costo de alquiler</dd></div>
+      <div><dt>Temporada</dt><dd>8 episodios quincenales</dd></div>
+      <div><dt>Precio por episodio</dt><dd>US$1.500</dd></div>
+    </dl>
+
+    <h3 class="mini">Qué produce cada episodio</h3>
+    <p class="sec-sub">Un episodio no es una pieza: es entre <b>siete y nueve</b>, todas publicables.</p>
+    <ul class="entregables">
+      <li>Episodio completo de entrevista para YouTube</li>
+      <li>Sesión musical completa, como contenido independiente</li>
+      <li>Trailer o pieza de lanzamiento</li>
+      <li>4 a 6 clips verticales para Reels, Shorts y TikTok</li>
+      <li>Clips horizontales para circulación editorial</li>
+      <li>Registro fotográfico de la entrevista y la sesión</li>
+    </ul>
+    <p class="sec-sub">Realización multicámara, corrección de color y paquete gráfico propio. En la temporada son <b>entre 56 y 72 piezas audiovisuales</b>.</p>
+
+    <div class="abierto">
+      <h3>El sonido va aparte</h3>
+      <p>El equipo audiovisual resuelve la imagen y la posproducción, pero <b>no tiene la infraestructura para garantizar por sí solo el registro profesional de una banda completa</b>. Hace falta una unidad de sonido dedicada, que cubra la preproducción, la grabación multipista y la posproducción: ingeniero, consola, microfonía, monitoreo para los músicos, mezcla y masterización.</p>
+      <p>Lo mismo con el <b>backline</b>: batería, amplificadores, instrumentos y lo que pida el rider de cada artista.</p>
+      <p>Las dos cosas quedan expresamente fuera del precio por episodio y hay que resolverlas entre 421 y PopArt, por aporte o por contratación. <b>Es la definición que falta para poder arrancar.</b></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Septiembre a diciembre</h2>
+    </div>
+    <p class="sec-sub">Un estreno cada dos semanas. Si el ciclo funciona, lo estiramos hasta el Quilmes.</p>
+    <div class="meses">
+      <div class="mes"><h4>Septiembre</h4><ul><li>4 notas</li><li class="pod">2 episodios</li></ul></div>
+      <div class="mes"><h4>Octubre</h4><ul><li>4 notas</li><li class="pod">2 episodios</li></ul></div>
+      <div class="mes"><h4>Noviembre</h4><ul><li>4 notas</li><li class="pod">2 episodios</li></ul></div>
+      <div class="mes"><h4>Diciembre</h4><ul><li>4 notas</li><li class="pod">2 episodios</li></ul></div>
+    </div>
+    <table class="tabla">
+      <thead><tr><th>&nbsp;</th><th>Por mes</th><th>La temporada</th></tr></thead>
+      <tbody>
+        <tr><td>Notas</td><td>4</td><td>16</td></tr>
+        <tr><td>Episodios</td><td>2</td><td>8</td></tr>
+        <tr><td>Piezas audiovisuales derivadas</td><td>14 a 18</td><td>56 a 72</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <div class="cierre">
+    <p class="eyebrow">8 episodios · US$1.500 cada uno</p>
+    <p class="num-big grad">US$12.000</p>
+    <p class="nota">Más el sonido y el backline, que van por separado. La vertical de música sale por canje, así que no suma costo.</p>
+  </div>
+
+  <div class="anexo">
+    <div class="anexo-txt">
+      <h3>Anexo técnico</h3>
+      <p>Modelo de producción, equipamiento, flujo de trabajo, los nueve entregables por episodio, los requerimientos de sonido y todo lo que queda fuera del alcance.</p>
+    </div>
+    <a class="pill" href="https://www.421.news/es/quilmes-rock-anexo/" target="_blank" rel="noopener">Ver el anexo</a>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -81,6 +81,12 @@ routes:
     data: page.media-kit
   /es/tarifario/:
     template: tarifario
+  # Documentos para compartir con PopArt. Sin `data:` (no dependen de una página
+  # de Ghost) y con noindex en la propia plantilla, igual que media-kit y tarifario.
+  /es/quilmes-rock/:
+    template: quilmes-rock
+  /es/quilmes-rock-anexo/:
+    template: quilmes-rock-anexo
 
   # === International rutas & canon ===
   /zh/rutas/:
