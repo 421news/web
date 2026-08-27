@@ -20,6 +20,7 @@ const REVENUE_ENABLED = !!(MP_TOKEN && GHOST_ADMIN_KEY);
 const xBot = require('./x-bot');
 const C = require('./hreflang-cluster');
 const curaduria = require('./curaduria');
+const autoresRanking = require('./autores');
 
 // Gate del número del mes de la Revista 421 (saca el PDF nuevo del HTML público y lo sirve
 // verificando al member). init() más abajo, cuando ya existen las deps que le pasamos.
@@ -1129,7 +1130,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.7.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.8.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2183,6 +2184,23 @@ async function refreshGA4Data() {
   );
 
   ga4Data.team = await getTeamHashes();
+
+  // Ranking de autores: reusa las MISMAS filas de pagePath que ya se pidieron
+  // arriba, así que no agrega ninguna query a GA4. Lo único que suma es traer los
+  // posts de Ghost (~16 requests paginados) para saber idioma, tags y firma.
+  //
+  // Va en try/catch aparte a propósito: si Ghost falla, el dashboard de analytics
+  // tiene que seguir actualizándose igual. Se conserva el ranking anterior en vez
+  // de dejar la pestaña vacía.
+  const autoresPrevios = ga4Data.autores || null;
+  try {
+    const posts = await autoresRanking.traerPosts(ghostRequest);
+    ga4Data.autores = autoresRanking.calcular(pageResult.rows || [], posts);
+    console.log(`[autores] ${ga4Data.autores.autores} autores, ${ga4Data.autores.notas} notas, ${ga4Data.autores.pv} pv`);
+  } catch (err) {
+    ga4Data.autores = autoresPrevios;
+    console.error(`[autores] no se pudo calcular: ${err.message}`);
+  }
 
   await enrichArticleTitles(ga4Data);
 

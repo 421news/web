@@ -54,6 +54,7 @@ document.documentElement.classList.add('is-analytics');
         <div class="analytics-toptabs">
           <button class="analytics-toptab active" data-view="analytics">Analytics</button>
           <button class="analytics-toptab" data-view="revenue">Revenue</button>
+          <button class="analytics-toptab" data-view="autores">Autores</button>
         </div>
 
         <!-- ===== ANALYTICS VIEW ===== -->
@@ -278,6 +279,35 @@ document.documentElement.classList.add('is-analytics');
             </div>
           </div>
         </div><!-- /#revenue-view -->
+
+        <div id="autores-view" style="display:none;">
+          <div class="analytics-hero">
+            <h1 class="analytics-title">Autores</h1>
+            <p class="analytics-subtitle">Qui&eacute;n trae el tr&aacute;fico &middot; <span id="autores-corte"></span></p>
+          </div>
+          <hr class="analytics-gradient-divider">
+
+          <div class="analytics-cards" id="autores-cards"></div>
+
+          <div class="analytics-section">
+            <div class="analytics-section-header">
+              <div class="analytics-section-titlerow">
+                <h2 id="autores-titulo">Por volumen</h2>
+              </div>
+              {{!-- Dos criterios distintos, no dos formatos del mismo: uno premia la
+                    constancia y el otro el techo. Se leen comparando la ultima columna,
+                    que dice la posicion en el otro ranking. --}}
+              <div class="analytics-granularity" id="autores-toggle">
+                <button class="analytics-gran active" data-orden="total">Por volumen</button>
+                <button class="analytics-gran" data-orden="top">Por mejor art&iacute;culo</button>
+              </div>
+            </div>
+            <p class="analytics-subtitle" id="autores-ayuda" style="margin-top:0"></p>
+            <div class="analytics-table-scroll">
+              <table class="analytics-table" id="autores-tabla"></table>
+            </div>
+          </div>
+        </div><!-- /#autores-view -->
       </div>
 
     </div>
@@ -378,9 +408,16 @@ __revenueResp.then(function(x) {
       var view = this.getAttribute('data-view');
       for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('active');
       this.classList.add('active');
-      document.getElementById('analytics-view').style.display = view === 'analytics' ? '' : 'none';
-      document.getElementById('revenue-view').style.display = view === 'revenue' ? '' : 'none';
+      // Generalizado a N vistas: cada tab muestra #{data-view}-view y esconde el resto.
+      // Antes estaba escrito a mano para dos, y sumar una tercera exigia tocar esta linea.
+      for (var k = 0; k < tabs.length; k++) {
+        var v = tabs[k].getAttribute('data-view');
+        var el = document.getElementById(v + '-view');
+        if (el) el.style.display = v === view ? '' : 'none';
+      }
+      // Los dashboards pesados se inicializan la primera vez que se los mira.
       if (view === 'revenue' && window.initRevenueDashboard) window.initRevenueDashboard();
+      if (view === 'autores' && window.initAutoresDashboard) window.initAutoresDashboard();
     });
   }
 })();
@@ -388,3 +425,4 @@ __revenueResp.then(function(x) {
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js" defer></script>
 <script src="{{asset "js/analytics-dashboard.js"}}" defer></script>
 <script src="{{asset "js/revenue-dashboard.js"}}" defer></script>
+<script src="{{asset "js/autores-dashboard.js"}}" defer></script>

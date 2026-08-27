@@ -783,3 +783,46 @@
   .analytics-country-list { column-count: 1; }
   .analytics-donut-sm { margin: 0 auto; }
 }
+
+/* ===== Pestaña Autores ===== */
+/* Reusa .analytics-table / .analytics-card / .analytics-gran; solo agrega lo propio
+   de la fila de autor. Todo el color sale de las variables, así que el modo claro
+   lo resuelve la regla global (el amarillo pasa a verde). */
+.au-nombre {
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+.au-nota {
+  display: block;
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 0.78rem;
+  color: var(--crema);
+  opacity: 0.6;
+  text-decoration: none;
+  max-width: 46ch;
+  border-bottom: 1px solid transparent;
+}
+.au-nota:hover,
+.au-nota:focus-visible { opacity: 1; border-bottom-color: var(--amarillo); }
+.au-fig { font-weight: 700; position: relative; min-width: 6.5rem; }
+/* La barra codifica la magnitud para poder escanear la caída sin leer cada cifra. */
+.au-bar {
+  display: block;
+  height: 3px;
+  margin-left: auto;
+  margin-top: 3px;
+  background: var(--amarillo);
+  opacity: 0.35;
+}
+.au-soft { opacity: 0.6; font-size: 0.8rem; }
+.au-cmp { white-space: nowrap; font-size: 0.78rem; opacity: 0.75; }
+.au-delta { font-weight: 700; }
+/* Semánticos: sube / baja de puesto al cambiar de criterio. Deliberadamente
+   distintos del amarillo y del verde de marca, que ya significan otra cosa. */
+.au-up { color: #6fb3cc; }
+.au-down { color: #e08a67; }
+.au-eq { opacity: 0.45; }
+body.light-mode .au-up { color: #3f7f99; }
+body.light-mode .au-down { color: #bd6141; }
