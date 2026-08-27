@@ -10,12 +10,17 @@
 {{!-- SEO: noindex a los tags finos (<3 posts), mismo criterio que author.hbs. Una página
      de tag con dos notas es exactamente lo que Google reporta como "Crawled - currently
      not indexed", y activar la taxonomía crea varias de golpe. --}}
-{{!-- ⚠️ El tag NO esta en el contexto de nivel superior: hay que entrar con
-     {{#tag}}, igual que {{#author}} en author.hbs. Sin eso {{slug}} y {{name}}
-     salen vacios, el filtro queda "tag:+tag:-'hash-en'" y la pagina se
+{{!-- ⚠️ El tag NO esta en el contexto de nivel superior: hay que entrar con el
+     bloque "tag", igual que el bloque "author" en author.hbs. Sin eso el slug y
+     el name salen vacios, el filtro queda "tag:+tag:-'hash-en'" y la pagina se
      renderiza ENTERA vacia: sin titulo, sin tarjetas y con noindex. Le pasaba a
      todos los tags servidos por la taxonomia (los que no tienen plantilla
-     dedicada): /es/tag/resena/, /es/tag/comics/, etc. --}}
+     dedicada): /es/tag/resena/, /es/tag/comics/, etc.
+
+     Y los helpers se nombran SIN llaves adentro del comentario: gscan aplica sus
+     reglas con un escaneo de texto plano que no saltea los comentarios, asi que
+     un "author" entre llaves aca dispara el error de helper deprecado aunque no
+     sea codigo. --}}
 {{#tag}}
 {{#get "posts" limit="2" filter="tag:{{slug}}+tag:-'hash-en'" as |tagPosts tagPagination|}}
   {{#unless tagPagination.next}}
