@@ -134,20 +134,30 @@
 
   function fetchAuthors() {
     if (authorsCache) return Promise.resolve(authorsCache);
-    var url = '/ghost/api/content/authors/?key=' + API_KEY +
-      '&limit=all&fields=name,slug,profile_image,bio';
-    return fetch(url).then(function (r) { return r.json(); }).then(function (data) {
-      authorsCache = (data.authors || []).map(function (a) {
-        return {
-          name: a.name,
-          url: '/author/' + a.slug + '/',
-          bio: (a.bio || '').substring(0, 120),
-          img: a.profile_image,
-          _lower: (a.name + ' ' + (a.bio || '')).toLowerCase()
-        };
+    // `limit=all` NO trae todos: la Content API lo recorta en 100 y lo dice en
+    // meta.pagination. Con 149 autores eso dejaba 49 fuera del buscador. Se
+    // pagina igual que fetchPosts(), siguiendo meta.next.
+    var base = '/ghost/api/content/authors/?key=' + API_KEY +
+      '&fields=name,slug,profile_image,bio&limit=100';
+    authorsCache = [];
+    function addAuthor(a) {
+      authorsCache.push({
+        name: a.name,
+        url: '/author/' + a.slug + '/',
+        bio: (a.bio || '').substring(0, 120),
+        img: a.profile_image,
+        _lower: (a.name + ' ' + (a.bio || '')).toLowerCase()
       });
-      return authorsCache;
-    });
+    }
+    function fetchPage(page) {
+      return fetch(base + '&page=' + page).then(function (r) { return r.json(); }).then(function (data) {
+        (data.authors || []).forEach(addAuthor);
+        var meta = data.meta && data.meta.pagination;
+        if (meta && meta.next) return fetchPage(meta.next);
+        return authorsCache;
+      });
+    }
+    return fetchPage(1).catch(function () { return authorsCache; });
   }
 
   function highlightSel(list) {

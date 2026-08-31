@@ -69,6 +69,19 @@
   "^/ko/tag/wiki/?$": /ko/
   "^/tr/tag/wiki/?$": /tr/
 
+  # Los 3 que quedaron vivos tras aquella tanda (2026-08-31). Son tags que solo
+  # usan notas en ingles, asi que no hay ruta EN adonde caer.
+  #   technology  4 notas; en EN el tema vive bajo `tech`. Ojo: /es/tag/technology/
+  #               existe pero renderiza vacia (el partial ES filtra las notas EN),
+  #               o sea que sin esta regla las 4 no tienen salida por ningun lado.
+  #   crypto     14 notas lo llevan, pero solo `bitcoin-fools-gold` lo tiene de
+  #               primary_tag; el resto ya cae en tech. Mismo destino.
+  #   essay       1 nota, y el tag publico duplica al interno `hash-essay`. Sin
+  #               pagina en ninguna lengua: va a la home, criterio de `wiki`.
+  "^/en/tag/technology/?$": /en/tag/tech/
+  "^/en/tag/crypto/?$": /en/tag/tech/
+  "^/en/tag/essay/?$": /en/
+
   # Seccion de resenas de libros: la landing es /es/resenas/ y /en/reviews/.
   # El chip de tag de cada post-card apunta a /{lang}/tag/{slug}/, que en ES cae en
   # la taxonomia generica (contenido duplicado con la landing) y en EN es 404

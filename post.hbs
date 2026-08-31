@@ -32,11 +32,14 @@
     var spanishMeta = document.querySelector('meta[name="spanish-version"]');
     var globeSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
     var html = '';
+    // La barra final NO es opcional: sin ella Ghost contesta un 301 y Google
+    // termina indexando las dos formas de la misma nota como URLs distintas.
+    // Y va `else if`: los dos metas nunca conviven, pero con dos `if` sueltos
+    // el de castellano pisaba al de ingles y una nota ES se linkeaba a si misma.
     if (englishMeta && englishMeta.content) {
-      html = '<a href="/en/' + englishMeta.content + '" class="btn-translate" aria-label="Read in English">' + globeSvg + 'EN</a>';
-    }
-    if (spanishMeta && spanishMeta.content) {
-      html = '<a href="/es/' + spanishMeta.content + '" class="btn-translate" aria-label="Leer en espa\u00F1ol">' + globeSvg + 'ES</a>';
+      html = '<a href="/en/' + englishMeta.content + '/" class="btn-translate" aria-label="Read in English">' + globeSvg + 'EN</a>';
+    } else if (spanishMeta && spanishMeta.content) {
+      html = '<a href="/es/' + spanishMeta.content + '/" class="btn-translate" aria-label="Leer en espa\u00F1ol">' + globeSvg + 'ES</a>';
     }
     linkContainers.forEach(function(c) { c.innerHTML = html; });
   });

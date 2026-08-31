@@ -149,7 +149,9 @@
       html += '<div class="c421-gate"><p>' + t.paidOnly + '</p><a href="' + subscribePath + '" class="c421-gate-btn">' + t.become + ' &rarr;</a></div>';
     } else if (!member) {
       html += '<div class="c421-gate"><p>' + t.login + '</p><button class="c421-gate-btn" onclick="window.location.hash=\'#/portal/signin\'">' + t.login + '</button></div>';
-    } else if (commentsEnabled === 'paid' && member.status !== 'paid') {
+    // `comped` cuenta como pago: 216 de los 225 que pagan lo hacen por MercadoPago
+    // y en Ghost figuran comped, no paid. Misma red de seguridad que revista.js:313.
+    } else if (commentsEnabled === 'paid' && member.status !== 'paid' && member.status !== 'comped') {
       html += '<div class="c421-gate"><p>' + t.paidOnly + '</p><a href="' + subscribePath + '" class="c421-gate-btn">' + t.become + ' &rarr;</a></div>';
     } else {
       html += renderCompose();
