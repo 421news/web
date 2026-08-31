@@ -91,40 +91,40 @@ routes:
   # === International rutas & canon ===
   /zh/rutas/:
     template: rutas-intl
-    data: page.rutas
+    data: page.rutas-zh
   /zh/canon/:
     template: canon-intl
-    data: page.canon
+    data: page.canon-zh
   /ja/rutas/:
     template: rutas-intl
-    data: page.rutas
+    data: page.rutas-ja
   /ja/canon/:
     template: canon-intl
-    data: page.canon
+    data: page.canon-ja
   /ko/rutas/:
     template: rutas-intl
-    data: page.rutas
+    data: page.rutas-ko
   /ko/canon/:
     template: canon-intl
-    data: page.canon
+    data: page.canon-ko
   /tr/rutas/:
     template: rutas-intl
-    data: page.rutas
+    data: page.rutas-tr
   /tr/canon/:
     template: canon-intl
-    data: page.canon
+    data: page.canon-tr
   /pt/rutas/:
     template: rutas-intl
-    data: page.rutas
+    data: page.rutas-pt
   /pt/canon/:
     template: canon-intl
-    data: page.canon
+    data: page.canon-pt
   /fr/rutas/:
     template: rutas-intl
-    data: page.rutas
+    data: page.rutas-fr
   /fr/canon/:
     template: canon-intl
-    data: page.canon
+    data: page.canon-fr
 
   # === International tag pages (4 primary tags x 6 langs) ===
   /zh/tag/culture/:
@@ -203,42 +203,42 @@ routes:
   # === International "what is 421" pages ===
   /zh/what-is-421/:
     template: page-intl
-    data: page.what-is-421
+    data: page.what-is-421-zh
   /ja/what-is-421/:
     template: page-intl
-    data: page.what-is-421
+    data: page.what-is-421-ja
   /ko/what-is-421/:
     template: page-intl
-    data: page.what-is-421
+    data: page.what-is-421-ko
   /tr/what-is-421/:
     template: page-intl
-    data: page.what-is-421
+    data: page.what-is-421-tr
   /pt/what-is-421/:
     template: page-intl
-    data: page.what-is-421
+    data: page.what-is-421-pt
   /fr/what-is-421/:
     template: page-intl
-    data: page.what-is-421
+    data: page.what-is-421-fr
 
   # === International subscribe pages ===
   /zh/subscribe/:
     template: subscribe-intl
-    data: page.subscribe
+    data: page.subscribe-zh
   /ja/subscribe/:
     template: subscribe-intl
-    data: page.subscribe
+    data: page.subscribe-ja
   /ko/subscribe/:
     template: subscribe-intl
-    data: page.subscribe
+    data: page.subscribe-ko
   /tr/subscribe/:
     template: subscribe-intl
-    data: page.subscribe
+    data: page.subscribe-tr
   /pt/subscribe/:
     template: subscribe-intl
-    data: page.subscribe
+    data: page.subscribe-pt
   /fr/subscribe/:
     template: subscribe-intl
-    data: page.subscribe
+    data: page.subscribe-fr
 
   /es/tag/cultura/:
     template: tag-cultura

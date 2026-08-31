@@ -82,6 +82,45 @@
   "^/en/tag/crypto/?$": /en/tag/tech/
   "^/en/tag/essay/?$": /en/
 
+  # Duplicado EN consolidado (2026-08-31). `progressive-death-metal` era la
+  # traduccion original de oct-2024; `new-wave-progressive-death-metal` es la
+  # reescritura SEO de jul-2025 y gana 1.768 impresiones contra 310, en posicion
+  # 6,3 contra 10,5 (GSC, 12 meses). Se conserva la reescritura y hereda el
+  # cluster hreflang con death-metal-progresivo. Backup del post borrado en
+  # backups/backup-post-progressive-death-metal-2026-08-31.json
+  "^/en/progressive-death-metal/?$": /en/new-wave-progressive-death-metal/
+
+  # Paginas por idioma de las rutas intl (2026-08-31). Cada ruta /{lang}/rutas/,
+  # /canon/, /subscribe/ y /what-is-421/ pasa a tener su propia pagina de Ghost,
+  # para que el <title> y la meta description salgan en el idioma correcto: los
+  # metadatos de una pagina los emite Ghost desde la pagina, el theme no los pisa.
+  # Efecto colateral: Ghost le da a cada pagina nueva su URL en la raiz. Se tapan
+  # aca, mismo criterio que /revista-421/ o /suscribite/.
+  "^/rutas-zh/?$": /zh/rutas/
+  "^/canon-zh/?$": /zh/canon/
+  "^/subscribe-zh/?$": /zh/subscribe/
+  "^/what-is-421-zh/?$": /zh/what-is-421/
+  "^/rutas-ja/?$": /ja/rutas/
+  "^/canon-ja/?$": /ja/canon/
+  "^/subscribe-ja/?$": /ja/subscribe/
+  "^/what-is-421-ja/?$": /ja/what-is-421/
+  "^/rutas-ko/?$": /ko/rutas/
+  "^/canon-ko/?$": /ko/canon/
+  "^/subscribe-ko/?$": /ko/subscribe/
+  "^/what-is-421-ko/?$": /ko/what-is-421/
+  "^/rutas-tr/?$": /tr/rutas/
+  "^/canon-tr/?$": /tr/canon/
+  "^/subscribe-tr/?$": /tr/subscribe/
+  "^/what-is-421-tr/?$": /tr/what-is-421/
+  "^/rutas-pt/?$": /pt/rutas/
+  "^/canon-pt/?$": /pt/canon/
+  "^/subscribe-pt/?$": /pt/subscribe/
+  "^/what-is-421-pt/?$": /pt/what-is-421/
+  "^/rutas-fr/?$": /fr/rutas/
+  "^/canon-fr/?$": /fr/canon/
+  "^/subscribe-fr/?$": /fr/subscribe/
+  "^/what-is-421-fr/?$": /fr/what-is-421/
+
   # Seccion de resenas de libros: la landing es /es/resenas/ y /en/reviews/.
   # El chip de tag de cada post-card apunta a /{lang}/tag/{slug}/, que en ES cae en
   # la taxonomia generica (contenido duplicado con la landing) y en EN es 404
