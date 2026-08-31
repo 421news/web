@@ -90,6 +90,14 @@
   # backups/backup-post-progressive-death-metal-2026-08-31.json
   "^/en/progressive-death-metal/?$": /en/new-wave-progressive-death-metal/
 
+  # "El poder del fragmento" (2026-08-31). Se publico con los slugs `fragmento` y
+  # `fragment-en` y se renombraron a slugs con la keyword adelante. Ghost NO crea
+  # el redirect solo al cambiar un slug: sin estas dos reglas las URLs viejas dan
+  # 404. La de castellano va sobre /es/ — la raiz /fragmento/ ya la levanta el
+  # catch-all de la migracion y termina cayendo aca igual.
+  "^/es/fragmento/?$": /es/magic-the-gathering-narrativa-fragmentada/
+  "^/en/fragment-en/?$": /en/magic-the-gathering-fragmented-narrative/
+
   # Paginas por idioma de las rutas intl (2026-08-31). Cada ruta /{lang}/rutas/,
   # /canon/, /subscribe/ y /what-is-421/ pasa a tener su propia pagina de Ghost,
   # para que el <title> y la meta description salgan en el idioma correcto: los
