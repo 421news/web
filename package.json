@@ -7,7 +7,7 @@
   "keywords": [
     "ghost-theme"
   ],
-  "version": "3.39.2",
+  "version": "3.39.3",
   "engines": {
     "ghost": ">=4.0.0"
   },
@@ -37,5 +37,21 @@
   "dependencies": {
     "form-data": "^4.0.5",
     "jsonwebtoken": "^9.0.3"
+  },
+  "config": {
+    "image_sizes": {
+      "s": {
+        "width": 300
+      },
+      "m": {
+        "width": 600
+      },
+      "l": {
+        "width": 1000
+      },
+      "xl": {
+        "width": 2000
+      }
+    }
   }
 }
