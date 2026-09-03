@@ -8,7 +8,9 @@
   window.ghostImg = window.ghostImg || function (url, w) {
     if (!url || url.indexOf('/content/images/') === -1) return url || '';
     if (url.indexOf('/content/images/size/') !== -1) return url;
-    return url.replace('/content/images/', '/content/images/size/w' + w + '/');
+    // El orden importa: size/wN/format/webp/ funciona, format/webp/size/wN/ da 404.
+    // WebP baja el hero de la home de 2,81 MB (PNG w2000) a 84 KB. 33x.
+    return url.replace('/content/images/', '/content/images/size/w' + w + '/format/webp/');
   };
 
 
