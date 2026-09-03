@@ -2,6 +2,17 @@
 // Redesign: .pc (v1 editorial) / .pc--featured (v2 foil for canon/rutas)
 (function () {
     var TEXTURA = '/assets/images/textura.webp';
+    // Ghost genera variantes redimensionadas on-the-fly insertando /size/wN/ en la
+    // ruta, pero la Content API devuelve SIEMPRE el original — que puede pesar MB.
+    // Sin esto, cada card servia la imagen entera. Ver "Imagenes responsive" en CLAUDE.md.
+    // Idempotente y a prueba de orden de carga: la definen los 4 scripts que la usan.
+    window.ghostImg = window.ghostImg || function (url, w) {
+        if (!url || url.indexOf('/content/images/') === -1) return url || '';
+        if (url.indexOf('/content/images/size/') !== -1) return url;
+        return url.replace('/content/images/', '/content/images/size/w' + w + '/');
+    };
+
+
 
     window.escHtml = function (s) {
         if (!s) return '';
@@ -74,7 +85,7 @@
         var tagName = window.escHtml(tag.name || 'Uncategorized');
         var rt = post.reading_time ? (' <span class="pc__sep">·</span> ' + post.reading_time + ' min') : '';
         var meta = window.escHtml(author.name || '') + rt;
-        var img = window.escHtml(post.feature_image || '');
+        var imgRaw = post.feature_image || '';
         var title = window.escHtml(post.title);
         var overlay = '<div class="pc__overlay" style="background-size:cover;background-position:center"></div>';
         var tagSpan = '<span class="pc__tag"' + (tag.slug ? ' data-tag-url="' + window.escHtml(tagUrl) + '"' : '') + '>' + tagName + ctHtml + '</span>';
@@ -94,7 +105,7 @@
             return '<div role="listitem" class="w-dyn-item">' +
                 '<a href="' + post.url + '" class="pc pc__link pc--featured">' +
                 '<div class="pc__cover">' +
-                '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="800" />' +
+                '<img src="' + window.escHtml(window.ghostImg(imgRaw, 1000)) + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="800" />' +
                 overlay + '<div class="pc__mask"></div>' + badge + tagPill +
                 '<div class="pc__titlebox"><h3 class="pc__title">' + title + '</h3>' +
                 '<div class="pc__meta pc__meta--over">' + meta + '</div></div>' +
@@ -104,7 +115,7 @@
         return '<div role="listitem" class="w-dyn-item">' +
             '<a href="' + post.url + '" class="pc pc__link">' +
             '<div class="pc__cover">' +
-            '<img src="' + img + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="375" />' +
+            '<img src="' + window.escHtml(window.ghostImg(imgRaw, 600)) + '" alt="' + title + '" class="pc__img" loading="lazy" width="600" height="375" />' +
             overlay + '</div>' +
             body + '</a></div>';
     };

@@ -1,6 +1,17 @@
 (function () {
     var CONTENT_KEY = '420da6f85b5cc903b347de9e33';
     var API_BASE = '/ghost/api/content';
+    // Ghost genera variantes redimensionadas on-the-fly insertando /size/wN/ en la
+    // ruta, pero la Content API devuelve SIEMPRE el original — que puede pesar MB.
+    // Sin esto, cada card servia la imagen entera. Ver "Imagenes responsive" en CLAUDE.md.
+    // Idempotente y a prueba de orden de carga: la definen los 4 scripts que la usan.
+    window.ghostImg = window.ghostImg || function (url, w) {
+        if (!url || url.indexOf('/content/images/') === -1) return url || '';
+        if (url.indexOf('/content/images/size/') !== -1) return url;
+        return url.replace('/content/images/', '/content/images/size/w' + w + '/');
+    };
+
+
 
     var rutasContainer = document.getElementById('rutas-container');
     var canonContainer = document.getElementById('canon-container');
@@ -133,7 +144,7 @@
             var post = postMap[item.slug];
             if (!post) return;
             var tag = post.primary_tag || {};
-            var img = post.feature_image || '';
+            var img = window.ghostImg(post.feature_image || '', 300);
             html += '<a href="' + post.url + '" class="canon-item">';
             html += '<div class="canon-number-badge">' + (startIndex + i + 1) + '</div>';
             if (img) {

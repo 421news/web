@@ -4,6 +4,17 @@
  */
 (function() {
   var WM = window.WindowManager = {};
+  // Ghost genera variantes redimensionadas on-the-fly insertando /size/wN/ en la
+  // ruta, pero la Content API devuelve SIEMPRE el original — que puede pesar MB.
+  // Sin esto, cada card servia la imagen entera. Ver "Imagenes responsive" en CLAUDE.md.
+  // Idempotente y a prueba de orden de carga: la definen los 4 scripts que la usan.
+  window.ghostImg = window.ghostImg || function (url, w) {
+    if (!url || url.indexOf('/content/images/') === -1) return url || '';
+    if (url.indexOf('/content/images/size/') !== -1) return url;
+    return url.replace('/content/images/', '/content/images/size/w' + w + '/');
+  };
+
+
   var windows = [];
   var zCounter = 10001;
   var isDesktop = window.innerWidth >= 1024;
@@ -509,7 +520,7 @@
 
         var html = '';
         if (post.feature_image) {
-          html += '<img class="wm-post-image" src="' + escapeAttr(post.feature_image) +
+          html += '<img class="wm-post-image" src="' + escapeAttr(window.ghostImg(post.feature_image, 600)) +
             '" alt="' + escapeAttr(post.title) + '" />';
         }
         html += '<div class="wm-post-details">';

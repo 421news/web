@@ -1,6 +1,17 @@
 // Lightweight language-filtered search (replaces Sodo Search)
 (function () {
   var API_KEY = '420da6f85b5cc903b347de9e33';
+  // Ghost genera variantes redimensionadas on-the-fly insertando /size/wN/ en la
+  // ruta, pero la Content API devuelve SIEMPRE el original — que puede pesar MB.
+  // Sin esto, cada card servia la imagen entera. Ver "Imagenes responsive" en CLAUDE.md.
+  // Idempotente y a prueba de orden de carga: la definen los 4 scripts que la usan.
+  window.ghostImg = window.ghostImg || function (url, w) {
+    if (!url || url.indexOf('/content/images/') === -1) return url || '';
+    if (url.indexOf('/content/images/size/') !== -1) return url;
+    return url.replace('/content/images/', '/content/images/size/w' + w + '/');
+  };
+
+
   var langMatch = location.pathname.match(/^\/([a-z]{2})\//);
   var lang = langMatch ? langMatch[1] : 'es';
   var tagMap = { es: 'hash-es', en: 'hash-en', zh: 'hash-zh', ja: 'hash-ja', ko: 'hash-ko', tr: 'hash-tr', pt: 'hash-pt', fr: 'hash-fr' };
@@ -110,7 +121,7 @@
         title: p.title,
         url: p.url,
         excerpt: (p.excerpt || '').substring(0, 150),
-        img: p.feature_image,
+        img: window.ghostImg(p.feature_image, 300),
         _lower: (p.title + ' ' + (p.excerpt || '')).toLowerCase()
       });
     }
@@ -145,7 +156,7 @@
         name: a.name,
         url: '/author/' + a.slug + '/',
         bio: (a.bio || '').substring(0, 120),
-        img: a.profile_image,
+        img: window.ghostImg(a.profile_image, 300),
         _lower: (a.name + ' ' + (a.bio || '')).toLowerCase()
       });
     }
