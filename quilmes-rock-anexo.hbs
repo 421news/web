@@ -8,14 +8,15 @@
      noindex explícito. El plan vive en /es/quilmes-rock/. --}}
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="googlebot" content="noindex, nofollow">
-<title>421 · Sesiones en Aquilea — anexo técnico</title>
-<meta name="description" content="Modelo de producción, equipamiento, entregables y exclusiones del ciclo de entrevistas y sesiones.">
-<meta property="og:title" content="421 · Sesiones en Aquilea — anexo técnico">
-<meta property="og:description" content="Modelo de producción, equipamiento, entregables y exclusiones del ciclo de entrevistas y sesiones.">
-<meta property="og:url" content="https://www.421.news/es/quilmes-rock-anexo/">
-<meta property="og:type" content="website">
-<meta property="og:image" content="https://www.421.news/content/images/2026/01/10_diciembre.jpg">
-<meta name="twitter:card" content="summary_large_image">
+{{!-- Cabecera social: title, description y la metacard salen de
+     partials/social-meta.hbs, que es el único lugar del theme que las escribe.
+     Este template es standalone (no pasa por default.hbs, así que no hay
+     ghost_head), por eso el partial es dueño de la cabecera entera y recibe
+     los valores por parámetro: cada string se escribe una sola vez. --}}
+{{> social-meta standalone=true
+    title="421 · Sesiones en Aquilea — anexo técnico"
+    description="Modelo de producción, equipamiento, entregables y exclusiones del ciclo de entrevistas y sesiones."
+    url="https://www.421.news/es/quilmes-rock-anexo/"}}
 <link rel="icon" href="/assets/images/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

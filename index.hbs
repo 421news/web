@@ -1,8 +1,15 @@
 {{!< default}}
 
-{{!-- Meta (description/OG/Twitter) ahora viene server-side desde default.hbs vía {{#is "home"}} --}}
+{{!-- Metacard: la emite partials/social-meta.hbs desde default.hbs. Acá solo se
+     pisa la imagen — el resto (título, descripción, locale) usa el default
+     castellano, que es el de esta home.
+     Un solo bloque para og:image y twitter:image: cuando eran dos, terminaron
+     apuntando a archivos distintos y cada plataforma mostraba otra foto.
+     Las medidas van declaradas porque sin ellas WhatsApp muestra la preview sin
+     imagen la primera vez. Si se cambia la imagen, cambiarlas también. --}}
 {{#contentFor "ogImage"}}https://www.421.news/content/images/2026/05/revista-10-trimmed.jpg{{/contentFor}}
-{{#contentFor "twitterImage"}}https://www.421.news/content/images/2026/05/revista-10-trimmed.jpg{{/contentFor}}
+{{#contentFor "ogImageWidth"}}2000{{/contentFor}}
+{{#contentFor "ogImageHeight"}}1125{{/contentFor}}
 
 <div class="page-wrapper">
   {{> "general-styling"}}

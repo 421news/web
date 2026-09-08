@@ -5,7 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="googlebot" content="noindex, nofollow">
-<title>421 · Tarifario Comercial 2026</title>
+{{!-- Cabecera social: title, description y la metacard salen de
+     partials/social-meta.hbs, que es el único lugar del theme que las escribe.
+     Este template es standalone (no pasa por default.hbs, así que no hay
+     ghost_head), por eso el partial es dueño de la cabecera entera y recibe
+     los valores por parámetro: cada string se escribe una sola vez. --}}
+{{> social-meta standalone=true
+    title="421 · Tarifario Comercial 2026"
+    description="Grilla de precios y formatos comerciales de 421 para anunciantes y agencias."
+    url="https://www.421.news/es/tarifario/"}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">

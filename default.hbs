@@ -70,21 +70,19 @@ el script de mas abajo, que ajusta document.documentElement.lang segun el path. 
     <link rel="alternate" type="application/rss+xml" title="421 — English" href="https://www.421.news/en/rss/" />
     <link rel="author" type="text/plain" href="https://www.421.news/assets/data/llms.txt" title="LLM Context" />
     {{ghost_head}}
-    {{!-- OG/Twitter overrides for landing AND collection homes (/es/, /en/, etc).
-         CRITICAL: {{#is "home"}} only matches /, not /es/. Use {{#unless}} chain.
-         These come AFTER {{ghost_head}} so they WIN — X/Twitter's scraper uses last-occurrence
-         (OG spec says first wins, but real-world scrapers pick last). Moved here v3.33.83
-         because Ghost was injecting og:title with "(Page 1)" + twitter:card "summary" after ours. --}}
+    {{!-- Metacard social de las 9 homes de colección (/, /es/, /en/ y las 6 intl).
+         El unless chain es porque el helper is "home" matchea SOLO /, nunca /es/,
+         que es una collection: es la trampa recurrente del theme.
+
+         Las páginas quedan excluidas a propósito. Toda ruta con `data: page.X`
+         en routes.yaml tiene su recurso en Ghost, así que ghost_head ya emitió
+         la metacard completa desde los campos de esa página — el theme no la
+         toca. El contenido vive en Ghost Admin, no acá.
+
+         Todo lo que se emite está en partials/social-meta.hbs, que es el único
+         lugar del theme que escribe og:* / twitter:*. Ver ahí el porqué. --}}
     {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
-    <meta property="og:title" content="{{#block "ogTitle"}}421 — Cultura, tecnología, juegos y vida real{{/block}}" />
-    <meta property="og:description" content="{{#block "ogDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina.{{/block}}" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="{{#block "ogLocale"}}es_AR{{/block}}" />
-    <meta property="og:image" content="{{#block "ogImage"}}https://www.421.news/content/images/2026/01/10_diciembre.jpg{{/block}}" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{#block "ogTitle"}}421 — Cultura, tecnología, juegos y vida real{{/block}}" />
-    <meta name="twitter:description" content="{{#block "ogDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina.{{/block}}" />
-    <meta name="twitter:image" content="{{#block "twitterImage"}}https://www.421.news/content/images/2026/01/10_diciembre.jpg{{/block}}" />
+    {{> social-meta}}
     {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
 
     {{!-- Preload feature image on post pages (LCP element) --}}

@@ -1,0 +1,74 @@
+{{!-- ÚNICO lugar del theme que escribe og:* / twitter:*.
+
+     Por qué existe: hasta v3.39.5 convivían cuatro mecanismos distintos para
+     emitir el mismo dato — el helper ghost_head, bloques en default.hbs, meta
+     escritas a mano en algunos templates, y setMeta() por JavaScript. Ninguno
+     reemplazó al anterior, así que las metacards salían duplicadas y
+     contradictorias, y las escritas a mano caían dentro del body, donde ningún
+     scraper las mira.
+
+     LA REGLA: las metacards las emite ghost_head. El theme solo las emite
+     donde Ghost no tiene un recurso del cual derivarlas, y eso es exactamente:
+       - las 9 homes de colección (/, /es/, /en/ y las 6 intl), que en Ghost no
+         son un post ni una page y por eso no tienen metadatos propios;
+       - los documentos standalone (quilmes-rock, media-kit, tarifario), que no
+         pasan por default.hbs y por lo tanto no tienen ghost_head.
+     Si una ruta tiene `data: page.X` en routes.yaml, Ghost ya emite su metacard
+     completa y correcta desde los campos de esa página: el theme NO la toca.
+
+     Dos formas de pasarle los valores:
+       - Por bloque (las homes): cada plantilla de idioma usa contentFor sobre
+         "ogTitle" y acá se lee con el helper block. El default declarado abajo
+         es el castellano.
+       - Por parámetro (los standalone, que no tienen layout y por lo tanto no
+         pueden usar bloques): se incluye el partial pasando title, description,
+         url y, si hace falta, cardImage.
+     El parámetro gana sobre el bloque.
+
+     ⚠️ El parámetro de la imagen se llama cardImage y NO image a propósito:
+     "image" es un helper deprecado de Ghost, y gscan rechaza el theme entero
+     con "The image helper was replaced with img_url" apenas ve un if sobre él.
+     No renombrarlo de vuelta; el upload falla.
+
+     Cada string se escribe UNA sola vez:
+     twitter:* se deriva de los mismos valores que og:*, que era la otra fuente
+     de desincronización (og:image y twitter:image llegaron a apuntar a dos
+     archivos distintos, así que X y WhatsApp mostraban fotos diferentes).
+
+     og:image:width/height van siempre: sin ellas WhatsApp suele mostrar la
+     preview sin imagen la primera vez, porque tiene que bajar el archivo para
+     saber el tamaño.
+
+     La imagen tiene que ser 1200x630 (ratio 1.91:1, el de la tarjeta grande) y
+     pesar bastante menos de 600 KB: WhatsApp descarta las imágenes pesadas al
+     armar el thumbnail. Y va subida a Ghost (/content/images/), NUNCA a
+     /assets/, que Fastly congela un año. --}}
+<meta property="og:title" content="{{#if title}}{{title}}{{else}}{{#block "ogTitle"}}421 — Cultura, tecnología, juegos y vida real{{/block}}{{/if}}" />
+<meta property="og:description" content="{{#if description}}{{description}}{{else}}{{#block "ogDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina.{{/block}}{{/if}}" />
+<meta property="og:locale" content="{{#if locale}}{{locale}}{{else}}{{#block "ogLocale"}}es_AR{{/block}}{{/if}}" />
+<meta property="og:image" content="{{#if cardImage}}{{cardImage}}{{else}}{{#block "ogImage"}}https://www.421.news/content/images/size/w1200/2026/09/og-default-1200x630.jpg{{/block}}{{/if}}" />
+<meta property="og:image:width" content="{{#if cardImageWidth}}{{cardImageWidth}}{{else}}{{#block "ogImageWidth"}}1200{{/block}}{{/if}}" />
+<meta property="og:image:height" content="{{#if cardImageHeight}}{{cardImageHeight}}{{else}}{{#block "ogImageHeight"}}630{{/block}}{{/if}}" />
+{{!-- ⚠️ El default va repetido en la segunda invocación de cada bloque, y NO es
+     un descuido: el helper block guarda el valor puesto por contentFor, pero
+     NO guarda el default. Un `block "ogTitle"` sin cuerpo devuelve vacío
+     cuando la plantilla de idioma no lo pisó — o sea, en /es/ y en / los
+     twitter:* saldrían en blanco. Se probó y pasa.
+     Si se cambia un default, hay que cambiarlo en los DOS lugares. --}}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{#if title}}{{title}}{{else}}{{#block "ogTitle"}}421 — Cultura, tecnología, juegos y vida real{{/block}}{{/if}}" />
+<meta name="twitter:description" content="{{#if description}}{{description}}{{else}}{{#block "ogDescription"}}421: ensayos, crónicas, guías y entrevistas sobre cultura, tecnología, juegos y vida real desde una mirada argentina.{{/block}}{{/if}}" />
+<meta name="twitter:image" content="{{#if cardImage}}{{cardImage}}{{else}}{{#block "ogImage"}}https://www.421.news/content/images/size/w1200/2026/09/og-default-1200x630.jpg{{/block}}{{/if}}" />
+{{!-- El title, la description, og:type y og:url solo en los standalone.
+     En todo lo que pasa por default.hbs los emite ghost_head con el valor
+     correcto, y repetirlos sería volver a crear el duplicado que este partial
+     vino a eliminar. En los standalone no hay ghost_head, así que el partial es
+     dueño de la cabecera entera — y así el título y la descripción se escriben
+     una sola vez en vez de tres (title + description + og + twitter). --}}
+{{#if standalone}}
+<title>{{title}}</title>
+<meta name="description" content="{{description}}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="421" />
+{{#if url}}<meta property="og:url" content="{{url}}" />{{/if}}
+{{/if}}

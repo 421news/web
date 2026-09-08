@@ -1,29 +1,12 @@
 {{!< default}}
 
-<script>
-  document.title = 'Subscribe to 421 | 421.news';
-  (function() {
-    var title = 'Subscribe to 421 | 421.news';
-    var desc = '421 is an intellectual orientation outlet. Subscribe for full access to all content.';
-    var img = 'https://www.421.news/content/images/2026/01/10_diciembre.jpg';
-    var url = 'https://www.421.news/en/subscribe/';
-    function setMeta(attr, key, val) {
-      var el = document.querySelector('meta[' + attr + '="' + key + '"]');
-      if (el) { el.content = val; }
-      else { var m = document.createElement('meta'); m.setAttribute(attr, key); m.content = val; document.head.appendChild(m); }
-    }
-    setMeta('name', 'description', desc);
-    setMeta('property', 'og:title', title);
-    setMeta('property', 'og:description', desc);
-    setMeta('property', 'og:image', img);
-    setMeta('property', 'og:url', url);
-    setMeta('property', 'og:type', 'website');
-    setMeta('name', 'twitter:card', 'summary_large_image');
-    setMeta('name', 'twitter:title', title);
-    setMeta('name', 'twitter:description', desc);
-    setMeta('name', 'twitter:image', img);
-  })();
-</script>
+{{!-- Metacard social y title: los emite ghost_head desde la página de Ghost
+     que alimenta esta ruta (`data: page.subscribe` en routes.yaml).
+     Acá había un bloque de JavaScript que pisaba document.title y las meta
+     og:/twitter: en runtime. Era código muerto para lo único que importaba:
+     ningún scraper de redes ejecuta JavaScript, así que WhatsApp, X, Telegram y
+     Facebook veían siempre la metacard genérica del theme, en castellano y con
+     la imagen por defecto. El copy se migró a los campos de la página. --}}
 
     <link href="{{asset "css/suscribite.css"}}" rel="stylesheet" type="text/css">
     <div class="page-wrapper">
