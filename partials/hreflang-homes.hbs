@@ -1,0 +1,24 @@
+{{!-- Set de hreflang de las 9 homes: la raíz y las 8 colecciones de idioma.
+     Tiene que salir en LAS NUEVE y con el set completo, o Google pierde la
+     reciprocidad y elige / como canónica de /es/.
+
+     Lo incluye cada plantilla de home con contentFor sobre "hreflangHomes", y
+     default.hbs lo imprime con el helper block. Antes esto vivía en default.hbs
+     detrás de un unless chain que excluía post/page/tag/author/error, o sea que
+     la lista de homes se derivaba POR EXCLUSIÓN. Se volvió explícito porque esa
+     derivación se rompía sola: al bindear `data: page.X` a una colección —que es
+     lo que hace que Ghost emita la metacard correcta de cada home— la variable
+     `page` pasa a ser truthy y el unless chain dejaba de renderizar, borrando el
+     hreflang de las 9 homes sin que nada avisara.
+
+     El hreflang de los POSTS es otra cosa: sale del codeinjection_head de cada
+     uno, lo escribe el webhook, y no tiene nada que ver con este partial. --}}
+<link rel="alternate" hreflang="es" href="https://www.421.news/es/" />
+<link rel="alternate" hreflang="en" href="https://www.421.news/en/" />
+<link rel="alternate" hreflang="zh" href="https://www.421.news/zh/" />
+<link rel="alternate" hreflang="ja" href="https://www.421.news/ja/" />
+<link rel="alternate" hreflang="ko" href="https://www.421.news/ko/" />
+<link rel="alternate" hreflang="tr" href="https://www.421.news/tr/" />
+<link rel="alternate" hreflang="pt" href="https://www.421.news/pt/" />
+<link rel="alternate" hreflang="fr" href="https://www.421.news/fr/" />
+<link rel="alternate" hreflang="x-default" href="https://www.421.news/" />

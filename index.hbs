@@ -1,5 +1,11 @@
 {{!< default}}
 
+{{!-- Esta plantilla es una de las 9 homes: declara su hreflang explícitamente.
+     Antes lo emitía default.hbs por exclusión, y esa derivación se rompe al
+     bindear `data: page.X` a la colección. Ver partials/hreflang-homes.hbs. --}}
+{{#contentFor "hreflangHomes"}}{{> hreflang-homes}}{{/contentFor}}
+
+
 {{!-- Metacard: la emite partials/social-meta.hbs desde default.hbs. Acá solo se
      pisa la imagen — el resto (título, descripción, locale) usa el default
      castellano, que es el de esta home.

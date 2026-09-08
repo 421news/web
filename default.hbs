@@ -4,14 +4,24 @@ Las plantillas intl compartidas (rutas-intl, canon-intl, tag-intl, page-intl, su
 6 idiomas desde un mismo archivo, asi que no pueden fijarlo server-side: para esas sigue corrigiendolo
 el script de mas abajo, que ajusta document.documentElement.lang segun el path. --}}<html lang="{{#block "htmlLang"}}es{{/block}}">{{/is}}
   <head>
-    {{!-- TITLE:
-         - post/page/author: dynamic meta_title
-         - tag: dynamic meta_title (preserve tag-specific titles)
-         - landing/collection homes/error/etc: static 421 brand title (avoids Ghost's "(Page N)" suffix on paginated collections like /es/, /en/)
-         CRITICAL — RECURRING PITFALL: {{#is "home"}} matches ONLY /, NOT /es/. /es/ is a Ghost collection, not the "home" route. Don't try to override meta inside {{#is "home"}} expecting /es/ to be covered. --}}
-    {{!-- El default del bloque metaTitle es el español: /, /es/ y cualquier home sin contentFor salen igual que antes.
-         Las 7 homes intl (en/pt/fr/zh/ja/ko/tr) lo pisan con {{#contentFor "metaTitle"}} en su propia plantilla. --}}
-    {{#is "post,page,author"}}<title>{{meta_title}} | 421.news</title>{{else}}{{#is "tag"}}<title>{{meta_title}} | 421.news</title>{{else}}<title>{{#block "metaTitle"}}421 — Cultura, tecnología, juegos y vida real | 421.news{{/block}}</title>{{/is}}{{/is}}
+    {{!-- TITLE — una sola línea, con la condición DENTRO del bloque.
+         Ese orden es el punto: el contentFor de una plantilla gana siempre, y
+         solo si nadie lo puso se evalúa la condición. Así:
+           - las 7 homes intl ponen su contentFor y conservan su título tal cual,
+             estén o no bindeadas a una página con `data: page.X`;
+           - / y /es/ no ponen nada y caen en el título de marca en castellano,
+             exactamente como hasta ahora;
+           - posts, páginas, autores y tags usan el meta_title dinámico.
+
+         Antes esto eran tres ramas encadenadas con el bloque metido en la última.
+         No servía una vez bindeadas las homes: al pasar a matchear is "page" se
+         iban por la rama dinámica y perdían su título propio — /ja/ habría pasado
+         de "421 | 認知的食事のための上質な情報" al meta_title del sitio, que en una
+         colección sale como "421 | Medio digital… (Page 1)".
+
+         Trampa recurrente del theme: el helper is "home" matchea SOLO /, nunca
+         /es/, que es una collection. No usarlo para cubrir las homes. --}}
+    <title>{{#block "metaTitle"}}{{#is "post,page,author,tag"}}{{meta_title}} | 421.news{{else}}421 — Cultura, tecnología, juegos y vida real | 421.news{{/is}}{{/block}}</title>
     <meta charset='utf-8' />
     <meta content='width=device-width, initial-scale=1' name='viewport' />
     <meta name="robots" content="max-image-preview:large">
@@ -38,20 +48,17 @@ el script de mas abajo, que ajusta document.documentElement.lang segun el path. 
     {{#unless @site.icon}}
       <link href='{{asset "images/webclip.png"}}' rel='apple-touch-icon' />
     {{/unless}}
-    {{!-- Server-side hreflang: landing (/) AND collection homepages (/es/, /en/, /pt/, /fr/, /zh/, /ja/, /ko/, /tr/) --}}
-    {{!-- Critical: must render on ALL collection homes for hreflang reciprocity. Without it, Google picks / as canonical for /es/. --}}
-    {{!-- Uses {{#unless}} chain since {{#is "home,index"}} alone is unreliable across Ghost versions. Excludes posts/pages/tags/authors/error pages. --}}
-    {{#unless post}}{{#unless page}}{{#unless tag}}{{#unless author}}{{#unless error}}
-    <link rel="alternate" hreflang="es" href="https://www.421.news/es/" />
-    <link rel="alternate" hreflang="en" href="https://www.421.news/en/" />
-    <link rel="alternate" hreflang="zh" href="https://www.421.news/zh/" />
-    <link rel="alternate" hreflang="ja" href="https://www.421.news/ja/" />
-    <link rel="alternate" hreflang="ko" href="https://www.421.news/ko/" />
-    <link rel="alternate" hreflang="tr" href="https://www.421.news/tr/" />
-    <link rel="alternate" hreflang="pt" href="https://www.421.news/pt/" />
-    <link rel="alternate" hreflang="fr" href="https://www.421.news/fr/" />
-    <link rel="alternate" hreflang="x-default" href="https://www.421.news/" />
-    {{/unless}}{{/unless}}{{/unless}}{{/unless}}{{/unless}}
+    {{!-- Hreflang de las 9 homes. Lo declara cada plantilla de home con
+         contentFor sobre "hreflangHomes" incluyendo partials/hreflang-homes.hbs;
+         acá solo se imprime. El default vacío es correcto: cualquier plantilla
+         que no sea una home no lleva este set.
+
+         Antes se derivaba por exclusión con un unless chain sobre
+         post/page/tag/author/error. Se volvió explícito porque esa derivación se
+         rompe sola: bindear `data: page.X` a una colección hace que `page` sea
+         truthy y el chain dejaba de renderizar, borrando el hreflang de las 9
+         homes en silencio. Ver el partial. --}}
+    {{#block "hreflangHomes"}}{{/block}}
     {{!-- Server-side hreflang for posts is provided by codeinjection_head (migrated 2026-02 + webhook for new posts). --}}
     {{!-- The legacy self-referential block here was creating duplicate hreflang="es" entries when paired with codeinjection. Removed v3.33.42. --}}
     <script>

@@ -1,5 +1,10 @@
 {{!< default}}
 
+{{!-- Esta plantilla es una de las 9 homes: declara su hreflang explícitamente.
+     Antes lo emitía default.hbs por exclusión, y esa derivación se rompe al
+     bindear `data: page.X` a la colección. Ver partials/hreflang-homes.hbs. --}}
+{{#contentFor "hreflangHomes"}}{{> hreflang-homes}}{{/contentFor}}
+
 {{!-- Meta SERVER-SIDE. Antes se armaban por JS (document.title + setMeta), así que el HTML crudo de
      /pt/ salía con título y descripción en español y og:locale=es_AR: cualquier crawler o scraper que
      no ejecuta JS veía esta home como si fuera la española. Mismos strings que ya usaba el JS. --}}
