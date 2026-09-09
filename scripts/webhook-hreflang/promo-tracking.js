@@ -207,7 +207,11 @@ async function reporte(req, res) {
     await loadStore();
     const nDias = Math.min(180, Math.max(1, parseInt(req.query.dias, 10) || 60));
     const desde = new Date(Date.now() - 3 * 3600 * 1000 - nDias * 86400000).toISOString().slice(0, 10);
-    const ids = req.query.c ? [String(req.query.c)] : Object.keys(store.campanas);
+    // Las campañas `test-*` no salen en el reporte: este JSON es el que termina
+    // en el dashboard del equipo y, eventualmente, en un media kit. Una prueba de
+    // humo con CTR del 33% ahí adentro es peor que no tener el dato.
+    const ids = req.query.c ? [String(req.query.c)]
+      : Object.keys(store.campanas).filter(id => req.query.test === '1' || !/^test-/.test(id));
 
     const out = {};
     for (const id of ids) {
