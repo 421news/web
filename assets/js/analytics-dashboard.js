@@ -232,6 +232,7 @@
   var PZA_ENDPOINT = 'https://webhook-hreflang.onrender.com/api/pza/reporte?dias=90';
   var PZA_NOMBRES = {
     'sub-mid-post': 'CTA de suscripción (mitad de nota)',
+    'sub-home-banner': 'CTA de suscripción (banner de la home)',
     'rebord-2026-10': 'Publicidad · Rebord vuelve (home)'
   };
 

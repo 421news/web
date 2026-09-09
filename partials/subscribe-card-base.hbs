@@ -13,6 +13,58 @@
 .hwc-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(252,210,33,0.22); }
 .hwc-price { font-size: 0.72rem; color: var(--crema, #eae6e1); opacity: 0.5; }
 @media (prefers-reduced-motion: reduce) { .hwc-btn { transition: none; } .hwc-btn:hover { transform: none; } }
+
+/* --- La tarjeta adentro del cuerpo de una nota ---------------------------
+   El cuerpo del artículo pinta TODOS sus links como texto con gradiente,
+   itálica y borde inferior verde (index.css, regla .rich-text a). Sobre el
+   pill eso es demoledor: background-clip:text le recorta al texto el gradiente
+   que tendría que ser el FONDO del botón, y -webkit-text-fill-color:transparent
+   lo deja sin relleno. El botón se veía roto en los dos modos.
+   Es la misma excepción que ya existía para las kg-card de Ghost. */
+.rich-text .home-wizard-cta a,
+.rich-text .home-wizard-cta a * {
+  -webkit-text-fill-color: var(--negro, #1a1a1a);
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  border-bottom: none;
+  font-style: normal;
+  text-decoration: none;
+}
+
+/* En la HOME la tarjeta vive sobre la banda con la tapa de la revista, que es
+   oscura llueva o truene: ahí no se toca. Adentro de una nota el fondo es
+   crema, así que ahí sí se adapta al modo claro. */
+body.light-mode .rich-text .home-wizard-cta .hwc-inner {
+  background: #fbfaf8;
+}
+/* El acento del título es texto con gradiente: sobre el panel claro la mitad
+   amarilla se lava. Regla del sitio: nada amarillo sobre fondo claro. En el
+   botón el gradiente SÍ se queda — ahí el amarillo es relleno con texto negro
+   encima, no texto. --gradient-main no se remapea solo porque se declara en
+   :root, así que var(--amarillo) adentro resuelve al amarillo real. */
+body.light-mode .rich-text .home-wizard-cta .hwc-grad {
+  background-image: none;
+  -webkit-text-fill-color: var(--verde, #17a583);
+  color: var(--verde, #17a583);
+}
+body.light-mode .rich-text .home-wizard-cta .hwc-title,
+body.light-mode .rich-text .home-wizard-cta .hwc-text,
+body.light-mode .rich-text .home-wizard-cta .hwc-price {
+  color: var(--negro, #1a1a1a);
+}
+/* En light, light-mode.css pisa los links del cuerpo con `background-image:none`
+   y texto verde, y su selector (body.light-mode .rich-text a) le gana al de
+   arriba: el pill se quedaba SIN FONDO, sólo el texto. Hay que repetir el
+   override con la especificidad de ese contexto. */
+body.light-mode .rich-text .home-wizard-cta a,
+body.light-mode .rich-text .home-wizard-cta a * {
+  background-image: var(--gradient-main);
+  -webkit-text-fill-color: var(--negro, #1a1a1a);
+  color: var(--negro, #1a1a1a);
+}
+
+/* El amarillo pasa a verde solo en light (globals + light-mode.css), así que el
+   eyebrow, el borde y el pill se resuelven con las variables y no a mano. */
 @media (max-width: 640px) {
   .hwc-inner { padding: 1.5rem 1.3rem; }
   .hwc-action { align-items: stretch; width: 100%; }
