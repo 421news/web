@@ -1,10 +1,14 @@
 {{!-- ===========================================================================
   CTA de suscripción embebido en la mitad de la nota.
 
-  Es el cuarto punto de contacto del funnel, y apunta a un lector distinto de
-  los otros tres: el que ya bajó media nota (o sea, le está gustando) y le dio
-  cerrar al popup. Por eso NO se dispara por scroll ni tapa nada — es un bloque
-  más del artículo, en el corte natural entre dos párrafos.
+  Es el cuarto punto de contacto del funnel y apunta a un lector distinto de los
+  otros tres: el que ya bajó media nota (o sea, le está gustando) y le dio cerrar
+  al popup. Por eso NO se dispara por scroll ni tapa nada — es un bloque más del
+  artículo, en el corte natural entre dos párrafos.
+
+  La tarjeta es LA MISMA de la home (partials/subscribe-card.hbs). Acá sólo se
+  decide dónde va y en qué idioma. Si cambia el diseño o el copy, cambia en las
+  dos superficies a la vez, que es el punto.
 
   Se incluye desde los tres wrappers de post (post-es / post-en / post-intl).
 
@@ -23,73 +27,28 @@
   4. El gate excluye `paid` Y `comped`: 221 de los ~232 que pagan lo hacen por
      MercadoPago y en Ghost figuran comped. Con el chequeo obvio, el 96% de los
      que pagan vería un CTA para suscribirse a algo que ya paga.
-
-  5. Se mide por partida doble, igual que la pieza publicitaria: GA4 (para cruzar
-     con página, dispositivo y el resto del funnel) y nuestro propio contador en
-     Render (que no lo comen los bloqueadores). Ver promo-tracking.js.
 =========================================================================== --}}
 
 {{#match @member.status "!=" "paid"}}{{#match @member.status "!=" "comped"}}
+{{> "subscribe-card-base"}}
 <template id="mps421-tpl">
-  <aside class="mps421" aria-label="Suscribite a 421">
-    <div class="mps421-inner">
-      <span class="mps421-eyebrow"></span>
-      <h3 class="mps421-title"></h3>
-      <p class="mps421-text"></p>
-      <a class="mps421-btn" href="/es/suscribite/"></a>
-      <span class="mps421-price"></span>
-    </div>
-  </aside>
+  <div class="mps421-wrap">
+    {{!-- El castellano va server-side por ser el idioma mayoritario; el resto lo
+          reescribe el JS a partir de la URL, como el resto del theme. --}}
+    {{> "subscribe-card"
+        eyebrow="Suscribite"
+        title="Las notas de 421"
+        titleAccent="no tienen paywall"
+        text="Y a cada colaborador se le paga por su trabajo. Las dos cosas dependen de los suscriptores."
+        btn="Suscribite →"
+        price="US$10 por mes"
+        href="/es/suscribite/"
+        place="post-es" camp="sub-mid-post" ev="midpost_subscribe"}}
+  </div>
 </template>
 
 <style>
-  .mps421 {
-    margin: 2.6rem 0;
-    border-radius: 16px;
-    padding: 1.5px;                                  /* el borde es el gradiente */
-    background: var(--gradient-main, linear-gradient(280deg, var(--verde, #17a583), var(--amarillo, #fcd221)));
-  }
-  .mps421-inner {
-    border-radius: 14.5px;
-    padding: 1.5rem 1.6rem;
-    background: rgba(24, 24, 24, 0.96);
-    display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem;
-  }
-  body.light-mode .mps421-inner { background: rgba(234, 230, 225, 0.96); }
-
-  .mps421-eyebrow {
-    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--amarillo, #fcd221);
-  }
-  .mps421-title {
-    margin: 0; font-size: clamp(1.15rem, 2.4vw, 1.5rem); font-weight: 800; line-height: 1.2;
-    color: var(--crema, #eae6e1);
-  }
-  .mps421-text {
-    margin: 0; font-size: 0.95rem; line-height: 1.5; max-width: 56ch;
-    color: var(--crema, #eae6e1); opacity: 0.8;
-  }
-  body.light-mode .mps421-title, body.light-mode .mps421-text { color: var(--negro, #121212); }
-
-  /* Pill, igual que el resto de los CTA del sitio (ver Design Rules) */
-  .mps421-btn {
-    display: inline-block; margin-top: 0.4rem;
-    font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.85rem;
-    padding: 0.72rem 1.6rem; border-radius: 999px; text-decoration: none; white-space: nowrap;
-    background: var(--gradient-main, linear-gradient(280deg, var(--verde, #17a583), var(--amarillo, #fcd221)));
-    color: var(--negro, #121212);
-    transition: transform 0.18s, box-shadow 0.18s;
-  }
-  .mps421-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(252, 210, 33, 0.22); }
-  @media (prefers-reduced-motion: reduce) { .mps421-btn { transition: none; } .mps421-btn:hover { transform: none; } }
-
-  .mps421-price { font-size: 0.72rem; opacity: 0.5; color: var(--crema, #eae6e1); }
-  body.light-mode .mps421-price { color: var(--negro, #121212); }
-
-  @media (max-width: 640px) {
-    .mps421-inner { padding: 1.3rem 1.2rem; align-items: stretch; }
-    .mps421-btn { text-align: center; }
-  }
+  .mps421-wrap { margin: 2.6rem 0; }
 </style>
 
 <script>
@@ -97,58 +56,41 @@
   var MIN_CHARS = 2200;    // por debajo de esto la nota es demasiado corta (nota 3)
   var CORTE = 0.45;        // fracción del texto tras la cual se inserta
 
+  // Mismo mensaje que la home, en los 7 idiomas restantes. El núcleo es el
+  // porqué de 421: se le paga a todo el que colabora y ninguna nota queda
+  // detrás de un muro. Verificado el 2026-09-09: 1.621 notas publicadas, las
+  // 1.621 públicas. Si eso alguna vez deja de ser cierto, este copy miente.
   var I18N = {
-    es: { eyebrow: '✦ Suscribite', title: 'Bancá el medio que te gusta leer',
-          text: 'Leé la revista un mes antes, comentá en cada nota y entrá al concilio mensual con la redacción.',
-          btn: 'Suscribite →', price: 'US$10/mes · cancelás cuando quieras', href: '/es/suscribite/' },
-    en: { eyebrow: '✦ Subscribe', title: 'Back the outlet you love to read',
-          text: 'Read the magazine a month early, comment on every piece and join the monthly council with the newsroom.',
-          btn: 'Subscribe →', price: 'US$10/mo · cancel anytime', href: '/en/subscribe/' },
-    pt: { eyebrow: '✦ Assine', title: 'Apoie o veículo que você gosta de ler',
-          text: 'Leia a revista um mês antes, comente em cada matéria e participe do encontro mensal com a redação.',
-          btn: 'Assine →', price: 'US$10/mês · cancele quando quiser', href: '/pt/subscribe/' },
-    fr: { eyebrow: '✦ Abonnez-vous', title: 'Soutenez le média que vous aimez lire',
-          text: 'Lisez le magazine un mois avant, commentez chaque article et rejoignez la rencontre mensuelle avec la rédaction.',
-          btn: 'S’abonner →', price: 'US$10/mois · annulez quand vous voulez', href: '/fr/subscribe/' },
-    zh: { eyebrow: '✦ 订阅', title: '支持你喜欢阅读的媒体',
-          text: '提前一个月阅读杂志，在每篇文章下评论，并参加与编辑部的每月会议。',
-          btn: '订阅 →', price: '每月 10 美元 · 随时取消', href: '/zh/subscribe/' },
-    ja: { eyebrow: '✦ 購読', title: 'あなたが読みたいメディアを支える',
-          text: '雑誌を 1 ヶ月早く読み、各記事にコメントし、編集部との月例会に参加できます。',
-          btn: '購読する →', price: '月額 10 ドル · いつでも解約可', href: '/ja/subscribe/' },
-    ko: { eyebrow: '✦ 구독', title: '좋아하는 매체를 후원하세요',
-          text: '잡지를 한 달 먼저 읽고, 모든 글에 댓글을 달고, 편집실과의 월간 모임에 참여하세요.',
-          btn: '구독하기 →', price: '월 10달러 · 언제든 해지', href: '/ko/subscribe/' },
-    tr: { eyebrow: '✦ Abone ol', title: 'Okumaktan keyif aldığın yayını destekle',
-          text: 'Dergiyi bir ay önce oku, her yazıya yorum yap ve yazı işleriyle aylık buluşmaya katıl.',
-          btn: 'Abone ol →', price: 'Aylık 10 US$ · istediğin zaman iptal et', href: '/tr/subscribe/' }
+    en: { eyebrow: 'Subscribe', title: 'No 421 article', accent: 'is behind a paywall',
+          text: 'And every contributor is paid for their work. Both things depend on our subscribers.',
+          btn: 'Subscribe →', price: 'US$10 a month', href: '/en/subscribe/' },
+    pt: { eyebrow: 'Assine', title: 'Nenhuma matéria da 421', accent: 'tem paywall',
+          text: 'E cada colaborador é pago pelo seu trabalho. As duas coisas dependem dos assinantes.',
+          btn: 'Assine →', price: 'US$10 por mês', href: '/pt/subscribe/' },
+    fr: { eyebrow: 'Abonnez-vous', title: 'Aucun article de 421', accent: 'n’a de paywall',
+          text: 'Et chaque collaborateur est payé pour son travail. Les deux dépendent des abonnés.',
+          btn: 'S’abonner →', price: 'US$10 par mois', href: '/fr/subscribe/' },
+    zh: { eyebrow: '订阅', title: '421 的文章', accent: '没有付费墙',
+          text: '每一位撰稿人都会因其工作获得报酬。这两件事都依靠订阅者。',
+          btn: '订阅 →', price: '每月 10 美元', href: '/zh/subscribe/' },
+    ja: { eyebrow: '購読', title: '421 の記事に', accent: 'ペイウォールはない',
+          text: 'そして寄稿者には必ず報酬を支払っています。どちらも購読者に支えられています。',
+          btn: '購読する →', price: '月額 10 ドル', href: '/ja/subscribe/' },
+    ko: { eyebrow: '구독', title: '421의 기사에는', accent: '페이월이 없습니다',
+          text: '그리고 모든 기고자에게 원고료를 지급합니다. 두 가지 모두 구독자에게 달려 있습니다.',
+          btn: '구독하기 →', price: '월 10달러', href: '/ko/subscribe/' },
+    tr: { eyebrow: 'Abone ol', title: '421’in yazılarında', accent: 'paywall yok',
+          text: 'Ve her katkı sunana emeğinin karşılığı ödeniyor. İkisi de abonelere bağlı.',
+          btn: 'Abone ol →', price: 'Aylık 10 US$', href: '/tr/subscribe/' }
   };
 
-  // Helper de medición compartido con promo-strip.hbs. Guarda `|| function` para
-  // que no dependa del orden de carga, igual que window.ghostImg().
-  window.pza421 = window.pza421 || function (campana, tipo, ubicacion) {
-    var url = 'https://webhook-hreflang.onrender.com/api/pza/e';
-    var cuerpo = JSON.stringify({ c: campana, t: tipo, p: ubicacion,
-                                  d: window.matchMedia('(max-width: 767px)').matches ? 'm' : 'd' });
-    try {
-      if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([cuerpo], { type: 'text/plain' }));
-      else fetch(url, { method: 'POST', body: cuerpo, keepalive: true, mode: 'no-cors',
-                        headers: { 'Content-Type': 'text/plain' } });
-    } catch (e) { /* medir no puede romper la página */ }
-  };
 
   function iniciar() {
     var tpl = document.getElementById('mps421-tpl');
     var cuerpo = document.querySelector('.rich-text.w-richtext');
     if (!tpl || !cuerpo) return;
 
-    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
-    var lang = (m && I18N[m[1]]) ? m[1] : 'es';
-    var t = I18N[lang];
-
-    var bloques = Array.prototype.filter.call(cuerpo.children, function (el) {
-      return el.offsetHeight > 0 || el.textContent.trim().length > 0;
-    });
+    var bloques = Array.prototype.slice.call(cuerpo.children);
     var total = cuerpo.textContent.replace(/\s+/g, ' ').trim().length;
     if (total < MIN_CHARS || bloques.length < 6) return;   // nota 3
 
@@ -164,42 +106,30 @@
     if (!ancla || ancla === bloques[bloques.length - 1]) return;
 
     var nodo = tpl.content.firstElementChild.cloneNode(true);
-    nodo.querySelector('.mps421-eyebrow').textContent = t.eyebrow;
-    nodo.querySelector('.mps421-title').textContent = t.title;
-    nodo.querySelector('.mps421-text').textContent = t.text;
-    nodo.querySelector('.mps421-price').textContent = t.price;
-    var btn = nodo.querySelector('.mps421-btn');
-    btn.textContent = t.btn;
-    btn.href = t.href;
+    var card = nodo.querySelector('.home-wizard-cta');
+
+    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+    var lang = m ? m[1] : 'es';
+    var t = I18N[lang];
+    if (t) {
+      nodo.querySelector('.hwc-eyebrow').textContent = '✦ ' + t.eyebrow;
+      nodo.querySelector('.hwc-title').firstChild.nodeValue = t.title + ' ';
+      nodo.querySelector('.hwc-grad').textContent = t.accent;
+      nodo.querySelector('.hwc-text').textContent = t.text;
+      nodo.querySelector('.hwc-price').textContent = t.price;
+      var btn = nodo.querySelector('.hwc-btn');
+      btn.textContent = t.btn;
+      btn.href = t.href;
+    }
+    // Un idioma que no está en el diccionario cae a castellano, que es lo que
+    // ya vino renderizado desde el server.
+    card.setAttribute('data-hwc-place', 'post-' + (t ? lang : 'es'));
 
     ancla.parentNode.insertBefore(nodo, ancla.nextSibling);
 
-    var UBIC = 'post-' + lang;
-
-    btn.addEventListener('click', function () {
-      window.pza421('sub-mid-post', 'c', UBIC);
-      if (typeof gtag === 'function') {
-        gtag('event', 'midpost_subscribe_click', { event_category: 'engagement', event_label: UBIC });
-      }
-    });
-
-    // Impresión: sólo si el bloque estuvo de verdad a la vista. Contarlo al
-    // insertarlo mediría "notas abiertas", no "veces que el CTA se vio", y el
-    // CTR quedaría inventado.
-    if (!('IntersectionObserver' in window)) return;
-    var visto = false;
-    var obs = new IntersectionObserver(function (ents) {
-      ents.forEach(function (e) {
-        if (visto || !e.isIntersecting || document.visibilityState !== 'visible') return;
-        visto = true;
-        obs.disconnect();
-        window.pza421('sub-mid-post', 'i', UBIC);
-        if (typeof gtag === 'function') {
-          gtag('event', 'midpost_subscribe_view', { event_category: 'engagement', event_label: UBIC, non_interaction: true });
-        }
-      });
-    }, { threshold: 0.5 });
-    obs.observe(nodo);
+    // La medición (click + impresión) la maneja subscribe-card-base.hbs; hay que
+    // avisarle que apareció una tarjeta nueva, porque se insertó después.
+    if (typeof window.hwcObservar === 'function') window.hwcObservar();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);

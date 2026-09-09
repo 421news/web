@@ -1,0 +1,83 @@
+{{!-- Estilos y medición de subscribe-card.hbs. Va una sola vez por página. --}}
+<style>
+/* Tarjeta: borde de gradiente + panel oscuro adentro */
+.home-wizard-cta { border-radius: 16px; background: var(--gradient-main, linear-gradient(135deg, var(--verde,#17a583), var(--amarillo,#fcd221))); padding: 1.5px; box-shadow: 0 10px 34px rgba(0,0,0,0.45); }
+.hwc-inner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; border-radius: 14.5px; padding: 1.8rem 2rem; background: rgba(24,24,24,0.94); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.hwc-copy { flex: 1 1 340px; min-width: 0; }
+.hwc-action { flex: 0 0 auto; display: flex; flex-direction: column; align-items: flex-start; gap: 0.55rem; }
+.hwc-eyebrow { font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.72rem; color: var(--amarillo, #fcd221); }
+.hwc-title { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 800; line-height: 1.15; margin: 0.5rem 0 0.6rem; color: var(--crema, #eae6e1); }
+.hwc-grad { background: var(--gradient-main, linear-gradient(135deg, var(--verde,#17a583), var(--amarillo,#fcd221))); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hwc-text { font-size: 0.95rem; line-height: 1.5; margin: 0; max-width: 54ch; color: var(--crema, #eae6e1); opacity: 0.8; }
+.hwc-btn { display: inline-block; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.9rem; padding: 0.85rem 1.8rem; border-radius: 999px; text-decoration: none; white-space: nowrap; transition: transform 0.18s, box-shadow 0.18s; background: var(--gradient-main, linear-gradient(135deg, var(--verde,#17a583), var(--amarillo,#fcd221))); color: var(--negro, #1a1a1a); }
+.hwc-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(252,210,33,0.22); }
+.hwc-price { font-size: 0.72rem; color: var(--crema, #eae6e1); opacity: 0.5; }
+@media (prefers-reduced-motion: reduce) { .hwc-btn { transition: none; } .hwc-btn:hover { transform: none; } }
+@media (max-width: 640px) {
+  .hwc-inner { padding: 1.5rem 1.3rem; }
+  .hwc-action { align-items: stretch; width: 100%; }
+  .hwc-btn { text-align: center; }
+}
+</style>
+
+<script>
+(function () {
+  // Helper de medición compartido con promo-strip.hbs. Guarda `|| function` para
+  // no depender del orden de carga, igual que window.ghostImg().
+  window.pza421 = window.pza421 || function (campana, tipo, ubicacion) {
+    var url = 'https://webhook-hreflang.onrender.com/api/pza/e';
+    var cuerpo = JSON.stringify({ c: campana, t: tipo, p: ubicacion,
+                                  d: window.matchMedia('(max-width: 767px)').matches ? 'm' : 'd' });
+    try {
+      if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([cuerpo], { type: 'text/plain' }));
+      else fetch(url, { method: 'POST', body: cuerpo, keepalive: true, mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain' } });
+    } catch (e) { /* medir no puede romper la página */ }
+  };
+
+  function datos(card) {
+    return { place: card.getAttribute('data-hwc-place') || 'na',
+             camp: card.getAttribute('data-hwc-camp') || 'sub-card',
+             ev: card.getAttribute('data-hwc-ev') || 'subscribe' };
+  }
+
+  // Click: delegado en el document, así también agarra la tarjeta que inserta el
+  // JS en la mitad de la nota.
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.hwc-btn[data-hwc-track]');
+    if (!btn) return;
+    var card = btn.closest('.home-wizard-cta');
+    if (!card) return;
+    var d = datos(card);
+    window.pza421(d.camp, 'c', d.place);
+    if (typeof gtag === 'function') {
+      gtag('event', d.ev + '_click', { event_category: 'engagement', event_label: d.place });
+    }
+  });
+
+  // Impresión: sólo si la tarjeta estuvo de verdad a la vista, con la pestaña al
+  // frente. Sin esto estaríamos midiendo "páginas abiertas" y el CTR sería
+  // inventado. Es lo que hace comparables la home y la nota.
+  if (!('IntersectionObserver' in window)) return;
+  var obs = new IntersectionObserver(function (ents) {
+    ents.forEach(function (en) {
+      if (!en.isIntersecting || document.visibilityState !== 'visible') return;
+      if (en.target.hasAttribute('data-hwc-visto')) return;
+      en.target.setAttribute('data-hwc-visto', '1');
+      obs.unobserve(en.target);
+      var d = datos(en.target);
+      window.pza421(d.camp, 'i', d.place);
+      if (typeof gtag === 'function') {
+        gtag('event', d.ev + '_view', { event_category: 'engagement', event_label: d.place, non_interaction: true });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  function observar() {
+    document.querySelectorAll('.home-wizard-cta[data-hwc-place]').forEach(function (c) { obs.observe(c); });
+  }
+  window.hwcObservar = observar;   // la tarjeta de la nota se inserta después
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', observar);
+  else observar();
+})();
+</script>

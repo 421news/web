@@ -1,0 +1,22 @@
+{{!-- Tarjeta de suscripción — ÚNICO markup, usado en la home y en la mitad de
+      cada nota. Antes eran dos componentes parecidos pero distintos, y se notaba.
+      Los estilos y la medición viven en subscribe-card-base.hbs: hay que incluir
+      ese partial UNA vez en la página, además de este.
+
+      Params: eyebrow, title, titleAccent, text, btn, price, href
+              place (ubicación para el reporte: home-es, post-en, …)
+              camp  (campaña: sub-home-banner | sub-mid-post)
+              ev    (prefijo del evento GA4; se le agrega _click y _view) --}}
+<div class="home-wizard-cta" data-hwc-place="{{place}}" data-hwc-camp="{{camp}}" data-hwc-ev="{{ev}}">
+  <div class="hwc-inner">
+    <div class="hwc-copy">
+      <span class="hwc-eyebrow">✦ {{eyebrow}}</span>
+      <h2 class="hwc-title">{{title}} <span class="hwc-grad">{{titleAccent}}</span></h2>
+      <p class="hwc-text">{{text}}</p>
+    </div>
+    <div class="hwc-action">
+      <a href="{{href}}" class="hwc-btn" data-hwc-track>{{btn}}</a>
+      <span class="hwc-price">{{price}}</span>
+    </div>
+  </div>
+</div>
