@@ -55,6 +55,7 @@ document.documentElement.classList.add('is-analytics');
           <button class="analytics-toptab active" data-view="analytics">Analytics</button>
           <button class="analytics-toptab" data-view="revenue">Revenue</button>
           <button class="analytics-toptab" data-view="autores">Autores</button>
+          <button class="analytics-toptab" data-view="buscadores">Motores de b&uacute;squeda</button>
         </div>
 
         <!-- ===== ANALYTICS VIEW ===== -->
@@ -298,6 +299,19 @@ document.documentElement.classList.add('is-analytics');
           </div>
         </div><!-- /#revenue-view -->
 
+        <!-- ===== MOTORES DE BÚSQUEDA ===== -->
+        <!-- Consolida las dos propiedades de Search Console: 421.news y
+             cuatroveintiuno.com, el dominio anterior a la migración de octubre
+             de 2025. Los datos los sirve el webhook desde un archivo, no en
+             vivo: ver assets/js/buscadores-dashboard.js. -->
+        <div id="buscadores-view" style="display:none;">
+          <div class="analytics-hero">
+            <h1>Motores de b&uacute;squeda</h1>
+            <p class="analytics-subtitle">Google Search Console, dominio actual y anterior consolidados</p>
+          </div>
+          <div id="buscadores-body"></div>
+        </div><!-- /#buscadores-view -->
+
         <div id="autores-view" style="display:none;">
           <div class="analytics-hero">
             <h1 class="analytics-title">Autores</h1>
@@ -436,6 +450,7 @@ __revenueResp.then(function(x) {
       // Los dashboards pesados se inicializan la primera vez que se los mira.
       if (view === 'revenue' && window.initRevenueDashboard) window.initRevenueDashboard();
       if (view === 'autores' && window.initAutoresDashboard) window.initAutoresDashboard();
+      if (view === 'buscadores' && window.initBuscadoresDashboard) window.initBuscadoresDashboard();
     });
   }
 })();
@@ -444,3 +459,4 @@ __revenueResp.then(function(x) {
 <script src="{{asset "js/analytics-dashboard.js"}}" defer></script>
 <script src="{{asset "js/revenue-dashboard.js"}}" defer></script>
 <script src="{{asset "js/autores-dashboard.js"}}" defer></script>
+<script src="{{asset "js/buscadores-dashboard.js"}}" defer></script>

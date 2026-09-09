@@ -1,0 +1,463 @@
+{
+ "generado": "2026-09-09T23:48:41.885925Z",
+ "cobertura": {
+  "421.news|web": [
+   "2025-09-14",
+   "2026-09-06",
+   358
+  ],
+  "421.news|discover": [
+   "2025-09-14",
+   "2026-09-06",
+   358
+  ],
+  "cuatroveintiuno.com|web": [
+   "2025-04-28",
+   "2026-09-06",
+   497
+  ],
+  "cuatroveintiuno.com|discover": [
+   "2025-04-28",
+   "2026-09-06",
+   497
+  ]
+ },
+ "meses": [
+  {
+   "mes": "2025-04",
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 143,
+     "impresiones": 4035
+    },
+    "discover": {
+     "clicks": 3,
+     "impresiones": 28
+    }
+   },
+   "total": {
+    "clicks": 146,
+    "impresiones": 4063
+   }
+  },
+  {
+   "mes": "2025-05",
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 1282,
+     "impresiones": 54352
+    },
+    "discover": {
+     "clicks": 4,
+     "impresiones": 167
+    }
+   },
+   "total": {
+    "clicks": 1286,
+    "impresiones": 54519
+   }
+  },
+  {
+   "mes": "2025-06",
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 2227,
+     "impresiones": 79793
+    },
+    "discover": {
+     "clicks": 1447,
+     "impresiones": 62189
+    }
+   },
+   "total": {
+    "clicks": 3674,
+    "impresiones": 141982
+   }
+  },
+  {
+   "mes": "2025-07",
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 2993,
+     "impresiones": 148318
+    },
+    "discover": {
+     "clicks": 11163,
+     "impresiones": 679198
+    }
+   },
+   "total": {
+    "clicks": 14156,
+    "impresiones": 827516
+   }
+  },
+  {
+   "mes": "2025-08",
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 5067,
+     "impresiones": 150995
+    },
+    "discover": {
+     "clicks": 3305,
+     "impresiones": 155178
+    }
+   },
+   "total": {
+    "clicks": 8372,
+    "impresiones": 306173
+   }
+  },
+  {
+   "mes": "2025-09",
+   "421.news": {
+    "web": {
+     "clicks": 1408,
+     "impresiones": 23552
+    },
+    "discover": {
+     "clicks": 59,
+     "impresiones": 1694
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 1809,
+     "impresiones": 55401
+    },
+    "discover": {
+     "clicks": 493,
+     "impresiones": 15022
+    }
+   },
+   "total": {
+    "clicks": 3769,
+    "impresiones": 95669
+   }
+  },
+  {
+   "mes": "2025-10",
+   "421.news": {
+    "web": {
+     "clicks": 5705,
+     "impresiones": 263145
+    },
+    "discover": {
+     "clicks": 10762,
+     "impresiones": 568417
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 453,
+     "impresiones": 1598
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 16920,
+    "impresiones": 833160
+   }
+  },
+  {
+   "mes": "2025-11",
+   "421.news": {
+    "web": {
+     "clicks": 3892,
+     "impresiones": 228871
+    },
+    "discover": {
+     "clicks": 3003,
+     "impresiones": 119933
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 3,
+     "impresiones": 150
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 6898,
+    "impresiones": 348954
+   }
+  },
+  {
+   "mes": "2025-12",
+   "421.news": {
+    "web": {
+     "clicks": 4290,
+     "impresiones": 399516
+    },
+    "discover": {
+     "clicks": 7599,
+     "impresiones": 213863
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 2,
+     "impresiones": 149
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 11891,
+    "impresiones": 613528
+   }
+  },
+  {
+   "mes": "2026-01",
+   "421.news": {
+    "web": {
+     "clicks": 4605,
+     "impresiones": 695809
+    },
+    "discover": {
+     "clicks": 498,
+     "impresiones": 14607
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 0,
+     "impresiones": 42
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 5103,
+    "impresiones": 710458
+   }
+  },
+  {
+   "mes": "2026-02",
+   "421.news": {
+    "web": {
+     "clicks": 4506,
+     "impresiones": 559323
+    },
+    "discover": {
+     "clicks": 500,
+     "impresiones": 16705
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 1,
+     "impresiones": 21
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 5007,
+    "impresiones": 576049
+   }
+  },
+  {
+   "mes": "2026-03",
+   "421.news": {
+    "web": {
+     "clicks": 4859,
+     "impresiones": 619083
+    },
+    "discover": {
+     "clicks": 864,
+     "impresiones": 11316
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 1,
+     "impresiones": 52
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 5724,
+    "impresiones": 630451
+   }
+  },
+  {
+   "mes": "2026-04",
+   "421.news": {
+    "web": {
+     "clicks": 3841,
+     "impresiones": 478861
+    },
+    "discover": {
+     "clicks": 4152,
+     "impresiones": 192776
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 0,
+     "impresiones": 14
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 7993,
+    "impresiones": 671651
+   }
+  },
+  {
+   "mes": "2026-05",
+   "421.news": {
+    "web": {
+     "clicks": 4036,
+     "impresiones": 431416
+    },
+    "discover": {
+     "clicks": 7665,
+     "impresiones": 191328
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 1,
+     "impresiones": 9
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 11702,
+    "impresiones": 622753
+   }
+  },
+  {
+   "mes": "2026-06",
+   "421.news": {
+    "web": {
+     "clicks": 5629,
+     "impresiones": 674595
+    },
+    "discover": {
+     "clicks": 422,
+     "impresiones": 15686
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 0,
+     "impresiones": 7
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 6051,
+    "impresiones": 690288
+   }
+  },
+  {
+   "mes": "2026-07",
+   "421.news": {
+    "web": {
+     "clicks": 5806,
+     "impresiones": 777194
+    },
+    "discover": {
+     "clicks": 5254,
+     "impresiones": 209366
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 0,
+     "impresiones": 14
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 11060,
+    "impresiones": 986574
+   }
+  },
+  {
+   "mes": "2026-08",
+   "421.news": {
+    "web": {
+     "clicks": 6546,
+     "impresiones": 831916
+    },
+    "discover": {
+     "clicks": 22229,
+     "impresiones": 680344
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 0,
+     "impresiones": 9
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 28775,
+    "impresiones": 1512269
+   }
+  },
+  {
+   "mes": "2026-09",
+   "421.news": {
+    "web": {
+     "clicks": 1409,
+     "impresiones": 172808
+    },
+    "discover": {
+     "clicks": 411,
+     "impresiones": 24655
+    }
+   },
+   "cuatroveintiuno.com": {
+    "web": {
+     "clicks": 0,
+     "impresiones": 6
+    },
+    "discover": {
+     "clicks": 0,
+     "impresiones": 0
+    }
+   },
+   "total": {
+    "clicks": 1820,
+    "impresiones": 197469
+   }
+  }
+ ]
+}

@@ -1131,7 +1131,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.9.0', revista: revistaGate.status(), promo: promo.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.10.0', revista: revistaGate.status(), promo: promo.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2094,6 +2094,30 @@ app.options('/api/pza/e', promo.preflight);
 // evitar el preflight), por eso el parser de texto va acá.
 app.post('/api/pza/e', express.text({ type: '*/*', limit: '2kb' }), promo.registrar);
 app.get('/api/pza/reporte', promo.reporte);
+
+// --- Search Console consolidado: dominio viejo + nuevo -----------------------
+// Sale de un archivo y no de la API de Google porque el refresh token de este
+// servicio es sólo de Analytics: no tiene scope de webmasters. Y porque GSC
+// retiene 16 meses, así que lo de cuatroveintiuno.com se borra solo — este
+// archivo es el archivo histórico. Se regenera con
+// seo/scripts/generar-gsc-consolidado.py y se sube al repo.
+let gscConsolidado = null;
+try { gscConsolidado = require('./gsc-consolidado.json'); }
+catch (e) { console.warn('[gsc] sin gsc-consolidado.json'); }
+
+app.options('/api/gsc-data.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Methods', 'GET');
+  res.set('Vary', 'Origin');
+  res.status(204).end();
+});
+app.get('/api/gsc-data.json', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Vary', 'Origin');
+  res.set('Cache-Control', 'public, max-age=21600');
+  if (!gscConsolidado) return res.status(503).json({ error: 'sin datos consolidados' });
+  res.json(gscConsolidado);
+});
 promo.loadStore().catch(e => console.error(`[promo] boot: ${e.message}`));
 app.options('/api/revista/descarga/:numero', revistaGate.preflight);
 app.get('/api/revista/descarga/:numero', revistaGate.descargar);
