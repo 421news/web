@@ -43,6 +43,20 @@
     {{> "last-posts-es"}}
   </main>
 
+  {{!-- Pieza publicitaria fija al pie. Sólo en la home ES: el router ya nos da el
+       gate de idioma, así que no hace falta chequear nada en el partial.
+       Para cambiar de anunciante se tocan estos params y nada más; para bajarla,
+       se comenta esta llamada. --}}
+  {{> "promo-strip"
+      id="rebord-2026-10"
+      href="https://www.movistararena.com.ar/"
+      alt="Rebord vuelve — 19/10, 21 hs, Movistar Arena"
+      imgD="https://www.421.news/content/images/2026/09/rebord-oct-d.jpg"
+      imgD2="https://www.421.news/content/images/2026/09/rebord-oct-d2x.jpg"
+      imgM="https://www.421.news/content/images/2026/09/rebord-oct-m.jpg"
+      imgM2="https://www.421.news/content/images/2026/09/rebord-oct-m2x.jpg"
+      hasta="2026-10-20"}}
+
   {{> "site-footer"}}
 
 </div>

@@ -25,6 +25,7 @@ const autoresRanking = require('./autores');
 // Gate del número del mes de la Revista 421 (saca el PDF nuevo del HTML público y lo sirve
 // verificando al member). init() más abajo, cuando ya existen las deps que le pasamos.
 const revistaGate = require('./revista-gate');
+const promo = require('./promo-tracking');
 
 // --- Ghost API helpers ---
 
@@ -1130,7 +1131,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.8.0', revista: revistaGate.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.9.0', revista: revistaGate.status(), promo: promo.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -1647,7 +1648,16 @@ const GA4_CHANNEL_COLORS = {
 const GA4_CONVERSION_EVENTS = [
   'popup_cta_click', 'sticky_subscribe_click', 'nav_subscribe_click', 'post_subscribe_click',
   'revista_wizard_cta_click', 'sign_up_intent', 'begin_checkout', 'payment_method_selected',
-  'purchase_initiated', 'sign_up', 'popup_shown', 'popup_dismissed'
+  'purchase_initiated', 'sign_up', 'popup_shown', 'popup_dismissed',
+  // home_banner_subscribe_click existe desde v3.34.58 y nunca había entrado en
+  // esta lista: el banner de la home no aparecía en el desglose de CTAs.
+  'home_banner_subscribe_click',
+  // CTA embebido en la mitad de la nota (v3.40.0)
+  'midpost_subscribe_click', 'midpost_subscribe_view',
+  // Pieza publicitaria de la home (v3.40.0). El nombre lleva la ubicación
+  // adentro a propósito: desglosar por parámetro exige registrar una custom
+  // dimension en GA4 Admin, que además no es retroactiva.
+  'promo_home_click', 'promo_home_view'
 ];
 
 const GA4_MONTH_LABELS = {
@@ -2074,6 +2084,17 @@ app.post('/webhook/revista', (req, res) => {
 });
 
 app.get('/api/revista/estado', revistaGate.estado);
+
+// --- Medición de piezas publicitarias (ver promo-tracking.js) ---
+// El path es neutro a propósito: cualquier cosa con /ads/ o /banner/ en la URL
+// la cortan las listas de bloqueo, y ahí se pierde justo lo que queremos medir.
+promo.init({ ghostRequest });
+app.options('/api/pza/e', promo.preflight);
+// express.json() global no toca un body text/plain (sendBeacon manda así para
+// evitar el preflight), por eso el parser de texto va acá.
+app.post('/api/pza/e', express.text({ type: '*/*', limit: '2kb' }), promo.registrar);
+app.get('/api/pza/reporte', promo.reporte);
+promo.loadStore().catch(e => console.error(`[promo] boot: ${e.message}`));
 app.options('/api/revista/descarga/:numero', revistaGate.preflight);
 app.get('/api/revista/descarga/:numero', revistaGate.descargar);
 
@@ -2674,6 +2695,15 @@ app.post('/api/emails/run', async (req, res) => {
 });
 
 // --- Start ---
+
+// Render manda SIGTERM en cada deploy/restart. Sin este flush se pierde hasta
+// un minuto de eventos de medición (el debounce del store).
+for (const sig of ['SIGTERM', 'SIGINT']) {
+  process.on(sig, () => {
+    promo.flush().finally(() => process.exit(0));
+    setTimeout(() => process.exit(0), 4000).unref();
+  });
+}
 
 app.listen(PORT, () => {
   emailsAuto.iniciar();

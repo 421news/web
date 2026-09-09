@@ -1,0 +1,209 @@
+{{!-- ===========================================================================
+  CTA de suscripción embebido en la mitad de la nota.
+
+  Es el cuarto punto de contacto del funnel, y apunta a un lector distinto de
+  los otros tres: el que ya bajó media nota (o sea, le está gustando) y le dio
+  cerrar al popup. Por eso NO se dispara por scroll ni tapa nada — es un bloque
+  más del artículo, en el corte natural entre dos párrafos.
+
+  Se incluye desde los tres wrappers de post (post-es / post-en / post-intl).
+
+  Decisiones que no son cosméticas:
+
+  1. El punto de inserción se calcula por LARGO DE TEXTO acumulado, no por
+     cantidad de párrafos. Una nota que arranca con seis párrafos cortos y sigue
+     con tres larguísimos tiene su mitad real muy lejos del párrafo del medio.
+
+  2. Se inserta siempre después de un <p>, nunca entre un heading y su primer
+     párrafo: cortar ahí parte una sección al medio y se lee como un error.
+
+  3. No aparece en notas de menos de MIN_CHARS: en una nota corta el lector ve
+     el CTA del header, este, y el del final en tres pantallas seguidas.
+
+  4. El gate excluye `paid` Y `comped`: 221 de los ~232 que pagan lo hacen por
+     MercadoPago y en Ghost figuran comped. Con el chequeo obvio, el 96% de los
+     que pagan vería un CTA para suscribirse a algo que ya paga.
+
+  5. Se mide por partida doble, igual que la pieza publicitaria: GA4 (para cruzar
+     con página, dispositivo y el resto del funnel) y nuestro propio contador en
+     Render (que no lo comen los bloqueadores). Ver promo-tracking.js.
+=========================================================================== --}}
+
+{{#match @member.status "!=" "paid"}}{{#match @member.status "!=" "comped"}}
+<template id="mps421-tpl">
+  <aside class="mps421" aria-label="Suscribite a 421">
+    <div class="mps421-inner">
+      <span class="mps421-eyebrow"></span>
+      <h3 class="mps421-title"></h3>
+      <p class="mps421-text"></p>
+      <a class="mps421-btn" href="/es/suscribite/"></a>
+      <span class="mps421-price"></span>
+    </div>
+  </aside>
+</template>
+
+<style>
+  .mps421 {
+    margin: 2.6rem 0;
+    border-radius: 16px;
+    padding: 1.5px;                                  /* el borde es el gradiente */
+    background: var(--gradient-main, linear-gradient(280deg, var(--verde, #17a583), var(--amarillo, #fcd221)));
+  }
+  .mps421-inner {
+    border-radius: 14.5px;
+    padding: 1.5rem 1.6rem;
+    background: rgba(24, 24, 24, 0.96);
+    display: flex; flex-direction: column; align-items: flex-start; gap: 0.5rem;
+  }
+  body.light-mode .mps421-inner { background: rgba(234, 230, 225, 0.96); }
+
+  .mps421-eyebrow {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--amarillo, #fcd221);
+  }
+  .mps421-title {
+    margin: 0; font-size: clamp(1.15rem, 2.4vw, 1.5rem); font-weight: 800; line-height: 1.2;
+    color: var(--crema, #eae6e1);
+  }
+  .mps421-text {
+    margin: 0; font-size: 0.95rem; line-height: 1.5; max-width: 56ch;
+    color: var(--crema, #eae6e1); opacity: 0.8;
+  }
+  body.light-mode .mps421-title, body.light-mode .mps421-text { color: var(--negro, #121212); }
+
+  /* Pill, igual que el resto de los CTA del sitio (ver Design Rules) */
+  .mps421-btn {
+    display: inline-block; margin-top: 0.4rem;
+    font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; font-size: 0.85rem;
+    padding: 0.72rem 1.6rem; border-radius: 999px; text-decoration: none; white-space: nowrap;
+    background: var(--gradient-main, linear-gradient(280deg, var(--verde, #17a583), var(--amarillo, #fcd221)));
+    color: var(--negro, #121212);
+    transition: transform 0.18s, box-shadow 0.18s;
+  }
+  .mps421-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(252, 210, 33, 0.22); }
+  @media (prefers-reduced-motion: reduce) { .mps421-btn { transition: none; } .mps421-btn:hover { transform: none; } }
+
+  .mps421-price { font-size: 0.72rem; opacity: 0.5; color: var(--crema, #eae6e1); }
+  body.light-mode .mps421-price { color: var(--negro, #121212); }
+
+  @media (max-width: 640px) {
+    .mps421-inner { padding: 1.3rem 1.2rem; align-items: stretch; }
+    .mps421-btn { text-align: center; }
+  }
+</style>
+
+<script>
+(function () {
+  var MIN_CHARS = 2200;    // por debajo de esto la nota es demasiado corta (nota 3)
+  var CORTE = 0.45;        // fracción del texto tras la cual se inserta
+
+  var I18N = {
+    es: { eyebrow: '✦ Suscribite', title: 'Bancá el medio que te gusta leer',
+          text: 'Leé la revista un mes antes, comentá en cada nota y entrá al concilio mensual con la redacción.',
+          btn: 'Suscribite →', price: 'US$10/mes · cancelás cuando quieras', href: '/es/suscribite/' },
+    en: { eyebrow: '✦ Subscribe', title: 'Back the outlet you love to read',
+          text: 'Read the magazine a month early, comment on every piece and join the monthly council with the newsroom.',
+          btn: 'Subscribe →', price: 'US$10/mo · cancel anytime', href: '/en/subscribe/' },
+    pt: { eyebrow: '✦ Assine', title: 'Apoie o veículo que você gosta de ler',
+          text: 'Leia a revista um mês antes, comente em cada matéria e participe do encontro mensal com a redação.',
+          btn: 'Assine →', price: 'US$10/mês · cancele quando quiser', href: '/pt/subscribe/' },
+    fr: { eyebrow: '✦ Abonnez-vous', title: 'Soutenez le média que vous aimez lire',
+          text: 'Lisez le magazine un mois avant, commentez chaque article et rejoignez la rencontre mensuelle avec la rédaction.',
+          btn: 'S’abonner →', price: 'US$10/mois · annulez quand vous voulez', href: '/fr/subscribe/' },
+    zh: { eyebrow: '✦ 订阅', title: '支持你喜欢阅读的媒体',
+          text: '提前一个月阅读杂志，在每篇文章下评论，并参加与编辑部的每月会议。',
+          btn: '订阅 →', price: '每月 10 美元 · 随时取消', href: '/zh/subscribe/' },
+    ja: { eyebrow: '✦ 購読', title: 'あなたが読みたいメディアを支える',
+          text: '雑誌を 1 ヶ月早く読み、各記事にコメントし、編集部との月例会に参加できます。',
+          btn: '購読する →', price: '月額 10 ドル · いつでも解約可', href: '/ja/subscribe/' },
+    ko: { eyebrow: '✦ 구독', title: '좋아하는 매체를 후원하세요',
+          text: '잡지를 한 달 먼저 읽고, 모든 글에 댓글을 달고, 편집실과의 월간 모임에 참여하세요.',
+          btn: '구독하기 →', price: '월 10달러 · 언제든 해지', href: '/ko/subscribe/' },
+    tr: { eyebrow: '✦ Abone ol', title: 'Okumaktan keyif aldığın yayını destekle',
+          text: 'Dergiyi bir ay önce oku, her yazıya yorum yap ve yazı işleriyle aylık buluşmaya katıl.',
+          btn: 'Abone ol →', price: 'Aylık 10 US$ · istediğin zaman iptal et', href: '/tr/subscribe/' }
+  };
+
+  // Helper de medición compartido con promo-strip.hbs. Guarda `|| function` para
+  // que no dependa del orden de carga, igual que window.ghostImg().
+  window.pza421 = window.pza421 || function (campana, tipo, ubicacion) {
+    var url = 'https://webhook-hreflang.onrender.com/api/pza/e';
+    var cuerpo = JSON.stringify({ c: campana, t: tipo, p: ubicacion,
+                                  d: window.matchMedia('(max-width: 767px)').matches ? 'm' : 'd' });
+    try {
+      if (navigator.sendBeacon) navigator.sendBeacon(url, new Blob([cuerpo], { type: 'text/plain' }));
+      else fetch(url, { method: 'POST', body: cuerpo, keepalive: true, mode: 'no-cors',
+                        headers: { 'Content-Type': 'text/plain' } });
+    } catch (e) { /* medir no puede romper la página */ }
+  };
+
+  function iniciar() {
+    var tpl = document.getElementById('mps421-tpl');
+    var cuerpo = document.querySelector('.rich-text.w-richtext');
+    if (!tpl || !cuerpo) return;
+
+    var m = window.location.pathname.match(/^\/([a-z]{2})\//);
+    var lang = (m && I18N[m[1]]) ? m[1] : 'es';
+    var t = I18N[lang];
+
+    var bloques = Array.prototype.filter.call(cuerpo.children, function (el) {
+      return el.offsetHeight > 0 || el.textContent.trim().length > 0;
+    });
+    var total = cuerpo.textContent.replace(/\s+/g, ' ').trim().length;
+    if (total < MIN_CHARS || bloques.length < 6) return;   // nota 3
+
+    // Punto de corte por texto acumulado (nota 1)
+    var acum = 0, i = 0;
+    for (; i < bloques.length; i++) {
+      acum += bloques[i].textContent.length;
+      if (acum >= total * CORTE) break;
+    }
+    // ...y siempre después de un párrafo, nunca partiendo un heading (nota 2)
+    while (i < bloques.length - 1 && bloques[i].tagName !== 'P') i++;
+    var ancla = bloques[i];
+    if (!ancla || ancla === bloques[bloques.length - 1]) return;
+
+    var nodo = tpl.content.firstElementChild.cloneNode(true);
+    nodo.querySelector('.mps421-eyebrow').textContent = t.eyebrow;
+    nodo.querySelector('.mps421-title').textContent = t.title;
+    nodo.querySelector('.mps421-text').textContent = t.text;
+    nodo.querySelector('.mps421-price').textContent = t.price;
+    var btn = nodo.querySelector('.mps421-btn');
+    btn.textContent = t.btn;
+    btn.href = t.href;
+
+    ancla.parentNode.insertBefore(nodo, ancla.nextSibling);
+
+    var UBIC = 'post-' + lang;
+
+    btn.addEventListener('click', function () {
+      window.pza421('sub-mid-post', 'c', UBIC);
+      if (typeof gtag === 'function') {
+        gtag('event', 'midpost_subscribe_click', { event_category: 'engagement', event_label: UBIC });
+      }
+    });
+
+    // Impresión: sólo si el bloque estuvo de verdad a la vista. Contarlo al
+    // insertarlo mediría "notas abiertas", no "veces que el CTA se vio", y el
+    // CTR quedaría inventado.
+    if (!('IntersectionObserver' in window)) return;
+    var visto = false;
+    var obs = new IntersectionObserver(function (ents) {
+      ents.forEach(function (e) {
+        if (visto || !e.isIntersecting || document.visibilityState !== 'visible') return;
+        visto = true;
+        obs.disconnect();
+        window.pza421('sub-mid-post', 'i', UBIC);
+        if (typeof gtag === 'function') {
+          gtag('event', 'midpost_subscribe_view', { event_category: 'engagement', event_label: UBIC, non_interaction: true });
+        }
+      });
+    }, { threshold: 0.5 });
+    obs.observe(nodo);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', iniciar);
+  else iniciar();
+})();
+</script>
+{{/match}}{{/match}}

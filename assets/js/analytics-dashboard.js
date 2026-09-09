@@ -14,6 +14,8 @@
     { ev: 'sticky_subscribe_click', label: 'Barra fija (mobile)' },
     { ev: 'nav_subscribe_click', label: 'Nav' },
     { ev: 'post_subscribe_click', label: 'Post (header)' },
+    { ev: 'midpost_subscribe_click', label: 'Post (mitad)' },
+    { ev: 'home_banner_subscribe_click', label: 'Home (banner)' },
     { ev: 'revista_wizard_cta_click', label: 'Revista' }
   ];
   // Conversion funnel (ordered steps)
@@ -219,6 +221,58 @@
     setupSearch();
     setupSortHeaders();
     onFilterChange();
+    renderPza();
+  }
+
+  // === Piezas y CTAs medidos por nosotros ===
+  // Va aparte del resto del dashboard a propósito: no sale de ga4-data.json sino
+  // del contador propio del webhook, que cuenta lo que GA4 no ve (ver
+  // scripts/webhook-hreflang/promo-tracking.js). Si el endpoint no responde, la
+  // sección se esconde sola: es información extra, no puede romper el dashboard.
+  var PZA_ENDPOINT = 'https://webhook-hreflang.onrender.com/api/pza/reporte?dias=90';
+  var PZA_NOMBRES = {
+    'sub-mid-post': 'CTA de suscripción (mitad de nota)',
+    'rebord-2026-10': 'Publicidad · Rebord vuelve (home)'
+  };
+
+  function renderPza() {
+    var sec = document.getElementById('pza-section');
+    if (!sec) return;
+    var ctrl = new AbortController();
+    var timer = setTimeout(function() { ctrl.abort(); }, 6000);
+    fetch(PZA_ENDPOINT, { signal: ctrl.signal })
+      .then(function(r) { clearTimeout(timer); return r.json(); })
+      .then(function(d) {
+        var ids = Object.keys(d.campanas || {});
+        if (!ids.length) { sec.style.display = 'none'; return; }
+        var filas = '';
+        ids.forEach(function(id) {
+          var c = d.campanas[id];
+          filas += fila(PZA_NOMBRES[id] || id, c.periodo, true);
+          Object.keys(c.ubicacion || {}).forEach(function(u) {
+            filas += fila('&nbsp;&nbsp;↳ ' + u, c.ubicacion[u], false);
+          });
+          filas += fila('&nbsp;&nbsp;↳ mobile', c.dispositivo.mobile, false);
+          filas += fila('&nbsp;&nbsp;↳ desktop', c.dispositivo.desktop, false);
+        });
+        document.getElementById('pza-table-wrap').innerHTML =
+          '<table class="analytics-table"><thead><tr>' +
+          '<th>Pieza</th><th>Impresiones</th><th>Clicks</th><th>CTR</th><th>Alcance</th>' +
+          '</tr></thead><tbody>' + filas + '</tbody></table>';
+      })
+      .catch(function() { clearTimeout(timer); sec.style.display = 'none'; });
+  }
+
+  function fila(label, v, fuerte) {
+    if (!v) return '';
+    var imp = v.impresiones != null ? v.impresiones : 0;
+    var cl = v.clicks != null ? v.clicks : 0;
+    // El alcance sólo lo tiene el total de la campaña: por ubicación y por
+    // dispositivo no deduplicamos personas, y un número a medias miente.
+    var alc = v.alcance != null ? fmt(v.alcance) : '—';
+    return '<tr' + (fuerte ? ' style="font-weight:700"' : '') + '><td>' + label + '</td>' +
+      '<td>' + fmt(imp) + '</td><td>' + fmt(cl) + '</td>' +
+      '<td>' + (v.ctr != null ? v.ctr : 0) + '%</td><td>' + alc + '</td></tr>';
   }
 
   // === Granularity toggle (día / semana / mes) ===

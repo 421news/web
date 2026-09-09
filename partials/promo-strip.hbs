@@ -1,0 +1,214 @@
+{{!-- ===========================================================================
+  Pieza publicitaria fija al pie de la home.
+
+  Se incluye parametrizada, así el próximo anunciante es un cambio de params y
+  no de código:
+
+    {{> "promo-strip"
+        id="rebord-2026-10"
+        href="https://www.movistararena.com.ar/"
+        alt="Rebord vuelve — 19/10 en el Movistar Arena"
+        imgD="https://www.421.news/content/images/2026/09/rebord-oct-d.jpg"
+        imgD2="https://www.421.news/content/images/2026/09/rebord-oct-d2x.jpg"
+        imgM="https://www.421.news/content/images/2026/09/rebord-oct-m.jpg"
+        imgM2="https://www.421.news/content/images/2026/09/rebord-oct-m2x.jpg"
+        hasta="2026-10-20"}}
+
+  Decisiones que NO son cosméticas — cambiarlas rompe algo:
+
+  1. Los nombres de clase, el id y el path del endpoint son neutros a propósito
+     (`pz421`, `/api/pza/`). Las listas de bloqueo (EasyList y derivadas) filtran
+     por patrones de texto: `ad-banner`, `/ads/`, `banner_ad`, y hasta `728x90`
+     en la URL de la imagen. Con nombres obvios perdemos entre el 20% y el 40%
+     de las impresiones MEDIDAS, y el número que le mostramos al anunciante sale
+     mal. Por eso las piezas se subieron a Ghost como `rebord-oct-d.jpg` y no
+     como `banner-728x90.jpg`. El lector igual ve el rótulo "Publicidad": lo que
+     se evita es el match de una lista, no la transparencia.
+
+  2. El gate excluye `paid` Y `comped`. 221 de los ~232 que pagan lo hacen por
+     MercadoPago y en Ghost figuran `comped`, no `paid`: con el chequeo obvio,
+     el 96% de los que pagan vería el banner. Misma red que comments.js.
+
+  3. La barra aparece recién después del `load` + 1,2s. Es fija y por lo tanto
+     entra en el viewport inicial: si se pintara de entrada podría disputarle el
+     LCP a la imagen del featured, y el LCP de la home se arregló hace una
+     semana (25,6 s → 2,6 s). Retrasarla no cuesta impresiones — el lector sigue
+     en la página — y garantiza que no toca la métrica.
+
+  4. El alto se reserva con `aspect-ratio` y la barra es `position: fixed`, así
+     que no desplaza nada: cero CLS.
+
+  5. El pill "Sumate a 421" también vive fijo abajo en mobile. Se lo corre hacia
+     arriba con `--pz421-h` en vez de esconderlo: es la superficie de suscripción
+     más usada del sitio y el 60% del tráfico es mobile.
+=========================================================================== --}}
+
+{{#match @member.status "!=" "paid"}}{{#match @member.status "!=" "comped"}}
+<aside class="pz421" id="pz421" role="complementary" aria-label="Publicidad" hidden>
+  <span class="pz421-tag">Publicidad</span>
+  <a class="pz421-link" href="{{href}}" target="_blank" rel="sponsored noopener noreferrer">
+    <picture>
+      <source media="(min-width: 768px)"
+              srcset="{{imgD}} 728w, {{imgD2}} 1456w" sizes="728px">
+      <img class="pz421-img" src="{{imgM}}" srcset="{{imgM}} 320w, {{imgM2}} 640w" sizes="320px"
+           width="320" height="100" alt="{{alt}}" loading="lazy" decoding="async" fetchpriority="low">
+    </picture>
+  </a>
+  <button class="pz421-x" type="button" aria-label="Cerrar publicidad">&times;</button>
+</aside>
+
+<style>
+  /* El `hidden` del markup lo pisa cualquier regla de display con más
+     especificidad: sin esta línea la barra se pinta apenas carga el CSS, o sea
+     antes de que el JS decida si corresponde mostrarla (ver notas 3 y 2). */
+  .pz421[hidden] { display: none !important; }
+
+  .pz421 {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+    display: flex; align-items: center; justify-content: center;
+    /* el padding derecho reserva el lugar de la X: en un viewport de 390px la
+       pieza de 320 y un botón de 44 no entran uno al lado del otro sin esto */
+    padding: 0.55rem 64px calc(0.55rem + env(safe-area-inset-bottom, 0px)) 8px;
+    background: rgba(18, 18, 18, 0.94);
+    -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(234, 230, 225, 0.14);
+    box-shadow: 0 -8px 26px rgba(0, 0, 0, 0.42);
+    animation: pz421-in 0.35s ease both;
+  }
+  body.light-mode .pz421 {
+    background: rgba(234, 230, 225, 0.96);
+    border-top-color: rgba(18, 18, 18, 0.16);
+  }
+  @keyframes pz421-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .pz421 { animation: none; } }
+
+  .pz421-link { display: block; line-height: 0; text-decoration: none; }
+  .pz421-img {
+    display: block; width: 320px; max-width: 100%; height: auto;
+    aspect-ratio: 320 / 100;           /* reserva de espacio: cero CLS */
+  }
+  @media (min-width: 768px) {
+    .pz421-img { width: 728px; aspect-ratio: 728 / 90; }
+  }
+
+  /* Rótulo: sale del borde superior para no sumarle alto a la barra */
+  .pz421-tag {
+    position: absolute; left: 10px; top: -9px;
+    font-size: 0.55rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 0.12rem 0.45rem; border-radius: 999px;
+    background: rgba(18, 18, 18, 0.94); color: var(--crema, #eae6e1); opacity: 0.55;
+    border: 1px solid rgba(234, 230, 225, 0.18); pointer-events: none;
+  }
+  body.light-mode .pz421-tag {
+    background: rgba(234, 230, 225, 0.96); color: var(--negro, #121212);
+    border-color: rgba(18, 18, 18, 0.18);
+  }
+
+  /* 44x44 es el mínimo tocable con el pulgar; fondo sólido para que se lea
+     sobre cualquier pieza que mande el anunciante */
+  .pz421-x {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 999px;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+    border: 1.5px solid rgba(234, 230, 225, 0.45);
+    background: rgba(18, 18, 18, 0.92); color: var(--crema, #eae6e1);
+    font-size: 26px; line-height: 1; cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .pz421-x:hover { background: var(--crema, #eae6e1); color: var(--negro, #121212); border-color: var(--crema, #eae6e1); }
+  .pz421-x:focus-visible { outline: 2px solid var(--amarillo, #fcd221); outline-offset: 2px; }
+  body.light-mode .pz421-x { background: rgba(234, 230, 225, 0.95); color: var(--negro, #121212); border-color: rgba(18, 18, 18, 0.4); }
+  body.light-mode .pz421-x:hover { background: var(--negro, #121212); color: var(--crema, #eae6e1); }
+
+  /* Con la barra puesta: el footer deja de quedar tapado y el pill se corre */
+  body.pz421-on { padding-bottom: var(--pz421-h, 116px); }
+  body.pz421-on .hero-mobile-suscribite-button { bottom: calc(14px + var(--pz421-h, 116px)); }
+</style>
+
+<script>
+(function () {
+  var ID      = '{{id}}';
+  var HASTA   = '{{hasta}}';
+  var UBIC    = 'home-es';
+  var ENDPOINT = 'https://webhook-hreflang.onrender.com/api/pza/e';
+  var CIERRE_H = 24;   // horas que queda cerrada si el lector la cierra
+
+  var el = document.getElementById('pz421');
+  if (!el) return;
+
+  // 1) Vencimiento: una pieza de un show que ya pasó es peor que ninguna.
+  if (HASTA && new Date(HASTA + 'T23:59:59-03:00') < new Date()) { el.remove(); return; }
+
+  // 2) La cerró hace poco
+  try {
+    var cerrada = parseInt(localStorage.getItem('pz421-' + ID) || '0', 10);
+    if (cerrada && (Date.now() - cerrada) < CIERRE_H * 3600 * 1000) { el.remove(); return; }
+  } catch (e) { /* modo incógnito: se muestra igual */ }
+
+  var esMobile = window.matchMedia('(max-width: 767px)').matches;
+
+  // El evento se manda por sendBeacon: no bloquea la navegación y sobrevive al
+  // unload, que es justo cuando se dispara el click. text/plain evita el
+  // preflight de CORS (es una "simple request"), o sea un round-trip menos.
+  // La guarda `|| function` es para no depender del orden de carga: el mismo
+  // helper lo define mid-post-subscribe.hbs. Mismo patrón que window.ghostImg().
+  window.pza421 = window.pza421 || function (campana, tipo, ubicacion) {
+    var cuerpo = JSON.stringify({ c: campana, t: tipo, p: ubicacion,
+                                  d: window.matchMedia('(max-width: 767px)').matches ? 'm' : 'd' });
+    try {
+      if (navigator.sendBeacon) navigator.sendBeacon(ENDPOINT, new Blob([cuerpo], { type: 'text/plain' }));
+      else fetch(ENDPOINT, { method: 'POST', body: cuerpo, keepalive: true, mode: 'no-cors',
+                             headers: { 'Content-Type': 'text/plain' } });
+    } catch (e) { /* medir no puede romper la página */ }
+  };
+  function avisar(tipo) { window.pza421(ID, tipo, UBIC); }
+
+  function ga(nombre) {
+    if (typeof gtag === 'function') {
+      gtag('event', nombre, { event_category: 'promo', event_label: ID, non_interaction: nombre.indexOf('view') > -1 });
+    }
+  }
+
+  function mostrar() {
+    el.hidden = false;
+    var alto = el.offsetHeight || (esMobile ? 116 : 106);
+    document.body.style.setProperty('--pz421-h', alto + 'px');
+    document.body.classList.add('pz421-on');
+
+    // Impresión = visible de verdad y con la pestaña al frente durante 1s. Sin
+    // el chequeo de visibilidad, una pestaña abierta en segundo plano cuenta
+    // como impresión y el número que le pasamos al anunciante queda inflado.
+    var contada = false;
+    function contar() {
+      if (contada || document.visibilityState !== 'visible') return;
+      contada = true;
+      avisar('i');
+      ga('promo_home_view');
+    }
+    if (document.visibilityState === 'visible') setTimeout(contar, 1000);
+    else document.addEventListener('visibilitychange', function once() {
+      if (document.visibilityState === 'visible') {
+        document.removeEventListener('visibilitychange', once);
+        setTimeout(contar, 1000);
+      }
+    });
+  }
+
+  el.querySelector('.pz421-link').addEventListener('click', function () {
+    avisar('c');
+    ga('promo_home_click');
+  });
+
+  el.querySelector('.pz421-x').addEventListener('click', function () {
+    try { localStorage.setItem('pz421-' + ID, String(Date.now())); } catch (e) {}
+    el.remove();
+    document.body.classList.remove('pz421-on');
+    ga('promo_home_close');
+  });
+
+  // Después del load: ver la nota 3 del encabezado (LCP).
+  if (document.readyState === 'complete') setTimeout(mostrar, 1200);
+  else window.addEventListener('load', function () { setTimeout(mostrar, 1200); });
+})();
+</script>
+{{/match}}{{/match}}
