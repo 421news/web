@@ -3,7 +3,11 @@
       Los estilos y la medición viven en subscribe-card-base.hbs: hay que incluir
       ese partial UNA vez en la página, además de este.
 
-      Params: eyebrow, title, titleAccent, text, btn, price, href
+      Params: eyebrow, title, titleAccent, text, btn, priceNote, href
+              (dice priceNote y no price porque price es un helper de Ghost y le
+               gana al parámetro del partial: el span salía vacío en producción.
+               El nombre va SIN llaves acá: un helper entre llaves dentro de un
+               comentario rompe el upload del theme con 422.)
               place (ubicación para el reporte: home-es, post-en, …)
               camp  (campaña: sub-home-banner | sub-mid-post)
               ev    (prefijo del evento GA4; se le agrega _click y _view) --}}
@@ -16,7 +20,7 @@
     </div>
     <div class="hwc-action">
       <a href="{{href}}" class="hwc-btn" data-hwc-track>{{btn}}</a>
-      <span class="hwc-price">{{price}}</span>
+      <span class="hwc-price">{{priceNote}}</span>
     </div>
   </div>
 </div>
