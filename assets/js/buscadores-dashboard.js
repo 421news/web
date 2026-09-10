@@ -21,6 +21,11 @@
   var iniciado = false;
   var chartClicks = null, chartImpr = null;
   var MESES_RAW = [];   // los meses tal cual vienen: incluyen el top de notas
+  var SERIE = [];       // los meses ya normalizados
+  // Un solo estado para toda la pestaña: el rango manda sobre los dos gráficos,
+  // el ranking y la tabla. Antes el selector de mes sólo movía el ranking y eso
+  // hacía que el gráfico y la lista contaran cosas distintas.
+  var ESTADO = { desde: null, hasta: null, tipo: 'line' };
 
   window.initBuscadoresDashboard = function () {
     if (iniciado) return;
@@ -72,14 +77,14 @@
     var totD = serie.reduce(function (s, m) { return s + m.discover; }, 0);
     var mejor = serie.slice().sort(function (a, b) { return b.clicks - a.clicks; })[0];
 
+    SERIE = serie;
+    ESTADO.desde = serie[0].mes;
+    ESTADO.hasta = serie[serie.length - 1].mes;
+
     document.getElementById('buscadores-body').innerHTML =
-      '<div class="analytics-cards">' +
-        tarjeta(fmt(totC), 'clicks totales · ' + serie.length + ' meses') +
-        tarjeta(fmt(totI), 'impresiones') +
-        tarjeta(pct(totD, totC), 'de los clicks son de Discover') +
-        tarjeta(etiqueta(mejor.mes), 'mejor mes: ' + fmt(mejor.clicks) + ' clicks') +
-      '</div>' +
-      '<p class="analytics-subtitle" style="margin-top:1.2rem">' +
+      '<div id="gsc-cards"></div>' +
+      controles(serie) +
+      '<p class="analytics-subtitle" style="margin-top:1rem">' +
         'Suma de <strong>421.news</strong> y <strong>cuatroveintiuno.com</strong>. La migración fue en ' +
         'octubre de 2025: sin el dominio viejo, el salto de esos meses parece crecimiento y es mudanza. ' +
         'El primer y el último mes están incompletos.' +
@@ -89,44 +94,115 @@
       '<p class="analytics-subtitle">Cuando las impresiones suben y el CTR baja, 421 está apareciendo ' +
         'en consultas que no le corresponden.</p>' +
       '<div class="analytics-chart-container"><canvas id="gsc-chart-impr"></canvas></div>' +
-      '<h3 class="analytics-subhead" style="margin-top:2rem">Notas del mes</h3>' +
-      '<p class="analytics-subtitle">Qué leyó la gente cada mes, separado por origen. ' +
-        'Sirve para elegir de qué escribir: Discover premia otra cosa que la búsqueda.</p>' +
-      selectorMeses(meses) +
+      '<h3 class="analytics-subhead" style="margin-top:2rem">Notas del período</h3>' +
+      '<p class="analytics-subtitle">Qué leyó la gente, separado por origen. Sirve para elegir de qué ' +
+        'escribir: Discover premia otra cosa que la búsqueda. Es la suma de los doce primeros de cada ' +
+        'mes, así que una nota siempre décimotercera queda corta.</p>' +
       '<div id="gsc-ranking"></div>' +
       '<h3 class="analytics-subhead" style="margin-top:2rem">Mes a mes</h3>' +
-      tabla(serie);
+      '<div id="gsc-tabla"></div>';
 
-    var sel = document.getElementById('gsc-mes');
-    if (sel) {
-      sel.addEventListener('change', function () { ranking(this.value); });
-      ranking(sel.value);
-    }
-
-    if (typeof Chart === 'undefined') return;
-    dibujar(serie);
+    conectarControles();
+    pintar();
   }
 
-  // Meses con ranking cargado, del más nuevo al más viejo
-  function selectorMeses(meses) {
-    var conTop = meses.filter(function (m) { return m.top; }).slice().reverse();
-    if (!conTop.length) return '<div class="analytics-empty">Los datos que llegaron no traen ' +
-      'ranking de notas. Suele ser una respuesta vieja en la cache del navegador: recargá.</div>';
-    // Arranca en el último mes COMPLETO: el mes en curso siempre parece una caída.
-    var porDefecto = conTop.filter(function (m) { return !PARCIALES[m.mes]; })[0] || conTop[0];
-    return '<select id="gsc-mes" class="analytics-search-input" style="max-width:16rem;margin-bottom:1rem">' +
-      conTop.map(function (m) {
-        return '<option value="' + m.mes + '"' + (m.mes === porDefecto.mes ? ' selected' : '') + '>' +
+  // --- Controles: rango y forma del gráfico ---
+  function controles(serie) {
+    var ops = function (sel) {
+      return serie.map(function (m) {
+        return '<option value="' + m.mes + '"' + (m.mes === sel ? ' selected' : '') + '>' +
           etiqueta(m.mes) + (PARCIALES[m.mes] ? ' (parcial)' : '') + '</option>';
-      }).join('') + '</select>';
+      }).join('');
+    };
+    return '<div class="analytics-section-header" style="gap:1rem;flex-wrap:wrap;align-items:flex-end">' +
+      '<div style="display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">' +
+        '<label style="font-size:.8rem;opacity:.6">Desde</label>' +
+        '<select id="gsc-desde" class="analytics-search-input" style="max-width:11rem">' + ops(ESTADO.desde) + '</select>' +
+        '<label style="font-size:.8rem;opacity:.6">hasta</label>' +
+        '<select id="gsc-hasta" class="analytics-search-input" style="max-width:11rem">' + ops(ESTADO.hasta) + '</select>' +
+      '</div>' +
+      '<div class="analytics-granularity" id="gsc-forma">' +
+        '<button class="analytics-gran active" data-tipo="line">Línea</button>' +
+        '<button class="analytics-gran" data-tipo="bar">Columnas</button>' +
+      '</div>' +
+      '</div>';
   }
 
-  function ranking(mes) {
+  function conectarControles() {
+    var d = document.getElementById('gsc-desde'), h = document.getElementById('gsc-hasta');
+    function cambio() {
+      // Si los invierten, se ordenan solos en vez de mostrar un rango vacío.
+      var a = d.value, b = h.value;
+      ESTADO.desde = a <= b ? a : b;
+      ESTADO.hasta = a <= b ? b : a;
+      if (d.value !== ESTADO.desde) d.value = ESTADO.desde;
+      if (h.value !== ESTADO.hasta) h.value = ESTADO.hasta;
+      pintar();
+    }
+    if (d) d.addEventListener('change', cambio);
+    if (h) h.addEventListener('change', cambio);
+
+    var btns = document.querySelectorAll('#gsc-forma .analytics-gran');
+    Array.prototype.forEach.call(btns, function (b) {
+      b.addEventListener('click', function () {
+        ESTADO.tipo = this.getAttribute('data-tipo');
+        Array.prototype.forEach.call(btns, function (x) { x.classList.remove('active'); });
+        this.classList.add('active');
+        pintar();
+      });
+    });
+  }
+
+  function enRango() {
+    return SERIE.filter(function (m) { return m.mes >= ESTADO.desde && m.mes <= ESTADO.hasta; });
+  }
+
+  function pintar() {
+    var s = enRango();
+    if (!s.length) return;
+
+    var totC = s.reduce(function (a, m) { return a + m.clicks; }, 0);
+    var totI = s.reduce(function (a, m) { return a + m.impr; }, 0);
+    var totD = s.reduce(function (a, m) { return a + m.discover; }, 0);
+    var mejor = s.slice().sort(function (a, b) { return b.clicks - a.clicks; })[0];
+
+    document.getElementById('gsc-cards').innerHTML = '<div class="analytics-cards">' +
+      tarjeta(fmt(totC), 'clicks · ' + s.length + (s.length === 1 ? ' mes' : ' meses')) +
+      tarjeta(fmt(totI), 'impresiones') +
+      tarjeta(pct(totD, totC), 'de los clicks son de Discover') +
+      tarjeta(etiqueta(mejor.mes), 'mejor mes: ' + fmt(mejor.clicks) + ' clicks') +
+      '</div>';
+
+    document.getElementById('gsc-tabla').innerHTML = tabla(s);
+    ranking(s);
+    if (typeof Chart !== 'undefined') dibujar(s);
+  }
+
+  // Suma los top de cada mes del rango: una nota que aparece en varios meses
+  // acumula. Es aproximado por definición (sólo se guardan 12 por mes), y eso
+  // está dicho arriba del bloque.
+  function ranking(serie) {
     var cont = document.getElementById('gsc-ranking');
-    var m = MESES_RAW.filter(function (x) { return x.mes === mes; })[0];
-    if (!cont || !m || !m.top) { if (cont) cont.innerHTML = '<div class="analytics-empty">Sin datos de ese mes</div>'; return; }
-    cont.innerHTML = '<div class="analytics-funnel-grid">' +
-      lista('Búsqueda', m.top.web) + lista('Discover', m.top.discover) + '</div>';
+    if (!cont) return;
+    var acum = { web: {}, discover: {} };
+    serie.forEach(function (m) {
+      var raw = MESES_RAW.filter(function (x) { return x.mes === m.mes; })[0];
+      if (!raw || !raw.top) return;
+      Object.keys(acum).forEach(function (tipo) {
+        (raw.top[tipo] || []).forEach(function (f) {
+          var a = acum[tipo][f.u] || (acum[tipo][f.u] = { u: f.u, c: 0, i: 0, x: f.x });
+          a.c += f.c; a.i += f.i;
+        });
+      });
+    });
+    function orden(o) { return Object.keys(o).map(function (k) { return o[k]; }).sort(function (a, b) { return b.c - a.c; }).slice(0, 12); }
+    var w = orden(acum.web), d = orden(acum.discover);
+    if (!w.length && !d.length) {
+      cont.innerHTML = '<div class="analytics-empty">Los datos que llegaron no traen ranking de notas. ' +
+        'Suele ser una respuesta vieja en la cache del navegador: recargá.</div>';
+      return;
+    }
+    cont.innerHTML = '<div class="analytics-funnel-grid">' + lista('Búsqueda', w) + lista('Discover', d) + '</div>';
   }
 
   function lista(titulo, filas) {
@@ -197,23 +273,29 @@
 
   function dibujar(serie) {
     var labels = serie.map(function (m) { return etiqueta(m.mes); });
+    var esLinea = ESTADO.tipo === 'line';
     var tenue = serie.map(function (m) { return PARCIALES[m.mes] ? 0.4 : 1; });
+
+    // En columnas los meses parciales van atenuados; en línea eso no se puede
+    // (el trazo es uno solo), y para eso están los rótulos "(parcial)".
+    function serieDe(clave, color) {
+      var datos = serie.map(function (m) { return m[clave]; });
+      if (esLinea) {
+        return { label: clave === 'web' ? 'Búsqueda' : 'Discover', data: datos, type: 'line',
+                 borderColor: color, backgroundColor: sombra(color, .12), fill: true,
+                 tension: .35, pointRadius: 2, pointHoverRadius: 4, borderWidth: 2 };
+      }
+      return { label: clave === 'web' ? 'Búsqueda' : 'Discover', data: datos, type: 'bar',
+               backgroundColor: serie.map(function (m, i) { return sombra(color, tenue[i]); }) };
+    }
 
     var c1 = document.getElementById('gsc-chart-clicks');
     if (c1) {
       if (chartClicks) chartClicks.destroy();
       chartClicks = new Chart(c1, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Búsqueda', data: serie.map(function (m) { return m.web; }),
-              backgroundColor: serie.map(function (m, i) { return sombra(VERDE, tenue[i]); }) },
-            { label: 'Discover', data: serie.map(function (m) { return m.discover; }),
-              backgroundColor: serie.map(function (m, i) { return sombra(AMARILLO, tenue[i]); }) }
-          ]
-        },
-        options: opciones({ apilado: true, titulo: 'Clicks por mes' })
+        type: esLinea ? 'line' : 'bar',
+        data: { labels: labels, datasets: [serieDe('web', VERDE), serieDe('discover', AMARILLO)] },
+        options: opciones({ apilado: !esLinea })
       });
     }
 
@@ -221,19 +303,22 @@
     if (c2) {
       if (chartImpr) chartImpr.destroy();
       chartImpr = new Chart(c2, {
-        type: 'line',
+        type: esLinea ? 'line' : 'bar',
         data: {
           labels: labels,
           datasets: [
-            { label: 'Impresiones', data: serie.map(function (m) { return m.impr; }),
-              borderColor: TENUE, backgroundColor: 'rgba(148,141,132,.15)', fill: true,
-              tension: .3, yAxisID: 'y', pointRadius: 2 },
+            esLinea
+              ? { label: 'Impresiones', data: serie.map(function (m) { return m.impr; }), type: 'line',
+                  borderColor: TENUE, backgroundColor: 'rgba(148,141,132,.15)', fill: true,
+                  tension: .35, yAxisID: 'y', pointRadius: 2, borderWidth: 2 }
+              : { label: 'Impresiones', data: serie.map(function (m) { return m.impr; }), type: 'bar',
+                  backgroundColor: serie.map(function (m, i) { return sombra('#948d84', tenue[i]); }), yAxisID: 'y' },
             { label: 'CTR %', data: serie.map(function (m) { return m.impr ? +(m.clicks / m.impr * 100).toFixed(2) : 0; }),
-              borderColor: VERDE, backgroundColor: 'transparent', tension: .3,
+              type: 'line', borderColor: VERDE, backgroundColor: 'transparent', tension: .35,
               yAxisID: 'y2', pointRadius: 2, borderWidth: 2 }
           ]
         },
-        options: opciones({ doble: true, titulo: 'Impresiones y CTR' })
+        options: opciones({ doble: true })
       });
     }
   }
@@ -256,9 +341,11 @@
           // la leyenda salía apagada. Se fuerza el color pleno.
           generateLabels: function (chart) {
             return chart.data.datasets.map(function (ds, i) {
-              var c = Array.isArray(ds.backgroundColor)
-                ? (ds.label === 'Discover' ? AMARILLO : VERDE)
-                : (ds.borderColor || ds.backgroundColor);
+              var c = ds.borderColor && typeof ds.borderColor === 'string'
+                ? ds.borderColor
+                : (Array.isArray(ds.backgroundColor)
+                    ? (ds.label === 'Discover' ? AMARILLO : VERDE)
+                    : ds.backgroundColor);
               return { text: ds.label, fillStyle: c, strokeStyle: c, lineWidth: 0,
                        hidden: !chart.isDatasetVisible(i), datasetIndex: i, fontColor: CREMA };
             });
