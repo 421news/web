@@ -20,6 +20,7 @@
 
   var iniciado = false;
   var chartClicks = null, chartImpr = null;
+  var MESES_RAW = [];   // los meses tal cual vienen: incluyen el top de notas
 
   window.initBuscadoresDashboard = function () {
     if (iniciado) return;
@@ -46,6 +47,7 @@
   function render(d) {
     var meses = d.meses || [];
     if (!meses.length) return;
+    MESES_RAW = meses;
 
     // El primer y el último mes de la serie están cortados por la mitad
     PARCIALES[meses[0].mes] = true;
@@ -87,11 +89,79 @@
       '<p class="analytics-subtitle">Cuando las impresiones suben y el CTR baja, 421 está apareciendo ' +
         'en consultas que no le corresponden.</p>' +
       '<div class="analytics-chart-container"><canvas id="gsc-chart-impr"></canvas></div>' +
+      '<h3 class="analytics-subhead" style="margin-top:2rem">Notas del mes</h3>' +
+      '<p class="analytics-subtitle">Qué leyó la gente cada mes, separado por origen. ' +
+        'Sirve para elegir de qué escribir: Discover premia otra cosa que la búsqueda.</p>' +
+      selectorMeses(meses) +
+      '<div id="gsc-ranking"></div>' +
       '<h3 class="analytics-subhead" style="margin-top:2rem">Mes a mes</h3>' +
       tabla(serie);
 
+    var sel = document.getElementById('gsc-mes');
+    if (sel) {
+      sel.addEventListener('change', function () { ranking(this.value); });
+      ranking(sel.value);
+    }
+
     if (typeof Chart === 'undefined') return;
     dibujar(serie);
+  }
+
+  // Meses con ranking cargado, del más nuevo al más viejo
+  function selectorMeses(meses) {
+    var conTop = meses.filter(function (m) { return m.top; }).slice().reverse();
+    if (!conTop.length) return '';
+    // Arranca en el último mes COMPLETO: el mes en curso siempre parece una caída.
+    var porDefecto = conTop.filter(function (m) { return !PARCIALES[m.mes]; })[0] || conTop[0];
+    return '<select id="gsc-mes" class="analytics-search-input" style="max-width:16rem;margin-bottom:1rem">' +
+      conTop.map(function (m) {
+        return '<option value="' + m.mes + '"' + (m.mes === porDefecto.mes ? ' selected' : '') + '>' +
+          etiqueta(m.mes) + (PARCIALES[m.mes] ? ' (parcial)' : '') + '</option>';
+      }).join('') + '</select>';
+  }
+
+  function ranking(mes) {
+    var cont = document.getElementById('gsc-ranking');
+    var m = MESES_RAW.filter(function (x) { return x.mes === mes; })[0];
+    if (!cont || !m || !m.top) { if (cont) cont.innerHTML = '<div class="analytics-empty">Sin datos de ese mes</div>'; return; }
+    cont.innerHTML = '<div class="analytics-funnel-grid">' +
+      lista('Búsqueda', m.top.web) + lista('Discover', m.top.discover) + '</div>';
+  }
+
+  function lista(titulo, filas) {
+    if (!filas || !filas.length) return '<div><h3 class="analytics-subhead">' + titulo +
+      '</h3><div class="analytics-empty">Sin datos</div></div>';
+    var max = filas[0].c || 1;
+    return '<div><h3 class="analytics-subhead">' + titulo + '</h3><div class="analytics-cta-list">' +
+      filas.map(function (f) {
+        var w = Math.round(f.c / max * 100);
+        // f.x marca las del dominio viejo: el link se arma contra 421.news igual,
+        // porque cuatroveintiuno.com redirige, pero se avisa de dónde salió.
+        var href = 'https://www.421.news' + f.u;
+        var estilo = 'color:inherit;text-decoration:none;border-bottom:1px solid rgba(148,141,132,.35)';
+        return '<div class="analytics-cta-item">' +
+          '<div class="analytics-cta-row">' +
+            '<span class="analytics-cta-label"><a href="' + href + '" target="_blank" rel="noopener" style="' + estilo + '">' +
+              titulazo(f.u) + '</a>' + (f.x ? ' <span style="opacity:.45">· dominio viejo</span>' : '') + '</span>' +
+            '<span class="analytics-cta-val">' + fmt(f.c) +
+              ' <span class="analytics-cta-pct">' + pct(f.c, f.i) + '</span></span>' +
+          '</div>' +
+          '<div class="analytics-bar-track"><div class="analytics-bar-fill" style="width:' + w + '%"></div></div>' +
+          '</div>';
+      }).join('') + '</div></div>';
+  }
+
+  // El slug alcanza para reconocer la nota y entra en una línea
+  function titulazo(u) {
+    var limpio = u.replace(/\/$/, '');
+    if (!limpio) return 'portada';
+    // /es/, /en/, /pt/… son las portadas de idioma, no notas
+    if (/^\/[a-z]{2}$/.test(limpio)) return 'portada ' + limpio.slice(1).toUpperCase();
+    if (/^\/[a-z]{2}\/tag\//.test(limpio)) return 'tag: ' + limpio.split('/').pop().replace(/-/g, ' ');
+    if (/^\/author\//.test(limpio)) return 'autor: ' + limpio.split('/').pop().replace(/-/g, ' ');
+    var slug = limpio.split('/').pop();
+    var t = slug.replace(/-/g, ' ');
+    return t.length > 52 ? t.slice(0, 52) + '…' : t;
   }
 
   function tarjeta(n, d) {

@@ -1131,7 +1131,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.10.0', revista: revistaGate.status(), promo: promo.status(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.11.0', revista: revistaGate.status(), promo: promo.status(), gsc: gscData.estado(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2096,28 +2096,36 @@ app.post('/api/pza/e', express.text({ type: '*/*', limit: '2kb' }), promo.regist
 app.get('/api/pza/reporte', promo.reporte);
 
 // --- Search Console consolidado: dominio viejo + nuevo -----------------------
-// Sale de un archivo y no de la API de Google porque el refresh token de este
-// servicio es sólo de Analytics: no tiene scope de webmasters. Y porque GSC
-// retiene 16 meses, así que lo de cuatroveintiuno.com se borra solo — este
-// archivo es el archivo histórico. Se regenera con
-// seo/scripts/generar-gsc-consolidado.py y se sube al repo.
-let gscConsolidado = null;
-try { gscConsolidado = require('./gsc-consolidado.json'); }
-catch (e) { console.warn('[gsc] sin gsc-consolidado.json'); }
+// Acumulativo: nunca borra un mes. Google retiene 16 meses y cuatroveintiuno.com
+// se va a ir borrando solo de la API — acá queda. Ver gsc-data.js.
+const gscData = require('./gsc-data');
+let gscSemilla = null;
+try { gscSemilla = require('./gsc-consolidado.json'); }
+catch (e) { console.warn('[gsc] sin gsc-consolidado.json (semilla)'); }
+gscData.init({ ghostRequest }, gscSemilla);
 
-app.options('/api/gsc-data.json', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
-  res.set('Access-Control-Allow-Methods', 'GET');
-  res.set('Vary', 'Origin');
-  res.status(204).end();
+app.options('/api/gsc-data.json', gscData.preflight);
+app.get('/api/gsc-data.json', gscData.servir);
+
+// Refresco manual, misma llave que el motor de emails
+app.post('/api/gsc-refresh', async (req, res) => {
+  const llave = process.env.EMAILS_RUN_KEY;
+  if (!llave || req.headers['x-webhook-key'] !== llave) return res.status(403).json({ error: 'nope' });
+  try { res.json(await gscData.refrescar('manual')); }
+  catch (e) { res.status(500).json({ ok: false, error: e.message }); }
 });
-app.get('/api/gsc-data.json', (req, res) => {
-  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
-  res.set('Vary', 'Origin');
-  res.set('Cache-Control', 'public, max-age=21600');
-  if (!gscConsolidado) return res.status(503).json({ error: 'sin datos consolidados' });
-  res.json(gscConsolidado);
-});
+
+if (gscData.ENABLED) {
+  // Una vez por día alcanza: GSC publica con dos días de retraso.
+  setInterval(() => {
+    gscData.refrescar('cron').catch(e => console.error(`[gsc] cron: ${e.message}`));
+  }, 24 * 60 * 60 * 1000);
+  setTimeout(() => {
+    gscData.refrescar('boot').catch(e => console.error(`[gsc] boot: ${e.message}`));
+  }, 90 * 1000);
+} else {
+  gscData.loadStore().catch(e => console.error(`[gsc] boot: ${e.message}`));
+}
 promo.loadStore().catch(e => console.error(`[promo] boot: ${e.message}`));
 app.options('/api/revista/descarga/:numero', revistaGate.preflight);
 app.get('/api/revista/descarga/:numero', revistaGate.descargar);
