@@ -231,10 +231,12 @@
   // sección se esconde sola: es información extra, no puede romper el dashboard.
   var PZA_ENDPOINT = 'https://webhook-hreflang.onrender.com/api/pza/reporte?dias=90';
   var PZA_NOMBRES = {
-    'sub-mid-post': 'CTA de suscripción (mitad de nota)',
-    'sub-home-banner': 'CTA de suscripción (banner de la home)',
     'rebord-2026-10': 'Publicidad · Rebord vuelve (home)'
   };
+  // Los CTA de suscripción se siguen midiendo, pero acá no se listan: ya están
+  // arriba, en el desglose de Conversiones. Se reconocen por el prefijo `sub-`,
+  // así que cualquier CTA nuevo queda fuera solo.
+  function esPublicidad(id) { return !/^sub-/.test(id); }
 
   function renderPza() {
     var sec = document.getElementById('pza-section');
@@ -244,7 +246,7 @@
     fetch(PZA_ENDPOINT, { signal: ctrl.signal })
       .then(function(r) { clearTimeout(timer); return r.json(); })
       .then(function(d) {
-        var ids = Object.keys(d.campanas || {});
+        var ids = Object.keys(d.campanas || {}).filter(esPublicidad);
         if (!ids.length) { sec.style.display = 'none'; return; }
         var filas = '';
         ids.forEach(function(id) {
