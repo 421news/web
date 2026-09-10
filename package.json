@@ -7,7 +7,7 @@
   "keywords": [
     "ghost-theme"
   ],
-  "version": "3.46.0",
+  "version": "3.46.1",
   "engines": {
     "ghost": ">=4.0.0"
   },
