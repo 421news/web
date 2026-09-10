@@ -229,7 +229,11 @@ async function servir(req, res) {
   cors(res);
   try {
     await loadStore();
-    res.set('Cache-Control', 'public, max-age=3600');
+    // 5 minutos, no horas: este JSON cambia de FORMA, no sólo de números (se le
+    // sumó el ranking de notas). Con una cache larga, un navegador que pidió el
+    // esquema viejo se queda con él y ni un hard reload lo saca, porque el fetch
+    // pasa al hacer click en la pestaña y no al cargar la página.
+    res.set('Cache-Control', 'public, max-age=300');
     res.json(store);
   } catch (e) {
     res.status(500).json({ error: e.message });

@@ -31,7 +31,7 @@
 
     var ctrl = new AbortController();
     var t = setTimeout(function () { ctrl.abort(); }, 8000);
-    fetch(ENDPOINT, { signal: ctrl.signal })
+    fetch(ENDPOINT, { signal: ctrl.signal, cache: 'no-cache' })
       .then(function (r) { clearTimeout(t); if (!r.ok) throw new Error(r.status); return r.json(); })
       .then(render)
       .catch(function () {
@@ -110,7 +110,8 @@
   // Meses con ranking cargado, del más nuevo al más viejo
   function selectorMeses(meses) {
     var conTop = meses.filter(function (m) { return m.top; }).slice().reverse();
-    if (!conTop.length) return '';
+    if (!conTop.length) return '<div class="analytics-empty">Los datos que llegaron no traen ' +
+      'ranking de notas. Suele ser una respuesta vieja en la cache del navegador: recargá.</div>';
     // Arranca en el último mes COMPLETO: el mes en curso siempre parece una caída.
     var porDefecto = conTop.filter(function (m) { return !PARCIALES[m.mes]; })[0] || conTop[0];
     return '<select id="gsc-mes" class="analytics-search-input" style="max-width:16rem;margin-bottom:1rem">' +
