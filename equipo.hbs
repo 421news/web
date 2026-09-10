@@ -1,0 +1,235 @@
+{{!< default}}
+
+{{!-- Hub interno: el índice de todo lo que no es el sitio público.
+      Mismo gate que /es/analytics/ — el token de member que firma Ghost se
+      valida contra /api/team-check en el webhook, que a su vez chequea el label
+      "equipo". No se inventa un mecanismo nuevo: alta y baja de acceso siguen
+      siendo poner o sacar esa etiqueta en Ghost. --}}
+
+<meta name="robots" content="noindex, nofollow">
+<link href="{{asset "css/analytics.css"}}" rel="stylesheet" type="text/css">
+
+<script>
+document.title = 'Equipo | 421.news';
+document.documentElement.classList.add('is-analytics');
+</script>
+
+<div class="page-wrapper">
+  {{> "general-styling"}}
+
+  <div class="analytics-page">
+    <div class="global-container">
+
+      <div id="auth-loading" class="analytics-auth-state">
+        <div class="analytics-auth-icon">&#x23F3;</div>
+        <p>Verificando acceso...</p>
+      </div>
+
+      <div id="auth-signin" class="analytics-auth-state" style="display:none;">
+        <div class="analytics-auth-icon">&#x1F511;</div>
+        <h2>Inici&aacute; sesi&oacute;n</h2>
+        <p>Para ver esta p&aacute;gina ten&eacute;s que estar logueado con el mail de tu cuenta de 421.</p>
+        <p><a href="#/portal/signin" class="btn-solid">Iniciar sesi&oacute;n</a></p>
+        <a href="/es/" class="analytics-back-link">&larr; Volver al inicio</a>
+      </div>
+
+      <div id="auth-network" class="analytics-auth-state" style="display:none;">
+        <div class="analytics-auth-icon">&#x1F4E1;</div>
+        <h2>No pudimos verificar tu acceso</h2>
+        <p>Tu navegador no logr&oacute; conectarse al servidor de datos de 421. No es un problema de permisos.</p>
+        <p>Suele ser un bloqueador de anuncios, una extensi&oacute;n de privacidad o una VPN bloqueando <code>webhook-hreflang.onrender.com</code>. Prob&aacute; desactivarlos para este sitio, o entr&aacute; desde otro navegador.</p>
+        <a href="/es/equipo/" class="analytics-back-link">Reintentar</a>
+      </div>
+
+      <div id="auth-denied" class="analytics-auth-state" style="display:none;">
+        <div class="analytics-auth-icon">&#x1F512;</div>
+        <h2>Acceso restringido</h2>
+        <p>Esta p&aacute;gina es solo para el equipo de 421.</p>
+        <p id="auth-denied-quien" style="display:none;"></p>
+        <a href="/es/" class="analytics-back-link">&larr; Volver al inicio</a>
+      </div>
+
+      <div id="hub" style="display:none;">
+
+        <header class="eq-header">
+          <span class="eq-eyebrow">&#10022; Interno</span>
+          <h1 class="eq-titulo">Equipo 421</h1>
+          <p class="analytics-subtitle">Todo lo que no es el sitio p&uacute;blico: los tableros, los documentos comerciales y lo que se comparte con terceros.</p>
+          <div class="eq-quien"><span class="eq-punto"></span> <span id="eq-mail">Sesi&oacute;n verificada</span></div>
+        </header>
+
+        <h2 class="eq-seccion">Tableros</h2>
+        <div class="eq-grid">
+          <a class="eq-tarjeta" href="/es/analytics/">
+            <span class="eq-ico">&#128202;</span>
+            <h3>Analytics</h3>
+            <p>Tr&aacute;fico, canales, contenido y conversiones. Cuatro pesta&ntilde;as: Analytics, Revenue, Autores y Motores de b&uacute;squeda.</p>
+            <span class="eq-ruta">/es/analytics/</span>
+          </a>
+          <a class="eq-tarjeta" href="/es/analytics/">
+            <span class="eq-ico">&#128184;</span>
+            <h3>Revenue</h3>
+            <p>Suscriptores pagos, MRR y la serie hist&oacute;rica semanal. Vive adentro de Analytics.</p>
+            <span class="eq-ruta">/es/analytics/ &rarr; Revenue</span>
+          </a>
+          <a class="eq-tarjeta" href="/es/analytics/">
+            <span class="eq-ico">&#128269;</span>
+            <h3>Motores de b&uacute;squeda</h3>
+            <p>Search Console de los dos dominios, mes a mes, con el ranking de notas separado por b&uacute;squeda y Discover.</p>
+            <span class="eq-ruta">/es/analytics/ &rarr; Motores</span>
+          </a>
+        </div>
+
+        <h2 class="eq-seccion">Comercial</h2>
+        <div class="eq-grid">
+          <a class="eq-tarjeta" href="/es/media-kit/">
+            <span class="eq-ico">&#128196;</span>
+            <h3>Media kit</h3>
+            <p>La presentaci&oacute;n de 421 para anunciantes: audiencia, alcance y formatos.</p>
+            <span class="eq-ruta">/es/media-kit/</span>
+          </a>
+          <a class="eq-tarjeta" href="/es/tarifario/">
+            <span class="eq-ico">&#127991;</span>
+            <h3>Tarifario</h3>
+            <p>La grilla de precios. Los montos se sirven gateados: no est&aacute;n en el HTML p&uacute;blico.</p>
+            <span class="eq-ruta">/es/tarifario/</span>
+          </a>
+        </div>
+
+        <h2 class="eq-seccion">Documentos para terceros</h2>
+        <div class="eq-grid">
+          <a class="eq-tarjeta eq-externa" href="/es/quilmes-rock/">
+            <span class="eq-chip">PopArt</span>
+            <h3>Quilmes Rock</h3>
+            <p>Propuesta de cobertura. Se comparte por link, no est&aacute; enlazada desde ning&uacute;n lado.</p>
+            <span class="eq-ruta">/es/quilmes-rock/</span>
+          </a>
+          <a class="eq-tarjeta eq-externa" href="/es/quilmes-rock-anexo/">
+            <span class="eq-chip">PopArt</span>
+            <h3>Quilmes Rock &middot; anexo</h3>
+            <p>El detalle que acompa&ntilde;a a la propuesta.</p>
+            <span class="eq-ruta">/es/quilmes-rock-anexo/</span>
+          </a>
+        </div>
+
+        <h2 class="eq-seccion">Herramientas</h2>
+        <div class="eq-grid">
+          <a class="eq-tarjeta" href="/es/revista-421/">
+            <span class="eq-ico">&#128213;</span>
+            <h3>Revista 421</h3>
+            <p>El archivo p&uacute;blico. El n&uacute;mero m&aacute;s nuevo est&aacute; gateado un mes para suscriptores.</p>
+            <span class="eq-ruta">/es/revista-421/</span>
+          </a>
+          <a class="eq-tarjeta" href="https://mtg.421.news" target="_blank" rel="noopener">
+            <span class="eq-ico">&#127183;</span>
+            <h3>Magic 421</h3>
+            <p>La app de colecci&oacute;n, uno de los beneficios de la suscripci&oacute;n.</p>
+            <span class="eq-ruta">mtg.421.news</span>
+          </a>
+          <a class="eq-tarjeta" href="https://421bn.ghost.io/ghost/" target="_blank" rel="noopener">
+            <span class="eq-chip eq-gris">Ghost</span>
+            <h3>Panel de Ghost</h3>
+            <p>El admin del CMS: notas, miembros, newsletters, integraciones.</p>
+            <span class="eq-ruta">421bn.ghost.io/ghost/</span>
+          </a>
+        </div>
+
+        <p class="eq-pie">
+          Acceso restringido a los miembros con la etiqueta <code>equipo</code> en Ghost,
+          el mismo gate que usa <code>/es/analytics/</code>. Para dar o sacar acceso se
+          agrega o se quita esa etiqueta.
+        </p>
+
+      </div><!-- /#hub -->
+
+    </div>
+  </div>
+
+  {{> "site-footer"}}
+</div>
+
+<style>
+  .eq-header { padding: 1rem 0 1.5rem; border-bottom: 1px solid rgba(234,230,225,.14); margin-bottom: 1rem; }
+  .eq-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--amarillo); display: block; margin-bottom: .5rem; }
+  .eq-titulo { font-size: clamp(1.9rem, 5vw, 2.7rem); font-weight: 800; font-style: italic; margin: 0 0 .4rem; line-height: 1.1; }
+  .eq-quien { margin-top: 1.2rem; font-size: .85rem; opacity: .6; display: flex; align-items: center; gap: .55rem; }
+  .eq-punto { width: 8px; height: 8px; border-radius: 999px; background: var(--verde); flex: 0 0 auto; }
+
+  .eq-seccion { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .55; margin: 2.4rem 0 1rem; }
+
+  .eq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+  .eq-tarjeta {
+    display: flex; flex-direction: column; gap: .45rem;
+    padding: 1.3rem 1.3rem 1.4rem;
+    background: #191817; border: 1px solid rgba(234,230,225,.14); border-radius: 12px;
+    text-decoration: none; color: inherit;
+    transition: border-color .16s, transform .16s;
+  }
+  .eq-tarjeta:hover { border-color: var(--amarillo); transform: translateY(-2px); }
+  .eq-tarjeta:focus-visible { outline: 2px solid var(--amarillo); outline-offset: 3px; }
+  .eq-tarjeta h3 { margin: 0; font-size: 1.05rem; font-weight: 700; }
+  .eq-tarjeta p { margin: 0; font-size: .85rem; opacity: .62; line-height: 1.45; }
+  .eq-ico { font-size: 1.5rem; line-height: 1; margin-bottom: .2rem; }
+  .eq-ruta { margin-top: .5rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .72rem; opacity: .45; }
+
+  /* Los documentos de un cliente se leen distinto sin gritar */
+  .eq-tarjeta.eq-externa { border-style: dashed; }
+  .eq-chip { align-self: flex-start; font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .15rem .5rem; border-radius: 999px; background: rgba(23,165,131,.16); color: var(--verde); }
+  .eq-chip.eq-gris { background: rgba(148,141,132,.18); opacity: .8; color: inherit; }
+
+  .eq-pie { margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid rgba(234,230,225,.14); font-size: .82rem; opacity: .55; }
+
+  body.light-mode .eq-tarjeta { background: rgba(255,255,255,.6); }
+  @media (prefers-reduced-motion: reduce) { .eq-tarjeta { transition: none; } .eq-tarjeta:hover { transform: none; } }
+</style>
+
+<script>
+(function () {
+  var CHECK = 'https://webhook-hreflang.onrender.com/api/team-check';
+
+  function estado(id) {
+    document.getElementById('auth-loading').style.display = 'none';
+    document.getElementById(id).style.display = '';
+  }
+
+  // Mismo criterio que analytics.hbs: 401 y 403 son cosas distintas y mostrar
+  // "acceso restringido" a alguien que nunca inició sesión lo manda a pedir un
+  // permiso que ya tiene.
+  function quienSoy() {
+    fetch('/members/api/member/', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (m) {
+        if (!m || !m.email) return;
+        var el = document.getElementById('auth-denied-quien');
+        el.textContent = 'Estás logueado como ' + m.email + '. Si esa no es tu cuenta de 421, cerrá sesión y entrá con la otra.';
+        el.style.display = '';
+      })
+      .catch(function () {});
+  }
+
+  function saludar() {
+    fetch('/members/api/member/', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (m) {
+        if (m && m.email) document.getElementById('eq-mail').textContent = 'Entraste como ' + m.email;
+      })
+      .catch(function () {});
+  }
+
+  fetch('/members/api/session', { credentials: 'same-origin' })
+    .then(function (r) { return r.status === 200 ? r.text() : null; })
+    .then(function (token) {
+      if (!token) { estado('auth-signin'); return; }
+      return fetch(CHECK, { headers: { Authorization: 'Bearer ' + token } })
+        .then(function (r) {
+          if (r.status === 200) { estado('hub'); saludar(); return; }
+          if (r.status === 401) { estado('auth-signin'); return; }
+          estado('auth-denied'); quienSoy();
+        })
+        // Un fetch que ni sale (bloqueador, VPN, servicio caído) no es un
+        // problema de permisos y no hay que diagnosticarlo como tal.
+        .catch(function () { estado('auth-network'); });
+    })
+    .catch(function () { estado('auth-network'); });
+})();
+</script>

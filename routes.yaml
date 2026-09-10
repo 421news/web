@@ -73,6 +73,10 @@ routes:
   /en/what-is-421/:
     template: what-is-421
     data: page.what-is-421
+  # Hub interno: el índice de las páginas de equipo. Sin `data:` porque no
+  # depende de una página de Ghost; el gate y el noindex están en la plantilla.
+  /es/equipo/:
+    template: equipo
   /es/analytics/:
     template: analytics
     data: page.analytics
