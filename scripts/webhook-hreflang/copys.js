@@ -22,7 +22,7 @@ const FIRMA = '<p>Juan Ruocco</p>';
 // El argumento de suscripción es uno solo (definido 2026-09-09): las notas no
 // tienen paywall y a cada colaborador se le paga, y las dos cosas dependen de
 // los suscriptores. Es el mismo texto de la tarjeta de la home y de las notas.
-const CORE = '<p>Las notas de 421 no tienen paywall. Y a cada colaborador se le paga por su trabajo. Las dos cosas dependen de los suscriptores.</p>';
+const CORE = '<p>Las notas de 421 no tienen paywall. Y a cada colaborador se le paga por su trabajo. Ambas cosas son muy importantes para nosotros. Por un lado, que la información circule sin restricciones y por el otro, retribuir a cada escritor de forma justa. Para que eso suceda, necesitamos que te suscribas.</p>';
 
 // Placeholders que se completan al enviar (emails-automaticos.js → renderHtml):
 //   {{PRECIO}}          línea de precio con los pesos del día (GET /prices de MP)
@@ -39,10 +39,10 @@ const COPYS = {
     html: `
 <p>Hola,</p>
 ${CORE}
-<p>Una vez por mes me junto con ellos en el <strong>Concilio</strong>: una videollamada de alrededor de una hora donde charlamos de lo que estamos leyendo, de cómo va 421, de lo que viene y de en qué nos equivocamos. No queda grabado.</p>
+<p>Además, una vez por mes nos juntamos a charlar en el <strong>Concilio</strong>: una videollamada de alrededor de una hora donde hablamos de lo que estamos leyendo, de cómo va 421, de lo que viene y de cómo mejorar lo que hacemos.</p>
 <p>El próximo es <strong>este {{CONCILIO_DIA}} a las {{CONCILIO_HORA}}</strong> (hora de Argentina). Si te suscribís antes, el link te espera en tu cuenta.</p>
 <p>Suscribirte también te da la Revista 421 un mes antes que al resto y la posibilidad de comentar en las notas.</p>
-{{PRECIO}}
+<p>Contamos con vos para que 421 siga creciendo.</p>
 ${cta('Suscribirme', 'seg-concilio')}
 ${FIRMA}`.trim()
   },
