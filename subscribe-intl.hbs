@@ -12,23 +12,69 @@
 
             <div class="sub-hero">
               <span class="sub-hero-eyebrow" data-i18n="eyebrow">✦ Join 421</span>
-              <h1 class="sub-hero-title" data-i18n="h1">Read 421 and back the project</h1>
-              <p class="sub-hero-subtitle" data-i18n-html="subtitle">Sign up for free to read, or subscribe for full access and help us <strong>hire new writers</strong> every month.</p>
-              <div class="sub-hero-proof" data-i18n="proof">228 subscribers · 5,031 readers</div>
+              <h1 class="sub-hero-title" data-i18n="h1">Back 421</h1>
+              <p class="sub-hero-subtitle" data-i18n-html="subtitle">421 articles have no paywall. And every contributor gets paid for their work. Both things matter a lot to us: that information flows without restrictions, and that every writer is paid fairly. For that to happen, <strong>we need you to subscribe</strong>.</p>
+              <div class="sub-hero-proof" data-i18n="proof">235 subscribers · 5,694 registered</div>
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="tier-grid">
+            <div class="plan-toggle plan-toggle-global">
+              <button class="plan-toggle-btn active" id="toggle-monthly" data-i18n="monthly">Monthly</button>
+              <button class="plan-toggle-btn" id="toggle-yearly">
+                <span data-i18n="annual">Annual</span>
+                <span class="toggle-badge">-17%</span>
+              </button>
+            </div>
 
-              <!-- REGISTER + LOGIN -->
-              <div class="tier">
-                <h2 class="tier-name" data-i18n="registerName">Sign up</h2>
-                <p class="tier-tagline" data-i18n="registerTagline">Create your free account and start reading 421</p>
-                <div class="tier-free-label" data-i18n="freeLabel">Free</div>
-                <ul class="tier-benefits" data-i18n-list="registerBenefits">
-                  <li>Download of <strong>released</strong> magazines (back issues)</li>
-                  <li>Keep your session on any device</li>
+            <div class="tier-grid sub-first sub-three">
+
+              <!-- SUBSCRIPTION -->
+              <div class="tier featured" id="sub-plan-card">
+                <span class="tier-badge" data-i18n="badge">Recommended</span>
+                <h2 class="tier-name" data-i18n="subscribeName">Subscribe</h2>
+                <p class="tier-tagline" data-i18n="subscribeTagline">Your subscription lets us pay the people who write and keeps every article available to everyone.</p>
+
+                <div id="plan-price" class="tier-price">
+                  <span class="tier-price-amount" id="price-amount">$9.99</span>
+                  <span class="tier-price-period" id="price-period">USD / month</span>
+                  <div class="plan-price-detail" id="price-detail"></div>
+                </div>
+
+                <p class="tier-includes" data-i18n="includes">What’s included?</p>
+                <ul class="tier-benefits" data-i18n-list="subscribeBenefits">
+                  <li class="tier-benefit-featured"><strong>Council</strong>: a monthly video call (in Spanish) with <a href="/author/juan-ruocco/">Juan Ruocco</a>, director of 421, to talk about what we’re reading, what’s happening in the world and how 421 is doing</li>
+                  <li><strong>421 Magazine</strong> in PDF <strong>one month before</strong> public release</li>
+                  <li><strong>Comment</strong> on every article</li>
+                  <li>Access to the <a href="https://mtg.421.news">Magic: The Gathering 421 app</a></li>
                 </ul>
+
+                <button class="btn-gradient" id="btn-suscribirme" data-i18n="subscribeCta">Subscribe →</button>
+                <p class="tier-fine" data-i18n-html="payNote">Pay with an international card in USD through <strong>Stripe</strong>.</p>
+              </div>
+
+              <!-- MECENAS: premium subscription test, Ghost tier "mecenas" -->
+              <div class="tier tier-mecenas" id="sub-mecenas-card">
+                <h2 class="tier-name" data-i18n="mecenasName">Patron</h2>
+                <p class="tier-tagline" data-i18n="mecenasTagline">The biggest contribution to help 421 grow.</p>
+
+                <div class="tier-price">
+                  <span class="tier-price-amount" id="price-amount-mecenas">$100</span>
+                  <span class="tier-price-period" id="price-period-mecenas">USD / month</span>
+                </div>
+
+                <p class="tier-includes" data-i18n="includes">What’s included?</p>
+                <ul class="tier-benefits" data-i18n-list="mecenasBenefits">
+                  <li>Everything in the subscription</li>
+                  <li class="tier-benefit-featured"><strong>Annual in-person meeting</strong> with <a href="/author/juan-ruocco/">Juan Ruocco</a> at the Ergodic offices in Buenos Aires</li>
+                </ul>
+
+                <button class="btn-outline btn-mecenas" id="btn-mecenas" data-i18n="mecenasCta">Become a patron →</button>
+              </div>
+
+              <!-- REGISTER + LOGIN (secondary on purpose) -->
+              <div class="tier tier-secondary">
+                <h2 class="tier-name" data-i18n="registerName">Sign up</h2>
+                <p class="tier-tagline" data-i18n="registerTagline">Create your account and download every magazine issue except the latest, which is for subscribers. Your session stays saved on any device.</p>
 
                 <div class="tier-actions">
                   <button class="btn-outline" id="btn-free" data-i18n="registerCta">Sign up for free</button>
@@ -42,36 +88,6 @@
                     <button type="button" class="inline-login-back" id="btn-login-back" data-i18n="loginBack">&larr; Back</button>
                   </form>
                 </div>
-              </div>
-
-              <!-- SUBSCRIPTION -->
-              <div class="tier featured" id="sub-plan-card">
-                <span class="tier-badge" data-i18n="badge">Recommended</span>
-                <h2 class="tier-name" data-i18n="subscribeName">Subscribe</h2>
-                <p class="tier-tagline" data-i18n="subscribeTagline">Full access + back the project</p>
-
-                <div class="plan-toggle">
-                  <button class="plan-toggle-btn active" id="toggle-monthly" data-i18n="monthly">Monthly</button>
-                  <button class="plan-toggle-btn" id="toggle-yearly">
-                    <span data-i18n="annual">Annual</span>
-                    <span class="toggle-badge">-17%</span>
-                  </button>
-                </div>
-
-                <div id="plan-price" class="tier-price">
-                  <span class="tier-price-amount" id="price-amount">...</span>
-                  <span class="tier-price-period" id="price-period">USD / month</span>
-                  <div class="plan-price-detail" id="price-detail"></div>
-                </div>
-
-                <ul class="tier-benefits" data-i18n-list="subscribeBenefits">
-                  <li class="tier-benefit-featured">📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release</li>
-                  <li>Comment and join discussions on every article</li>
-                  <li><strong>Council</strong>: a monthly video call (in Spanish) with <a href="/author/juan-ruocco/">Juan Ruocco</a>, director of 421, to talk about what we’re reading, what’s happening in the world and how 421 is doing</li>
-                  <li>Access to the <a href="https://mtg.421.news">Magic 421 app</a></li>
-                </ul>
-
-                <button class="btn-gradient" id="btn-suscribirme" data-i18n="subscribeCta">Subscribe →</button>
               </div>
 
             </div>
@@ -92,109 +108,242 @@
         // (revista anticipada, concilio, magic app) intact across languages.
         var i18n = {
           en: {
-            eyebrow:'✦ Join 421',
-            h1:'Read 421 and back the project',
-            subtitle:'Sign up for free to read, or subscribe for full access and help us <strong>hire new writers</strong> every month.',
-            proof:'228 subscribers · 5,031 readers',
-            registerName:'Sign up', registerTagline:'Create your free account and start reading 421', freeLabel:'Free',
-            registerBenefits:['Download of <strong>released</strong> magazines (back issues)','Keep your session on any device'],
-            registerCta:'Sign up for free', or:'or', loginToggle:'I have an account · Log in',
-            loginPlaceholder:'you@email.com', loginSubmit:'Send me the login link', loginBack:'← Back',
-            loginSending:'Sending…', loginSent:'✓ We sent you a login link to sign in.', loginError:'Couldn’t send the link. Check your email and try again.',
-            badge:'Recommended', subscribeName:'Subscribe', subscribeTagline:'Full access + back the project',
-            monthly:'Monthly', annual:'Annual', year:'USD / year', month:'USD / month', save:'save 2 months', nocommit:'Save 2 months with the annual plan',
-            subscribeBenefits:['📕 Read <strong>Revista 421 #<span data-revista-numero>14</span></strong> in PDF <strong>one month before</strong> public release','Comment and join discussions on every article','<strong>Council</strong>: a monthly video call (in Spanish) with <a href="/author/juan-ruocco/">Juan Ruocco</a>, director of 421, to talk about what we’re reading, what’s happening in the world and how 421 is doing','Access to the <a href="https://mtg.421.news">Magic 421 app</a>'],
-            subscribeCta:'Subscribe →',
+            eyebrow: "✦ Join 421",
+            h1: "Back 421",
+            subtitle: "421 articles have no paywall. And every contributor gets paid for their work. Both things matter a lot to us: that information flows without restrictions, and that every writer is paid fairly. For that to happen, <strong>we need you to subscribe</strong>.",
+            proof: "235 subscribers · 5,694 registered",
+            registerName: "Sign up",
+            registerTagline: "Create your account and download every magazine issue except the latest, which is for subscribers. Your session stays saved on any device.",
+            registerCta: "Sign up for free",
+            or: "or",
+            loginToggle: "I have an account · Log in",
+            loginPlaceholder: "you@email.com",
+            loginSubmit: "Send me the login link",
+            loginBack: "← Back",
+            loginSending: "Sending…",
+            loginSent: "✓ We sent you a login link to sign in.",
+            loginError: "Couldn’t send the link. Check your email and try again.",
+            badge: "Recommended",
+            subscribeName: "Subscribe",
+            subscribeTagline: "Your subscription lets us pay the people who write and keeps every article available to everyone.",
+            monthly: "Monthly",
+            annual: "Annual",
+            year: "USD / year",
+            month: "USD / month",
+            save: "save 2 months",
+            nocommit: "Save 2 months with the annual plan",
+            subscribeBenefits: ["<strong>Council</strong>: a monthly video call (in Spanish) with <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>, director of 421, to talk about what we’re reading, what’s happening in the world and how 421 is doing","<strong>421 Magazine</strong> in PDF <strong>one month before</strong> public release","<strong>Comment</strong> on every article","Access to the <a href=\"https://mtg.421.news\">Magic: The Gathering 421 app</a>"],
+            subscribeCta: "Subscribe →",
+            includes: "What’s included?",
+            payNote: "Pay with an international card in USD through <strong>Stripe</strong>.",
+            mecenasName: "Patron",
+            mecenasTagline: "The biggest contribution to help 421 grow.",
+            mecenasBenefits: ["Everything in the subscription","<strong>Annual in-person meeting</strong> with <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> at the Ergodic offices in Buenos Aires"],
+            mecenasCta: "Become a patron →"
           },
           pt: {
-            eyebrow:'✦ Junte-se a 421',
-            h1:'Leia 421 e apoie o projeto',
-            subtitle:'Cadastre-se grátis para ler, ou assine para ter acesso completo e ajudar a <strong>contratar novos escritores</strong> todo mês.',
-            proof:'228 assinantes · 5.031 leitores',
-            registerName:'Cadastre-se', registerTagline:'Crie sua conta grátis e comece a ler 421', freeLabel:'Grátis',
-            registerBenefits:['Download de revistas <strong>liberadas</strong> (números antigos)','Mantenha sua sessão em qualquer dispositivo'],
-            registerCta:'Cadastre-se grátis', or:'ou', loginToggle:'Já tenho conta · Entrar',
-            loginPlaceholder:'voce@email.com', loginSubmit:'Envie meu link de acesso', loginBack:'← Voltar',
-            loginSending:'Enviando…', loginSent:'✓ Enviamos um link de acesso para o seu e-mail.', loginError:'Não foi possível enviar o link. Verifique o e-mail e tente de novo.',
-            badge:'Recomendado', subscribeName:'Assine', subscribeTagline:'Acesso completo + apoia o projeto',
-            monthly:'Mensal', annual:'Anual', year:'USD / ano', month:'USD / mês', save:'economize 2 meses', nocommit:'No plano anual você economiza 2 meses',
-            subscribeBenefits:['📕 Leia a <strong>Revista 421 #<span data-revista-numero>14</span></strong> em PDF <strong>um mês antes</strong> do público','Comentar e participar dos debates de cada nota','<strong>Concílio</strong>: uma videochamada por mês (em espanhol) com <a href="/author/juan-ruocco/">Juan Ruocco</a>, diretor da 421, para conversar sobre o que estamos lendo, o que acontece no mundo e como vai a 421','Acesso ao <a href="https://mtg.421.news">app de Magic 421</a>'],
-            subscribeCta:'Assine →',
+            eyebrow: "✦ Junte-se a 421",
+            h1: "Apoie a 421",
+            subtitle: "As notas da 421 não têm paywall. E cada colaborador é pago pelo seu trabalho. As duas coisas são muito importantes para nós: que a informação circule sem restrições e que cada escritor seja pago de forma justa. Para que isso aconteça, <strong>precisamos que você assine</strong>.",
+            proof: "235 assinantes · 5.694 cadastrados",
+            registerName: "Cadastre-se",
+            registerTagline: "Crie sua conta e baixe todas as revistas, menos a última, que é para assinantes. Sua sessão fica salva em qualquer dispositivo.",
+            registerCta: "Cadastre-se grátis",
+            or: "ou",
+            loginToggle: "Já tenho conta · Entrar",
+            loginPlaceholder: "voce@email.com",
+            loginSubmit: "Envie meu link de acesso",
+            loginBack: "← Voltar",
+            loginSending: "Enviando…",
+            loginSent: "✓ Enviamos um link de acesso para o seu e-mail.",
+            loginError: "Não foi possível enviar o link. Verifique o e-mail e tente de novo.",
+            badge: "Recomendado",
+            subscribeName: "Assine",
+            subscribeTagline: "Sua assinatura permite pagar quem escreve e manter todas as notas disponíveis para todos.",
+            monthly: "Mensal",
+            annual: "Anual",
+            year: "USD / ano",
+            month: "USD / mês",
+            save: "economize 2 meses",
+            nocommit: "No plano anual você economiza 2 meses",
+            subscribeBenefits: ["<strong>Concílio</strong>: uma videochamada por mês (em espanhol) com <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>, diretor da 421, para conversar sobre o que estamos lendo, o que acontece no mundo e como vai a 421","<strong>Revista 421</strong> em PDF <strong>um mês antes</strong> do público","<strong>Comentar</strong> em cada nota","Acesso ao <a href=\"https://mtg.421.news\">app de Magic: The Gathering 421</a>"],
+            subscribeCta: "Assine →",
+            includes: "O que inclui?",
+            payNote: "Pague com cartão internacional em USD pelo <strong>Stripe</strong>.",
+            mecenasName: "Mecenas",
+            mecenasTagline: "A maior contribuição para a 421 crescer.",
+            mecenasBenefits: ["Tudo o que a assinatura inclui","<strong>Encontro presencial anual</strong> com <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> nos escritórios da Ergodic, em Buenos Aires"],
+            mecenasCta: "Seja mecenas →"
           },
           fr: {
-            eyebrow:'✦ Rejoignez 421',
-            h1:'Lisez 421 et soutenez le projet',
-            subtitle:'Inscrivez-vous gratuitement pour lire, ou abonnez-vous pour un accès complet et aidez-nous à <strong>recruter de nouveaux auteurs</strong> chaque mois.',
-            proof:'228 abonnés · 5 031 lecteurs',
-            registerName:'Inscription', registerTagline:'Créez votre compte gratuit et commencez à lire 421', freeLabel:'Gratuit',
-            registerBenefits:['Téléchargement des magazines <strong>libérés</strong> (anciens numéros)','Gardez votre session sur tous vos appareils'],
-            registerCta:'Inscription gratuite', or:'ou', loginToggle:'J\'ai déjà un compte · Se connecter',
-            loginPlaceholder:'vous@email.com', loginSubmit:'Envoyez-moi le lien de connexion', loginBack:'← Retour',
-            loginSending:'Envoi…', loginSent:'✓ Nous vous avons envoyé un lien de connexion par e-mail.', loginError:'Impossible d\'envoyer le lien. Vérifiez l\'e-mail et réessayez.',
-            badge:'Recommandé', subscribeName:'S\'abonner', subscribeTagline:'Accès complet + soutien au projet',
-            monthly:'Mensuel', annual:'Annuel', year:'USD / an', month:'USD / mois', save:'économisez 2 mois', nocommit:'Avec l’offre annuelle, 2 mois offerts',
-            subscribeBenefits:['📕 Lisez la <strong>Revista 421 #<span data-revista-numero>14</span></strong> en PDF <strong>un mois avant</strong> le grand public','Commentez et participez aux débats sur chaque article','<strong>Concile</strong> : un appel vidéo par mois (en espagnol) avec <a href="/author/juan-ruocco/">Juan Ruocco</a>, directeur de 421, pour parler de ce que nous lisons, de ce qui se passe dans le monde et de la vie de 421','Accès à l\'<a href="https://mtg.421.news">app Magic 421</a>'],
-            subscribeCta:'S\'abonner →',
+            eyebrow: "✦ Rejoignez 421",
+            h1: "Soutenez 421",
+            subtitle: "Les articles de 421 n’ont pas de paywall. Et chaque contributeur est payé pour son travail. Les deux comptent beaucoup pour nous : que l’information circule sans restrictions et que chaque auteur soit rémunéré équitablement. Pour que cela continue, <strong>nous avons besoin que vous vous abonniez</strong>.",
+            proof: "235 abonnés · 5 694 inscrits",
+            registerName: "Inscription",
+            registerTagline: "Créez votre compte et téléchargez tous les numéros du magazine, sauf le dernier, réservé aux abonnés. Votre session reste active sur tous vos appareils.",
+            registerCta: "Inscription gratuite",
+            or: "ou",
+            loginToggle: "J'ai déjà un compte · Se connecter",
+            loginPlaceholder: "vous@email.com",
+            loginSubmit: "Envoyez-moi le lien de connexion",
+            loginBack: "← Retour",
+            loginSending: "Envoi…",
+            loginSent: "✓ Nous vous avons envoyé un lien de connexion par e-mail.",
+            loginError: "Impossible d'envoyer le lien. Vérifiez l'e-mail et réessayez.",
+            badge: "Recommandé",
+            subscribeName: "S'abonner",
+            subscribeTagline: "Votre abonnement nous permet de payer celles et ceux qui écrivent et de garder chaque article disponible pour tous.",
+            monthly: "Mensuel",
+            annual: "Annuel",
+            year: "USD / an",
+            month: "USD / mois",
+            save: "économisez 2 mois",
+            nocommit: "Avec l’offre annuelle, 2 mois offerts",
+            subscribeBenefits: ["<strong>Concile</strong> : un appel vidéo par mois (en espagnol) avec <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>, directeur de 421, pour parler de ce que nous lisons, de ce qui se passe dans le monde et de la vie de 421","<strong>Revista 421</strong> en PDF <strong>un mois avant</strong> le grand public","<strong>Commenter</strong> chaque article","Accès à l’<a href=\"https://mtg.421.news\">app Magic: The Gathering 421</a>"],
+            subscribeCta: "S'abonner →",
+            includes: "Ce qui est inclus",
+            payNote: "Paiement par carte internationale en USD via <strong>Stripe</strong>.",
+            mecenasName: "Mécène",
+            mecenasTagline: "La plus grande contribution pour faire grandir 421.",
+            mecenasBenefits: ["Tout ce que comprend l’abonnement","<strong>Rencontre annuelle en personne</strong> avec <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> dans les bureaux d’Ergodic, à Buenos Aires"],
+            mecenasCta: "Devenir mécène →"
           },
           zh: {
-            eyebrow:'✦ 加入 421',
-            h1:'阅读 421，支持项目',
-            subtitle:'免费注册即可阅读，或订阅以获得完整权限，并帮助我们每月<strong>聘请新作者</strong>。',
-            proof:'228 订阅者 · 5,031 读者',
-            registerName:'注册', registerTagline:'创建免费账户，开始阅读 421', freeLabel:'免费',
-            registerBenefits:['下载<strong>已公开</strong>的期刊（旧期刊）','在任何设备上保持登录'],
-            registerCta:'免费注册', or:'或', loginToggle:'已有账户 · 登录',
-            loginPlaceholder:'you@email.com', loginSubmit:'发送登录链接', loginBack:'← 返回',
-            loginSending:'发送中…', loginSent:'✓ 我们已向您的邮箱发送了登录链接。', loginError:'无法发送链接。请检查邮箱后重试。',
-            badge:'推荐', subscribeName:'订阅', subscribeTagline:'完整权限 + 支持项目',
-            monthly:'月付', annual:'年付', year:'USD / 年', month:'USD / 月', save:'节省2个月', nocommit:'选择年付，省下 2 个月',
-            subscribeBenefits:['📕 PDF 抢先阅读<strong>《Revista 421 #<span data-revista-numero>14</span>》</strong>，<strong>比公众提前一个月</strong>','评论并参与每篇文章的讨论','<strong>月度议会</strong>：每月一次与 421 主编 <a href="/author/juan-ruocco/">Juan Ruocco</a> 的视频通话（西班牙语），聊我们在读什么、世界上发生了什么，以及 421 的近况','访问 <a href="https://mtg.421.news">Magic 421 应用</a>'],
-            subscribeCta:'订阅 →',
+            eyebrow: "✦ 加入 421",
+            h1: "支持 421",
+            subtitle: "421 的文章没有付费墙，而且每位撰稿人都会获得报酬。这两件事对我们都非常重要：让信息不受限制地流通，并公平地支付每位作者。为此，<strong>我们需要你的订阅</strong>。",
+            proof: "235 订阅者 · 5,694 注册用户",
+            registerName: "注册",
+            registerTagline: "创建账户即可下载除最新一期外的所有杂志（最新一期仅限订阅者）。登录状态会在任何设备上保留。",
+            registerCta: "免费注册",
+            or: "或",
+            loginToggle: "已有账户 · 登录",
+            loginPlaceholder: "you@email.com",
+            loginSubmit: "发送登录链接",
+            loginBack: "← 返回",
+            loginSending: "发送中…",
+            loginSent: "✓ 我们已向您的邮箱发送了登录链接。",
+            loginError: "无法发送链接。请检查邮箱后重试。",
+            badge: "推荐",
+            subscribeName: "订阅",
+            subscribeTagline: "你的订阅让我们能够支付作者的报酬，并让所有文章继续向所有人提供。",
+            monthly: "月付",
+            annual: "年付",
+            year: "USD / 年",
+            month: "USD / 月",
+            save: "节省2个月",
+            nocommit: "选择年付，省下 2 个月",
+            subscribeBenefits: ["<strong>月度议会</strong>：每月一次与 421 主编 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> 的视频通话（西班牙语），聊我们在读什么、世界上发生了什么，以及 421 的近况","比公众<strong>提前一个月</strong>阅读 <strong>Revista 421</strong> PDF","在每篇文章下<strong>发表评论</strong>","使用 <a href=\"https://mtg.421.news\">Magic: The Gathering 421 应用</a>"],
+            subscribeCta: "订阅 →",
+            includes: "包含哪些内容？",
+            payNote: "通过 <strong>Stripe</strong> 使用国际银行卡以美元支付。",
+            mecenasName: "赞助人",
+            mecenasTagline: "帮助 421 成长的最大支持。",
+            mecenasBenefits: ["订阅包含的全部内容","每年一次在布宜诺斯艾利斯 Ergodic 办公室与 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> <strong>线下见面</strong>"],
+            mecenasCta: "成为赞助人 →"
           },
           ja: {
-            eyebrow:'✦ 421に参加',
-            h1:'421を読んでプロジェクトを支援',
-            subtitle:'無料登録で読めます。購読すればすべてにアクセスでき、毎月<strong>新しい書き手を雇う</strong>支援になります。',
-            proof:'228 購読者 · 5,031 読者',
-            registerName:'登録', registerTagline:'無料アカウントを作成して421を読み始めよう', freeLabel:'無料',
-            registerBenefits:['<strong>公開済み</strong>雑誌のダウンロード（バックナンバー）','どのデバイスでもセッションを保持'],
-            registerCta:'無料登録', or:'または', loginToggle:'アカウントを持っている · ログイン',
-            loginPlaceholder:'you@email.com', loginSubmit:'ログインリンクを送る', loginBack:'← 戻る',
-            loginSending:'送信中…', loginSent:'✓ ログインリンクをメールに送信しました。', loginError:'リンクを送信できませんでした。メールを確認して再試行してください。',
-            badge:'おすすめ', subscribeName:'購読する', subscribeTagline:'フルアクセス + プロジェクト支援',
-            monthly:'月額', annual:'年額', year:'USD / 年', month:'USD / 月', save:'2ヶ月分お得', nocommit:'年額プランなら 2 ヶ月分お得',
-            subscribeBenefits:['📕 一般公開より<strong>1ヶ月早く</strong>《Revista 421 #<span data-revista-numero>14</span>》PDFを読める','すべての記事へのコメントと議論参加','<strong>月例会議</strong>：421 編集長 <a href="/author/juan-ruocco/">Juan Ruocco</a> との月1回のビデオ通話（スペイン語）。読んでいるもの、世界の出来事、421 の近況について話します','<a href="https://mtg.421.news">Magic 421 アプリ</a>へのアクセス'],
-            subscribeCta:'購読する →',
+            eyebrow: "✦ 421に参加",
+            h1: "421を支援する",
+            subtitle: "421の記事にはペイウォールがありません。そして、すべての寄稿者に報酬を支払っています。この2つは私たちにとってとても大切です。情報が制限なく流通すること、そしてすべての書き手に公正に支払うこと。それを続けるために、<strong>あなたの購読が必要です</strong>。",
+            proof: "235 購読者 · 5,694 登録者",
+            registerName: "登録",
+            registerTagline: "アカウントを作成すると、購読者向けの最新号を除くすべての雑誌をダウンロードできます。どのデバイスでもログイン状態が保たれます。",
+            registerCta: "無料登録",
+            or: "または",
+            loginToggle: "アカウントを持っている · ログイン",
+            loginPlaceholder: "you@email.com",
+            loginSubmit: "ログインリンクを送る",
+            loginBack: "← 戻る",
+            loginSending: "送信中…",
+            loginSent: "✓ ログインリンクをメールに送信しました。",
+            loginError: "リンクを送信できませんでした。メールを確認して再試行してください。",
+            badge: "おすすめ",
+            subscribeName: "購読する",
+            subscribeTagline: "あなたの購読が書き手への報酬となり、すべての記事を誰でも読める状態に保ちます。",
+            monthly: "月額",
+            annual: "年額",
+            year: "USD / 年",
+            month: "USD / 月",
+            save: "2ヶ月分お得",
+            nocommit: "年額プランなら 2 ヶ月分お得",
+            subscribeBenefits: ["<strong>月例会議</strong>：421 編集長 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> との月1回のビデオ通話（スペイン語）。読んでいるもの、世界の出来事、421 の近況について話します","<strong>Revista 421</strong> のPDFを一般公開の<strong>1ヶ月前</strong>に読める","すべての記事に<strong>コメント</strong>できる","<a href=\"https://mtg.421.news\">Magic: The Gathering 421 アプリ</a>へのアクセス"],
+            subscribeCta: "購読する →",
+            includes: "含まれるもの",
+            payNote: "<strong>Stripe</strong> で国際カードを使い USD でお支払い。",
+            mecenasName: "パトロン",
+            mecenasTagline: "421の成長を支える最大の支援。",
+            mecenasBenefits: ["購読のすべての特典","ブエノスアイレスの Ergodic オフィスで <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> と会う<strong>年1回の対面ミーティング</strong>"],
+            mecenasCta: "パトロンになる →"
           },
           ko: {
-            eyebrow:'✦ 421 함께하기',
-            h1:'421을 읽고 프로젝트를 지원하세요',
-            subtitle:'무료로 가입해 읽거나, 구독해 전체에 접근하고 매달 <strong>새로운 필자 고용</strong>을 도와주세요.',
-            proof:'228 구독자 · 5,031 독자',
-            registerName:'가입', registerTagline:'무료 계정을 만들고 421을 읽기 시작하세요', freeLabel:'무료',
-            registerBenefits:['<strong>공개된</strong> 잡지 다운로드 (이전 호)','모든 기기에서 세션 유지'],
-            registerCta:'무료 가입', or:'또는', loginToggle:'이미 계정이 있어요 · 로그인',
-            loginPlaceholder:'you@email.com', loginSubmit:'로그인 링크 보내기', loginBack:'← 뒤로',
-            loginSending:'보내는 중…', loginSent:'✓ 로그인 링크를 이메일로 보냈어요.', loginError:'링크를 보내지 못했어요. 이메일을 확인하고 다시 시도하세요.',
-            badge:'추천', subscribeName:'구독하기', subscribeTagline:'전체 접근 + 프로젝트 지원',
-            monthly:'월간', annual:'연간', year:'USD / 년', month:'USD / 월', save:'2개월 절약', nocommit:'연간 요금제로 2개월 절약',
-            subscribeBenefits:['📕 일반 공개보다 <strong>1개월 먼저</strong> <strong>Revista 421 #<span data-revista-numero>14</span></strong> PDF 읽기','모든 기사에 댓글 작성 및 토론 참여','<strong>월례 회의</strong>: 421 편집장 <a href="/author/juan-ruocco/">Juan Ruocco</a>와 매달 한 번 화상 통화(스페인어)로, 요즘 읽는 것과 세상 이야기, 421의 근황을 나눕니다','<a href="https://mtg.421.news">Magic 421 앱</a> 접근'],
-            subscribeCta:'구독하기 →',
+            eyebrow: "✦ 421 함께하기",
+            h1: "421을 후원하세요",
+            subtitle: "421의 기사에는 페이월이 없습니다. 그리고 모든 기고자는 자신의 작업에 대해 보수를 받습니다. 이 두 가지는 우리에게 매우 중요합니다. 정보가 제한 없이 흐르는 것, 그리고 모든 필자에게 공정하게 보수를 지급하는 것. 이를 위해 <strong>여러분의 구독이 필요합니다</strong>.",
+            proof: "235 구독자 · 5,694 가입자",
+            registerName: "가입",
+            registerTagline: "계정을 만들면 구독자 전용인 최신 호를 제외한 모든 잡지를 다운로드할 수 있습니다. 모든 기기에서 로그인이 유지됩니다.",
+            registerCta: "무료 가입",
+            or: "또는",
+            loginToggle: "이미 계정이 있어요 · 로그인",
+            loginPlaceholder: "you@email.com",
+            loginSubmit: "로그인 링크 보내기",
+            loginBack: "← 뒤로",
+            loginSending: "보내는 중…",
+            loginSent: "✓ 로그인 링크를 이메일로 보냈어요.",
+            loginError: "링크를 보내지 못했어요. 이메일을 확인하고 다시 시도하세요.",
+            badge: "추천",
+            subscribeName: "구독하기",
+            subscribeTagline: "여러분의 구독으로 필자들에게 보수를 지급하고 모든 기사를 누구나 볼 수 있게 유지합니다.",
+            monthly: "월간",
+            annual: "연간",
+            year: "USD / 년",
+            month: "USD / 월",
+            save: "2개월 절약",
+            nocommit: "연간 요금제로 2개월 절약",
+            subscribeBenefits: ["<strong>월례 회의</strong>: 421 편집장 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>와 매달 한 번 화상 통화(스페인어)로, 요즘 읽는 것과 세상 이야기, 421의 근황을 나눕니다","일반 공개보다 <strong>1개월 먼저</strong> <strong>Revista 421</strong> PDF 읽기","모든 기사에 <strong>댓글</strong> 작성","<a href=\"https://mtg.421.news\">Magic: The Gathering 421 앱</a> 이용"],
+            subscribeCta: "구독하기 →",
+            includes: "포함 내용",
+            payNote: "<strong>Stripe</strong>를 통해 해외 카드로 USD 결제.",
+            mecenasName: "후원자",
+            mecenasTagline: "421의 성장을 위한 가장 큰 후원.",
+            mecenasBenefits: ["구독의 모든 혜택","부에노스아이레스 Ergodic 사무실에서 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>와 함께하는 <strong>연 1회 오프라인 만남</strong>"],
+            mecenasCta: "후원자 되기 →"
           },
           tr: {
-            eyebrow:'✦ 421\'e katıl',
-            h1:'421 oku ve projeyi destekle',
-            subtitle:'Okumak için ücretsiz kaydol, ya da tam erişim için abone ol ve her ay <strong>yeni yazarlar işe almamıza</strong> yardım et.',
-            proof:'228 abone · 5.031 okuyucu',
-            registerName:'Kayıt ol', registerTagline:'Ücretsiz hesabını oluştur ve 421 okumaya başla', freeLabel:'Ücretsiz',
-            registerBenefits:['<strong>Yayınlanmış</strong> dergileri indirme (eski sayılar)','Oturumunu her cihazda koru'],
-            registerCta:'Ücretsiz kayıt', or:'veya', loginToggle:'Hesabım var · Giriş yap',
-            loginPlaceholder:'sen@email.com', loginSubmit:'Giriş bağlantısını gönder', loginBack:'← Geri',
-            loginSending:'Gönderiliyor…', loginSent:'✓ Giriş bağlantısını e-postana gönderdik.', loginError:'Bağlantı gönderilemedi. E-postanı kontrol edip tekrar dene.',
-            badge:'Önerilen', subscribeName:'Abone ol', subscribeTagline:'Tam erişim + projeyi destekle',
-            monthly:'Aylık', annual:'Yıllık', year:'USD / yıl', month:'USD / ay', save:'2 ay tasarruf', nocommit:'Yıllık planda 2 ay tasarruf',
-            subscribeBenefits:['📕 <strong>Revista 421 #<span data-revista-numero>14</span></strong>\'ü PDF olarak halka <strong>bir ay önce</strong> oku','Her makalede yorum ve tartışmalara katıl','<strong>Aylık Konsey</strong>: 421’in yöneticisi <a href="/author/juan-ruocco/">Juan Ruocco</a> ile ayda bir görüntülü görüşme (İspanyolca); ne okuduğumuzu, dünyada neler olduğunu ve 421’in nasıl gittiğini konuşuyoruz','<a href="https://mtg.421.news">Magic 421 uygulamasına</a> erişim'],
-            subscribeCta:'Abone ol →',
+            eyebrow: "✦ 421'e katıl",
+            h1: "421’i destekle",
+            subtitle: "421 yazılarında ödeme duvarı yok. Ve her katkıcıya emeğinin karşılığı ödeniyor. İkisi de bizim için çok önemli: bilginin kısıtlama olmadan dolaşması ve her yazara adil bir ücret ödenmesi. Bunun devam etmesi için <strong>abone olmana ihtiyacımız var</strong>.",
+            proof: "235 abone · 5.694 kayıtlı",
+            registerName: "Kayıt ol",
+            registerTagline: "Hesabını oluştur ve abonelere ayrılan son sayı hariç tüm dergileri indir. Oturumun her cihazda açık kalır.",
+            registerCta: "Ücretsiz kayıt",
+            or: "veya",
+            loginToggle: "Hesabım var · Giriş yap",
+            loginPlaceholder: "sen@email.com",
+            loginSubmit: "Giriş bağlantısını gönder",
+            loginBack: "← Geri",
+            loginSending: "Gönderiliyor…",
+            loginSent: "✓ Giriş bağlantısını e-postana gönderdik.",
+            loginError: "Bağlantı gönderilemedi. E-postanı kontrol edip tekrar dene.",
+            badge: "Önerilen",
+            subscribeName: "Abone ol",
+            subscribeTagline: "Aboneliğin, yazanlara ödeme yapmamızı ve tüm yazıların herkes için erişilebilir kalmasını sağlar.",
+            monthly: "Aylık",
+            annual: "Yıllık",
+            year: "USD / yıl",
+            month: "USD / ay",
+            save: "2 ay tasarruf",
+            nocommit: "Yıllık planda 2 ay tasarruf",
+            subscribeBenefits: ["<strong>Aylık Konsey</strong>: 421’in yöneticisi <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> ile ayda bir görüntülü görüşme (İspanyolca); ne okuduğumuzu, dünyada neler olduğunu ve 421’in nasıl gittiğini konuşuyoruz","<strong>Revista 421</strong> PDF’ini halktan <strong>bir ay önce</strong> oku","Her yazıya <strong>yorum</strong> yap","<a href=\"https://mtg.421.news\">Magic: The Gathering 421 uygulamasına</a> erişim"],
+            subscribeCta: "Abone ol →",
+            includes: "Neler dahil?",
+            payNote: "<strong>Stripe</strong> üzerinden uluslararası kartla USD olarak öde.",
+            mecenasName: "Mesen",
+            mecenasTagline: "421’in büyümesi için en büyük destek.",
+            mecenasBenefits: ["Aboneliğin tüm avantajları","Buenos Aires’teki Ergodic ofisinde <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> ile <strong>yıllık yüz yüze buluşma</strong>"],
+            mecenasCta: "Mesen ol →"
           }
         };
 
@@ -244,15 +393,19 @@
         // Tier price fetching + toggle logic
         var currentCadence = 'monthly';
         var tierData = null;
+        var tiersBy = { wizard: null, mecenas: null };
 
         fetch('/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33', { headers: { 'Accept-Version': 'v5.0' } })
           .then(function(r) { return r.json(); })
           .then(function(data) {
             var tiers = data.tiers || [];
+            // By slug: with two active paid tiers, "the first paid one" could be Mecenas.
             for (var i = 0; i < tiers.length; i++) {
-              if (tiers[i].type === 'paid' && tiers[i].active) { tierData = tiers[i]; break; }
+              if (tiers[i].slug === 'supporter') tiersBy.wizard = tiers[i];
+              if (tiers[i].slug === 'mecenas') tiersBy.mecenas = tiers[i];
             }
-            if (tierData) updatePriceDisplay();
+            tierData = tiersBy.wizard;
+            updatePriceDisplay();
           });
 
         function formatPrice(cents) {
@@ -261,6 +414,11 @@
         }
 
         function updatePriceDisplay() {
+          var mec = tiersBy.mecenas;
+          if (mec) {
+            document.getElementById('price-amount-mecenas').textContent = formatPrice(currentCadence === 'yearly' ? mec.yearly_price : mec.monthly_price);
+            document.getElementById('price-period-mecenas').textContent = currentCadence === 'yearly' ? t.year : t.month;
+          }
           if (!tierData) return;
           var amountEl = document.getElementById('price-amount');
           var periodEl = document.getElementById('price-period');
@@ -292,11 +450,17 @@
           updatePriceDisplay();
         });
 
-        document.getElementById('btn-suscribirme').addEventListener('click', function() {
-          if (!tierData) return;
-          if (typeof gtag === 'function') gtag('event','begin_checkout',{event_category:'subscription',event_label:'subscribe_'+currentCadence+'_intl_'+lang});
-          window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
-        });
+        function checkout(tier) {
+          var tt = tiersBy[tier];
+          if (!tt) return;
+          if (typeof gtag === 'function') {
+            gtag('event','begin_checkout',{event_category:'subscription',event_label:(tier === 'mecenas' ? 'mecenas_' : 'subscribe_')+currentCadence+'_intl_'+lang});
+            if (tier === 'mecenas') gtag('event','mecenas_click',{event_category:'subscription',event_label:'mecenas_'+currentCadence+'_intl_'+lang});
+          }
+          window.location.hash = '#/portal/signup/' + tt.id + '/' + currentCadence;
+        }
+        document.getElementById('btn-suscribirme').addEventListener('click', function() { checkout('wizard'); });
+        document.getElementById('btn-mecenas').addEventListener('click', function() { checkout('mecenas'); });
 
         document.getElementById('btn-free').addEventListener('click', function() {
           if (typeof gtag === 'function') gtag('event','sign_up_intent',{event_category:'subscription',event_label:'free_register_intl_'+lang});

@@ -94,8 +94,8 @@ function replaceProof(file, regex, replacement) {
   );
   const changedEn = replaceProof(
     'subscribe.hbs',
-    /[\d.,]+ (?:wizards|subscribers) · [\d.,]+ readers/,
-    `${paying} subscribers · ${enTotal} readers`
+    /[\d.,]+ (?:wizards|subscribers) · [\d.,]+ (?:readers|registered)/,
+    `${paying} subscribers · ${enTotal} registered`
   );
 
   if (!changedEs && !changedEn) return;
