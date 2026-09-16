@@ -142,7 +142,6 @@ ${FIRMA}`.trim()
 <p>Te anotaste en 421 hace un tiempo y desde entonces no abriste casi ninguno de estos mails. Puede ser que ya no te interese, que te caiga en spam, o que simplemente no era el momento.</p>
 <p>Cualquiera de las tres está bien. Solo quiero saber cuál.</p>
 <p>Si querés seguir recibiendo 421, no tenés que hacer nada: con que abras este mail alcanza.</p>
-<p>Si no, hay un link para darte de baja al final y listo, sin vueltas.</p>
 <p>Y si querés retomar por algún lado, las <a href="${RUTAS_URL}">Rutas</a> son recorridos temáticos para leer en orden, sin tener que elegir por dónde empezar.</p>
 ${FIRMA}`.trim()
   }
