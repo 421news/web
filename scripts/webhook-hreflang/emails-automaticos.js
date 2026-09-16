@@ -25,7 +25,14 @@ const REVISTA_PAGE_API = `${GHOST_URL}/ghost/api/content/pages/slug/revista-421/
 // ── Calendario: el Concilio es el ÚLTIMO DOMINGO de cada mes ────────────────
 // Excepciones cuando una edición se corre: clave = mes al que PERTENECE.
 const CONCILIO_EXCEPCIONES = {
-  '2026-07': '2026-08-02'
+  '2026-07': '2026-08-02',
+  '2026-09': '2026-09-18'  // viernes, por Meet
+};
+// Hora y link de cada Concilio. Los mails del Concilio leen fecha, hora y link
+// de acá: si el próximo Concilio NO está cargado, esos mails no salen (el log
+// lo avisa). Desde 2026-09 es por Google Meet; antes era un vivo de YouTube.
+const CONCILIO_DETALLES = {
+  '2026-09-18': { hora: '20:30', link: 'https://meet.google.com/joj-vrcy-swr' }
 };
 const VENTANA_PRE_CONCILIO = [2, 7];
 const VENTANA_POST_CONCILIO = [12, 18];
@@ -165,14 +172,47 @@ function filtroDe(c, hoy) {
   return c.filtro(hoy);
 }
 
-function renderHtml(id, revista) {
+const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+// Próximo Concilio desde `hoy`, con sus detalles si están cargados.
+function proximoConcilio(hoy) {
+  const fecha = conciliosCerca(hoy).find(x => diasEntre(hoy, x) >= 0);
+  if (!fecha) return null;
+  const d = new Date(`${fecha}T12:00:00Z`);
+  return { fecha, dia: `${DIAS[d.getUTCDay()]} ${d.getUTCDate()}`, diaCorto: DIAS[d.getUTCDay()], ...(CONCILIO_DETALLES[fecha] || {}) };
+}
+
+// Precio en pesos del día, desde la misma fuente que cobra MercadoPago.
+async function lineaPrecio() {
+  let ars = null;
+  try {
+    const r = await fetch('https://mercadopago-ghost.onrender.com/prices', { signal: AbortSignal.timeout(15000) });
+    const j = await r.json();
+    ars = j.prices && j.prices['wizard-monthly'] && j.prices['wizard-monthly'].ars;
+  } catch (e) { console.error(`[emails] no se pudo leer /prices: ${e.message}`); }
+  const pesos = ars ? ` Desde Argentina, con MercadoPago, son <strong>$${ars.toLocaleString('es-AR')} por mes</strong>.` : '';
+  return `<p>Cuesta <strong>US$10 por mes</strong> o <strong>US$100 por año</strong>.${pesos}</p>`;
+}
+
+function rellenar(txt, ctx) {
+  const k = ctx.concilio || {};
+  return txt
+    .replace(/\{\{CONCILIO_DIA_CORTO\}\}/g, k.diaCorto || '')
+    .replace(/\{\{CONCILIO_DIA\}\}/g, k.dia || '')
+    .replace(/\{\{CONCILIO_HORA\}\}/g, k.hora || '')
+    .replace(/\{\{CONCILIO_LINK_TEXTO\}\}/g, (k.link || '').replace(/^https?:\/\//, ''))
+    .replace(/\{\{CONCILIO_LINK\}\}/g, k.link || '')
+    .replace(/\{\{PRECIO\}\}/g, ctx.precio || '');
+}
+
+function renderHtml(id, revista, ctx = {}) {
   const c = COPYS[id];
   let html = c.html;
   if (html.includes('{{REVISTA}}')) {
     const linea = revista && c.revistaLinea ? c.revistaLinea.replace('{{TITULO}}', revista.titulo) : null;
     html = linea ? html.replace('{{REVISTA}}', linea) : html.replace(/\n?<p>\{\{REVISTA\}\}<\/p>/, '');
   }
-  return html;
+  return rellenar(html, ctx);
 }
 
 /**
@@ -189,18 +229,28 @@ function renderHtml(id, revista) {
  *                               conciencia, no por accidente.
  */
 async function correr(opts = {}) {
-  const hoy = opts.hoy || new Date().toISOString().slice(0, 10);
+  // Fecha en hora ARGENTINA, no UTC: con la UTC, a las 21:00 ART del martes el
+  // slug pasaba a ser el del miércoles, el chequeo de "ya existe" no lo veía y
+  // la tanda se creaba dos veces (visto 2026-08-25 → 2026-09-16).
+  const hoy = opts.hoy || fechaART();
   const dry = opts.dry !== false;
   const log = [];
   const push = m => { log.push(m); console.log(`[emails] ${m}`); };
 
   push(`corrida ${hoy} · modo=${dry ? 'dry' : 'ENVIAR'}${opts.solo ? ` · solo=${opts.solo}` : ''}`);
   const revista = await ultimaRevista();
+  const ctx = { concilio: proximoConcilio(hoy), precio: await lineaPrecio() };
 
   for (const c of CAMPANAS) {
     if (opts.solo && c.id !== opts.solo) continue;
     const t = toca(c, hoy);
     if (t !== true && !opts.solo) { push(`— ${c.id}: no toca (${t.no})`); continue; }
+
+    const usaConcilio = /\{\{CONCILIO_/.test(COPYS[c.id].html + COPYS[c.id].asunto);
+    if (usaConcilio && !(ctx.concilio && ctx.concilio.hora && ctx.concilio.link)) {
+      push(`✗ ${c.id}: el Concilio del ${ctx.concilio ? ctx.concilio.fecha : '?'} no tiene hora/link en CONCILIO_DETALLES — NO SALE`);
+      continue;
+    }
 
     const filtroPedido = opts.filtroOverride && opts.solo === c.id ? opts.filtroOverride : filtroDe(c, hoy);
     // Un --filtro a mano con `subscribed:true` programa un mail que después no sale
@@ -220,14 +270,15 @@ async function correr(opts = {}) {
     const tope = opts.max || MAX_DESTINATARIOS;
     if (n > tope) { push(`✗ ${c.id}: ABORTADO, ${n} > ${tope}. Si es a propósito, pasar opts.max.`); continue; }
 
-    const slug = `auto-${c.id}-${hoy}`;
+    // opts.prueba: slug aparte, así una prueba no le ocupa el slug al envío real del día
+    const slug = `auto-${c.id}-${hoy}${opts.prueba ? '-prueba' : ''}`;
     const ya = await ghost('GET', `/posts/?limit=1&filter=${encodeURIComponent(`slug:${slug}`)}`);
     if (ya.ok && ya.j.posts && ya.j.posts.length) { push(`— ${c.id}: ya existe (${slug})`); continue; }
 
     if (dry) { push(`▸ ${c.id}: ${opts.cuando ? 'programaría' : 'mandaría'} a ${n} vía ${c.newsletter || NEWSLETTER} (${filtro})`); continue; }
 
     const qs = new URLSearchParams({ source: 'html', newsletter: c.newsletter || NEWSLETTER, email_segment: filtro });
-    const base = { title: COPYS[c.id].asunto, slug, html: renderHtml(c.id, revista), email_only: true };
+    const base = { title: rellenar(COPYS[c.id].asunto, ctx), slug, html: renderHtml(c.id, revista, ctx), email_only: true };
 
     let r;
     if (opts.cuando) {
@@ -251,7 +302,30 @@ async function correr(opts = {}) {
         push(`⚠️ ${c.id}: el segmento quedo como "${seg}" y esperaba "${filtro}" — REVISAR ANTES DE QUE SALGA`);
       }
     } else {
-      r = await ghost('POST', `/posts/?${qs}`, { posts: [{ ...base, status: 'published' }] });
+      // Mismo patrón en dos pasos que el programado. Un POST directo con
+      // status published IGNORA ?newsletter: Ghost marca el email_only como
+      // `sent` pero no crea ningún email (newsletter null, segmento `all`, sin
+      // stats). Así "salieron" 64 envíos entre el 2026-08-18 y el 2026-09-16
+      // sin llegarle a nadie. La newsletter solo se asocia en el PUT.
+      const d = await ghost('POST', `/posts/?source=html`, { posts: [{ ...base, status: 'draft' }] });
+      if (!d.ok) { push(`✗ ${c.id}: draft HTTP ${d.status} ${d.txt.slice(0, 150)}`); continue; }
+      const p = d.j.posts[0];
+      r = await ghost('PUT', `/posts/${p.id}/?${qs}`, { posts: [{ updated_at: p.updated_at, status: 'published' }] });
+      if (!r.ok) {
+        await ghost('DELETE', `/posts/${p.id}/`);
+        push(`✗ ${c.id}: publish HTTP ${r.status} ${r.txt.slice(0, 150)}`);
+        continue;
+      }
+      // Verificar que Ghost haya creado el email de verdad: `sent` no alcanza.
+      const v = await ghost('GET', `/posts/${p.id}/?include=email,newsletter`);
+      const vp = v.ok && v.j.posts && v.j.posts[0];
+      if (!vp || !vp.newsletter || !vp.email) {
+        push(`✗ ${c.id}: Ghost lo marcó ${vp ? vp.status : '?'} pero NO creó el email (newsletter=${vp && vp.newsletter ? vp.newsletter.slug : 'null'}) — NO SALIÓ`);
+        continue;
+      }
+      if (vp.email_segment !== filtro) {
+        push(`⚠️ ${c.id}: el segmento quedó como "${vp.email_segment}" y esperaba "${filtro}"`);
+      }
     }
     push(r.ok
       ? `✔ ${c.id}: ${opts.cuando ? `PROGRAMADO para ${new Date(opts.cuando).toISOString()} →` : 'enviado a'} ${n} destinatarios`
@@ -261,10 +335,13 @@ async function correr(opts = {}) {
 }
 
 // ── Scheduler: chequeo horario, robusto a reinicios ─────────────────────────
+function fechaART(d = new Date()) {
+  return d.toLocaleDateString('en-CA', { timeZone: 'America/Argentina/Buenos_Aires' }); // YYYY-MM-DD
+}
 function horaART() {
   const s = new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' });
   const d = new Date(s);
-  return { dia: d.getDay(), hora: d.getHours(), fecha: d.toISOString().slice(0, 10) };
+  return { dia: d.getDay(), hora: d.getHours(), fecha: fechaART() };
 }
 
 /**
@@ -310,4 +387,4 @@ function iniciar() {
   console.log(`[emails] automatización activa — chequeo horario, envía los ${['dom','lun','mar','mié','jue','vie','sáb'][DIA_ENVIO]} desde las ${HORA_ENVIO_ART}:00 ART`);
 }
 
-module.exports = { correr, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };
+module.exports = { correr, renderHtml, rellenar, proximoConcilio, lineaPrecio, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };

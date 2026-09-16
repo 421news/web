@@ -19,47 +19,51 @@ const cta = (texto, campaign) =>
 
 const FIRMA = '<p>Juan Ruocco</p>';
 
+// El argumento de suscripción es uno solo (definido 2026-09-09): las notas no
+// tienen paywall y a cada colaborador se le paga, y las dos cosas dependen de
+// los suscriptores. Es el mismo texto de la tarjeta de la home y de las notas.
+const CORE = '<p>Las notas de 421 no tienen paywall. Y a cada colaborador se le paga por su trabajo. Las dos cosas dependen de los suscriptores.</p>';
+
+// Placeholders que se completan al enviar (emails-automaticos.js → renderHtml):
+//   {{PRECIO}}          línea de precio con los pesos del día (GET /prices de MP)
+//   {{CONCILIO_DIA}}    "viernes 18"      ┐ salen de CONCILIO_DETALLES; si la
+//   {{CONCILIO_HORA}}   "20:30"           │ fecha no está cargada ahí, los mails
+//   {{CONCILIO_LINK}}   link de Meet      ┘ del Concilio NO salen
+//   {{REVISTA}}         último número liberado (página revista-421)
+
 const COPYS = {
   // ─────────────────────────────────────────────────────────── núcleo (mensual)
   concilio: {
-    nombre: 'Concilio — sale 2 a 7 días antes de cada Concilio',
-    asunto: 'Hace un tiempo que no te escribo',
+    nombre: 'Concilio — a registrados, 2 a 7 días antes de cada Concilio',
+    asunto: 'Este {{CONCILIO_DIA}} hacemos el Concilio',
     html: `
-<p>Hola, ¿cómo va?</p>
-<p>Hace un tiempo que no te escribo. Hoy vuelvo por algo puntual.</p>
-<p>Una vez por mes estamos haciendo el <strong>Concilio</strong>: un vivo de alrededor de una hora entre los suscriptores de 421 y yo. Se habla de lo que estamos leyendo, de cómo va el proyecto, los pasos a seguir, de en qué nos equivocamos.</p>
-<p>No queda grabado: lo que se dice ahí queda entre los que están.</p>
-<p><strong>Este domingo tenemos uno.</strong></p>
-<p>Además, suscribirse te permite:</p>
-<ul>
-  <li>Leer la Revista 421 en PDF un mes antes de que se libere al público</li>
-  <li>Comentar y discutir en cada nota</li>
-  <li>Acceder a la app de Magic para gestión de colecciones</li>
-</ul>
-<p>Cuesta <strong>US$10 por mes</strong> o <strong>US$100 por año</strong>. Desde Argentina, con MercadoPago, son <strong>$15.100 por mes</strong>.</p>
+<p>Hola,</p>
+${CORE}
+<p>Una vez por mes me junto con ellos en el <strong>Concilio</strong>: una videollamada de alrededor de una hora donde charlamos de lo que estamos leyendo, de cómo va 421, de lo que viene y de en qué nos equivocamos. No queda grabado.</p>
+<p>El próximo es <strong>este {{CONCILIO_DIA}} a las {{CONCILIO_HORA}}</strong> (hora de Argentina). Si te suscribís antes, el link te espera en tu cuenta.</p>
+<p>Suscribirte también te da la Revista 421 un mes antes que al resto y la posibilidad de comentar en las notas.</p>
+{{PRECIO}}
 ${cta('Suscribirme', 'seg-concilio')}
-<p>Si preferís seguir leyendo gratis: 421 sigue abierto. Esto es para el que ya viene leyendo hace rato y alguna vez pensó en dar el paso.</p>
 ${FIRMA}`.trim()
   },
 
-  // ───────────────────────────────────── recordatorio a los que YA pagan (225)
-  // No vende nada: solo avisa que el Concilio es el domingo y dónde está el
-  // link, porque la vez pasada varios no lo encontraron. Va por la newsletter
+  // ───────────────────────────────────── recordatorio a los que YA pagan
+  // No vende nada: fecha, hora y link directo. Va por la newsletter
   // "Exclusivo para suscriptores" y al segmento status:-free.
   'concilio-suscriptores': {
-    nombre: 'Concilio · recordatorio a suscriptores — mismos días que el mail del núcleo',
-    asunto: 'El Concilio es este domingo',
+    nombre: 'Concilio · recordatorio a suscriptores — mismos días que el mail a registrados',
+    asunto: 'El Concilio es este {{CONCILIO_DIA}}',
     html: `
 <p>Hola,</p>
-<p>Te aviso para que lo agendes: <strong>este domingo a las 18:00</strong> (hora de Argentina) hacemos el Concilio.</p>
-<p>El link para entrar está en tu cuenta, en <a href="${MI_SUSCRIPCION_URL}">Mi suscripción</a>. Es el mismo lugar donde tenés la revista y la app de Magic.</p>
-<p>La vez pasada varios no lo encontraron, así que ahí va el atajo directo.</p>
-<p>Nos vemos el domingo.</p>
+<p>Te aviso para que lo agendes: <strong>este {{CONCILIO_DIA}} a las {{CONCILIO_HORA}}</strong> (hora de Argentina) hacemos el Concilio.</p>
+<p>Es por Google Meet. Para entrar: <a href="{{CONCILIO_LINK}}"><strong>{{CONCILIO_LINK_TEXTO}}</strong></a></p>
+<p>Dura alrededor de una hora y no queda grabado. El link también está en <a href="${MI_SUSCRIPCION_URL}">Mi suscripción</a>, por si lo perdés.</p>
+<p>Gracias por sostener 421. Nos vemos el {{CONCILIO_DIA_CORTO}}.</p>
 ${FIRMA}`.trim()
   },
 
   revista: {
-    nombre: 'Revista — sale a mitad de ciclo, 12 a 18 días después del Concilio',
+    nombre: 'Revista — a registrados, 12 a 18 días después del Concilio',
     asunto: 'El número nuevo sale primero para suscriptores',
     // {{REVISTA}} se reemplaza en tiempo de envío con el último número liberado,
     // leído de la página de Ghost. Si no se puede leer, la línea se omite entera.
@@ -68,9 +72,10 @@ ${FIRMA}`.trim()
 <p>Todos los meses sacamos un número de la <strong>Revista 421</strong>: un PDF armado y diseñado, con lo mejor del mes y material que no está en el sitio.</p>
 <p>Sale primero para los suscriptores. Un mes después se libera para todos.</p>
 <p>{{REVISTA}}</p>
-<p>Los números viejos quedan disponibles gratis, así que si nunca bajaste uno, empezá por ahí: <a href="${REVISTA_URL}">están todos acá</a>. Lo que se reserva es el último.</p>
-<p>Suscribirse también da entrada al Concilio (el vivo mensual que no queda grabado), poder comentar en las notas, y la app de Magic para gestión de colecciones.</p>
-<p>US$10 por mes o US$100 por año. Desde Argentina, $15.100 por mes.</p>
+<p>Los números anteriores están disponibles gratis, así que si nunca bajaste uno, empezá por ahí: <a href="${REVISTA_URL}">están todos acá</a>.</p>
+${CORE}
+<p>Suscribirte también te da entrada al Concilio, una videollamada por mes conmigo que no queda grabada, y la posibilidad de comentar en las notas.</p>
+{{PRECIO}}
 ${cta('Suscribirme', 'seg-revista')}
 ${FIRMA}`.trim(),
     revistaLinea: 'El último que ya se liberó es el <strong>{{TITULO}}</strong>. El que le sigue lo están leyendo los suscriptores.'
@@ -96,24 +101,20 @@ ${FIRMA}`.trim()
 <p>Hola,</p>
 <p>Hacemos una revista todos los meses: un PDF armado y diseñado, con lo mejor de 421 y material que no está en el sitio. Números especiales sobre inteligencia artificial, sobre manga, sobre ruinas digitales.</p>
 <p><a href="${REVISTA_URL}">Están casi todos disponibles gratis</a>, así que agarrá el que más te llame y llevátelo.</p>
-<p>Es tuyo, no hay que registrarse en nada ni dejar ningún dato. Ya estás.</p>
+<p>Con tu cuenta ya alcanza para bajarlos. Ya estás.</p>
 ${FIRMA}`.trim()
   },
 
   'bienvenida-3': {
     nombre: 'Bienvenida 3 — semana 4 desde el alta (el que vende)',
-    asunto: 'El domingo no queda grabado',
+    asunto: 'Cómo se sostiene 421',
     html: `
 <p>Hola,</p>
-<p>Una vez por mes hacemos el <strong>Concilio</strong>: un vivo de alrededor de una hora donde contamos en qué anda 421, qué vamos a escribir, en qué nos equivocamos. Se responden las preguntas que aparecen en el chat.</p>
-<p>No queda grabado. Si no estuviste, lo perdiste. Es la única parte de 421 que no se puede leer después.</p>
-<p>El link es solo para suscriptores. Suscribirse también da:</p>
-<ul>
-  <li>Leer la Revista 421 en PDF un mes antes de que se libere al público</li>
-  <li>Comentar y discutir en cada nota</li>
-  <li>Acceder a la app de Magic para gestión de colecciones</li>
-</ul>
-<p>Cuesta <strong>US$10 por mes</strong> o <strong>US$100 por año</strong>. Desde Argentina, con MercadoPago, son <strong>$15.100 por mes</strong>.</p>
+<p>Ya llevás un mes leyendo 421, así que te cuento cómo funciona por dentro.</p>
+${CORE}
+<p>A los suscriptores los veo una vez por mes en el <strong>Concilio</strong>: una videollamada de alrededor de una hora donde charlamos de lo que estamos leyendo, de cómo va 421 y de en qué nos equivocamos. No queda grabado, así que lo que se dice ahí queda entre los que están.</p>
+<p>Suscribirte también te da la Revista 421 un mes antes que al resto y la posibilidad de comentar en las notas.</p>
+{{PRECIO}}
 ${cta('Suscribirme', 'drip-concilio')}
 ${FIRMA}`.trim()
   },
@@ -123,10 +124,12 @@ ${FIRMA}`.trim()
     asunto: 'Última vez que te escribo por esto',
     html: `
 <p>Hola,</p>
-<p>Es la última vez que te escribo para invitarte a suscribirte. Si no es el momento, no pasa nada: 421 sigue abierto y vas a poder leer todo igual.</p>
-<p>Por si el momento es ahora: son US$10 por mes ($15.100 desde Argentina), y con eso entrás al Concilio, leés la revista un mes antes y podés comentar en las notas.</p>
+<p>Es la última vez que te escribo para invitarte a suscribirte. Si no es el momento, está todo bien: 421 sigue abierto y vas a poder leer todo igual.</p>
+${CORE}
+<p>Con la suscripción entrás al Concilio (una videollamada por mes conmigo), leés la revista un mes antes y podés comentar en las notas.</p>
+{{PRECIO}}
 ${cta('Suscribirme', 'drip-cierre')}
-<p>Y si te quedás gratis, también está bien. Gracias por leer.</p>
+<p>Gracias por leer.</p>
 ${FIRMA}`.trim()
   },
 
@@ -145,4 +148,4 @@ ${FIRMA}`.trim()
   }
 };
 
-module.exports = { COPYS, SUSCRIBITE, REVISTA_URL, CANON_URL, RUTAS_URL, cta, FIRMA };
+module.exports = { COPYS, CORE, SUSCRIBITE, REVISTA_URL, CANON_URL, RUTAS_URL, cta, FIRMA };
