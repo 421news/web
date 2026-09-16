@@ -27,14 +27,18 @@ const REVISTA_PAGE_API = `${GHOST_URL}/ghost/api/content/pages/slug/revista-421/
 const CONCILIO_EXCEPCIONES = {
   '2026-07': '2026-08-02',
   '2026-09': '2026-09-18', // viernes, por Meet
-  '2026-10': '2026-10-02'  // viernes
+  '2026-10': '2026-10-02', // viernes
+  '2026-11': '2026-11-06', // viernes
+  '2026-12': '2026-12-04'  // viernes
 };
 // Hora y link de cada Concilio. Los mails del Concilio leen fecha, hora y link
 // de acá: si el próximo Concilio NO está cargado, esos mails no salen (el log
 // lo avisa). Desde 2026-09 es por Google Meet; antes era un vivo de YouTube.
 const CONCILIO_DETALLES = {
   '2026-09-18': { hora: '20:30', link: 'https://meet.google.com/joj-vrcy-swr' },
-  '2026-10-02': { hora: '20:30', link: 'https://meet.google.com/gbn-otcd-jpf' }
+  '2026-10-02': { hora: '20:30', link: 'https://meet.google.com/gbn-otcd-jpf' },
+  '2026-11-06': { hora: '20:30', link: 'https://meet.google.com/ybh-kkwg-hhp' },
+  '2026-12-04': { hora: '20:30', link: 'https://meet.google.com/bqr-qhtt-gor' }
 };
 const VENTANA_PRE_CONCILIO = [2, 7];
 const VENTANA_POST_CONCILIO = [12, 18];
