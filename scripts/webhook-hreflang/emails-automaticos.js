@@ -20,7 +20,6 @@ const NEWSLETTER = 'marketing';
 const DIA_ENVIO = 2;        // 0=domingo … 2=martes
 const HORA_ENVIO_ART = 9;   // 09:00 hora de Buenos Aires
 const MAX_DESTINATARIOS = 4000;
-const REVISTA_PAGE_API = `${GHOST_URL}/ghost/api/content/pages/slug/revista-421/?key=420da6f85b5cc903b347de9e33`;
 
 // ── Calendario: el Concilio es el ÚLTIMO DOMINGO de cada mes ────────────────
 // Excepciones cuando una edición se corre: clave = mes al que PERTENECE.
@@ -92,20 +91,73 @@ async function newsletterId(slug) {
   return _nlCache[slug] || null;
 }
 
-async function ultimaRevista() {
+// ── Revista ─────────────────────────────────────────────────────────────────
+// Los mails de la revista salen solos cuando se sube un número nuevo. "Número
+// nuevo" = el que revista-gate.js capturó (gated.numero + capturedAt en el store
+// privado): o sea que el PDF ya está y los suscriptores lo pueden bajar.
+const REVISTA_PRIMER_NUMERO_AUTO = 20; // el #19 se mandó a mano el 2026-09-06
+const REVISTA_HORAS_QUIETA = 2;        // la página tiene que llevar 2 h sin editarse
+const REVISTA_DIAS_SUSCRIPTORES = 10;  // más tarde que esto ya no se avisa
+const REVISTA_DIAS_LIBRE = 21;
+
+const limpiarTexto = h => h.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+
+async function estadoRevista() {
   try {
-    const r = await fetch(REVISTA_PAGE_API);
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const page = (await r.json()).pages[0];
-    const t = [...(page.html || '').matchAll(/<h[23][^>]*>(.*?)<\/h[23]>/gs)]
-      .map(m => m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim())
-      .filter(x => /^#\s*\d+/.test(x));
-    if (!t.length) return null;
-    return { titulo: t.map(x => ({ x, n: +x.match(/^#\s*(\d+)/)[1] })).sort((a, b) => b.n - a.n)[0].x };
+    const st = await ghost('GET', '/pages/slug/revista-gate-store/');
+    const gated = st.ok && st.j.pages && st.j.pages[0] && JSON.parse(st.j.pages[0].codeinjection_foot || '{}').gated;
+    if (!gated || typeof gated.numero !== 'number') return null;
+
+    const pg = await ghost('GET', '/pages/slug/revista-421/?formats=html');
+    const page = pg.ok && pg.j.pages && pg.j.pages[0];
+    if (!page) return null;
+    const html = page.html || '';
+    const heads = [...html.matchAll(/<h[23][^>]*>(.*?)<\/h[23]>/gs)]
+      .map(m => ({ titulo: limpiarTexto(m[1]), at: m.index, fin: m.index + m[0].length }))
+      .filter(x => /^#\s*\d+/.test(x.titulo))
+      .map(x => ({ ...x, numero: +x.titulo.match(/^#\s*(\d+)/)[1] }));
+    const seccion = n => {
+      const i = heads.findIndex(x => x.numero === n);
+      if (i < 0) return null;
+      const nextAt = heads.filter(x => x.at > heads[i].at).map(x => x.at).sort((a, b) => a - b)[0] || html.length;
+      const cuerpo = html.slice(heads[i].fin, nextAt);
+      const img = cuerpo.match(/<img[^>]+src="([^"]+)"/);
+      // Si alguien pegó la editorial debajo de la tapa, el mail a suscriptores la lleva.
+      const parrafos = [...cuerpo.replace(/<figure[\s\S]*?<\/figure>/g, '').matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
+        .map(m => m[1]).filter(t => limpiarTexto(t).length > 40);
+      return { numero: n, titulo: heads[i].titulo, portada: img ? img[1] : null, editorial: parrafos.map(t => `<p>${t}</p>`).join('\n') };
+    };
+    const nueva = seccion(gated.numero);
+    if (!nueva) return null;
+    const ya = async id => {
+      const r = await ghost('GET', `/posts/?limit=1&filter=${encodeURIComponent(`slug:auto-${id}-n${gated.numero}`)}`);
+      return !!(r.ok && r.j.posts && r.j.posts.length);
+    };
+    return {
+      nueva, libre: seccion(gated.numero - 1),
+      capturedAt: gated.capturedAt, pageUpdatedAt: page.updated_at,
+      suscriptoresEnviado: await ya('revista-suscriptores')
+    };
   } catch (e) {
     console.error(`[emails] revista: ${e.message}`);
     return null;
   }
+}
+
+function tocaRevista(c, ctx) {
+  const r = ctx && ctx.revista;
+  if (!r) return { no: 'sin número nuevo gateado' };
+  if (r.nueva.numero < REVISTA_PRIMER_NUMERO_AUTO) return { no: `#${r.nueva.numero} es anterior a la automatización` };
+  const horas = x => (Date.now() - new Date(x).getTime()) / 3600000;
+  if (c.tipo === 'revista-suscriptores') {
+    if (horas(r.capturedAt) > REVISTA_DIAS_SUSCRIPTORES * 24) return { no: `#${r.nueva.numero} salió hace más de ${REVISTA_DIAS_SUSCRIPTORES} días` };
+    if (horas(r.pageUpdatedAt) < REVISTA_HORAS_QUIETA) return { no: `la página se editó hace menos de ${REVISTA_HORAS_QUIETA} h, espero` };
+    return true;
+  }
+  if (!r.libre) return { no: `no encuentro el #${r.nueva.numero - 1} en la página` };
+  if (!r.suscriptoresEnviado) return { no: 'todavía no salió el aviso a suscriptores' };
+  if (horas(r.capturedAt) > REVISTA_DIAS_LIBRE * 24) return { no: `#${r.nueva.numero} salió hace más de ${REVISTA_DIAS_LIBRE} días` };
+  return true;
 }
 
 // ── Campañas ────────────────────────────────────────────────────────────────
@@ -144,7 +196,13 @@ const CAMPANAS = [
     newsletter: 'default-newsletter-2',
     filtro: () => 'status:-free' },
 
-  { id: 'revista', tipo: 'post-concilio', filtro: h => `${FREE}+email_open_rate:>10+created_at:<'${semanasAtras(h, 8)}'` },
+  // Revista: salen solas cuando se sube un número nuevo (ver estadoRevista).
+  // A suscriptores: cualquier día desde las 9, apenas la página queda quieta.
+  { id: 'revista-suscriptores', tipo: 'revista-suscriptores', diario: true,
+    newsletter: 'default-newsletter-2', filtro: () => 'status:-free' },
+  // A toda la base de registrados: el martes siguiente. Avisa que el número
+  // anterior quedó libre y que salió el nuevo para suscriptores.
+  { id: 'revista-libre', tipo: 'revista-libre', max: 8000, filtro: () => FREE },
   { id: 'cold', tipo: 'segmento', cada: 12, offset: 4, filtro: h => `${FREE}+email_open_rate:<=10+last_seen_at:<'${semanasAtras(h, 13)}'+created_at:<'${semanasAtras(h, 8)}'` }
 ];
 
@@ -153,8 +211,9 @@ function semanaDelAnio(d) {
   return Math.floor((dd - new Date(Date.UTC(dd.getUTCFullYear(), 0, 1))) / (7 * 86400000));
 }
 
-function toca(c, hoy) {
+function toca(c, hoy, ctx) {
   if (c.tipo === 'drip') return true;
+  if (c.tipo === 'revista-suscriptores' || c.tipo === 'revista-libre') return tocaRevista(c, ctx);
   const cal = conciliosCerca(hoy);
   const prox = cal.map(x => diasEntre(hoy, x)).filter(d => d >= 0).sort((a, b) => a - b)[0];
   if (c.tipo === 'pre-concilio') {
@@ -202,13 +261,21 @@ async function lineaPrecio() {
 
 function rellenar(txt, ctx) {
   const k = ctx.concilio || {};
+  const r = ctx.revista || {};
   return txt
     .replace(/\{\{CONCILIO_DIA_CORTO\}\}/g, k.diaCorto || '')
     .replace(/\{\{CONCILIO_DIA\}\}/g, k.dia || '')
     .replace(/\{\{CONCILIO_HORA\}\}/g, k.hora || '')
     .replace(/\{\{CONCILIO_LINK_TEXTO\}\}/g, (k.link || '').replace(/^https?:\/\//, ''))
     .replace(/\{\{CONCILIO_LINK\}\}/g, k.link || '')
-    .replace(/\{\{PRECIO\}\}/g, ctx.precio || '');
+    .replace(/\{\{PRECIO\}\}/g, ctx.precio || '')
+    .replace(/\{\{REV_NUEVA_N\}\}/g, r.nueva ? `#${r.nueva.numero}` : '')
+    .replace(/\{\{REV_NUEVA\}\}/g, r.nueva ? r.nueva.titulo : '')
+    .replace(/\{\{REV_LIBRE_N\}\}/g, r.libre ? `#${r.libre.numero}` : '')
+    .replace(/\{\{REV_LIBRE\}\}/g, r.libre ? r.libre.titulo : '')
+    .replace(/\n?<p>\{\{REV_PORTADA\}\}<\/p>/g, r.nueva && r.nueva.portada
+      ? `\n<p><a href="https://www.421.news/es/revista-421/"><img src="${r.nueva.portada}" alt="${r.nueva.titulo}" width="300" style="max-width:300px;height:auto"></a></p>` : '')
+    .replace(/\n?<p>\{\{REV_EDITORIAL\}\}<\/p>/g, r.nueva && r.nueva.editorial ? `\n${r.nueva.editorial}` : '');
 }
 
 function renderHtml(id, revista, ctx = {}) {
@@ -244,12 +311,13 @@ async function correr(opts = {}) {
   const push = m => { log.push(m); console.log(`[emails] ${m}`); };
 
   push(`corrida ${hoy} · modo=${dry ? 'dry' : 'ENVIAR'}${opts.solo ? ` · solo=${opts.solo}` : ''}`);
-  const revista = await ultimaRevista();
-  const ctx = { concilio: proximoConcilio(hoy), precio: await lineaPrecio() };
+  const revista = null; // el {{REVISTA}} viejo ya no lo usa ningún copy
+  const ctx = { concilio: proximoConcilio(hoy), precio: await lineaPrecio(), revista: await estadoRevista() };
 
   for (const c of CAMPANAS) {
     if (opts.solo && c.id !== opts.solo) continue;
-    const t = toca(c, hoy);
+    if (opts.soloDiarias && !c.diario) continue;
+    const t = toca(c, hoy, ctx);
     if (t !== true && !opts.solo) { push(`— ${c.id}: no toca (${t.no})`); continue; }
 
     const usaConcilio = /\{\{CONCILIO_/.test(COPYS[c.id].html + COPYS[c.id].asunto);
@@ -273,11 +341,13 @@ async function correr(opts = {}) {
       }
     } catch (e) { push(`✗ ${c.id}: ${e.message}`); continue; }
     if (!n) { push(`— ${c.id}: 0 destinatarios`); continue; }
-    const tope = opts.max || MAX_DESTINATARIOS;
+    const tope = opts.max || c.max || MAX_DESTINATARIOS;
     if (n > tope) { push(`✗ ${c.id}: ABORTADO, ${n} > ${tope}. Si es a propósito, pasar opts.max.`); continue; }
 
     // opts.prueba: slug aparte, así una prueba no le ocupa el slug al envío real del día
-    const slug = `auto-${c.id}-${hoy}${opts.prueba ? '-prueba' : ''}`;
+    // Los de la revista van por número, no por fecha: un aviso por número, salga el día que salga.
+    const clave = c.tipo.startsWith('revista-') && ctx.revista ? `n${ctx.revista.nueva.numero}` : hoy;
+    const slug = `auto-${c.id}-${clave}${opts.prueba ? '-prueba' : ''}`;
     const ya = await ghost('GET', `/posts/?limit=1&filter=${encodeURIComponent(`slug:${slug}`)}`);
     if (ya.ok && ya.j.posts && ya.j.posts.length) { push(`— ${c.id}: ya existe (${slug})`); continue; }
 
@@ -333,6 +403,7 @@ async function correr(opts = {}) {
         push(`⚠️ ${c.id}: el segmento quedó como "${vp.email_segment}" y esperaba "${filtro}"`);
       }
     }
+    if (r.ok && c.id === 'revista-suscriptores' && ctx.revista) ctx.revista.suscriptoresEnviado = true;
     push(r.ok
       ? `✔ ${c.id}: ${opts.cuando ? `PROGRAMADO para ${new Date(opts.cuando).toISOString()} →` : 'enviado a'} ${n} destinatarios`
       : `✗ ${c.id}: HTTP ${r.status} ${r.txt.slice(0, 150)}`);
@@ -384,8 +455,10 @@ function iniciar() {
     catch (e) { console.error(`[emails] revisión de colgados falló: ${e.message}`); }
 
     const { dia, hora } = horaART();
-    if (dia !== DIA_ENVIO || hora < HORA_ENVIO_ART) return;
-    try { await correr({ dry: false }); }
+    if (hora < HORA_ENVIO_ART) return;
+    // Los martes corre todo; el resto de los días, solo las campañas `diario`
+    // (el aviso de revista a suscriptores, que no puede esperar una semana).
+    try { await correr({ dry: false, soloDiarias: dia !== DIA_ENVIO }); }
     catch (e) { console.error(`[emails] tick falló: ${e.message}`); }
   };
   setInterval(tick, 60 * 60 * 1000);
@@ -393,4 +466,4 @@ function iniciar() {
   console.log(`[emails] automatización activa — chequeo horario, envía los ${['dom','lun','mar','mié','jue','vie','sáb'][DIA_ENVIO]} desde las ${HORA_ENVIO_ART}:00 ART`);
 }
 
-module.exports = { correr, toca, renderHtml, rellenar, proximoConcilio, lineaPrecio, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };
+module.exports = { correr, toca, estadoRevista, renderHtml, rellenar, proximoConcilio, lineaPrecio, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };

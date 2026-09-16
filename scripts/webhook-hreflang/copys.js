@@ -62,23 +62,37 @@ ${FIRMA}`.trim()
 ${FIRMA}`.trim()
   },
 
-  revista: {
-    nombre: 'Revista — a registrados, 12 a 18 días después del Concilio',
-    asunto: 'El número nuevo sale primero para suscriptores',
-    // {{REVISTA}} se reemplaza en tiempo de envío con el último número liberado,
-    // leído de la página de Ghost. Si no se puede leer, la línea se omite entera.
+  // ─────────────────────────── revista (salen solas cuando se sube un número)
+  // Placeholders: {{REV_NUEVA}} "#20 - Octubre 2026 - Título", {{REV_NUEVA_N}} "#20",
+  // {{REV_LIBRE}} / {{REV_LIBRE_N}} el número anterior, {{REV_PORTADA}} la tapa,
+  // {{REV_EDITORIAL}} los párrafos pegados debajo de la tapa en la página (si hay).
+  // El link va SIEMPRE a la página, nunca al PDF: la versión web de los mails de
+  // Ghost es pública y reenviarla entregaría el archivo.
+  'revista-suscriptores': {
+    nombre: 'Revista · a suscriptores — apenas se sube el número nuevo',
+    asunto: 'Ya salió el {{REV_NUEVA_N}} de la Revista 421',
+    html: `
+<p>Hola,</p>
+<p>Ya está disponible el <strong>{{REV_NUEVA}}</strong>. Como suscriptor, lo leés un mes antes que el resto.</p>
+<p>{{REV_PORTADA}}</p>
+<p>{{REV_EDITORIAL}}</p>
+<p><a href="${REVISTA_URL}"><strong>Descargalo acá</strong></a> (entrá con tu cuenta de 421).</p>
+<p>Gracias por sostener 421.</p>
+${FIRMA}`.trim()
+  },
+
+  'revista-libre': {
+    nombre: 'Revista · a todos los registrados — el martes después del número nuevo',
+    asunto: 'El {{REV_LIBRE_N}} ya es gratis (y salió el {{REV_NUEVA_N}})',
     html: `
 <p>Hola,</p>
 <p>Todos los meses sacamos un número de la <strong>Revista 421</strong>: un PDF armado y diseñado, con lo mejor del mes y material que no está en el sitio.</p>
-<p>Sale primero para los suscriptores. Un mes después se libera para todos.</p>
-<p>{{REVISTA}}</p>
-<p>Los números anteriores están disponibles gratis, así que si nunca bajaste uno, empezá por ahí: <a href="${REVISTA_URL}">están todos acá</a>.</p>
+<p>El <strong>{{REV_LIBRE}}</strong> ya está disponible gratis para todos. <a href="${REVISTA_URL}"><strong>Bajalo acá</strong></a>.</p>
+<p>Y ya salió el <strong>{{REV_NUEVA}}</strong>, que durante este mes leen primero los suscriptores.</p>
 ${CORE}
-<p>Suscribirte también te da entrada al Concilio, una videollamada por mes conmigo que no queda grabada, y la posibilidad de comentar en las notas.</p>
-{{PRECIO}}
-${cta('Suscribirme', 'seg-revista')}
-${FIRMA}`.trim(),
-    revistaLinea: 'El último que ya se liberó es el <strong>{{TITULO}}</strong>. El que le sigue lo están leyendo los suscriptores.'
+<p>Contamos con vos para que 421 siga creciendo.</p>
+${cta('Suscribirme', 'revista-libre')}
+${FIRMA}`.trim()
   },
 
   // ──────────────────────────────────────────── bienvenida (altas nuevas, drip)
