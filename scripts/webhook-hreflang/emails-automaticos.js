@@ -387,4 +387,4 @@ function iniciar() {
   console.log(`[emails] automatización activa — chequeo horario, envía los ${['dom','lun','mar','mié','jue','vie','sáb'][DIA_ENVIO]} desde las ${HORA_ENVIO_ART}:00 ART`);
 }
 
-module.exports = { correr, renderHtml, rellenar, proximoConcilio, lineaPrecio, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };
+module.exports = { correr, toca, renderHtml, rellenar, proximoConcilio, lineaPrecio, iniciar, CAMPANAS, conciliosCerca, revisarColgados, limpiarSegmento };
