@@ -27,21 +27,21 @@
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="tier-grid sub-first">
+            <div class="plan-toggle plan-toggle-global">
+              <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
+              <button class="plan-toggle-btn" id="toggle-yearly">
+                Anual
+                <span class="toggle-badge">-17%</span>
+              </button>
+            </div>
+
+            <div class="tier-grid sub-first sub-three">
 
               <!-- SUSCRIPCION -->
               <div class="tier featured" id="sub-plan-card">
                 <span class="tier-badge">Recomendado</span>
                 <h2 class="tier-name">Suscribite</h2>
                 <p class="tier-tagline">Tu suscripci&oacute;n hace que podamos pagarles a quienes escriben y que las notas sigan disponibles para todos.</p>
-
-                <div class="plan-toggle">
-                  <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
-                  <button class="plan-toggle-btn" id="toggle-yearly">
-                    Anual
-                    <span class="toggle-badge">-17%</span>
-                  </button>
-                </div>
 
                 <div id="plan-price" class="tier-price">
                   <span class="tier-price-amount" id="price-amount">$9.99</span>
@@ -57,8 +57,27 @@
                   <li>Acceso a la <a href="https://mtg.421.news">app de Magic The Gathering 421</a></li>
                 </ul>
 
-                <button class="btn-gradient" id="btn-suscribirme">Suscribite &rarr;</button>
+                <button class="btn-gradient" id="btn-suscribirme" data-tier="wizard">Suscribite &rarr;</button>
                 <p class="tier-fine">Pod&eacute;s pagar en pesos argentinos con <strong>MercadoPago</strong> o con tarjeta internacional en d&oacute;lares con <strong>Stripe</strong>. Despu&eacute;s de elegir el plan, eleg&iacute;s el m&eacute;todo.</p>
+              </div>
+
+              <!-- MECENAS: testeo de suscripción premium (2026-09). Tier "mecenas" en Ghost. -->
+              <div class="tier tier-mecenas" id="sub-mecenas-card">
+                <h2 class="tier-name">Mecenas</h2>
+                <p class="tier-tagline">El aporte m&aacute;s grande para que 421 crezca.</p>
+
+                <div class="tier-price">
+                  <span class="tier-price-amount" id="price-amount-mecenas">$100</span>
+                  <span class="tier-price-period" id="price-period-mecenas">USD / mes</span>
+                </div>
+
+                <p class="tier-includes">&iquest;Qu&eacute; incluye?</p>
+                <ul class="tier-benefits">
+                  <li>Todo lo de la suscripci&oacute;n</li>
+                  <li class="tier-benefit-featured"><strong>Reuni&oacute;n presencial anual</strong> con <a href="/author/juan-ruocco/">Juan Ruocco</a> en las oficinas de Ergodic</li>
+                </ul>
+
+                <button class="btn-outline btn-mecenas" id="btn-mecenas" data-tier="mecenas">Hacete mecenas &rarr;</button>
               </div>
 
               <!-- REGISTRO + LOGIN (secundario a propósito: el foco es la suscripción) -->
@@ -167,7 +186,10 @@
       document.addEventListener('DOMContentLoaded', function() {
         // State
         var currentCadence = 'monthly';
-        var tierData = null;
+        var tierData = null;      // tier elegido (el del botón que se tocó)
+        var tiersBy = { wizard: null, mecenas: null };
+        var currentTier = 'wizard';
+        var TIER_SLUGS = { wizard: 'supporter', mecenas: 'mecenas' };
         var arsPrices = null; // { 'wizard-monthly': {usd, ars}, 'wizard-yearly': {usd, ars} }
 
         // DOM refs
@@ -179,14 +201,14 @@
         fetch('https://421bn.ghost.io/ghost/api/content/tiers/?key=420da6f85b5cc903b347de9e33')
           .then(function(r) { return r.json(); })
           .then(function(data) {
+            // Por slug: con dos tiers pagos activos, "el primero pago" puede ser Mecenas.
             var tiers = data.tiers || [];
             for (var i = 0; i < tiers.length; i++) {
-              if (tiers[i].type === 'paid' && tiers[i].active) {
-                tierData = tiers[i];
-                break;
-              }
+              if (tiers[i].slug === TIER_SLUGS.wizard) tiersBy.wizard = tiers[i];
+              if (tiers[i].slug === TIER_SLUGS.mecenas) tiersBy.mecenas = tiers[i];
             }
-            if (tierData) updatePriceDisplay();
+            tierData = tiersBy[currentTier];
+            updatePriceDisplay();
           })
           .catch(function() { /* el precio ya se muestra hardcodeado ($9.99) en el HTML */ });
 
@@ -207,7 +229,7 @@
         }
 
         function currentSubType() {
-          return currentCadence === 'yearly' ? 'wizard-yearly' : 'wizard-monthly';
+          return currentTier + (currentCadence === 'yearly' ? '-yearly' : '-monthly');
         }
 
         function currentARS() {
@@ -231,6 +253,12 @@
         }
 
         function updatePriceDisplay() {
+          var mec = tiersBy.mecenas;
+          if (mec) {
+            document.getElementById('price-amount-mecenas').textContent = formatPrice(currentCadence === 'yearly' ? mec.yearly_price : mec.monthly_price);
+            document.getElementById('price-period-mecenas').textContent = currentCadence === 'yearly' ? 'USD / a\u00f1o' : 'USD / mes';
+          }
+          var tierData = tiersBy.wizard;
           if (!tierData) return;
           var amountEl = document.getElementById('price-amount');
           var periodEl = document.getElementById('price-period');
@@ -258,10 +286,11 @@
 
         function getPlanLabel() {
           if (!tierData) return '';
+          var nombre = currentTier === 'mecenas' ? 'Mecenas' : 'Suscripci\u00f3n';
           if (currentCadence === 'yearly') {
-            return 'Suscripci\u00f3n anual \u2014 ' + formatPrice(tierData.yearly_price) + ' USD/a\u00f1o';
+            return nombre + ' anual \u2014 ' + formatPrice(tierData.yearly_price) + ' USD/a\u00f1o';
           }
-          return 'Suscripci\u00f3n mensual \u2014 ' + formatPrice(tierData.monthly_price) + ' USD/mes';
+          return nombre + ' mensual \u2014 ' + formatPrice(tierData.monthly_price) + ' USD/mes';
         }
 
         // Toggle monthly/yearly
@@ -292,16 +321,23 @@
           gtag('event', name, data);
         }
 
-        // Suscribirme → show payment chooser (intent to subscribe paid)
-        document.getElementById('btn-suscribirme').addEventListener('click', function() {
-          track('begin_checkout', 'wizard_' + currentCadence, {
-            value: currentCadence === 'yearly' ? (tierData && tierData.yearly_price || 50) : (tierData && tierData.monthly_price || 5),
+        // Suscribite / Hacete mecenas → show payment chooser (intent to subscribe paid)
+        function startCheckout(tier) {
+          currentTier = tier;
+          tierData = tiersBy[tier];
+          if (!tierData) return;
+          track('begin_checkout', tier + '_' + currentCadence, {
+            value: (currentCadence === 'yearly' ? tierData.yearly_price : tierData.monthly_price) / 100,
             currency: 'USD',
-            items: [{ item_id: (tierData && tierData.id) || 'wizard', item_name: 'Wizard ' + currentCadence }]
+            items: [{ item_id: tierData.id, item_name: (tier === 'mecenas' ? 'Mecenas ' : 'Wizard ') + currentCadence }]
           });
+          if (tier === 'mecenas') track('mecenas_click', 'mecenas_' + currentCadence);
           document.getElementById('chooser-plan-name').textContent = getPlanLabel();
+          updateArsDisplay();
           showSection(sectionChooser);
-        });
+        }
+        document.getElementById('btn-suscribirme').addEventListener('click', function() { startCheckout('wizard'); });
+        document.getElementById('btn-mecenas').addEventListener('click', function() { startCheckout('mecenas'); });
 
         // Free signup → Ghost Portal
         document.getElementById('btn-free').addEventListener('click', function() {
@@ -368,11 +404,11 @@
         // Stripe → Ghost Portal with tier
         document.getElementById('btn-stripe').addEventListener('click', function() {
           if (!tierData) return;
-          track('payment_method_selected', 'stripe_' + currentCadence);
+          track('payment_method_selected', 'stripe_' + currentTier + '_' + currentCadence);
           // Evento con nombre propio: `event_label` no esta registrado como custom
           // dimension en GA4, asi que el desglose stripe/mp solo se puede leer si
           // cada metodo dispara un evento distinto.
-          track('select_payment_stripe', 'stripe_' + currentCadence);
+          track('select_payment_stripe', 'stripe_' + currentTier + '_' + currentCadence);
           window.location.hash = '#/portal/signup/' + tierData.id + '/' + currentCadence;
         });
 
@@ -383,7 +419,7 @@
           var ars = currentARS();
           document.getElementById('mp-plan-name').textContent = ars === null
             ? getPlanLabel() + ' \u2014 MercadoPago'
-            : 'Suscripci\u00f3n ' + (currentCadence === 'yearly' ? 'anual' : 'mensual')
+            : (currentTier === 'mecenas' ? 'Mecenas ' : 'Suscripci\u00f3n ') + (currentCadence === 'yearly' ? 'anual' : 'mensual')
               + ' \u2014 ' + formatARS(ars) + ' ARS' + (currentCadence === 'yearly' ? ' / a\u00f1o' : ' / mes');
           var amt = document.getElementById('mp-amount-note');
           if (amt) {
@@ -433,8 +469,8 @@
           })
           .then(function(data) {
             if (data.success && data.redirectUrl) {
-              track('purchase_initiated', 'mercadopago_' + currentCadence, {
-                value: currentCadence === 'yearly' ? (tierData && tierData.yearly_price || 50) : (tierData && tierData.monthly_price || 5),
+              track('purchase_initiated', 'mercadopago_' + currentTier + '_' + currentCadence, {
+                value: tierData ? (currentCadence === 'yearly' ? tierData.yearly_price : tierData.monthly_price) / 100 : 0,
                 currency: 'USD'
               });
               window.location.href = data.redirectUrl;

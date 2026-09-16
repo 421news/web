@@ -11,14 +11,23 @@ const MP_ACCESS_TOKEN = process.env.MP_ACCESS_TOKEN;
 const GHOST_ADMIN_KEY = process.env.GHOST_ADMIN_KEY;
 const GHOST_URL = process.env.GHOST_URL || 'https://421bn.ghost.io';
 const WIZARD_TIER_ID = process.env.WIZARD_TIER_ID || '66c8fcf131e80b000183e05d';
+// Tier Mecenas (2026-09): testeo de suscripción premium, US$100/mes · US$1000/año.
+// Se identifica por SLUG, no por "el primer tier pago activo": con dos tiers pagos
+// activos esa búsqueda podía devolver Mecenas y cobrarle US$100 a un Wizard.
+const WIZARD_TIER_SLUG = 'supporter';
+const MECENAS_TIER_SLUG = 'mecenas';
 const PORT = process.env.PORT || 10000;
 const ALLOWED_ORIGINS = ['https://www.421.news', 'https://421.news', 'https://421bn.ghost.io'];
 
 // USD prices (in dollars, not cents)
 const PRICES_USD = {
   'wizard-monthly': 9.99,
-  'wizard-yearly': 99.90
+  'wizard-yearly': 99.90,
+  'mecenas-monthly': 100,
+  'mecenas-yearly': 1000
 };
+const isMecenas = planType => String(planType || '').startsWith('mecenas-');
+const isYearlyPlan = planType => String(planType || '').endsWith('-yearly');
 
 // --- CORS middleware ---
 app.use((req, res, next) => {
@@ -146,18 +155,21 @@ async function getTierPrices() {
     );
     if (status !== 200 || !data || !data.tiers) throw new Error(`HTTP ${status}`);
 
-    const tier = data.tiers.find(t => t.type === 'paid' && t.active);
-    if (!tier) throw new Error('no active paid tier');
-    if (!tier.monthly_price || !tier.yearly_price) throw new Error('tier has no prices');
-
-    const prices = {
-      'wizard-monthly': tier.monthly_price / 100,
-      'wizard-yearly': tier.yearly_price / 100
-    };
+    const prices = {};
+    for (const [slug, prefix] of [[WIZARD_TIER_SLUG, 'wizard'], [MECENAS_TIER_SLUG, 'mecenas']]) {
+      const tier = data.tiers.find(t => t.slug === slug && t.type === 'paid' && t.active);
+      if (!tier || !tier.monthly_price || !tier.yearly_price) {
+        console.warn(`[price] tier "${slug}" missing/inactive/no prices — using fallback for ${prefix}`);
+        continue;
+      }
+      prices[`${prefix}-monthly`] = tier.monthly_price / 100;
+      prices[`${prefix}-yearly`] = tier.yearly_price / 100;
+    }
+    if (!prices['wizard-monthly']) throw new Error('wizard tier not found by slug');
 
     for (const [type, usd] of Object.entries(prices)) {
       if (usd !== PRICES_USD[type]) {
-        console.warn(`[price] Ghost tier "${tier.name}" says ${type}=$${usd}, hardcoded fallback says $${PRICES_USD[type]}. Using Ghost. Update PRICES_USD to match.`);
+        console.warn(`[price] Ghost tier says ${type}=$${usd}, hardcoded fallback says $${PRICES_USD[type]}. Using Ghost. Update PRICES_USD to match.`);
       }
     }
 
@@ -169,6 +181,19 @@ async function getTierPrices() {
     if (cachedTierPrices) return cachedTierPrices;
     return PRICES_USD;
   }
+}
+
+// Tier id por plan. Mecenas se resuelve por slug (y se cachea) para no depender
+// de un id hardcodeado; Wizard mantiene el id de siempre.
+let mecenasTierId = process.env.MECENAS_TIER_ID || null;
+async function tierIdFor(planType) {
+  if (!isMecenas(planType)) return WIZARD_TIER_ID;
+  if (mecenasTierId) return mecenasTierId;
+  const { status, data } = await ghostRequest('GET', `/ghost/api/admin/tiers/?limit=all`);
+  const t = status === 200 && data.tiers && data.tiers.find(x => x.slug === MECENAS_TIER_SLUG);
+  if (!t) throw new Error('mecenas tier not found');
+  mecenasTierId = t.id;
+  return t.id;
 }
 
 // --- MercadoPago API ---
@@ -289,15 +314,17 @@ async function uncompMember(member) {
 // Membership labels are managed by this webhook; everything else (equipo,
 // original wizard) is preserved. Taxonomy simplified 2026-07-28: dropped
 // payment-method:mercadopago, mp-cancelled, cancelados, Stripe.
-const MEMBERSHIP_LABELS = ['Wizard', 'mensual', 'anual', 'mp-cancelled', 'cancelados', 'payment-method:mercadopago', 'Stripe'];
+const MEMBERSHIP_LABELS = ['Wizard', 'Mecenas', 'mensual', 'anual', 'mp-cancelled', 'cancelados', 'payment-method:mercadopago', 'Stripe'];
 
 function buildActiveLabels(planType, existingLabels) {
   // Keep non-membership labels (equipo, original wizard); add Wizard + plan.
   const keepLabels = (existingLabels || []).filter(l => !MEMBERSHIP_LABELS.includes(l.name));
-  const planLabel = planType === 'wizard-yearly' ? 'anual' : 'mensual';
+  const planLabel = isYearlyPlan(planType) ? 'anual' : 'mensual';
+  // `Wizard` sigue marcando a TODOS los que pagan (Mecenas incluidos); `Mecenas` distingue el tier.
   return [
     ...keepLabels,
     { name: 'Wizard' },
+    ...(isMecenas(planType) ? [{ name: 'Mecenas' }] : []),
     { name: planLabel }
   ];
 }
@@ -311,7 +338,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.6.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.7.0' });
 });
 
 // GET /prices — what we will ACTUALLY debit, in ARS.
@@ -354,11 +381,9 @@ app.post('/subscribe', async (req, res) => {
     const amountARS = arsFor(priceUSD, oficialRate);
 
     // Determine frequency
-    const isYearly = formSubType === 'wizard-yearly';
+    const isYearly = isYearlyPlan(formSubType);
     const frequency = isYearly ? 12 : 1;
-    const reason = isYearly
-      ? '421 Wizard Anual'
-      : '421 Wizard Mensual';
+    const reason = `421 ${isMecenas(formSubType) ? 'Mecenas' : 'Wizard'} ${isYearly ? 'Anual' : 'Mensual'}`;
 
     // Store email + name + plan in external_reference for IPN lookup
     const externalRef = JSON.stringify({
@@ -479,7 +504,7 @@ async function handlePreapprovalUpdate(preapprovalId) {
   if (mpStatus === 'authorized') {
     await activateMember(email, name, planType);
   } else if (mpStatus === 'cancelled' || mpStatus === 'paused') {
-    await deactivateMember(email);
+    await deactivateMember(email, planType);
   } else {
     console.log(`[ipn] Preapproval status "${mpStatus}" — no action needed`);
   }
@@ -533,8 +558,12 @@ async function activateMember(email, name, planType) {
   console.log(`[ghost] Activating member: ${email} (${planType})`);
 
   const existing = await findMemberByEmail(email);
-  const labels = buildActiveLabels(planType, existing ? existing.labels : []);
-  const tiers = [{ id: WIZARD_TIER_ID }];
+  // Si ya es Mecenas y llega la autorización (o un pago) de una sub Wizard vieja,
+  // no lo bajamos de tier: se queda como Mecenas.
+  const yaMecenas = existing && (existing.tiers || []).some(t => t.slug === MECENAS_TIER_SLUG);
+  const efectivo = yaMecenas && !isMecenas(planType) ? 'mecenas-monthly' : planType;
+  const labels = buildActiveLabels(efectivo, existing ? existing.labels : []);
+  const tiers = [{ id: await tierIdFor(efectivo) }];
 
   if (existing) {
     // Update existing member
@@ -547,7 +576,7 @@ async function activateMember(email, name, planType) {
   }
 }
 
-async function deactivateMember(email) {
+async function deactivateMember(email, planType) {
   console.log(`[ghost] Deactivating member: ${email}`);
 
   // Fetch WITH subscriptions so we can detect the comp type (A vs B).
@@ -572,6 +601,16 @@ async function deactivateMember(email) {
   if (hasActiveStripe) {
     console.log(`[ghost] Skipping ${email} — has active paid subscription`);
     return;
+  }
+
+  // Dos subs (ej: pasó de Wizard a Mecenas): si se cancela la de un tier que NO es
+  // el que tiene hoy, es la vieja — no lo bajamos a free.
+  if (planType) {
+    const tieneMecenas = (existing.tiers || []).some(t => t.slug === MECENAS_TIER_SLUG);
+    if (tieneMecenas !== isMecenas(planType)) {
+      console.log(`[ghost] Skipping ${email} — cancelled ${planType} but member is on ${tieneMecenas ? 'Mecenas' : 'Wizard'}`);
+      return;
+    }
   }
 
   await uncompMember(existing);
@@ -733,6 +772,13 @@ async function runPricePeg() {
     const ar = s.auto_recurring || {};
     const amt = ar.transaction_amount;
     if (/TEST|borrar/i.test(s.reason || '')) continue;
+    let refType = ''; try { refType = JSON.parse(s.external_reference || '{}').type || ''; } catch (e) {}
+    if (refType === 'mecenas-monthly') {
+      const t100 = Math.round(100 * oficial / 100) * 100;
+      if (t100 > amt) changes.push({ id: s.id, from: amt, to: t100, ar });
+      continue;
+    }
+    if (isMecenas(refType) || /Mecenas/i.test(s.reason || '')) continue; // anual Mecenas: no se toca
     const annual = (ar.frequency_type === 'months' && ar.frequency >= 12) || ar.frequency_type === 'years' || amt >= 30000;
     if (annual) continue; // monthly only
     const tier = Math.abs(amt - t5) <= Math.abs(amt - t10) ? t5 : t10;

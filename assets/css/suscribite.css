@@ -1116,3 +1116,19 @@
 @media (max-width: 768px) {
   .tier-grid.sub-first { grid-template-columns: 1fr; }
 }
+
+/* Tres tiers: Suscribite + Mecenas lado a lado, Registrate abajo a lo ancho */
+.plan-toggle-global { max-width: 360px; margin: 2rem auto 0; }
+.tier-grid.sub-three { grid-template-columns: 1.25fr 1fr; }
+.tier-grid.sub-three .tier-secondary { grid-column: 1 / -1; }
+.tier-mecenas { border-color: rgba(252, 210, 33, 0.35); }
+.tier-mecenas .btn-mecenas { margin-top: auto; }
+.light-mode .tier-mecenas { border-color: rgba(23, 165, 131, 0.4); }
+@media (max-width: 768px) {
+  .tier-grid.sub-three { grid-template-columns: 1fr; }
+}
+.tier-mecenas .btn-mecenas { width: 100%; text-align: center; cursor: pointer; }
+@media (min-width: 769px) {
+  .tier-grid.sub-three .tier-secondary { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; align-items: center; }
+  .tier-grid.sub-three .tier-secondary .tier-actions { grid-column: 2; grid-row: 1 / span 2; margin: 0; }
+}
