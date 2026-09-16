@@ -122,10 +122,7 @@ async function estadoRevista() {
       const nextAt = heads.filter(x => x.at > heads[i].at).map(x => x.at).sort((a, b) => a - b)[0] || html.length;
       const cuerpo = html.slice(heads[i].fin, nextAt);
       const img = cuerpo.match(/<img[^>]+src="([^"]+)"/);
-      // Si alguien pegó la editorial debajo de la tapa, el mail a suscriptores la lleva.
-      const parrafos = [...cuerpo.replace(/<figure[\s\S]*?<\/figure>/g, '').matchAll(/<p[^>]*>([\s\S]*?)<\/p>/g)]
-        .map(m => m[1]).filter(t => limpiarTexto(t).length > 40);
-      return { numero: n, titulo: heads[i].titulo, portada: img ? img[1] : null, editorial: parrafos.map(t => `<p>${t}</p>`).join('\n') };
+      return { numero: n, titulo: heads[i].titulo, portada: img ? img[1] : null };
     };
     const nueva = seccion(gated.numero);
     if (!nueva) return null;
@@ -274,8 +271,7 @@ function rellenar(txt, ctx) {
     .replace(/\{\{REV_LIBRE_N\}\}/g, r.libre ? `#${r.libre.numero}` : '')
     .replace(/\{\{REV_LIBRE\}\}/g, r.libre ? r.libre.titulo : '')
     .replace(/\n?<p>\{\{REV_PORTADA\}\}<\/p>/g, r.nueva && r.nueva.portada
-      ? `\n<p><a href="https://www.421.news/es/revista-421/"><img src="${r.nueva.portada}" alt="${r.nueva.titulo}" width="300" style="max-width:300px;height:auto"></a></p>` : '')
-    .replace(/\n?<p>\{\{REV_EDITORIAL\}\}<\/p>/g, r.nueva && r.nueva.editorial ? `\n${r.nueva.editorial}` : '');
+      ? `\n<p><a href="https://www.421.news/es/revista-421/"><img src="${r.nueva.portada}" alt="${r.nueva.titulo}" width="300" style="max-width:300px;height:auto"></a></p>` : '');
 }
 
 function renderHtml(id, revista, ctx = {}) {

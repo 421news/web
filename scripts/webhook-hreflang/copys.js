@@ -65,8 +65,7 @@ ${FIRMA}`.trim()
   // ─────────────────────────── revista (salen solas cuando se sube un número)
   // Placeholders: {{REV_NUEVA}} "#20 - Octubre 2026 - Título", {{REV_NUEVA_N}} "#20",
   // {{REV_LIBRE}} / {{REV_LIBRE_N}} el número anterior, {{REV_PORTADA}} la tapa,
-  // {{REV_EDITORIAL}} los párrafos pegados debajo de la tapa en la página (si hay).
-  // El link va SIEMPRE a la página, nunca al PDF: la versión web de los mails de
+    // El link va SIEMPRE a la página, nunca al PDF: la versión web de los mails de
   // Ghost es pública y reenviarla entregaría el archivo.
   'revista-suscriptores': {
     nombre: 'Revista · a suscriptores — apenas se sube el número nuevo',
@@ -75,7 +74,6 @@ ${FIRMA}`.trim()
 <p>Hola,</p>
 <p>Ya está disponible el <strong>{{REV_NUEVA}}</strong>. Como suscriptor, lo leés un mes antes que el resto.</p>
 <p>{{REV_PORTADA}}</p>
-<p>{{REV_EDITORIAL}}</p>
 <p><a href="${REVISTA_URL}"><strong>Descargalo acá</strong></a> (entrá con tu cuenta de 421).</p>
 <p>Gracias por sostener 421.</p>
 ${FIRMA}`.trim()
