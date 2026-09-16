@@ -77,13 +77,30 @@
                     <span class="concilio-badge">Monthly</span>
                   </div>
                   <p class="account-desc">Monthly video call on Google Meet, about an hour long, in Spanish. Subscribers only, not recorded.</p>
-                  <a class="concilio-next" href="https://meet.google.com/joj-vrcy-swr" target="_blank" rel="noopener">
+                  <a class="concilio-next" id="concilio-next" href="https://meet.google.com/joj-vrcy-swr" target="_blank" rel="noopener">
                     <div class="concilio-meta">
                       <p class="concilio-title">Next Council</p>
                       <p class="concilio-date"><span class="concilio-live">Friday 9/18 &middot; 8:30pm</span> (Buenos Aires time) &middot; join the call</p>
                     </div>
                   </a>
                 </div>
+                <script>
+                  // Próximos Concilios: se muestra el primero que no terminó. Mismo dato que
+                  // CONCILIO_DETALLES en scripts/webhook-hreflang/emails-automaticos.js.
+                  (function () {
+                    var CONCILIOS = [
+                      { fin: '2026-09-18T22:30:00-03:00', es: 'Viernes 18/9', en: 'Friday 9/18', hora: '20:30', horaEn: '8:30pm', link: 'https://meet.google.com/joj-vrcy-swr' },
+                      { fin: '2026-10-02T22:30:00-03:00', es: 'Viernes 2/10', en: 'Friday 10/2', hora: '20:30', horaEn: '8:30pm', link: 'https://meet.google.com/gbn-otcd-jpf' }
+                    ];
+                    var now = Date.now(), c = null;
+                    for (var i = 0; i < CONCILIOS.length; i++) { if (new Date(CONCILIOS[i].fin).getTime() > now) { c = CONCILIOS[i]; break; } }
+                    var a = document.getElementById('concilio-next');
+                    if (!c || !a) return;
+                    a.href = c.link;
+                    var d = a.querySelector('.concilio-date');
+                    if (d) d.innerHTML = '<span class="concilio-live">' + c.en + ' &middot; ' + c.horaEn + '</span> (Buenos Aires time) &middot; join the call';
+                  })();
+                </script>
 
                 <div class="account-app-link" style="margin-top: 1.6rem;">
                   <a href="https://mtg.421.news" target="_blank" rel="noopener" class="account-app-btn">
