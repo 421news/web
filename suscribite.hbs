@@ -21,43 +21,19 @@
 
             <div class="sub-hero">
               <span class="sub-hero-eyebrow">✦ Sumate a 421</span>
-              <h1 class="sub-hero-title">Le&eacute; 421 y banc&aacute; el proyecto</h1>
-              <p class="sub-hero-subtitle">Registrate gratis para leer, o suscribite para acceder a todo y ayudar a que podamos <strong>contratar nuevos escritores</strong> cada mes.</p>
-              <div class="sub-hero-proof">235 suscriptores · 5.694 lectores</div>
+              <h1 class="sub-hero-title">Banc&aacute; 421</h1>
+              <p class="sub-hero-subtitle">Las notas de 421 no tienen paywall. Y a cada colaborador se le paga por su trabajo. Ambas cosas son muy importantes para nosotros: que la informaci&oacute;n circule sin restricciones y retribuir a cada escritor de forma justa. Para que eso suceda, <strong>necesitamos que te suscribas</strong>.</p>
+              <div class="sub-hero-proof">235 suscriptores · 5.694 registrados</div>
             </div>
             <hr class="sub-gradient-divider">
 
-            <div class="tier-grid">
-
-              <!-- REGISTRO + LOGIN -->
-              <div class="tier">
-                <h2 class="tier-name">Registrate</h2>
-                <p class="tier-tagline">Cre&aacute; tu cuenta gratis y empez&aacute; a leer 421</p>
-                <div class="tier-free-label">Gratis</div>
-                <ul class="tier-benefits">
-                  <li>Descarga de revistas <strong>liberadas</strong> (n&uacute;meros viejos)</li>
-                  <li>Guard&aacute;s tu sesi&oacute;n en cualquier dispositivo</li>
-                </ul>
-
-                <div class="tier-actions">
-                  <button class="btn-outline" id="btn-free">Registrate gratis</button>
-                  <div class="tier-actions-divider">o</div>
-                  <button class="btn-ghost" id="btn-login-toggle">Ya tengo cuenta &middot; Inici&aacute; sesi&oacute;n</button>
-
-                  <form class="inline-login" id="inline-login">
-                    <input type="email" id="login-email" placeholder="tu@email.com" required autocomplete="email">
-                    <button type="submit" class="btn-outline" id="login-submit">Envi&aacute; el link de acceso</button>
-                    <div class="login-msg" id="login-msg"></div>
-                    <button type="button" class="inline-login-back" id="btn-login-back">&larr; Volver</button>
-                  </form>
-                </div>
-              </div>
+            <div class="tier-grid sub-first">
 
               <!-- SUSCRIPCION -->
               <div class="tier featured" id="sub-plan-card">
                 <span class="tier-badge">Recomendado</span>
                 <h2 class="tier-name">Suscribite</h2>
-                <p class="tier-tagline">Acceso completo + banc&aacute;s el proyecto</p>
+                <p class="tier-tagline">Tu suscripci&oacute;n hace que podamos pagarles a quienes escriben y que las notas sigan abiertas para todos.</p>
 
                 <div class="plan-toggle">
                   <button class="plan-toggle-btn active" id="toggle-monthly">Mensual</button>
@@ -73,42 +49,38 @@
                   <div class="plan-price-detail" id="price-detail">Con el plan anual ahorrás 2 meses</div>
                 </div>
 
+                <p class="tier-includes">&iquest;Qu&eacute; incluye?</p>
                 <ul class="tier-benefits">
-                  <li class="tier-benefit-featured">📕 Le&eacute; la <strong>Revista 421</strong> en PDF <strong>un mes antes</strong> de que se libere al p&uacute;blico</li>
-                  <li>Comentar y participar en debates de cada nota</li>
-                  <li><strong>Concilio mensual</strong>: stream en vivo con <a href="/author/juan-ruocco/">Juan Ruocco</a>, con tus preguntas en el chat</li>
-                  <li>Acceso a la <a href="https://mtg.421.news">app de Magic 421</a></li>
+                  <li class="tier-benefit-featured"><strong>Concilio</strong>: una videollamada por mes con <a href="/author/juan-ruocco/">Juan Ruocco</a>, director de 421, para charlar de lo que estamos leyendo, de lo que pasa en el mundo y de c&oacute;mo va 421</li>
+                  <li><strong>Revista 421</strong> en PDF <strong>un mes antes</strong> de que se libere al p&uacute;blico</li>
+                  <li><strong>Comentar</strong> en cada nota</li>
+                  <li>Acceso a la <a href="https://mtg.421.news">app de Magic The Gathering 421</a></li>
                 </ul>
 
                 <button class="btn-gradient" id="btn-suscribirme">Suscribite &rarr;</button>
+                <p class="tier-fine">Pod&eacute;s pagar en pesos argentinos con <strong>MercadoPago</strong> o con tarjeta internacional en d&oacute;lares con <strong>Stripe</strong>. Despu&eacute;s de elegir el plan, eleg&iacute;s el m&eacute;todo.</p>
+              </div>
+
+              <!-- REGISTRO + LOGIN (secundario a propósito: el foco es la suscripción) -->
+              <div class="tier tier-secondary">
+                <h2 class="tier-name">Registrate</h2>
+                <p class="tier-tagline">Cre&aacute; tu cuenta y descarg&aacute; todas las revistas menos la &uacute;ltima, que es para suscriptores. Tu sesi&oacute;n queda guardada en cualquier dispositivo.</p>
+
+                <div class="tier-actions">
+                  <button class="btn-outline" id="btn-free">Registrate gratis</button>
+                  <div class="tier-actions-divider">o</div>
+                  <button class="btn-ghost" id="btn-login-toggle">Ya tengo cuenta &middot; Inici&aacute; sesi&oacute;n</button>
+
+                  <form class="inline-login" id="inline-login">
+                    <input type="email" id="login-email" placeholder="tu@email.com" required autocomplete="email">
+                    <button type="submit" class="btn-outline" id="login-submit">Envi&aacute; el link de acceso</button>
+                    <div class="login-msg" id="login-msg"></div>
+                    <button type="button" class="inline-login-back" id="btn-login-back">&larr; Volver</button>
+                  </form>
+                </div>
               </div>
 
             </div>
-
-            <!-- ===== FAQ ===== -->
-            <section class="sub-faq">
-              <h2>Preguntas frecuentes</h2>
-              <details class="sub-faq-item">
-                <summary>¿Qu&eacute; es exactamente el "acceso anticipado" a la revista?</summary>
-                <p>Cada nuevo n&uacute;mero de Revista 421 sale primero solo para suscriptores, en PDF. Un mes despu&eacute;s se libera para el resto.</p>
-              </details>
-              <details class="sub-faq-item">
-                <summary>¿Puedo pagar en pesos argentinos?</summary>
-                <p>S&iacute;. Tenés dos m&eacute;todos: <strong>MercadoPago</strong> (pesos argentinos, d&eacute;bito autom&aacute;tico) o <strong>Stripe</strong> (tarjeta internacional en USD). Despu&eacute;s de elegir el plan, eleg&iacute;s el m&eacute;todo.</p>
-              </details>
-              <details class="sub-faq-item">
-                <summary>¿C&oacute;mo cancelo?</summary>
-                <p>Desde tu cuenta, en cualquier momento. Sin permanencia, sin preguntas. Conserv&aacute;s el acceso hasta el final del per&iacute;odo pago.</p>
-              </details>
-              <details class="sub-faq-item">
-                <summary>¿Qu&eacute; pasa con los n&uacute;meros viejos de la revista?</summary>
-                <p>Quedan disponibles para todos (gratis). Solo el <strong>&uacute;ltimo n&uacute;mero</strong> est&aacute; reservado a los suscriptores durante el primer mes.</p>
-              </details>
-              <details class="sub-faq-item">
-                <summary>¿Qu&eacute; incluye el Concilio mensual?</summary>
-                <p>Un stream en vivo de aprox. 1 hora, el &uacute;ltimo domingo de cada mes. Juan Ruocco cuenta qu&eacute; est&aacute; leyendo, qu&eacute; deber&iacute;a escribir 421 el mes que viene y en qu&eacute; nos equivocamos, y responde las preguntas del chat. El link es solo para suscriptores y <strong>no queda grabado</strong>: si no lo viste en vivo, te lo perdiste. Se anuncia con tiempo por mail.</p>
-              </details>
-            </section>
           </div>
 
 

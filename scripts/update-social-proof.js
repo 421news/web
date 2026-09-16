@@ -89,8 +89,8 @@ function replaceProof(file, regex, replacement) {
 
   const changedEs = replaceProof(
     'suscribite.hbs',
-    /[\d.,]+ (?:wizards|suscriptores) · [\d.,]+ lectores/,
-    `${paying} suscriptores · ${esTotal} lectores`
+    /[\d.,]+ (?:wizards|suscriptores) · [\d.,]+ (?:lectores|registrados)/,
+    `${paying} suscriptores · ${esTotal} registrados`
   );
   const changedEn = replaceProof(
     'subscribe.hbs',
@@ -110,7 +110,7 @@ function replaceProof(file, regex, replacement) {
     console.log(`Version → ${pkg.version}`);
     execSync(
       `git add suscribite.hbs subscribe.hbs package.json && ` +
-      `git commit -m "Update social proof: ${paying} suscriptores, ${total} lectores" && git push origin main`,
+      `git commit -m "Update social proof: ${paying} suscriptores, ${total} registrados" && git push origin main`,
       { cwd: ROOT, stdio: 'inherit' }
     );
   } else {

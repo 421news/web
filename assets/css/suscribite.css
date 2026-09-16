@@ -1105,3 +1105,14 @@
   .tier-grid { grid-template-columns: 1fr; }
   .tier { padding: 1.5rem; }
 }
+
+/* Suscribite primero, Registrate secundario (2026-09, doc de Agustina) */
+.tier-grid.sub-first { grid-template-columns: 1.5fr 1fr; align-items: start; }
+.tier.tier-secondary { padding: 1.5rem; opacity: 0.92; }
+.tier.tier-secondary .tier-name { font-size: var(--fs-lg); }
+.tier.tier-secondary .tier-tagline { margin-bottom: 1rem; }
+.tier-includes { font-weight: 800; color: var(--crema); margin: 0 0 0.5rem; }
+.light-mode .tier-includes { color: var(--negro); }
+@media (max-width: 768px) {
+  .tier-grid.sub-first { grid-template-columns: 1fr; }
+}
