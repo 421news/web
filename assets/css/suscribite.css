@@ -1157,3 +1157,16 @@
   .tier-grid.sub-three .tier-mecenas { order: 2; }
   .tier-grid.sub-three .tier-secondary { order: 3; }
 }
+
+/* Botones alineados entre las tres tarjetas: mismo alto de botón y un pie
+   (.tier-foot) de altura mínima igual debajo de cada uno. Registrate: el texto
+   queda centrado en el alto libre de la tarjeta. */
+@media (min-width: 901px) {
+  .tier-grid.sub-three #btn-suscribirme,
+  .tier-grid.sub-three .btn-mecenas,
+  .tier-grid.sub-three #btn-free { height: 52px; box-sizing: border-box; }
+  .tier-grid.sub-three .tier-foot { min-height: 7.5rem; }
+  .tier-grid.sub-three .tier-secondary .tier-tagline {
+    flex: 1; display: flex; align-items: center; margin: 0 0 1.5rem;
+  }
+}

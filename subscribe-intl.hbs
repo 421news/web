@@ -49,7 +49,9 @@
                 </ul>
 
                 <button class="btn-gradient" id="btn-suscribirme" data-i18n="subscribeCta">Subscribe →</button>
-                <p class="tier-fine" data-i18n-html="payNote">Pay with an international card in USD through <strong>Stripe</strong>.</p>
+                <div class="tier-foot">
+                  <p class="tier-fine" data-i18n-html="payNote">Pay with an international card in USD through <strong>Stripe</strong>.</p>
+                </div>
               </div>
 
               <!-- MECENAS: premium subscription test, Ghost tier "mecenas" -->
@@ -64,11 +66,17 @@
 
                 <p class="tier-includes" data-i18n="includes">What’s included?</p>
                 <ul class="tier-benefits" data-i18n-list="mecenasBenefits">
-                  <li>Everything in the subscription</li>
+                  <li><strong>Council</strong>: a monthly video call (in Spanish) with <a href="/author/juan-ruocco/">Juan Ruocco</a>, director of 421, to talk about what we’re reading, what’s happening in the world and how 421 is doing</li>
+                  <li><strong>421 Magazine</strong> in PDF <strong>one month before</strong> public release</li>
+                  <li><strong>Comment</strong> on every article</li>
+                  <li>Access to the <a href="https://mtg.421.news">Magic: The Gathering 421 app</a></li>
                   <li class="tier-benefit-featured"><strong>Annual in-person meeting</strong> with <a href="/author/juan-ruocco/">Juan Ruocco</a> at the Ergodic offices in Buenos Aires</li>
                 </ul>
 
                 <button class="btn-outline btn-mecenas" id="btn-mecenas" data-i18n="mecenasCta">Become a patron →</button>
+                <div class="tier-foot">
+                  <p class="tier-fine" data-i18n-html="payNote">Pay with an international card in USD through <strong>Stripe</strong>.</p>
+                </div>
               </div>
 
               <!-- REGISTER + LOGIN (secondary on purpose) -->
@@ -78,6 +86,7 @@
 
                 <div class="tier-actions">
                   <button class="btn-outline" id="btn-free" data-i18n="registerCta">Sign up for free</button>
+                  <div class="tier-foot">
                   <div class="tier-actions-divider" data-i18n="or">or</div>
                   <button class="btn-ghost" id="btn-login-toggle" data-i18n="loginToggle">I have an account · Log in</button>
 
@@ -87,6 +96,7 @@
                     <div class="login-msg" id="login-msg"></div>
                     <button type="button" class="inline-login-back" id="btn-login-back" data-i18n="loginBack">&larr; Back</button>
                   </form>
+                  </div>
                 </div>
               </div>
 
@@ -138,7 +148,7 @@
             payNote: "Pay with an international card in USD through <strong>Stripe</strong>.",
             mecenasName: "Patron",
             mecenasTagline: "The biggest contribution to help 421 grow.",
-            mecenasBenefits: ["Everything in the subscription","<strong>Annual in-person meeting</strong> with <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> at the Ergodic offices in Buenos Aires"],
+            mecenasBenefits: ["<strong>Council</strong>: a monthly video call (in Spanish) with <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>, director of 421, to talk about what we’re reading, what’s happening in the world and how 421 is doing", "<strong>421 Magazine</strong> in PDF <strong>one month before</strong> public release", "<strong>Comment</strong> on every article", "Access to the <a href=\"https://mtg.421.news\">Magic: The Gathering 421 app</a>", "<strong>Annual in-person meeting</strong> with <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> at the Ergodic offices in Buenos Aires"],
             mecenasCta: "Become a patron →"
           },
           pt: {
@@ -172,7 +182,7 @@
             payNote: "Pague com cartão internacional em USD pelo <strong>Stripe</strong>.",
             mecenasName: "Mecenas",
             mecenasTagline: "A maior contribuição para a 421 crescer.",
-            mecenasBenefits: ["Tudo o que a assinatura inclui","<strong>Encontro presencial anual</strong> com <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> nos escritórios da Ergodic, em Buenos Aires"],
+            mecenasBenefits: ["<strong>Concílio</strong>: uma videochamada por mês (em espanhol) com <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>, diretor da 421, para conversar sobre o que estamos lendo, o que acontece no mundo e como vai a 421", "<strong>Revista 421</strong> em PDF <strong>um mês antes</strong> do público", "<strong>Comentar</strong> em cada nota", "Acesso ao <a href=\"https://mtg.421.news\">app de Magic: The Gathering 421</a>", "<strong>Encontro presencial anual</strong> com <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> nos escritórios da Ergodic, em Buenos Aires"],
             mecenasCta: "Seja mecenas →"
           },
           fr: {
@@ -206,7 +216,7 @@
             payNote: "Paiement par carte internationale en USD via <strong>Stripe</strong>.",
             mecenasName: "Mécène",
             mecenasTagline: "La plus grande contribution pour faire grandir 421.",
-            mecenasBenefits: ["Tout ce que comprend l’abonnement","<strong>Rencontre annuelle en personne</strong> avec <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> dans les bureaux d’Ergodic, à Buenos Aires"],
+            mecenasBenefits: ["<strong>Concile</strong> : un appel vidéo par mois (en espagnol) avec <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>, directeur de 421, pour parler de ce que nous lisons, de ce qui se passe dans le monde et de la vie de 421", "<strong>Revista 421</strong> en PDF <strong>un mois avant</strong> le grand public", "<strong>Commenter</strong> chaque article", "Accès à l’<a href=\"https://mtg.421.news\">app Magic: The Gathering 421</a>", "<strong>Rencontre annuelle en personne</strong> avec <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> dans les bureaux d’Ergodic, à Buenos Aires"],
             mecenasCta: "Devenir mécène →"
           },
           zh: {
@@ -240,7 +250,7 @@
             payNote: "通过 <strong>Stripe</strong> 使用国际银行卡以美元支付。",
             mecenasName: "赞助人",
             mecenasTagline: "帮助 421 成长的最大支持。",
-            mecenasBenefits: ["订阅包含的全部内容","每年一次在布宜诺斯艾利斯 Ergodic 办公室与 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> <strong>线下见面</strong>"],
+            mecenasBenefits: ["<strong>月度议会</strong>：每月一次与 421 主编 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> 的视频通话（西班牙语），聊我们在读什么、世界上发生了什么，以及 421 的近况", "比公众<strong>提前一个月</strong>阅读 <strong>Revista 421</strong> PDF", "在每篇文章下<strong>发表评论</strong>", "使用 <a href=\"https://mtg.421.news\">Magic: The Gathering 421 应用</a>", "每年一次在布宜诺斯艾利斯 Ergodic 办公室与 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> <strong>线下见面</strong>"],
             mecenasCta: "成为赞助人 →"
           },
           ja: {
@@ -274,7 +284,7 @@
             payNote: "<strong>Stripe</strong> で国際カードを使い USD でお支払い。",
             mecenasName: "パトロン",
             mecenasTagline: "421の成長を支える最大の支援。",
-            mecenasBenefits: ["購読のすべての特典","ブエノスアイレスの Ergodic オフィスで <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> と会う<strong>年1回の対面ミーティング</strong>"],
+            mecenasBenefits: ["<strong>月例会議</strong>：421 編集長 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> との月1回のビデオ通話（スペイン語）。読んでいるもの、世界の出来事、421 の近況について話します", "<strong>Revista 421</strong> のPDFを一般公開の<strong>1ヶ月前</strong>に読める", "すべての記事に<strong>コメント</strong>できる", "<a href=\"https://mtg.421.news\">Magic: The Gathering 421 アプリ</a>へのアクセス", "ブエノスアイレスの Ergodic オフィスで <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> と会う<strong>年1回の対面ミーティング</strong>"],
             mecenasCta: "パトロンになる →"
           },
           ko: {
@@ -308,7 +318,7 @@
             payNote: "<strong>Stripe</strong>를 통해 해외 카드로 USD 결제.",
             mecenasName: "후원자",
             mecenasTagline: "421의 성장을 위한 가장 큰 후원.",
-            mecenasBenefits: ["구독의 모든 혜택","부에노스아이레스 Ergodic 사무실에서 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>와 함께하는 <strong>연 1회 오프라인 만남</strong>"],
+            mecenasBenefits: ["<strong>월례 회의</strong>: 421 편집장 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>와 매달 한 번 화상 통화(스페인어)로, 요즘 읽는 것과 세상 이야기, 421의 근황을 나눕니다", "일반 공개보다 <strong>1개월 먼저</strong> <strong>Revista 421</strong> PDF 읽기", "모든 기사에 <strong>댓글</strong> 작성", "<a href=\"https://mtg.421.news\">Magic: The Gathering 421 앱</a> 이용", "부에노스아이레스 Ergodic 사무실에서 <a href=\"/author/juan-ruocco/\">Juan Ruocco</a>와 함께하는 <strong>연 1회 오프라인 만남</strong>"],
             mecenasCta: "후원자 되기 →"
           },
           tr: {
@@ -342,7 +352,7 @@
             payNote: "<strong>Stripe</strong> üzerinden uluslararası kartla USD olarak öde.",
             mecenasName: "Mesen",
             mecenasTagline: "421’in büyümesi için en büyük destek.",
-            mecenasBenefits: ["Aboneliğin tüm avantajları","Buenos Aires’teki Ergodic ofisinde <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> ile <strong>yıllık yüz yüze buluşma</strong>"],
+            mecenasBenefits: ["<strong>Aylık Konsey</strong>: 421’in yöneticisi <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> ile ayda bir görüntülü görüşme (İspanyolca); ne okuduğumuzu, dünyada neler olduğunu ve 421’in nasıl gittiğini konuşuyoruz", "<strong>Revista 421</strong> PDF’ini halktan <strong>bir ay önce</strong> oku", "Her yazıya <strong>yorum</strong> yap", "<a href=\"https://mtg.421.news\">Magic: The Gathering 421 uygulamasına</a> erişim", "Buenos Aires’teki Ergodic ofisinde <a href=\"/author/juan-ruocco/\">Juan Ruocco</a> ile <strong>yıllık yüz yüze buluşma</strong>"],
             mecenasCta: "Mesen ol →"
           }
         };
