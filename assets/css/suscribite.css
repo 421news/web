@@ -1117,18 +1117,30 @@
   .tier-grid.sub-first { grid-template-columns: 1fr; }
 }
 
-/* Tres tiers: Suscribite + Mecenas lado a lado, Registrate abajo a lo ancho */
+/* Tres tiers en tres columnas de la misma altura: Registrate · Suscribite · Mecenas.
+   En el DOM Suscribite va primero (así queda arriba en mobile); en desktop el
+   orden visual lo pone `order`. Los botones se empujan al fondo de cada tarjeta. */
 .plan-toggle-global { max-width: 360px; margin: 2rem auto 0; }
-.tier-grid.sub-three { grid-template-columns: 1.25fr 1fr; }
-.tier-grid.sub-three .tier-secondary { grid-column: 1 / -1; }
-.tier-mecenas { border-color: rgba(252, 210, 33, 0.35); }
-.tier-mecenas .btn-mecenas { margin-top: auto; }
-.light-mode .tier-mecenas { border-color: rgba(23, 165, 131, 0.4); }
-@media (max-width: 768px) {
-  .tier-grid.sub-three { grid-template-columns: 1fr; }
+.tier-grid.sub-three {
+  grid-template-columns: repeat(3, 1fr);
+  align-items: stretch;
+  max-width: 1120px;
 }
+.tier-grid.sub-three .tier { height: 100%; box-sizing: border-box; }
+.tier-grid.sub-three .tier-secondary { order: 1; padding: 2rem; opacity: 1; }
+.tier-grid.sub-three #sub-plan-card { order: 2; }
+.tier-grid.sub-three .tier-mecenas { order: 3; }
+.tier-grid.sub-three .tier-secondary .tier-name { font-size: var(--fs-xl); }
+.tier-grid.sub-three .tier-actions,
+.tier-grid.sub-three #btn-suscribirme,
+.tier-grid.sub-three .btn-mecenas { margin-top: auto; }
+.tier-mecenas { border-color: rgba(252, 210, 33, 0.35); }
 .tier-mecenas .btn-mecenas { width: 100%; text-align: center; cursor: pointer; }
-@media (min-width: 769px) {
-  .tier-grid.sub-three .tier-secondary { display: grid; grid-template-columns: 1fr 1fr; gap: 0 2rem; align-items: center; }
-  .tier-grid.sub-three .tier-secondary .tier-actions { grid-column: 2; grid-row: 1 / span 2; margin: 0; }
+.light-mode .tier-mecenas { border-color: rgba(23, 165, 131, 0.4); }
+@media (max-width: 900px) {
+  .tier-grid.sub-three { grid-template-columns: 1fr; }
+  .tier-grid.sub-three .tier { height: auto; }
+  .tier-grid.sub-three #sub-plan-card { order: 1; }
+  .tier-grid.sub-three .tier-mecenas { order: 2; }
+  .tier-grid.sub-three .tier-secondary { order: 3; }
 }
