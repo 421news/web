@@ -1170,3 +1170,12 @@
     flex: 1; display: flex; align-items: center; margin: 0 0 1.5rem;
   }
 }
+
+/* Registrate a su tamaño natural (2026-09-17): estirado al alto de las otras
+   dos quedaba una caja enorme casi vacía. Su botón no se alinea con los otros. */
+@media (min-width: 901px) {
+  .tier-grid.sub-three .tier-secondary { height: auto; align-self: start; }
+  .tier-grid.sub-three .tier-secondary .tier-tagline { flex: none; display: block; margin: 0 0 1.5rem; }
+  .tier-grid.sub-three .tier-secondary .tier-actions { margin-top: 0; }
+  .tier-grid.sub-three .tier-secondary .tier-foot { min-height: 0; }
+}
