@@ -1137,6 +1137,19 @@
 .tier-mecenas { border-color: rgba(252, 210, 33, 0.35); }
 .tier-mecenas .btn-mecenas { width: 100%; text-align: center; cursor: pointer; }
 .light-mode .tier-mecenas { border-color: rgba(23, 165, 131, 0.4); }
+/* El contenedor de la página mide 900px: la grilla de tres se sale de él para
+   que cada columna tenga ~350px y el texto no quede en una tira angosta. */
+@media (min-width: 901px) {
+  .tier-grid.sub-three {
+    width: min(1120px, calc(100vw - 48px));
+    max-width: none;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
 @media (max-width: 900px) {
   .tier-grid.sub-three { grid-template-columns: 1fr; }
   .tier-grid.sub-three .tier { height: auto; }
