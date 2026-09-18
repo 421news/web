@@ -24,9 +24,21 @@ const PRICES_USD = {
   'wizard-monthly': 9.99,
   'wizard-yearly': 99.90,
   'mecenas-monthly': 100,
-  'mecenas-yearly': 1000
+  'mecenas-yearly': 1000,
+  // Oferta de regreso para ex suscriptores (2026-09): 3 meses y vuelve al precio
+  // normal. El precio lo fija esta tabla, no el tier de Ghost.
+  'promo5-monthly': 5,
+  'promo25-monthly': 2.5
 };
+const PROMO_MESES = 3;
+const PROMO_SECRET = process.env.PROMO_SECRET || '';
+const isPromo = t => String(t || '').startsWith('promo');
 const isMecenas = planType => String(planType || '').startsWith('mecenas-');
+// Token por persona: el link de la oferta solo sirve para el mail al que se mandó.
+function promoToken(email, tipo) {
+  return require('crypto').createHmac('sha256', PROMO_SECRET)
+    .update(String(email).toLowerCase().trim() + '|' + tipo).digest('hex').slice(0, 24);
+}
 const isYearlyPlan = planType => String(planType || '').endsWith('-yearly');
 
 // --- CORS middleware ---
@@ -314,7 +326,7 @@ async function uncompMember(member) {
 // Membership labels are managed by this webhook; everything else (equipo,
 // original wizard) is preserved. Taxonomy simplified 2026-07-28: dropped
 // payment-method:mercadopago, mp-cancelled, cancelados, Stripe.
-const MEMBERSHIP_LABELS = ['Wizard', 'Mecenas', 'mensual', 'anual', 'mp-cancelled', 'cancelados', 'payment-method:mercadopago', 'Stripe'];
+const MEMBERSHIP_LABELS = ['Wizard', 'Mecenas', 'promo regreso', 'mensual', 'anual', 'mp-cancelled', 'cancelados', 'payment-method:mercadopago', 'Stripe'];
 
 function buildActiveLabels(planType, existingLabels) {
   // Keep non-membership labels (equipo, original wizard); add Wizard + plan.
@@ -325,6 +337,7 @@ function buildActiveLabels(planType, existingLabels) {
     ...keepLabels,
     { name: 'Wizard' },
     ...(isMecenas(planType) ? [{ name: 'Mecenas' }] : []),
+    ...(isPromo(planType) ? [{ name: 'promo regreso' }] : []),
     { name: planLabel }
   ];
 }
@@ -338,7 +351,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.7.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.8.0' });
 });
 
 // GET /prices — what we will ACTUALLY debit, in ARS.
@@ -370,6 +383,18 @@ app.post('/subscribe', async (req, res) => {
   if (!PRICES_USD[formSubType]) {
     return res.status(400).json({ success: false, message: 'Invalid subscription type' });
   }
+  // La oferta de regreso exige el token del mail y que la persona no esté pagando ya.
+  if (isPromo(formSubType)) {
+    if (!PROMO_SECRET) return res.status(503).json({ success: false, message: 'Promo no configurada' });
+    if (!req.body.promoToken || req.body.promoToken !== promoToken(formEmail, formSubType)) {
+      console.warn(`[promo] token inválido para ${formEmail} (${formSubType})`);
+      return res.status(403).json({ success: false, message: 'Esta oferta es personal: usá el link que te llegó por mail.' });
+    }
+    const m = await findMemberByEmail(String(formEmail).toLowerCase().trim());
+    if (m && (m.status === 'paid' || m.status === 'comped')) {
+      return res.status(409).json({ success: false, message: 'Ya tenés una suscripción activa.' });
+    }
+  }
   // Price comes from the Ghost tier so the page and the checkout can't diverge.
   const tierPrices = await getTierPrices();
   const priceUSD = tierPrices[formSubType] || PRICES_USD[formSubType];
@@ -383,13 +408,19 @@ app.post('/subscribe', async (req, res) => {
     // Determine frequency
     const isYearly = isYearlyPlan(formSubType);
     const frequency = isYearly ? 12 : 1;
-    const reason = `421 ${isMecenas(formSubType) ? 'Mecenas' : 'Wizard'} ${isYearly ? 'Anual' : 'Mensual'}`;
+    const reason = isPromo(formSubType)
+      ? '421 Wizard Mensual (oferta de regreso)'
+      : `421 ${isMecenas(formSubType) ? 'Mecenas' : 'Wizard'} ${isYearly ? 'Anual' : 'Mensual'}`;
 
     // Store email + name + plan in external_reference for IPN lookup
     const externalRef = JSON.stringify({
       type: formSubType,
       email: formEmail,
-      name: formName || ''
+      name: formName || '',
+      // Fin de la promo: a partir de acá el peg mensual la lleva al precio normal.
+      ...(isPromo(formSubType)
+        ? { promoHasta: new Date(Date.now() + PROMO_MESES * 30 * 86400000).toISOString().slice(0, 10) }
+        : {})
     });
 
     console.log(`[mp] Creating subscription: ${formSubType}, ${formEmail}, $${priceUSD} USD = $${amountARS} ARS (oficial: ${oficialRate})`);
@@ -419,6 +450,17 @@ app.post('/subscribe', async (req, res) => {
     console.error(`[mp] Subscribe error: ${err.message}`);
     return res.status(500).json({ success: false, message: 'Server error' });
   }
+});
+
+// GET /promo/token?email=&type=&key= — genera el token del link de la oferta.
+// Solo para armar el envío: exige PROMO_ADMIN_KEY y no toca nada.
+app.get('/promo/token', (req, res) => {
+  const key = process.env.PROMO_ADMIN_KEY;
+  if (!key || req.query.key !== key) return res.status(403).json({ error: 'forbidden' });
+  const { email, type } = req.query;
+  if (!email || !PRICES_USD[type] || !isPromo(type)) return res.status(400).json({ error: 'email y type de promo requeridos' });
+  if (!PROMO_SECRET) return res.status(503).json({ error: 'falta PROMO_SECRET' });
+  res.json({ email, type, token: promoToken(email, type), usd: PRICES_USD[type], meses: PROMO_MESES });
 });
 
 // POST /webhook/mp-ipn — MercadoPago IPN webhook
@@ -773,6 +815,15 @@ async function runPricePeg() {
     const amt = ar.transaction_amount;
     if (/TEST|borrar/i.test(s.reason || '')) continue;
     let refType = ''; try { refType = JSON.parse(s.external_reference || '{}').type || ''; } catch (e) {}
+    // Oferta de regreso: se mantiene el precio promocional hasta promoHasta y
+    // después el peg la lleva al precio del tier normal (nunca baja).
+    if (isPromo(refType)) {
+      let hasta = ''; try { hasta = JSON.parse(s.external_reference || '{}').promoHasta || ''; } catch (e) {}
+      const usd = (!hasta || hasta >= new Date().toISOString().slice(0, 10)) ? PRICES_USD[refType] : 10;
+      const target = Math.round(usd * oficial / 100) * 100;
+      if (target > amt) changes.push({ id: s.id, from: amt, to: target, ar });
+      continue;
+    }
     if (refType === 'mecenas-monthly') {
       const t100 = Math.round(100 * oficial / 100) * 100;
       if (t100 > amt) changes.push({ id: s.id, from: amt, to: t100, ar });

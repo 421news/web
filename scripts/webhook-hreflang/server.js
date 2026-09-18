@@ -26,6 +26,7 @@ const autoresRanking = require('./autores');
 // verificando al member). init() más abajo, cuando ya existen las deps que le pasamos.
 const revistaGate = require('./revista-gate');
 const promo = require('./promo-tracking');
+const encuesta = require('./encuesta-baja');
 
 // --- Ghost API helpers ---
 
@@ -2089,11 +2090,27 @@ app.get('/api/revista/estado', revistaGate.estado);
 // El path es neutro a propósito: cualquier cosa con /ads/ o /banner/ en la URL
 // la cortan las listas de bloqueo, y ahí se pierde justo lo que queremos medir.
 promo.init({ ghostRequest });
+encuesta.init({ ghostRequest });
 app.options('/api/pza/e', promo.preflight);
 // express.json() global no toca un body text/plain (sendBeacon manda así para
 // evitar el preflight), por eso el parser de texto va acá.
 app.post('/api/pza/e', express.text({ type: '*/*', limit: '2kb' }), promo.registrar);
 app.get('/api/pza/reporte', promo.reporte);
+
+// Encuesta a ex suscriptores: el formulario vive en una página de Ghost
+// (/es/por-que-te-fuiste/) y postea acá con el token del link del mail.
+// El POST del formulario manda JSON, así que el navegador hace preflight.
+app.options('/api/encuesta/baja', (req, res) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  res.set('Access-Control-Allow-Methods', 'POST');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  res.sendStatus(204);
+});
+app.post('/api/encuesta/baja', (req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'https://www.421.news');
+  next();
+}, encuesta.responder);
+app.get('/api/encuesta/baja/reporte', encuesta.reporte);
 
 // --- Search Console consolidado: dominio viejo + nuevo -----------------------
 // Acumulativo: nunca borra un mes. Google retiene 16 meses y cuatroveintiuno.com
