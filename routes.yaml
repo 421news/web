@@ -1,5 +1,11 @@
 routes:
   /: landing
+  /es/por-que-te-fuiste/:
+    template: page
+    data: page.por-que-te-fuiste
+  /es/volver-a-421/:
+    template: page
+    data: page.volver-a-421
   /es/suscribite/:
     template: suscribite
     data: page.suscribite
