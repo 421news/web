@@ -351,7 +351,7 @@ function buildCancelledLabels(existingLabels) {
 // --- Routes ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.8.0' });
+  res.json({ status: 'ok', service: 'mercadopago-ghost', version: '1.9.0' });
 });
 
 // GET /prices — what we will ACTUALLY debit, in ARS.
@@ -543,13 +543,36 @@ async function handlePreapprovalUpdate(preapprovalId) {
 
   email = email.toLowerCase().trim();
 
+  let pagadoHasta = null;
+  if (['authorized', 'cancelled', 'paused'].includes(mpStatus)) {
+    pagadoHasta = await pagadoHastaMP(data);
+    // Sin respuesta de MP: next_payment_date, que a veces se pasa pero nunca se queda corta.
+    if (pagadoHasta === undefined) pagadoHasta = data.next_payment_date || null;
+  }
   if (mpStatus === 'authorized') {
-    await activateMember(email, name, planType);
+    await activateMember(email, name, planType, pagadoHasta);
   } else if (mpStatus === 'cancelled' || mpStatus === 'paused') {
-    await deactivateMember(email, planType);
+    // 🚨 ¿Sigue pagando por OTRA sub? Pasa cuando le rebota la tarjeta, se suscribe de
+    // nuevo, y después MP cancela la vieja: ese cancel le sacaba el acceso a alguien
+    // que está pagando (2 casos al 2026-09-18). Mismo payer_id en MP.
+    const otra = await otraSubActiva(data);
+    if (otra) {
+      console.log(`[ipn] ${email}: se canceló ${preapprovalId}, pero sigue pagando por ${otra.id} — no se lo baja`);
+      return;
+    }
+    await deactivateMember(email, planType, pagadoHasta);
   } else {
     console.log(`[ipn] Preapproval status "${mpStatus}" — no action needed`);
   }
+}
+
+// Otra preapproval autorizada del mismo pagador, o null. Si MP no responde se asume
+// que no hay otra (es el comportamiento de siempre).
+async function otraSubActiva(pre) {
+  if (!pre || !pre.payer_id) return null;
+  const { status, data } = await mpRequest('GET', `/preapproval/search?payer_id=${pre.payer_id}&status=authorized&limit=100`);
+  if (status !== 200) { console.error(`[mp] otras subs de ${pre.payer_id}: HTTP ${status}`); return null; }
+  return (data.results || []).find(s => s.id !== pre.id && s.status === 'authorized') || null;
 }
 
 async function handlePaymentNotification(paymentId) {
@@ -596,7 +619,72 @@ async function handlePaymentNotification(paymentId) {
   await activateMember(email.toLowerCase().trim(), '', planType);
 }
 
-async function activateMember(email, name, planType) {
+// --- Período ya pagado -----------------------------------------------------
+// Regla: a nadie se le saca lo que ya pagó. Un anual que cancela en el mes 2
+// tiene 10 meses cobrados; un mensual que cancela el día 3, 27 días.
+// La fecha sale de MercadoPago: último cobro exitoso (summarized.last_charged_date)
+// + la frecuencia de la sub. Se guarda como `expiry_at` del tier: el comp con
+// vencimiento es la feature nativa de Ghost, que lo baja solo al llegar la fecha.
+//  - Anuales: se fechan al ACTIVAR. Sin fecha quedaban como comps perpetuos y lo
+//    único que les cortaba el acceso era el cancel, que les sacaba el año pagado.
+//    Cada renovación vuelve a pasar por activateMember y empuja la fecha.
+//  - Mensuales: NO se fechan al activar. Si una notificación de renovación se
+//    pierde, una fecha a un mes le cortaría el acceso a alguien que está pagando.
+//  - Al cancelar (cualquier plan): si el período pago no terminó, se fecha el comp
+//    en vez de sacarlo.
+const DIAS_GRACIA = 10; // MP reintenta un cobro rechazado varios días antes de rendirse
+const DIA_MS = 86400000;
+
+// Hasta cuándo pagó: último cobro APROBADO de sus facturas + la frecuencia.
+// 🚨 No usar los campos de la preapproval (medido sobre 330 subs el 2026-09-18):
+//  - summarized.last_charged_date se queda atrás (62 mal: dice 1 cobro y hubo 3).
+//  - next_payment_date avanza aunque el cobro se rechace (51 adelantadas 1-12 meses).
+function sumarPeriodo(fecha, ar) {
+  const n = Number((ar || {}).frequency) || 1;
+  const d = new Date(fecha);
+  if (isNaN(d)) return null;
+  if ((ar || {}).frequency_type === 'days') d.setTime(d.getTime() + n * DIA_MS);
+  else d.setUTCMonth(d.getUTCMonth() + n);
+  return d.toISOString();
+}
+function pagadoHastaDeFacturas(facturas, ar) {
+  const ok = (facturas || [])
+    .filter(f => f.payment && f.payment.status === 'approved' && f.debit_date)
+    .map(f => new Date(f.debit_date).getTime())
+    .sort((a, b) => a - b);
+  return ok.length ? sumarPeriodo(ok[ok.length - 1], ar) : null;
+}
+// Facturas de la sub (/authorized_payments, páginas de 12: el máximo que acepta).
+// Si MP no responde devuelve undefined — distinto de null, que es "nunca pagó".
+async function pagadoHastaMP(pre) {
+  if (!pre || !pre.id) return undefined;
+  const facturas = [];
+  for (let offset = 0; offset < 600; offset += 12) {
+    const { status, data } = await mpRequest('GET', `/authorized_payments/search?preapproval_id=${pre.id}&limit=12&offset=${offset}`);
+    if (status !== 200) { console.error(`[mp] facturas de ${pre.id}: HTTP ${status}`); return undefined; }
+    facturas.push(...(data.results || []));
+    if (offset + 12 >= ((data.paging && data.paging.total) || 0)) break;
+  }
+  return pagadoHastaDeFacturas(facturas, pre.auto_recurring);
+}
+
+// `expiry_at` del tier al activar: sólo anuales. Sin dato de MP (activación sin
+// preapproval), se asume que se acaba de cobrar un año.
+function expiryAlActivar(planType, pagadoHasta) {
+  if (!isYearlyPlan(planType)) return null;
+  const hasta = pagadoHasta ? new Date(pagadoHasta).getTime() : Date.now() + 365 * DIA_MS;
+  return new Date(Math.max(hasta, Date.now()) + DIAS_GRACIA * DIA_MS).toISOString();
+}
+// Devuelve la fecha si el miembro tiene período pago sin vencer, o null.
+function periodoPagoVigente(member) {
+  const ahora = Date.now();
+  for (const t of (member.tiers || [])) {
+    if (t.expiry_at && new Date(t.expiry_at).getTime() > ahora) return t.expiry_at;
+  }
+  return null;
+}
+
+async function activateMember(email, name, planType, pagadoHasta) {
   console.log(`[ghost] Activating member: ${email} (${planType})`);
 
   const existing = await findMemberByEmail(email);
@@ -605,7 +693,12 @@ async function activateMember(email, name, planType) {
   const yaMecenas = existing && (existing.tiers || []).some(t => t.slug === MECENAS_TIER_SLUG);
   const efectivo = yaMecenas && !isMecenas(planType) ? 'mecenas-monthly' : planType;
   const labels = buildActiveLabels(efectivo, existing ? existing.labels : []);
-  const tiers = [{ id: await tierIdFor(efectivo) }];
+  let expiry = expiryAlActivar(efectivo, pagadoHasta);
+  // Nunca acortar una fecha que ya estaba más lejos (ej: la puso el backfill).
+  const previa = existing && periodoPagoVigente(existing);
+  if (expiry && previa && new Date(previa) > new Date(expiry)) expiry = previa;
+  const tiers = [expiry ? { id: await tierIdFor(efectivo), expiry_at: expiry } : { id: await tierIdFor(efectivo) }];
+  if (expiry) console.log(`[ghost] ${email}: anual → acceso garantizado hasta ${expiry.slice(0, 10)}${pagadoHasta ? ' (fecha de MP + gracia)' : ' (sin dato de MP: +1 año)'}`);
 
   if (existing) {
     // Update existing member
@@ -618,7 +711,7 @@ async function activateMember(email, name, planType) {
   }
 }
 
-async function deactivateMember(email, planType) {
+async function deactivateMember(email, planType, pagadoHasta) {
   console.log(`[ghost] Deactivating member: ${email}`);
 
   // Fetch WITH subscriptions so we can detect the comp type (A vs B).
@@ -653,6 +746,20 @@ async function deactivateMember(email, planType) {
       console.log(`[ghost] Skipping ${email} — cancelled ${planType} but member is on ${tieneMecenas ? 'Mecenas' : 'Wizard'}`);
       return;
     }
+  }
+
+  // 🚨 Período pago sin vencer: NO se le saca el acceso. Ya cobramos esos meses.
+  // Si el comp ya tiene fecha (anuales), no hay nada que hacer: Ghost lo baja solo.
+  const vigente = periodoPagoVigente(existing);
+  if (vigente) {
+    console.log(`[ghost] Skipping ${email} — canceló, pero tiene pago vigente hasta ${vigente.slice(0, 10)}`);
+    return;
+  }
+  // Si no tiene fecha pero MP dice que pagó hasta una fecha futura, se la ponemos.
+  if (pagadoHasta && new Date(pagadoHasta).getTime() > Date.now() && (existing.tiers || []).length) {
+    await updateMember(existing.id, { tiers: existing.tiers.map(t => ({ id: t.id, expiry_at: pagadoHasta })) });
+    console.log(`[ghost] ${email} canceló → conserva el acceso hasta ${pagadoHasta.slice(0, 10)} (lo que ya pagó)`);
+    return;
   }
 
   await uncompMember(existing);
@@ -710,6 +817,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 async function reconcileComped() {
   console.log('[reconcile] start');
+  const anualesActivas = []; // preapprovals anuales autorizadas, para fechar el comp
   async function preapprovalsByStatus(status) {
     const payers = new Map(); // payer_id -> external_reference email (if any)
     let offset = 0, total = 0;
@@ -720,6 +828,7 @@ async function reconcileComped() {
       for (const s of (data.results || [])) {
         let e = ''; try { e = (JSON.parse(s.external_reference || '{}').email || '').toLowerCase().trim(); } catch (x) {}
         if (s.payer_id) payers.set(String(s.payer_id), e || payers.get(String(s.payer_id)) || '');
+        if (status === 'authorized' && Number((s.auto_recurring || {}).frequency) === 12 && s.payer_id) anualesActivas.push(s);
       }
       offset += 100; await sleep(250);
     } while (offset < total);
@@ -744,25 +853,58 @@ async function reconcileComped() {
   const emailsFrom = (payers) => new Set([...payers.entries()].map(([pid, ext]) => ext || emailMap.get(pid)).filter(Boolean));
   const activeEmails = emailsFrom(active);
   const cancelledEmails = emailsFrom(cancelled);
+  const hastaPorEmail = new Map(); // email -> hasta cuándo pagó (anuales, por facturas)
+  for (const s of anualesActivas) {
+    const e = active.get(String(s.payer_id)) || emailMap.get(String(s.payer_id));
+    if (!e) continue;
+    const hasta = await pagadoHastaMP(s);
+    if (hasta && !(hastaPorEmail.get(e) > hasta)) hastaPorEmail.set(e, hasta);
+    await sleep(150);
+  }
 
   // Ghost comped
   const comped = [];
   let page = 1, pages = 1;
   do {
-    const { data } = await ghostRequest('GET', `/ghost/api/admin/members/?filter=${encodeURIComponent('status:comped')}&limit=100&page=${page}&include=labels,subscriptions`);
+    const { data } = await ghostRequest('GET', `/ghost/api/admin/members/?filter=${encodeURIComponent('status:comped')}&limit=100&page=${page}&include=labels,tiers,subscriptions`);
     for (const m of (data.members || [])) comped.push(m);
     pages = (data.meta && data.meta.pagination && data.meta.pagination.pages) || 1; page++;
   } while (page <= pages);
 
   // classify
   const orphans = [];
+  const aExtender = [];
   for (const m of comped) {
     const email = (m.email || '').toLowerCase().trim();
     const labels = (m.labels || []).map(l => (l.slug || l.name || '').toLowerCase());
     if (labels.includes('equipo')) continue;
     if ((m.subscriptions || []).some(s => (s.status === 'active' || s.status === 'trialing') && s.price && s.price.amount > 0)) continue;
-    if (activeEmails.has(email)) continue; // dual-sub, still paying
-    if (cancelledEmails.has(email)) orphans.push(m); // double-evidence; paused left alone
+    if (activeEmails.has(email)) {
+      // Anual que renovó en MP pero su comp quedó con la fecha vieja (notificación
+      // perdida, o sin fecha todavía): se le corre al período que MP dice que pagó.
+      const hasta = hastaPorEmail.get(email);
+      const objetivo = hasta && new Date(new Date(hasta).getTime() + DIAS_GRACIA * DIA_MS);
+      const tiers = m.tiers || [];
+      if (objetivo && objetivo > Date.now() && tiers.length && tiers.some(t => !t.expiry_at || new Date(t.expiry_at) < objetivo - DIA_MS)) {
+        aExtender.push({ m, expiry_at: objetivo.toISOString() });
+      }
+      continue; // dual-sub, still paying
+    }
+    if (periodoPagoVigente(m)) continue; // período pago sin vencer
+    const vencido = (m.tiers || []).length && m.tiers.every(t => t.expiry_at && new Date(t.expiry_at) <= Date.now());
+    if (cancelledEmails.has(email) || vencido) orphans.push(m); // double-evidence, o el comp ya venció; paused left alone
+  }
+
+  if (aExtender.length > 60) {
+    console.error(`[reconcile] ABORT extensión: ${aExtender.length} > cap 60 — nada aplicado`);
+  } else {
+    for (const { m, expiry_at } of aExtender) {
+      try {
+        await updateMember(m.id, { tiers: m.tiers.map(t => ({ id: t.id, expiry_at })) });
+        console.log(`[reconcile] ${m.email}: acceso anual extendido a ${expiry_at.slice(0, 10)} (fecha de MP)`);
+      } catch (e) { console.error(`[reconcile] extender ${m.email}: ${e.message}`); }
+      await sleep(300);
+    }
   }
 
   if (orphans.length > 25) {
@@ -774,7 +916,7 @@ async function reconcileComped() {
     catch (e) { console.error(`[reconcile] uncomp ${m.email}: ${e.message}`); }
     await sleep(300);
   }
-  console.log(`[reconcile] done: ${orphans.length} uncomped (comped=${comped.length}, active=${activeEmails.size}, cancelled=${cancelledEmails.size})`);
+  console.log(`[reconcile] done: ${orphans.length} uncomped, ${aExtender.length} extendidos (comped=${comped.length}, active=${activeEmails.size}, cancelled=${cancelledEmails.size})`);
 }
 
 function scheduleReconcileCron() {
