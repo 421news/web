@@ -1132,7 +1132,7 @@ async function autoTranslatePost(postId, force = false) {
 // --- Express endpoints ---
 
 app.get('/', (req, res) => {
-  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.11.0', revista: revistaGate.status(), promo: promo.status(), gsc: gscData.estado(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
+  res.json({ status: 'ok', service: 'webhook-hreflang', version: '2.12.0', revista: revistaGate.status(), promo: promo.status(), gsc: gscData.estado(), ga4: ga4Data ? 'ready' : 'not loaded', revenue: REVENUE_ENABLED ? (revenueData ? `ready (${revenueData.history.length} weeks)` : 'enabled, loading') : 'disabled', autoTranslate: AUTO_TRANSLATE_ENABLED, focal: FOCAL_ENABLED ? `enabled (${Object.keys(focalMap).length}, ${FOCAL_MODEL})` : `base-only (${Object.keys(focalMap).length})`, xBot: xBot.estado() });
 });
 
 app.post('/webhook/hreflang', async (req, res) => {
@@ -2111,6 +2111,9 @@ app.post('/api/encuesta/baja', (req, res, next) => {
   next();
 }, encuesta.responder);
 app.get('/api/encuesta/baja/reporte', encuesta.reporte);
+// Lo mismo, para /es/equipo/: token de member + label equipo, sin clave en la URL.
+app.options('/api/encuesta/baja/equipo', teamPreflight);
+app.get('/api/encuesta/baja/equipo', requireTeam, encuesta.equipo);
 
 // --- Search Console consolidado: dominio viejo + nuevo -----------------------
 // Acumulativo: nunca borra un mes. Google retiene 16 meses y cuatroveintiuno.com

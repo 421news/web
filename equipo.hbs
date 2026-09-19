@@ -80,6 +80,11 @@ document.documentElement.classList.add('is-analytics');
           </a>
         </div>
 
+        <h2 class="eq-seccion">Encuesta de bajas</h2>
+        <div id="eq-encuesta" class="eq-encuesta">
+          <p class="eq-enc-nota">Cargando respuestas&hellip;</p>
+        </div>
+
         <h2 class="eq-seccion">Comercial</h2>
         <div class="eq-grid">
           <a class="eq-tarjeta" href="/es/media-kit/">
@@ -177,6 +182,26 @@ document.documentElement.classList.add('is-analytics');
   .eq-chip { align-self: flex-start; font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: .15rem .5rem; border-radius: 999px; background: rgba(23,165,131,.16); color: var(--verde); }
   .eq-chip.eq-gris { background: rgba(148,141,132,.18); opacity: .8; color: inherit; }
 
+  /* Encuesta de bajas */
+  .eq-encuesta { background: #191817; border: 1px solid rgba(234,230,225,.14); border-radius: 12px; padding: 1.3rem; }
+  .eq-enc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1rem; margin-bottom: 1.4rem; }
+  .eq-enc-kpi b { display: block; font-size: 1.7rem; font-weight: 800; line-height: 1.1; }
+  .eq-enc-kpi span { font-size: .78rem; opacity: .6; }
+  .eq-enc-bloques { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.4rem 2rem; }
+  .eq-enc-bloque h3, .eq-enc-textos h3 { font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; opacity: .7; margin: 0 0 .7rem; }
+  .eq-enc-fila { margin-bottom: .6rem; }
+  .eq-enc-fila-top { display: flex; justify-content: space-between; gap: .8rem; font-size: .84rem; margin-bottom: .25rem; }
+  .eq-enc-fila-top span:last-child { opacity: .6; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .eq-enc-barra { height: 6px; border-radius: 999px; background: rgba(234,230,225,.1); overflow: hidden; }
+  .eq-enc-barra i { display: block; height: 100%; background: var(--gradient-main); border-radius: 999px; }
+  .eq-enc-textos { margin-top: 1.6rem; display: grid; gap: .8rem; }
+  .eq-enc-texto { border-left: 3px solid var(--amarillo); padding: .2rem 0 .2rem .9rem; }
+  .eq-enc-texto p { margin: 0 0 .3rem; font-size: .88rem; line-height: 1.5; }
+  .eq-enc-meta { font-size: .74rem; opacity: .55; }
+  .eq-enc-volvio { color: var(--verde); font-weight: 700; }
+  .eq-enc-nota { margin: 0; font-size: .85rem; opacity: .6; }
+  body.light-mode .eq-encuesta { background: rgba(255,255,255,.6); }
+
   .eq-pie { margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid rgba(234,230,225,.14); font-size: .82rem; opacity: .55; }
 
   body.light-mode .eq-tarjeta { background: rgba(255,255,255,.6); }
@@ -216,13 +241,89 @@ document.documentElement.classList.add('is-analytics');
       .catch(function () {});
   }
 
+  // Encuesta a ex suscriptores: mismo gate (requireTeam) que el resto del hub.
+  function el(tag, cls, texto) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (texto != null) e.textContent = texto;
+    return e;
+  }
+  function bloque(titulo, conteo) {
+    var b = el('div', 'eq-enc-bloque');
+    b.appendChild(el('h3', null, titulo));
+    var filas = Object.keys(conteo || {}).map(function (k) { return [k, conteo[k]]; })
+      .sort(function (a, c) { return c[1] - a[1]; });
+    var total = filas.reduce(function (a, f) { return a + f[1]; }, 0);
+    if (!filas.length) b.appendChild(el('p', 'eq-enc-nota', 'Sin datos todavía.'));
+    filas.forEach(function (f) {
+      var fila = el('div', 'eq-enc-fila');
+      var top = el('div', 'eq-enc-fila-top');
+      top.appendChild(el('span', null, f[0]));
+      top.appendChild(el('span', null, f[1] + ' · ' + Math.round(f[1] * 100 / total) + '%'));
+      var barra = el('div', 'eq-enc-barra');
+      var i = el('i');
+      i.style.width = (f[1] * 100 / filas[0][1]) + '%';
+      barra.appendChild(i);
+      fila.appendChild(top);
+      fila.appendChild(barra);
+      b.appendChild(fila);
+    });
+    return b;
+  }
+  function kpi(valor, texto) {
+    var k = el('div', 'eq-enc-kpi');
+    k.appendChild(el('b', null, valor));
+    k.appendChild(el('span', null, texto));
+    return k;
+  }
+  function encuesta(token) {
+    var caja = document.getElementById('eq-encuesta');
+    fetch(CHECK.replace('/team-check', '/encuesta/baja/equipo'), { headers: { Authorization: 'Bearer ' + token } })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (d) {
+        caja.innerHTML = '';
+        var kpis = el('div', 'eq-enc-kpis');
+        kpis.appendChild(kpi(d.total + ' / ' + d.enviados, 'respondieron (' + Math.round(d.total * 100 / d.enviados) + '%)'));
+        kpis.appendChild(kpi(String(d.volvieron), 'volvieron a pagar con la oferta'));
+        kpis.appendChild(kpi(String((d.lee && d.lee['Sí, seguido']) || 0), 'siguen leyendo 421 seguido'));
+        caja.appendChild(kpis);
+
+        var bloques = el('div', 'eq-enc-bloques');
+        bloques.appendChild(bloque('Motivo principal', d.principal));
+        bloques.appendChild(bloque('Todos los motivos marcados', d.motivos));
+        bloques.appendChild(bloque('¿Sigue leyendo 421?', d.lee));
+        bloques.appendChild(bloque('Precio que le parece razonable', d.precio));
+        caja.appendChild(bloques);
+
+        var conTexto = (d.respuestas || []).filter(function (r) { return r.otro || r.distinto; });
+        if (conTexto.length) {
+          var textos = el('div', 'eq-enc-textos');
+          textos.appendChild(el('h3', null, 'Lo que escribieron (' + conTexto.length + ')'));
+          conTexto.forEach(function (r) {
+            var t = el('div', 'eq-enc-texto');
+            if (r.otro) t.appendChild(el('p', null, '“' + r.otro + '”'));
+            if (r.distinto) t.appendChild(el('p', null, '¿Qué haríamos distinto? “' + r.distinto + '”'));
+            var meta = el('div', 'eq-enc-meta', r.email + ' · ' + (r.principal || '—') + ' · ' + String(r.fecha || '').slice(0, 10));
+            if (r.volvio) { meta.appendChild(document.createTextNode(' · ')); meta.appendChild(el('span', 'eq-enc-volvio', 'volvió')); }
+            t.appendChild(meta);
+            textos.appendChild(t);
+          });
+          caja.appendChild(textos);
+        }
+      })
+      .catch(function () {
+        caja.innerHTML = '';
+        caja.appendChild(el('p', 'eq-enc-nota', 'No se pudieron cargar las respuestas de la encuesta.'));
+      });
+  }
+
   fetch('/members/api/session', { credentials: 'same-origin' })
     .then(function (r) { return r.status === 200 ? r.text() : null; })
     .then(function (token) {
       if (!token) { estado('auth-signin'); return; }
       return fetch(CHECK, { headers: { Authorization: 'Bearer ' + token } })
         .then(function (r) {
-          if (r.status === 200) { estado('hub'); saludar(); return; }
+          if (r.status === 200) { estado('hub'); saludar(); encuesta(token); return; }
           if (r.status === 401) { estado('auth-signin'); return; }
           estado('auth-denied'); quienSoy();
         })

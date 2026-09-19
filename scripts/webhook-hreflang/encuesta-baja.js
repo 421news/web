@@ -112,23 +112,54 @@ async function responder(req, res) {
   }
 }
 
-async function reporte(req, res) {
-  if (!REPORTE_KEY || req.query.key !== REPORTE_KEY) return res.status(403).json({ error: 'forbidden' });
-  await loadStore(true);
+function resumen() {
   const cuenta = (campo) => store.respuestas.reduce((a, r) => {
     const vals = Array.isArray(r[campo]) ? r[campo] : [r[campo]];
     vals.filter(Boolean).forEach(v => { a[v] = (a[v] || 0) + 1; });
     return a;
   }, {});
-  res.json({
+  return {
     total: store.respuestas.length,
     motivos: cuenta('motivos'),
     principal: cuenta('principal'),
     lee: cuenta('lee'),
     precio: cuenta('precio'),
-    textos: store.respuestas.filter(r => r.distinto || r.otro).map(r => ({ email: r.email, otro: r.otro, distinto: r.distinto })),
-    respuestas: req.query.detalle ? store.respuestas : undefined
-  });
+    textos: store.respuestas.filter(r => r.distinto || r.otro).map(r => ({ email: r.email, otro: r.otro, distinto: r.distinto }))
+  };
 }
 
-module.exports = { init, responder, reporte, token, loadStore };
+async function reporte(req, res) {
+  if (!REPORTE_KEY || req.query.key !== REPORTE_KEY) return res.status(403).json({ error: 'forbidden' });
+  await loadStore(true);
+  res.json({ ...resumen(), respuestas: req.query.detalle ? store.respuestas : undefined });
+}
+
+// Para /es/equipo/ (el gate requireTeam lo pone server.js). Suma el contexto que
+// el reporte crudo no tiene: a cuántos se les mandó y quiénes volvieron a pagar.
+const ENVIADOS = 99; // envío del 2026-09-18, ver suscriptores/data/envio-encuesta-bajas-2026-09-18.json
+async function equipo(req, res) {
+  try {
+    await loadStore(true);
+    let volvieron = [];
+    try {
+      const f = encodeURIComponent("label:promo-regreso+status:-free");
+      const data = await deps.ghostRequest('GET', `/ghost/api/admin/members/?filter=${f}&fields=email&limit=200`);
+      volvieron = ((data && data.members) || []).map(m => String(m.email).toLowerCase());
+    } catch (e) { console.error(`[encuesta] volvieron: ${e.message}`); }
+    res.set('Cache-Control', 'private, no-store');
+    res.json({
+      ...resumen(),
+      enviados: ENVIADOS,
+      volvieron: volvieron.length,
+      respuestas: store.respuestas
+        .slice()
+        .sort((x, y) => String(y.fecha).localeCompare(String(x.fecha)))
+        .map(r => ({ ...r, volvio: volvieron.includes(r.email) }))
+    });
+  } catch (e) {
+    console.error(`[encuesta] equipo: ${e.message}`);
+    res.status(500).json({ error: 'no disponible' });
+  }
+}
+
+module.exports = { init, responder, reporte, equipo, token, loadStore };
